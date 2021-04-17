@@ -3175,7 +3175,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_POWDER_MOVE:
-            if (gBattleMoves[gCurrentMove].flags & FLAG_POWDER)
+            if ((gBattleMoves[gCurrentMove].flags & FLAG_POWDER) && (gBattlerAttacker != gBattlerTarget))
             {
                 if ((B_POWDER_GRASS >= GEN_6 && IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS))
                     || GetBattlerAbility(gBattlerTarget) == ABILITY_OVERCOAT)
@@ -7350,7 +7350,7 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
             MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_DEFEATIST:
-        if (gBattleMons[battlerAtk].hp <= (gBattleMons[battlerDef].maxHP / 2))
+        if (gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 2))
             MulModifier(&modifier, UQ_4_12(0.5));
         break;
     case ABILITY_FLASH_FIRE:
@@ -8037,6 +8037,13 @@ bool32 CanMegaEvolve(u8 battlerId)
     u8 battlerPosition = GetBattlerPosition(battlerId);
     u8 partnerPosition = GetBattlerPosition(BATTLE_PARTNER(battlerId));
     struct MegaEvolutionData *mega = &(((struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]))->mega);
+
+#ifdef ITEM_EXPANSION
+    // Check if Player has a Mega Bracelet
+    if ((GetBattlerPosition(battlerId) == B_POSITION_PLAYER_LEFT || (!(gBattleTypeFlags & BATTLE_TYPE_MULTI) && GetBattlerPosition(battlerId) == B_POSITION_PLAYER_RIGHT))
+     && !CheckBagHasItem(ITEM_MEGA_BRACELET, 1))
+        return FALSE;
+#endif
 
     // Check if trainer already mega evolved a pokemon.
     if (mega->alreadyEvolved[battlerPosition])

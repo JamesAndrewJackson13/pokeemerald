@@ -1321,7 +1321,7 @@ static void Cmd_attackcanceler(void)
     }
 
     gHitMarker |= HITMARKER_OBEYS;
-    if (NoTargetPresent(gCurrentMove))
+    if (NoTargetPresent(gCurrentMove) && (!IsTwoTurnsMove(gCurrentMove) || (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)))
     {
         gBattlescriptCurrInstr = BattleScript_ButItFailedAtkStringPpReduce;
         if (!IsTwoTurnsMove(gCurrentMove) || (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS))
