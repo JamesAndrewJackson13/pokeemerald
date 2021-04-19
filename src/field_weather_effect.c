@@ -2,6 +2,7 @@
 #include "battle_anim.h"
 #include "event_object_movement.h"
 #include "field_weather.h"
+#include "field_camera.h"
 #include "overworld.h"
 #include "random.h"
 #include "script.h"
@@ -41,56 +42,55 @@ static void UpdateCloudSprite(struct Sprite *);
 // The clouds are positioned on the map's grid.
 // These coordinates are for the lower half of Route 120.
 static const struct Coords16 sCloudSpriteMapCoords[] =
-{
-    { 0, 66},
-    { 5, 73},
-    {10, 78},
+    {
+        {0, 66},
+        {5, 73},
+        {10, 78},
 };
 
 static const struct SpriteSheet sCloudSpriteSheet =
-{
-    .data = gWeatherCloudTiles,
-    .size = sizeof(gWeatherCloudTiles),
-    .tag = 0x1200
-};
+    {
+        .data = gWeatherCloudTiles,
+        .size = sizeof(gWeatherCloudTiles),
+        .tag = 0x1200};
 
 static const struct OamData sCloudSpriteOamData =
-{
-    .y = 0,
-    .affineMode = ST_OAM_AFFINE_OFF,
-    .objMode = ST_OAM_OBJ_BLEND,
-    .mosaic = 0,
-    .bpp = ST_OAM_4BPP,
-    .shape = SPRITE_SHAPE(64x64),
-    .x = 0,
-    .matrixNum = 0,
-    .size = SPRITE_SIZE(64x64),
-    .tileNum = 0,
-    .priority = 3,
-    .paletteNum = 0,
-    .affineParam = 0,
+    {
+        .y = 0,
+        .affineMode = ST_OAM_AFFINE_OFF,
+        .objMode = ST_OAM_OBJ_BLEND,
+        .mosaic = 0,
+        .bpp = ST_OAM_4BPP,
+        .shape = SPRITE_SHAPE(64x64),
+        .x = 0,
+        .matrixNum = 0,
+        .size = SPRITE_SIZE(64x64),
+        .tileNum = 0,
+        .priority = 3,
+        .paletteNum = 0,
+        .affineParam = 0,
 };
 
 static const union AnimCmd sCloudSpriteAnimCmd[] =
-{
-    ANIMCMD_FRAME(0, 16),
-    ANIMCMD_END,
+    {
+        ANIMCMD_FRAME(0, 16),
+        ANIMCMD_END,
 };
 
 static const union AnimCmd *const sCloudSpriteAnimCmds[] =
-{
-    sCloudSpriteAnimCmd,
+    {
+        sCloudSpriteAnimCmd,
 };
 
 static const struct SpriteTemplate sCloudSpriteTemplate =
-{
-    .tileTag = 0x1200,
-    .paletteTag = 0x1201,
-    .oam = &sCloudSpriteOamData,
-    .anims = sCloudSpriteAnimCmds,
-    .images = NULL,
-    .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = UpdateCloudSprite,
+    {
+        .tileTag = 0x1200,
+        .paletteTag = 0x1201,
+        .oam = &sCloudSpriteOamData,
+        .anims = sCloudSpriteAnimCmds,
+        .images = NULL,
+        .affineAnims = gDummySpriteAffineAnimTable,
+        .callback = UpdateCloudSprite,
 };
 
 void Clouds_InitVars(void)
@@ -291,10 +291,10 @@ void StartDroughtWeatherBlend(void)
     CreateTask(UpdateDroughtBlend, 0x50);
 }
 
-#define tState      data[0]
-#define tBlendY     data[1]
+#define tState data[0]
+#define tBlendY data[1]
 #define tBlendDelay data[2]
-#define tWinRange   data[3]
+#define tWinRange data[3]
 
 static void UpdateDroughtBlend(u8 taskId)
 {
@@ -362,111 +362,111 @@ static bool8 UpdateVisibleRainSprites(void);
 static void DestroyRainSprites(void);
 
 static const struct Coords16 sRainSpriteCoords[] =
-{
-    {  0,   0},
-    {  0, 160},
-    {  0,  64},
-    {144, 224},
-    {144, 128},
-    { 32,  32},
-    { 32, 192},
-    { 32,  96},
-    { 72, 128},
-    { 72,  32},
-    { 72, 192},
-    {216,  96},
-    {216,   0},
-    {104, 160},
-    {104,  64},
-    {104, 224},
-    {144,   0},
-    {144, 160},
-    {144,  64},
-    { 32, 224},
-    { 32, 128},
-    { 72,  32},
-    { 72, 192},
-    { 48,  96},
+    {
+        {0, 0},
+        {0, 160},
+        {0, 64},
+        {144, 224},
+        {144, 128},
+        {32, 32},
+        {32, 192},
+        {32, 96},
+        {72, 128},
+        {72, 32},
+        {72, 192},
+        {216, 96},
+        {216, 0},
+        {104, 160},
+        {104, 64},
+        {104, 224},
+        {144, 0},
+        {144, 160},
+        {144, 64},
+        {32, 224},
+        {32, 128},
+        {72, 32},
+        {72, 192},
+        {48, 96},
 };
 
 static const struct OamData sRainSpriteOamData =
-{
-    .y = 0,
-    .affineMode = ST_OAM_AFFINE_OFF,
-    .objMode = ST_OAM_OBJ_NORMAL,
-    .mosaic = 0,
-    .bpp = ST_OAM_4BPP,
-    .shape = SPRITE_SHAPE(16x32),
-    .x = 0,
-    .matrixNum = 0,
-    .size = SPRITE_SIZE(16x32),
-    .tileNum = 0,
-    .priority = 1,
-    .paletteNum = 2,
-    .affineParam = 0,
+    {
+        .y = 0,
+        .affineMode = ST_OAM_AFFINE_OFF,
+        .objMode = ST_OAM_OBJ_NORMAL,
+        .mosaic = 0,
+        .bpp = ST_OAM_4BPP,
+        .shape = SPRITE_SHAPE(16x32),
+        .x = 0,
+        .matrixNum = 0,
+        .size = SPRITE_SIZE(16x32),
+        .tileNum = 0,
+        .priority = 1,
+        .paletteNum = 2,
+        .affineParam = 0,
 };
 
 static const union AnimCmd sRainSpriteFallAnimCmd[] =
-{
-    ANIMCMD_FRAME(0, 16),
-    ANIMCMD_JUMP(0),
+    {
+        ANIMCMD_FRAME(0, 16),
+        ANIMCMD_JUMP(0),
 };
 
 static const union AnimCmd sRainSpriteSplashAnimCmd[] =
-{
-    ANIMCMD_FRAME(8, 3),
-    ANIMCMD_FRAME(32, 2),
-    ANIMCMD_FRAME(40, 2),
-    ANIMCMD_END,
+    {
+        ANIMCMD_FRAME(8, 3),
+        ANIMCMD_FRAME(32, 2),
+        ANIMCMD_FRAME(40, 2),
+        ANIMCMD_END,
 };
 
 static const union AnimCmd sRainSpriteHeavySplashAnimCmd[] =
-{
-    ANIMCMD_FRAME(8, 3),
-    ANIMCMD_FRAME(16, 3),
-    ANIMCMD_FRAME(24, 4),
-    ANIMCMD_END,
+    {
+        ANIMCMD_FRAME(8, 3),
+        ANIMCMD_FRAME(16, 3),
+        ANIMCMD_FRAME(24, 4),
+        ANIMCMD_END,
 };
 
 static const union AnimCmd *const sRainSpriteAnimCmds[] =
-{
-    sRainSpriteFallAnimCmd,
-    sRainSpriteSplashAnimCmd,
-    sRainSpriteHeavySplashAnimCmd,
+    {
+        sRainSpriteFallAnimCmd,
+        sRainSpriteSplashAnimCmd,
+        sRainSpriteHeavySplashAnimCmd,
 };
 
 static const struct SpriteTemplate sRainSpriteTemplate =
-{
-    .tileTag = 4614,
-    .paletteTag = 0x1200,
-    .oam = &sRainSpriteOamData,
-    .anims = sRainSpriteAnimCmds,
-    .images = NULL,
-    .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = UpdateRainSprite,
+    {
+        .tileTag = 4614,
+        .paletteTag = 0x1200,
+        .oam = &sRainSpriteOamData,
+        .anims = sRainSpriteAnimCmds,
+        .images = NULL,
+        .affineAnims = gDummySpriteAffineAnimTable,
+        .callback = UpdateRainSprite,
 };
 
 // Q28.4 fixed-point format values
 static const s16 sRainSpriteMovement[][2] =
-{
-    {-0x68,  0xD0},
-    {-0xA0, 0x140},
+    {
+        {-0x68, 0xD0},
+        {-0xA0, 0x140},
 };
 
 // First byte is the number of frames a raindrop falls before it splashes.
 // Second byte is the maximum number of frames a raindrop can "wait" before
 // it appears and starts falling. (This is only for the initial raindrop spawn.)
 static const u16 sRainSpriteFallingDurations[][2] =
-{
-    {18, 7},
-    {12, 10},
+    {
+        {18, 7},
+        {12, 10},
 };
 
 static const struct SpriteSheet sRainSpriteSheet =
-{
-    .data = gWeatherRainTiles,
-    .size = sizeof(gWeatherRainTiles),
-    .tag = 0x1206,
+    {
+        .data = gWeatherRainTiles,
+        .size = sizeof(gWeatherRainTiles),
+        .tag = 0x1206,
 };
 
 void Rain_InitVars(void)
@@ -516,9 +516,7 @@ bool8 Rain_Finish(void)
     switch (gWeatherPtr->finishStep)
     {
     case 0:
-        if (gWeatherPtr->nextWeather == WEATHER_RAIN
-         || gWeatherPtr->nextWeather == WEATHER_RAIN_THUNDERSTORM
-         || gWeatherPtr->nextWeather == WEATHER_DOWNPOUR)
+        if (gWeatherPtr->nextWeather == WEATHER_RAIN || gWeatherPtr->nextWeather == WEATHER_RAIN_THUNDERSTORM || gWeatherPtr->nextWeather == WEATHER_DOWNPOUR)
         {
             gWeatherPtr->finishStep = 0xFF;
             return FALSE;
@@ -542,11 +540,11 @@ bool8 Rain_Finish(void)
 }
 
 #define tCounter data[0]
-#define tRandom  data[1]
-#define tPosX    data[2]
-#define tPosY    data[3]
-#define tState   data[4]
-#define tActive  data[5]
+#define tRandom data[1]
+#define tPosX data[2]
+#define tPosY data[3]
+#define tState data[4]
+#define tActive data[5]
 #define tWaiting data[6]
 
 static void StartRainSpriteFall(struct Sprite *sprite)
@@ -596,9 +594,7 @@ static void UpdateRainSprite(struct Sprite *sprite)
         sprite->pos1.x = sprite->tPosX >> 4;
         sprite->pos1.y = sprite->tPosY >> 4;
 
-        if (sprite->tActive
-         && (sprite->pos1.x >= -8 && sprite->pos1.x <= 248)
-         && sprite->pos1.y >= -16 && sprite->pos1.y <= 176)
+        if (sprite->tActive && (sprite->pos1.x >= -8 && sprite->pos1.x <= 248) && sprite->pos1.y >= -16 && sprite->pos1.y <= 176)
             sprite->invisible = FALSE;
         else
             sprite->invisible = TRUE;
@@ -673,7 +669,7 @@ static bool8 CreateRainSprite(void)
 
     spriteIndex = gWeatherPtr->rainSpriteCount;
     spriteId = CreateSpriteAtEnd(&sRainSpriteTemplate,
-      sRainSpriteCoords[spriteIndex].x, sRainSpriteCoords[spriteIndex].y, 78);
+                                 sRainSpriteCoords[spriteIndex].x, sRainSpriteCoords[spriteIndex].y, 78);
 
     if (spriteId != MAX_SPRITES)
     {
@@ -836,65 +832,65 @@ static bool8 UpdateVisibleSnowflakeSprites(void)
 }
 
 static const struct OamData sSnowflakeSpriteOamData =
-{
-    .y = 0,
-    .affineMode = ST_OAM_AFFINE_OFF,
-    .objMode = ST_OAM_OBJ_NORMAL,
-    .mosaic = 0,
-    .bpp = ST_OAM_4BPP,
-    .shape = SPRITE_SHAPE(8x8),
-    .x = 0,
-    .matrixNum = 0,
-    .size = SPRITE_SIZE(8x8),
-    .tileNum = 0,
-    .priority = 1,
-    .paletteNum = 0,
-    .affineParam = 0,
+    {
+        .y = 0,
+        .affineMode = ST_OAM_AFFINE_OFF,
+        .objMode = ST_OAM_OBJ_NORMAL,
+        .mosaic = 0,
+        .bpp = ST_OAM_4BPP,
+        .shape = SPRITE_SHAPE(8x8),
+        .x = 0,
+        .matrixNum = 0,
+        .size = SPRITE_SIZE(8x8),
+        .tileNum = 0,
+        .priority = 1,
+        .paletteNum = 0,
+        .affineParam = 0,
 };
 
 static const struct SpriteFrameImage sSnowflakeSpriteImages[] =
-{
-    {gWeatherSnow1Tiles, sizeof(gWeatherSnow1Tiles)},
-    {gWeatherSnow2Tiles, sizeof(gWeatherSnow2Tiles)},
+    {
+        {gWeatherSnow1Tiles, sizeof(gWeatherSnow1Tiles)},
+        {gWeatherSnow2Tiles, sizeof(gWeatherSnow2Tiles)},
 };
 
 static const union AnimCmd sSnowflakeAnimCmd0[] =
-{
-    ANIMCMD_FRAME(0, 16),
-    ANIMCMD_END,
+    {
+        ANIMCMD_FRAME(0, 16),
+        ANIMCMD_END,
 };
 
 static const union AnimCmd sSnowflakeAnimCmd1[] =
-{
-    ANIMCMD_FRAME(1, 16),
-    ANIMCMD_END,
+    {
+        ANIMCMD_FRAME(1, 16),
+        ANIMCMD_END,
 };
 
 static const union AnimCmd *const sSnowflakeAnimCmds[] =
-{
-    sSnowflakeAnimCmd0,
-    sSnowflakeAnimCmd1,
+    {
+        sSnowflakeAnimCmd0,
+        sSnowflakeAnimCmd1,
 };
 
 static const struct SpriteTemplate sSnowflakeSpriteTemplate =
-{
-    .tileTag = 0xFFFF,
-    .paletteTag = 0x1200,
-    .oam = &sSnowflakeSpriteOamData,
-    .anims = sSnowflakeAnimCmds,
-    .images = sSnowflakeSpriteImages,
-    .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = UpdateSnowflakeSprite,
+    {
+        .tileTag = 0xFFFF,
+        .paletteTag = 0x1200,
+        .oam = &sSnowflakeSpriteOamData,
+        .anims = sSnowflakeAnimCmds,
+        .images = sSnowflakeSpriteImages,
+        .affineAnims = gDummySpriteAffineAnimTable,
+        .callback = UpdateSnowflakeSprite,
 };
 
-#define tPosY         data[0]
-#define tDeltaY       data[1]
-#define tWaveDelta    data[2]
-#define tWaveIndex    data[3]
-#define tSnowflakeId  data[4]
-#define tFallCounter  data[5]
+#define tPosY data[0]
+#define tDeltaY data[1]
+#define tWaveDelta data[2]
+#define tWaveIndex data[3]
+#define tSnowflakeId data[4]
+#define tFallCounter data[5]
 #define tFallDuration data[6]
-#define tDeltaY2      data[7]
+#define tDeltaY2 data[7]
 
 static bool8 CreateSnowflakeSprite(void)
 {
@@ -941,7 +937,12 @@ static void InitSnowflakeSpriteMovement(struct Sprite *sprite)
 
 static void WaitSnowflakeSprite(struct Sprite *sprite)
 {
+    // fixes bug where snow stops spawing
+#ifdef BUGFIX
+    if (++gWeatherPtr->unknown_6E2 > 18)
+#else
     if (gWeatherPtr->unknown_6E2 > 18)
+#endif
     {
         sprite->invisible = FALSE;
         sprite->callback = UpdateSnowflakeSprite;
@@ -1021,7 +1022,7 @@ void Thunderstorm_InitVars(void)
     gWeatherPtr->targetRainSpriteCount = 16;
     gWeatherPtr->gammaTargetIndex = 3;
     gWeatherPtr->gammaStepDelay = 20;
-    gWeatherPtr->weatherGfxLoaded = FALSE;  // duplicate assignment
+    gWeatherPtr->weatherGfxLoaded = FALSE; // duplicate assignment
     gWeatherPtr->thunderTriggered = 0;
     SetRainStrengthFromSoundEffect(SE_THUNDERSTORM);
 }
@@ -1050,7 +1051,7 @@ void Downpour_InitVars(void)
     gWeatherPtr->targetRainSpriteCount = 24;
     gWeatherPtr->gammaTargetIndex = 3;
     gWeatherPtr->gammaStepDelay = 20;
-    gWeatherPtr->weatherGfxLoaded = FALSE;  // duplicate assignment
+    gWeatherPtr->weatherGfxLoaded = FALSE; // duplicate assignment
     SetRainStrengthFromSoundEffect(SE_DOWNPOUR);
 }
 
@@ -1177,9 +1178,7 @@ bool8 Thunderstorm_Finish(void)
         Thunderstorm_Main();
         if (gWeatherPtr->unknown_6EA)
         {
-            if (gWeatherPtr->nextWeather == WEATHER_RAIN
-             || gWeatherPtr->nextWeather == WEATHER_RAIN_THUNDERSTORM
-             || gWeatherPtr->nextWeather == WEATHER_DOWNPOUR)
+            if (gWeatherPtr->nextWeather == WEATHER_RAIN || gWeatherPtr->nextWeather == WEATHER_RAIN_THUNDERSTORM || gWeatherPtr->nextWeather == WEATHER_DOWNPOUR)
                 return FALSE;
 
             gWeatherPtr->targetRainSpriteCount = 0;
@@ -1241,89 +1240,89 @@ static void UpdateThunderSound(void)
 static const u16 unusedData_839AB1C[] = {0, 6, 6, 12, 18, 42, 300, 300};
 
 static const struct OamData gOamData_839AB2C =
-{
-    .y = 0,
-    .affineMode = ST_OAM_AFFINE_OFF,
-    .objMode = ST_OAM_OBJ_BLEND,
-    .mosaic = 0,
-    .bpp = ST_OAM_4BPP,
-    .shape = SPRITE_SHAPE(64x64),
-    .x = 0,
-    .matrixNum = 0,
-    .size = SPRITE_SIZE(64x64),
-    .tileNum = 0,
-    .priority = 2,
-    .paletteNum = 0,
-    .affineParam = 0,
+    {
+        .y = 0,
+        .affineMode = ST_OAM_AFFINE_OFF,
+        .objMode = ST_OAM_OBJ_BLEND,
+        .mosaic = 0,
+        .bpp = ST_OAM_4BPP,
+        .shape = SPRITE_SHAPE(64x64),
+        .x = 0,
+        .matrixNum = 0,
+        .size = SPRITE_SIZE(64x64),
+        .tileNum = 0,
+        .priority = 2,
+        .paletteNum = 0,
+        .affineParam = 0,
 };
 
 static const union AnimCmd gSpriteAnim_839AB34[] =
-{
-    ANIMCMD_FRAME(0, 16),
-    ANIMCMD_END,
+    {
+        ANIMCMD_FRAME(0, 16),
+        ANIMCMD_END,
 };
 
 static const union AnimCmd gSpriteAnim_839AB3C[] =
-{
-    ANIMCMD_FRAME(32, 16),
-    ANIMCMD_END,
+    {
+        ANIMCMD_FRAME(32, 16),
+        ANIMCMD_END,
 };
 
 static const union AnimCmd gSpriteAnim_839AB44[] =
-{
-    ANIMCMD_FRAME(64, 16),
-    ANIMCMD_END,
+    {
+        ANIMCMD_FRAME(64, 16),
+        ANIMCMD_END,
 };
 
 static const union AnimCmd gSpriteAnim_839AB4C[] =
-{
-    ANIMCMD_FRAME(96, 16),
-    ANIMCMD_END,
+    {
+        ANIMCMD_FRAME(96, 16),
+        ANIMCMD_END,
 };
 
 static const union AnimCmd gSpriteAnim_839AB54[] =
-{
-    ANIMCMD_FRAME(128, 16),
-    ANIMCMD_END,
+    {
+        ANIMCMD_FRAME(128, 16),
+        ANIMCMD_END,
 };
 
 static const union AnimCmd gSpriteAnim_839AB5C[] =
-{
-    ANIMCMD_FRAME(160, 16),
-    ANIMCMD_END,
+    {
+        ANIMCMD_FRAME(160, 16),
+        ANIMCMD_END,
 };
 
 static const union AnimCmd *const gSpriteAnimTable_839AB64[] =
-{
-    gSpriteAnim_839AB34,
-    gSpriteAnim_839AB3C,
-    gSpriteAnim_839AB44,
-    gSpriteAnim_839AB4C,
-    gSpriteAnim_839AB54,
-    gSpriteAnim_839AB5C,
+    {
+        gSpriteAnim_839AB34,
+        gSpriteAnim_839AB3C,
+        gSpriteAnim_839AB44,
+        gSpriteAnim_839AB4C,
+        gSpriteAnim_839AB54,
+        gSpriteAnim_839AB5C,
 };
 
 static const union AffineAnimCmd gSpriteAffineAnim_839AB7C[] =
-{
-    AFFINEANIMCMD_FRAME(0x200, 0x200, 0, 0),
-    AFFINEANIMCMD_END,
+    {
+        AFFINEANIMCMD_FRAME(0x200, 0x200, 0, 0),
+        AFFINEANIMCMD_END,
 };
 
 static const union AffineAnimCmd *const gSpriteAffineAnimTable_839AB8C[] =
-{
-    gSpriteAffineAnim_839AB7C,
+    {
+        gSpriteAffineAnim_839AB7C,
 };
 
 static void FogHorizontalSpriteCallback(struct Sprite *);
 static const struct SpriteTemplate sFogHorizontalSpriteTemplate =
-{
-    .tileTag = 0x1201,
-    .paletteTag = 0x1200,
-    .oam = &gOamData_839AB2C,
-    .anims = gSpriteAnimTable_839AB64,
-    .images = NULL,
-    .affineAnims = gSpriteAffineAnimTable_839AB8C,
-    .callback = FogHorizontalSpriteCallback,
+    {
+        .tileTag = 0x1201,
+        .paletteTag = 0x1200,
+        .oam = &gOamData_839AB2C,
+        .anims = gSpriteAnimTable_839AB64,
+        .images = NULL,
+        .affineAnims = gSpriteAffineAnimTable_839AB8C,
+        .callback = FogHorizontalSpriteCallback,
 };
 
 void FogHorizontal_Main(void);
@@ -1564,10 +1563,10 @@ bool8 Ash_Finish(void)
 }
 
 static const struct SpriteSheet sAshSpriteSheet =
-{
-    .data = gWeatherAshTiles,
-    .size = sizeof(gWeatherAshTiles),
-    .tag = 0x1202,
+    {
+        .data = gWeatherAshTiles,
+        .size = sizeof(gWeatherAshTiles),
+        .tag = 0x1202,
 };
 
 static void LoadAshSpriteSheet(void)
@@ -1576,46 +1575,46 @@ static void LoadAshSpriteSheet(void)
 }
 
 static const struct OamData sAshSpriteOamData =
-{
-    .y = 0,
-    .affineMode = ST_OAM_AFFINE_OFF,
-    .objMode = ST_OAM_OBJ_BLEND,
-    .bpp = ST_OAM_4BPP,
-    .shape = SPRITE_SHAPE(64x64),
-    .x = 0,
-    .size = SPRITE_SIZE(64x64),
-    .tileNum = 0,
-    .priority = 1,
-    .paletteNum = 15,
+    {
+        .y = 0,
+        .affineMode = ST_OAM_AFFINE_OFF,
+        .objMode = ST_OAM_OBJ_BLEND,
+        .bpp = ST_OAM_4BPP,
+        .shape = SPRITE_SHAPE(64x64),
+        .x = 0,
+        .size = SPRITE_SIZE(64x64),
+        .tileNum = 0,
+        .priority = 1,
+        .paletteNum = 15,
 };
 
 static const union AnimCmd sAshSpriteAnimCmd0[] =
-{
-    ANIMCMD_FRAME(0, 60),
-    ANIMCMD_FRAME(64, 60),
-    ANIMCMD_JUMP(0),
+    {
+        ANIMCMD_FRAME(0, 60),
+        ANIMCMD_FRAME(64, 60),
+        ANIMCMD_JUMP(0),
 };
 
 static const union AnimCmd *const sAshSpriteAnimCmds[] =
-{
-    sAshSpriteAnimCmd0,
+    {
+        sAshSpriteAnimCmd0,
 };
 
 static const struct SpriteTemplate sAshSpriteTemplate =
-{
-    .tileTag = 4610,
-    .paletteTag = 0x1200,
-    .oam = &sAshSpriteOamData,
-    .anims = sAshSpriteAnimCmds,
-    .images = NULL,
-    .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = UpdateAshSprite,
+    {
+        .tileTag = 4610,
+        .paletteTag = 0x1200,
+        .oam = &sAshSpriteOamData,
+        .anims = sAshSpriteAnimCmds,
+        .images = NULL,
+        .affineAnims = gDummySpriteAffineAnimTable,
+        .callback = UpdateAshSprite,
 };
 
-#define tOffsetY      data[0]
-#define tCounterY     data[1]
+#define tOffsetY data[0]
+#define tCounterY data[1]
 #define tSpriteColumn data[2]
-#define tSpriteRow    data[3]
+#define tSpriteRow data[3]
 
 static void CreateAshSprites(void)
 {
@@ -1787,50 +1786,50 @@ static void UpdateFogDiagonalMovement(void)
 }
 
 static const struct SpriteSheet gFogDiagonalSpriteSheet =
-{
-    .data = gWeatherFogDiagonalTiles,
-    .size = sizeof(gWeatherFogDiagonalTiles),
-    .tag = 0x1203,
+    {
+        .data = gWeatherFogDiagonalTiles,
+        .size = sizeof(gWeatherFogDiagonalTiles),
+        .tag = 0x1203,
 };
 
 static const struct OamData sFogDiagonalSpriteOamData =
-{
-    .y = 0,
-    .affineMode = ST_OAM_AFFINE_OFF,
-    .objMode = ST_OAM_OBJ_BLEND,
-    .bpp = ST_OAM_4BPP,
-    .shape = SPRITE_SHAPE(64x64),
-    .x = 0,
-    .size = SPRITE_SIZE(64x64),
-    .tileNum = 0,
-    .priority = 2,
-    .paletteNum = 0,
+    {
+        .y = 0,
+        .affineMode = ST_OAM_AFFINE_OFF,
+        .objMode = ST_OAM_OBJ_BLEND,
+        .bpp = ST_OAM_4BPP,
+        .shape = SPRITE_SHAPE(64x64),
+        .x = 0,
+        .size = SPRITE_SIZE(64x64),
+        .tileNum = 0,
+        .priority = 2,
+        .paletteNum = 0,
 };
 
 static const union AnimCmd sFogDiagonalSpriteAnimCmd0[] =
-{
-    ANIMCMD_FRAME(0, 16),
-    ANIMCMD_END,
+    {
+        ANIMCMD_FRAME(0, 16),
+        ANIMCMD_END,
 };
 
 static const union AnimCmd *const sFogDiagonalSpriteAnimCmds[] =
-{
-    sFogDiagonalSpriteAnimCmd0,
+    {
+        sFogDiagonalSpriteAnimCmd0,
 };
 
 static const struct SpriteTemplate sFogDiagonalSpriteTemplate =
-{
-    .tileTag = 0x1203,
-    .paletteTag = 0x1200,
-    .oam = &sFogDiagonalSpriteOamData,
-    .anims = sFogDiagonalSpriteAnimCmds,
-    .images = NULL,
-    .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = UpdateFogDiagonalSprite,
+    {
+        .tileTag = 0x1203,
+        .paletteTag = 0x1200,
+        .oam = &sFogDiagonalSpriteOamData,
+        .anims = sFogDiagonalSpriteAnimCmds,
+        .images = NULL,
+        .affineAnims = gDummySpriteAffineAnimTable,
+        .callback = UpdateFogDiagonalSprite,
 };
 
 #define tSpriteColumn data[0]
-#define tSpriteRow    data[1]
+#define tSpriteRow data[1]
 
 static void CreateFogDiagonalSprites(void)
 {
@@ -2034,62 +2033,62 @@ static void DestroySandstormSprites(void)
 }
 
 static const struct OamData sSandstormSpriteOamData =
-{
-    .y = 0,
-    .affineMode = ST_OAM_AFFINE_OFF,
-    .objMode = ST_OAM_OBJ_BLEND,
-    .bpp = ST_OAM_4BPP,
-    .shape = SPRITE_SHAPE(64x64),
-    .x = 0,
-    .size = SPRITE_SIZE(64x64),
-    .tileNum = 0,
-    .priority = 1,
-    .paletteNum = 0,
+    {
+        .y = 0,
+        .affineMode = ST_OAM_AFFINE_OFF,
+        .objMode = ST_OAM_OBJ_BLEND,
+        .bpp = ST_OAM_4BPP,
+        .shape = SPRITE_SHAPE(64x64),
+        .x = 0,
+        .size = SPRITE_SIZE(64x64),
+        .tileNum = 0,
+        .priority = 1,
+        .paletteNum = 0,
 };
 
 static const union AnimCmd sSandstormSpriteAnimCmd0[] =
-{
-    ANIMCMD_FRAME(0, 3),
-    ANIMCMD_END,
+    {
+        ANIMCMD_FRAME(0, 3),
+        ANIMCMD_END,
 };
 
 static const union AnimCmd sSandstormSpriteAnimCmd1[] =
-{
-    ANIMCMD_FRAME(64, 3),
-    ANIMCMD_END,
+    {
+        ANIMCMD_FRAME(64, 3),
+        ANIMCMD_END,
 };
 
 static const union AnimCmd *const sSandstormSpriteAnimCmds[] =
-{
-    sSandstormSpriteAnimCmd0,
-    sSandstormSpriteAnimCmd1,
+    {
+        sSandstormSpriteAnimCmd0,
+        sSandstormSpriteAnimCmd1,
 };
 
 static const struct SpriteTemplate sSandstormSpriteTemplate =
-{
-    .tileTag = 0x1204,
-    .paletteTag = 0x1201,
-    .oam = &sSandstormSpriteOamData,
-    .anims = sSandstormSpriteAnimCmds,
-    .images = NULL,
-    .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = UpdateSandstormSprite,
+    {
+        .tileTag = 0x1204,
+        .paletteTag = 0x1201,
+        .oam = &sSandstormSpriteOamData,
+        .anims = sSandstormSpriteAnimCmds,
+        .images = NULL,
+        .affineAnims = gDummySpriteAffineAnimTable,
+        .callback = UpdateSandstormSprite,
 };
 
 static const struct SpriteSheet sSandstormSpriteSheet =
-{
-    .data = gWeatherSandstormTiles,
-    .size = sizeof(gWeatherSandstormTiles),
-    .tag = 0x1204,
+    {
+        .data = gWeatherSandstormTiles,
+        .size = sizeof(gWeatherSandstormTiles),
+        .tag = 0x1204,
 };
 
 // Regular sandstorm sprites
-#define tSpriteColumn  data[0]
-#define tSpriteRow     data[1]
+#define tSpriteColumn data[0]
+#define tSpriteRow data[1]
 
 // Swirly sandstorm sprites
-#define tRadius        data[0]
-#define tWaveIndex     data[1]
+#define tRadius data[0]
+#define tWaveIndex data[1]
 #define tRadiusCounter data[2]
 #define tEntranceDelay data[3]
 
@@ -2239,27 +2238,27 @@ static void UpdateBubbleSprite(struct Sprite *);
 static const u8 sBubbleStartDelays[] = {40, 90, 60, 90, 2, 60, 40, 30};
 
 static const struct SpriteSheet sWeatherBubbleSpriteSheet =
-{
-    .data = gWeatherBubbleTiles,
-    .size = sizeof(gWeatherBubbleTiles),
-    .tag = 0x1205,
+    {
+        .data = gWeatherBubbleTiles,
+        .size = sizeof(gWeatherBubbleTiles),
+        .tag = 0x1205,
 };
 
 static const s16 sBubbleStartCoords[][2] =
-{
-    {120, 160},
-    {376, 160},
-    { 40, 140},
-    {296, 140},
-    {180, 130},
-    {436, 130},
-    { 60, 160},
-    {436, 160},
-    {220, 180},
-    {476, 180},
-    { 10,  90},
-    {266,  90},
-    {256, 160},
+    {
+        {120, 160},
+        {376, 160},
+        {40, 140},
+        {296, 140},
+        {180, 130},
+        {436, 130},
+        {60, 160},
+        {436, 160},
+        {220, 180},
+        {476, 180},
+        {10, 90},
+        {266, 90},
+        {256, 160},
 };
 
 void Bubbles_InitVars(void)
@@ -2309,31 +2308,31 @@ bool8 Bubbles_Finish(void)
 }
 
 static const union AnimCmd sBubbleSpriteAnimCmd0[] =
-{
-    ANIMCMD_FRAME(0, 16),
-    ANIMCMD_FRAME(1, 16),
-    ANIMCMD_END,
+    {
+        ANIMCMD_FRAME(0, 16),
+        ANIMCMD_FRAME(1, 16),
+        ANIMCMD_END,
 };
 
 static const union AnimCmd *const sBubbleSpriteAnimCmds[] =
-{
-    sBubbleSpriteAnimCmd0,
+    {
+        sBubbleSpriteAnimCmd0,
 };
 
 static const struct SpriteTemplate sBubbleSpriteTemplate =
-{
-    .tileTag = 0x1205,
-    .paletteTag = 0x1200,
-    .oam = &gOamData_AffineOff_ObjNormal_8x8,
-    .anims = sBubbleSpriteAnimCmds,
-    .images = NULL,
-    .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = UpdateBubbleSprite,
+    {
+        .tileTag = 0x1205,
+        .paletteTag = 0x1200,
+        .oam = &gOamData_AffineOff_ObjNormal_8x8,
+        .anims = sBubbleSpriteAnimCmds,
+        .images = NULL,
+        .affineAnims = gDummySpriteAffineAnimTable,
+        .callback = UpdateBubbleSprite,
 };
 
 #define tScrollXCounter data[0]
-#define tScrollXDir     data[1]
-#define tCounter        data[2]
+#define tScrollXDir data[1]
+#define tCounter data[2]
 
 static void CreateBubbleSprite(u16 coordsIndex)
 {
@@ -2528,43 +2527,62 @@ void ResumePausedWeather(void)
 }
 
 static const u8 sWeatherCycleRoute119[] =
-{
-    WEATHER_SUNNY,
-    WEATHER_RAIN,
-    WEATHER_RAIN_THUNDERSTORM,
-    WEATHER_RAIN,
+    {
+        WEATHER_SUNNY,
+        WEATHER_RAIN,
+        WEATHER_RAIN_THUNDERSTORM,
+        WEATHER_RAIN,
 };
 static const u8 sWeatherCycleRoute123[] =
-{
-    WEATHER_SUNNY,
-    WEATHER_SUNNY,
-    WEATHER_RAIN,
-    WEATHER_SUNNY,
+    {
+        WEATHER_SUNNY,
+        WEATHER_SUNNY,
+        WEATHER_RAIN,
+        WEATHER_SUNNY,
 };
 
 static u8 TranslateWeatherNum(u8 weather)
 {
     switch (weather)
     {
-    case WEATHER_NONE:               return WEATHER_NONE;
-    case WEATHER_SUNNY_CLOUDS:       return WEATHER_SUNNY_CLOUDS;
-    case WEATHER_SUNNY:              return WEATHER_SUNNY;
-    case WEATHER_RAIN:               return WEATHER_RAIN;
-    case WEATHER_SNOW:               return WEATHER_SNOW;
-    case WEATHER_RAIN_THUNDERSTORM:  return WEATHER_RAIN_THUNDERSTORM;
-    case WEATHER_FOG_HORIZONTAL:     return WEATHER_FOG_HORIZONTAL;
-    case WEATHER_VOLCANIC_ASH:       return WEATHER_VOLCANIC_ASH;
-    case WEATHER_SANDSTORM:          return WEATHER_SANDSTORM;
-    case WEATHER_FOG_DIAGONAL:       return WEATHER_FOG_DIAGONAL;
-    case WEATHER_UNDERWATER:         return WEATHER_UNDERWATER;
-    case WEATHER_SHADE:              return WEATHER_SHADE;
-    case WEATHER_DROUGHT:            return WEATHER_DROUGHT;
-    case WEATHER_DOWNPOUR:           return WEATHER_DOWNPOUR;
-    case WEATHER_UNDERWATER_BUBBLES: return WEATHER_UNDERWATER_BUBBLES;
-    case WEATHER_ABNORMAL:           return WEATHER_ABNORMAL;
-    case WEATHER_ROUTE119_CYCLE:     return sWeatherCycleRoute119[gSaveBlock1Ptr->weatherCycleStage];
-    case WEATHER_ROUTE123_CYCLE:     return sWeatherCycleRoute123[gSaveBlock1Ptr->weatherCycleStage];
-    default:                         return WEATHER_NONE;
+    case WEATHER_NONE:
+        return WEATHER_NONE;
+    case WEATHER_SUNNY_CLOUDS:
+        return WEATHER_SUNNY_CLOUDS;
+    case WEATHER_SUNNY:
+        return WEATHER_SUNNY;
+    case WEATHER_RAIN:
+        return WEATHER_RAIN;
+    case WEATHER_SNOW:
+        return WEATHER_SNOW;
+    case WEATHER_RAIN_THUNDERSTORM:
+        return WEATHER_RAIN_THUNDERSTORM;
+    case WEATHER_FOG_HORIZONTAL:
+        return WEATHER_FOG_HORIZONTAL;
+    case WEATHER_VOLCANIC_ASH:
+        return WEATHER_VOLCANIC_ASH;
+    case WEATHER_SANDSTORM:
+        return WEATHER_SANDSTORM;
+    case WEATHER_FOG_DIAGONAL:
+        return WEATHER_FOG_DIAGONAL;
+    case WEATHER_UNDERWATER:
+        return WEATHER_UNDERWATER;
+    case WEATHER_SHADE:
+        return WEATHER_SHADE;
+    case WEATHER_DROUGHT:
+        return WEATHER_DROUGHT;
+    case WEATHER_DOWNPOUR:
+        return WEATHER_DOWNPOUR;
+    case WEATHER_UNDERWATER_BUBBLES:
+        return WEATHER_UNDERWATER_BUBBLES;
+    case WEATHER_ABNORMAL:
+        return WEATHER_ABNORMAL;
+    case WEATHER_ROUTE119_CYCLE:
+        return sWeatherCycleRoute119[gSaveBlock1Ptr->weatherCycleStage];
+    case WEATHER_ROUTE123_CYCLE:
+        return sWeatherCycleRoute123[gSaveBlock1Ptr->weatherCycleStage];
+    default:
+        return WEATHER_NONE;
     }
 }
 
@@ -2577,9 +2595,6 @@ void UpdateWeatherPerDay(u16 increment)
 
 static void UpdateRainCounter(u8 newWeather, u8 oldWeather)
 {
-    if (newWeather != oldWeather
-     && (newWeather == WEATHER_RAIN || newWeather == WEATHER_RAIN_THUNDERSTORM))
+    if (newWeather != oldWeather && (newWeather == WEATHER_RAIN || newWeather == WEATHER_RAIN_THUNDERSTORM))
         IncrementGameStat(GAME_STAT_GOT_RAINED_ON);
 }
-
-

@@ -18,7 +18,8 @@
 			"game_stat.h": "c",
 			"global.berry.h": "c",
 			"limits.h": "c",
-			"gba.h": "c"
+			"gba.h": "c",
+			"event_object_movement.h": "c"
 		}
 	}
 }
