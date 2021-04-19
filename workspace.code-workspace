@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"C_Cpp.default.intelliSenseMode": "linux-gcc-arm",
+		"C_Cpp.default.systemIncludePath": [
+			"C:\\RomHack\\agbcc\\gcc"
+		],
+		"files.associations": {
+			"*.item": "openhab",
+			"*.json": "json",
+			"battle_controllers.h": "c",
+			"battle_util.h": "c",
+			"global.h": "c",
+			"game_stat.h": "c",
+			"global.berry.h": "c",
+			"limits.h": "c",
+			"gba.h": "c"
+		}
+	}
+}

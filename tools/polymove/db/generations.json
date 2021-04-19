@@ -1,0 +1,192 @@
+{
+  "CT": {
+    "genNumber": 8,
+    "genNumberRoman": "VIII",
+    "isLatestGen": true,
+    "dbFilename": "ct",
+    "gameFullName": "The Crown Tundra",
+    "lvlUpColumn": "CT",
+    "moveTutorColumn": 3,
+    "maxDexNum": 898
+  },
+  "IOA": {
+    "genNumber": 8,
+    "genNumberRoman": "VIII",
+    "isLatestGen": true,
+    "dbFilename": "ioa",
+    "gameFullName": "The Isle of Armor",
+    "lvlUpColumn": "IOA",
+    "moveTutorColumn": 2,
+    "maxDexNum": 898
+  },
+  "SWSH": {
+    "genNumber": 8,
+    "genNumberRoman": "VIII",
+    "isLatestGen": true,
+    "dbFilename": "swsh",
+    "gameFullName": "Pokémon Sword and Shield",
+    "lvlUpColumn": "SWSH",
+    "moveTutorColumn": 1,
+    "maxDexNum": 898
+  },
+  "LGPE": {
+    "genNumber": 7,
+    "genNumberRoman": "VII",
+    "isLatestGen": false,
+    "dbFilename": "lgpe",
+    "gameFullName": "Pokémon: Let's Go, Pikachu! and Let's Go, Eevee!",
+    "lvlUpColumn": "LGPE",
+    "moveTutorColumn": 2,
+    "maxDexNum": 809
+  },
+  "USUM": {
+    "genNumber": 7,
+    "genNumberRoman": "VII",
+    "isLatestGen": false,
+    "dbFilename": "usum",
+    "gameFullName": "Pokémon Ultra Sun and Ultra Moon",
+    "lvlUpColumn": "USUM",
+    "moveTutorColumn": 2,
+    "maxDexNum": 807
+  },
+  "SM": {
+    "genNumber": 7,
+    "genNumberRoman": "VII",
+    "isLatestGen": false,
+    "dbFilename": "sm",
+    "gameFullName": "Pokémon Sun and Moon",
+    "lvlUpColumn": "SM",
+    "moveTutorColumn": 1,
+    "maxDexNum": 802
+  },
+  "ORAS": {
+    "genNumber": 6,
+    "genNumberRoman": "VI",
+    "isLatestGen": false,
+    "dbFilename": "oras",
+    "gameFullName": "Pokémon Omega Ruby and Alpha Sapphire",
+    "lvlUpColumn": "ORAS",
+    "moveTutorColumn": 2,
+    "maxDexNum": 721
+  },
+  "XY": {
+    "genNumber": 6,
+    "genNumberRoman": "VI",
+    "isLatestGen": false,
+    "dbFilename": "xy",
+    "gameFullName": "Pokémon X and Y",
+    "lvlUpColumn": "XY",
+    "moveTutorColumn": 1,
+    "maxDexNum": 721
+  },
+  "B2W2": {
+    "genNumber": 5,
+    "genNumberRoman": "V",
+    "isLatestGen": false,
+    "dbFilename": "b2w2",
+    "gameFullName": "Pokémon Black 2 and White 2",
+    "lvlUpColumn": "B2W2",
+    "moveTutorColumn": 2,
+    "maxDexNum": 649
+  },
+  "BW": {
+    "genNumber": 5,
+    "genNumberRoman": "V",
+    "isLatestGen": false,
+    "dbFilename": "bw",
+    "gameFullName": "Pokémon Black and White",
+    "lvlUpColumn": "BW",
+    "moveTutorColumn": 1,
+    "maxDexNum": 649
+  },
+  "HGSS": {
+    "genNumber": 4,
+    "genNumberRoman": "IV",
+    "isLatestGen": false,
+    "dbFilename": "hgss",
+    "gameFullName": "Pokémon HeartGold and SoulSilver",
+    "lvlUpColumn": "PtHGSS",
+    "moveTutorColumn": 3,
+    "maxDexNum": 493
+  },
+  "PT": {
+    "genNumber": 4,
+    "genNumberRoman": "IV",
+    "isLatestGen": false,
+    "dbFilename": "pt",
+    "gameFullName": "Pokémon Platinum",
+    "lvlUpColumn": "PtHGSS",
+    "moveTutorColumn": 2,
+    "maxDexNum": 493
+  },
+  "DP": {
+    "genNumber": 4,
+    "genNumberRoman": "IV",
+    "isLatestGen": false,
+    "dbFilename": "dp",
+    "gameFullName": "Pokémon Diamond and Pearl",
+    "lvlUpColumn": "DP",
+    "moveTutorColumn": 1,
+    "maxDexNum": 493
+  },
+  "FRLG": {
+    "genNumber": 3,
+    "genNumberRoman": "III",
+    "isLatestGen": false,
+    "dbFilename": "frlg",
+    "gameFullName": "Pokémon Fire Red and Leaf Green",
+    "lvlUpColumn": "FRLG",
+    "moveTutorColumn": 1,
+    "maxDexNum": 386
+  },
+  "RSE": {
+    "genNumber": 3,
+    "genNumberRoman": "III",
+    "isLatestGen": false,
+    "dbFilename": "rse",
+    "gameFullName": "Pokémon Ruby, Sapphire and Emerald",
+    "lvlUpColumn": "RSE",
+    "moveTutorColumn": 2,
+    "maxDexNum": 386
+  },
+  "C": {
+    "genNumber": 2,
+    "genNumberRoman": "II",
+    "isLatestGen": false,
+    "dbFilename": "c",
+    "gameFullName": "Pokémon Crystal",
+    "lvlUpColumn": "C",
+    "moveTutorColumn": 1,
+    "maxDexNum": 251
+  },
+  "GS": {
+    "genNumber": 2,
+    "genNumberRoman": "II",
+    "isLatestGen": false,
+    "dbFilename": "gs",
+    "gameFullName": "Pokémon Gold and Silver",
+    "lvlUpColumn": "GS",
+    "moveTutorColumn": 0,
+    "maxDexNum": 251
+  },
+  "Y": {
+    "genNumber": 1,
+    "genNumberRoman": "I",
+    "isLatestGen": false,
+    "dbFilename": "y",
+    "gameFullName": "Pokémon Yellow",
+    "lvlUpColumn": "Y",
+    "moveTutorColumn": 1,
+    "maxDexNum": 151
+  },
+  "RGB": {
+    "genNumber": 1,
+    "genNumberRoman": "I",
+    "isLatestGen": false,
+    "dbFilename": "rgb",
+    "gameFullName": "Pokémon Red, Green and Blue",
+    "lvlUpColumn": "RGB",
+    "moveTutorColumn": 1,
+    "maxDexNum": 151
+  }
+}
