@@ -31,6 +31,7 @@
 #define FEATURE_POKECENTERSDISREGARDEGGS // Make pokecenters disregard eggs during healing animations
 #define FEATURE_LOWERCASEAFTERFIRSTCHAR  // After the first character is picked, auto select the lowercase keyboard
 #define FEATURE_REMOVECONTESTTAB // Removes the contest tab
+#define FEATURE_INDOORRUN // Allow running while indoors
 
 // Various undefined behavior bugs may or may not prevent compilation with
 // newer compilers. So always fix them when using a modern compiler.
