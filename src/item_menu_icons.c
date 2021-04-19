@@ -641,3 +641,15 @@ u8 CreateBerryFlavorCircleSprite(s16 x)
 {
     return CreateSprite(&gBerryCheckCircleSpriteTemplate, x, 116, 0);
 }
+
+#ifdef BUGFIX
+// Fix for `Scrolling through items in the bag causes the image to flicker` as per "Bugs and Glitches Markdown"
+void HideBagItemIconSprite(u8 id)
+{
+    u8 *spriteId = &gBagMenu->spriteId[10];
+    if (spriteId[id] != 0xFF)
+    {
+        gSprite[spriteId[id]].invisible = TRUE;
+    }
+}
+#endif
