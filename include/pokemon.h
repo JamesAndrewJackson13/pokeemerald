@@ -213,7 +213,7 @@ struct BaseStats
             u8 bodyColor : 7;
             u8 noFlip : 1;
             u8 flags;
-            u8 abilityHidden;
+            //u8 abilityHidden;
 }; /* size = 28 */
 
 #include "constants/battle_config.h"
