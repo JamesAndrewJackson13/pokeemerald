@@ -212,8 +212,9 @@ struct BaseStats
             u8 safariZoneFleeRate;
             u8 bodyColor : 7;
             u8 noFlip : 1;
- /* 0x1B */ u8 flags;
-};
+            u8 flags;
+            u8 abilityHidden;
+}; /* size = 28 */
 
 #include "constants/battle_config.h"
 struct BattleMove
