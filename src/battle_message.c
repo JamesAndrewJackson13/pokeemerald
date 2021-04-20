@@ -47,9 +47,11 @@ struct BattleWindowText
 extern const u16 gUnknown_08D85620[];
 
 // this file's functions
-static void ChooseMoveUsedParticle(u8 *textPtr);
-static void ChooseTypeOfMoveUsedString(u8 *dst);
-static void ExpandBattleTextBuffPlaceholders(const u8 *src, u8 *dst);
+#ifndef FEATURE_REMOVEJPNGRAMMERTABLES
+static void ChooseMoveUsedParticle(u8* textPtr);
+static void ChooseTypeOfMoveUsedString(u8* dst);
+#endif
+static void ExpandBattleTextBuffPlaceholders(const u8* src, u8* dst);
 
 // EWRAM vars
 static EWRAM_DATA u16 sBattlerAbilities[MAX_BATTLERS_COUNT] = {0};
@@ -2297,6 +2299,7 @@ static const u8 sText_Opposing1[] = _("The opposing");
 static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 
+#ifndef FEATURE_REMOVEJPNGRAMMERTABLES
 // This is four lists of moves which use a different attack string in Japanese
 // to the default. See the documentation for ChooseTypeOfMoveUsedString for more detail.
 static const u16 sGrammarMoveUsedTable[] =
@@ -2337,7 +2340,7 @@ static const u16 sGrammarMoveUsedTable[] =
         MOVE_UPROAR, MOVE_SPIT_UP, MOVE_SWALLOW, MOVE_TORMENT,
         MOVE_FLATTER, MOVE_ROLE_PLAY, MOVE_ENDEAVOR, MOVE_TICKLE,
         MOVE_COVET, 0};
-
+#endif
 static const u8 sDummyWeirdStatusString[] = {EOS, EOS, EOS, EOS, EOS, EOS, EOS, EOS, 0, 0};
 
 static const struct BattleWindowText sTextOnWindowsInfo_Normal[] =
@@ -4054,6 +4057,7 @@ static void ExpandBattleTextBuffPlaceholders(const u8 *src, u8 *dst)
     }
 }
 
+#ifndef FEATURE_REMOVEJPNGRAMMERTABLES
 // Loads one of two text strings into the provided buffer. This is functionally
 // unused, since the value loaded into the buffer is not read; it loaded one of
 // two particles (either "?" or "?") which works in tandem with ChooseTypeOfMoveUsedString
@@ -4079,7 +4083,9 @@ static void ChooseMoveUsedParticle(u8 *textBuff)
             StringCopy(textBuff, sText_ApostropheS); // 's
     }
 }
+#endif
 
+#ifndef FEATURE_REMOVEJPNGRAMMERTABLES
 // Appends "!" to the text buffer `dst`. In the original Japanese this looked
 // into the table of moves at sGrammarMoveUsedTable and varied the line accordingly.
 //
@@ -4133,8 +4139,9 @@ static void ChooseTypeOfMoveUsedString(u8 *dst)
         break;
     }
 }
+#endif
 
-void BattlePutTextOnWindow(const u8 *text, u8 windowId)
+void BattlePutTextOnWindow(const u8* text, u8 windowId)
 {
     const struct BattleWindowText *textInfo = sBattleTextOnWindowsInfo[gBattleScripting.windowsType];
     bool32 copyToVram;
