@@ -32,6 +32,7 @@
 #define FEATURE_LOWERCASEAFTERFIRSTCHAR  // After the first character is picked, auto select the lowercase keyboard
 #define FEATURE_REMOVECONTESTTAB // Removes the contest tab
 #define FEATURE_INDOORRUN // Allow running while indoors
+#define FEATURE_MODERNWHITEOUTMONEYLOSS // Changes the amount of money lost on whiteout to be more like modern pokemon games (Also modify `battle_scripts_1.s`)
 
 // Various undefined behavior bugs may or may not prevent compilation with
 // newer compilers. So always fix them when using a modern compiler.

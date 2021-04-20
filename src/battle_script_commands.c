@@ -1565,7 +1565,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
         calc = (calc * (100 + atkParam)) / 100;
     else if (atkHoldEffect == HOLD_EFFECT_ZOOM_LENS && GetBattlerTurnOrderNum(battlerAtk) > GetBattlerTurnOrderNum(battlerDef));
         calc = (calc * (100 + atkParam)) / 100;
-    
+
     if (gProtectStructs[battlerAtk].micle)
     {
         gProtectStructs[battlerAtk].micle = FALSE;
@@ -4414,7 +4414,7 @@ static void Cmd_playanimation(void)
 
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
     argumentPtr = T2_READ_PTR(gBattlescriptCurrInstr + 3);
-    
+
     #if B_TERRAIN_BG_CHANGE == FALSE
     if (gBattlescriptCurrInstr[2] == B_ANIM_RESTORE_BG)
     {
@@ -6254,6 +6254,84 @@ static u32 GetTrainerMoneyToGive(u16 trainerId)
     return moneyReward;
 }
 
+#ifdef FEATURE_MODERNWHITEOUTMONEYLOSS
+static void Cmd_getmoneyreward(void)
+{
+    u32 money;
+    if (gBattleOutcome == B_OUTCOME_WON)
+    {
+        money = GetTrainerMoneyToGive(gTrainerBattleOpponent_A);
+        if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS)
+            money += GetTrainerMoneyToGive(gTrainerBattleOpponent_B);
+        AddMoney(&gSaveBlock1Ptr->money, money);
+    }
+    else
+    {
+        s32 i, temp, monSpecies2, monLevel;
+        for (temp = 0, i = 0; i < PARTY_SIZE; i++)
+        {
+            monSpecies2 = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
+            if (monSpecies2 != SPECIES_NONE && monSpecies2 != SPECIES_EGG)
+            {
+                monLevel = GetMonData(&gPlayerParty[i], MON_DATA_LEVEL);
+                if (monLevel > temp)
+                {
+                    temp = monLevel;
+                }
+            }
+        }
+        // Now, we store the max level in the party (which is in temp) back into monLevel for the later calc
+        monLevel = temp;
+        for (temp = 0, i = 0; i < NUM_BADGES; i++)
+        {
+            temp += FlagGet(sBadgeFlags[i]);
+        }
+        // Base payout rate is dependant on # of badges
+        switch(temp) {
+            case 1: {
+                money = monLevel * 16;
+                break;
+            }
+            case 2: {
+                money = monLevel * 24;
+                break;
+            }
+            case 3: {
+                money = monLevel * 36;
+                break;
+            }
+            case 4: {
+                money = monLevel * 48;
+                break;
+            }
+            case 5: {
+                money = monLevel * 64;
+                break;
+            }
+            case 6: {
+                money = monLevel * 80;
+                break;
+            }
+            case 7: {
+                money = monLevel * 100;
+                break;
+            }
+            case 8: {
+                money = monLevel * 120;
+                break;
+            }
+            default {
+                money = monLevel * 8;
+                break;
+            }
+        }
+        RemoveMoney(&gSaveBlock1Ptr->money, money);
+    }
+
+    PREPARE_WORD_NUMBER_BUFFER(gBattleTextBuff1, 5, money);
+    gBattlescriptCurrInstr++;
+}
+#else
 static void Cmd_getmoneyreward(void)
 {
     u32 moneyReward = GetTrainerMoneyToGive(gTrainerBattleOpponent_A);
@@ -6265,6 +6343,7 @@ static void Cmd_getmoneyreward(void)
 
     gBattlescriptCurrInstr++;
 }
+#endif
 
 static void Cmd_unknown_5E(void)
 {
@@ -9136,17 +9215,17 @@ bool32 TryResetBattlerStatChanges(u8 battler)
 {
     u32 j;
     bool32 ret = FALSE;
-    
+
     gDisableStructs[battler].stockpileDef = 0;
     gDisableStructs[battler].stockpileSpDef = 0;
     for (j = 0; j < NUM_BATTLE_STATS; j++)
     {
         if (gBattleMons[battler].statStages[j] != DEFAULT_STAT_STAGE)
             ret = TRUE; // returns TRUE if any stat was reset
-        
+
         gBattleMons[battler].statStages[j] = DEFAULT_STAT_STAGE;
     }
-    
+
     return ret;
 }
 
@@ -11981,7 +12060,7 @@ static void Cmd_handleballthrow(void)
         else
             catchRate = gBaseStats[gBattleMons[gBattlerTarget].species].catchRate;
 
-        
+
         #ifdef POKEMON_EXPANSION
         if (gBaseStats[gBattleMons[gBattlerTarget].species].flags & F_ULTRA_BEAST)
         {
@@ -12546,7 +12625,23 @@ static void Cmd_trainerslideout(void)
     gBattlescriptCurrInstr += 2;
 }
 
-static void Cmd_settelekinesis(void)
+#ifdef FEATURE_MODERNWHITEOUTMONEYLOSS
+extern u8 gMaxPartyLevel;
+static const u16 sBadgeFlags[NUM_BADGES] =
+    {
+        FLAG_BADGE01_GET,
+        FLAG_BADGE02_GET,
+        FLAG_BADGE03_GET,
+        FLAG_BADGE04_GET,
+        FLAG_BADGE05_GET,
+        FLAG_BADGE06_GET,
+        FLAG_BADGE07_GET,
+        FLAG_BADGE08_GET,
+    }
+#endif
+
+static void
+Cmd_settelekinesis(void)
 {
     if (gStatuses3[gBattlerTarget] & (STATUS3_TELEKINESIS | STATUS3_ROOTED | STATUS3_SMACKED_DOWN)
         || gFieldStatuses & STATUS_FIELD_GRAVITY
@@ -12704,4 +12799,3 @@ static bool32 CriticalCapture(u32 odds)
         return FALSE;
     #endif
 }
-
