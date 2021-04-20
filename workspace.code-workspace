@@ -12,14 +12,10 @@
 		"files.associations": {
 			"*.item": "openhab",
 			"*.json": "json",
-			"battle_controllers.h": "c",
-			"battle_util.h": "c",
-			"global.h": "c",
-			"game_stat.h": "c",
-			"global.berry.h": "c",
-			"limits.h": "c",
-			"gba.h": "c",
-			"event_object_movement.h": "c"
+			"*.h": "c",
+			"xhash": "c",
+			"xtree": "c",
+			"xutility": "c"
 		}
 	}
 }
