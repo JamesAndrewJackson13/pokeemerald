@@ -3,7 +3,7 @@
 
 struct SaveSectionLocation
 {
-    void *data;
+    void* data;
     u16 size;
 };
 
@@ -29,11 +29,16 @@ struct SaveSectionOffsets
     u16 size;
 };
 
+#ifdef FEATURE_SAVEMEMORYFOOTER
+#define SECTOR_DATA_SIZE 4084
+#define SECTOR_FOOTER_SIZE 12
+#define SECTOR_SIZE (SECTOR_DATA_SIZE + SECTOR_FOOTER_SIZE)
+#else
 // Each 4 KiB flash sector contains 3968 bytes of actual data followed by a 128 byte footer
 #define SECTOR_DATA_SIZE 3968
 #define SECTOR_FOOTER_SIZE 128
 #define SECTOR_SIZE (SECTOR_DATA_SIZE + SECTOR_FOOTER_SIZE)
-
+#endif
 // Emerald changes this definition to be the sectors per slot.
 #define NUM_SECTORS_PER_SLOT 16
 
@@ -84,7 +89,7 @@ extern u32 gLastSaveCounter;
 extern u16 gLastKnownGoodSector;
 extern u32 gDamagedSaveSectors;
 extern u32 gSaveCounter;
-extern struct SaveSection *gFastSaveSection;
+extern struct SaveSection* gFastSaveSection;
 extern u16 gUnknown_03006208;
 extern u16 gSaveFileStatus;
 extern void (*gGameContinueCallback)(void);
