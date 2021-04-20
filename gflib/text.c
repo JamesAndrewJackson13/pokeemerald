@@ -1355,7 +1355,7 @@ s32 GetStringWidth(u8 fontId, const u8* str, s16 letterSpacing)
                     localLetterSpacing = GetFontAttribute(fontId, FONTATTR_LETTER_SPACING);
                 else
                     localLetterSpacing = letterSpacing;
-                break
+                break;
 #endif
             case EXT_CTRL_CODE_PAUSE_UNTIL_PRESS:
             case EXT_CTRL_CODE_WAIT_SE:
@@ -1513,7 +1513,7 @@ u8 RenderTextFont9(u8* pixels, u8 fontId, u8* str)
             pixels += 0x40;
             break;
         }
-    }     while (temp != EOS);
+    } while (temp != EOS);
 
     RestoreTextColors(&colorBackup[0], &colorBackup[1], &colorBackup[2]);
     return 1;

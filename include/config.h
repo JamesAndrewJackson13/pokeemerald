@@ -42,6 +42,7 @@
 #define FEATURE_REMOVEJPNGRAMMERTABLES  // Removes grammar tables and related function checks that aren't needed in the english version of the game
 #define FEATURE_DONTCONSUMETMS  // Treat TMs the way future games will; basically as HMs
 #define FEATURE_RESETSIZEFUNCTION  // Re-implements the otherwise missing `RESET_SIZE` text function
+#define FEATURE_PROPERPLURALGIVEITEM  // Implements a proper plural give item script, to put the "s" at the end of the item
 // VARS
 #define FEATURE_FASTERHPDRAINRATE 40  // When defined, this will use an alternate hp drain formula. The smaller the value, the faster it will drain. 48 is aprox. the speed of vanilla.
 // END EXTRA FEATURES
