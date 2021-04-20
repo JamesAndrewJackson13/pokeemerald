@@ -16,6 +16,12 @@
 			"xhash": "c",
 			"xtree": "c",
 			"xutility": "c"
-		}
+		},
+		"C_Cpp.formatting": "vcFormat",
+		"C_Cpp.vcFormat.newLine.beforeOpenBrace.type": "newLine",
+		"C_Cpp.vcFormat.newLine.scopeBracesOnSeparateLines": true,
+		"C_Cpp.vcFormat.newLine.beforeOpenBrace.function": "newLine",
+		"C_Cpp.vcFormat.newLine.beforeOpenBrace.block": "newLine",
+		"C_Cpp.vcFormat.newLine.beforeOpenBrace.lambda": "newLine"
 	}
 }
