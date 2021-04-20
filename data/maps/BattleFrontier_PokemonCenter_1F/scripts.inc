@@ -2,7 +2,7 @@
 
 BattleFrontier_PokemonCenter_1F_MapScripts:: @ 82678F9
 	map_script MAP_SCRIPT_ON_TRANSITION, BattleFrontier_PokemonCenter_1F_OnTransition
-	map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
+	//map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
 	.byte 0
 
 BattleFrontier_PokemonCenter_1F_OnTransition: @ 8267904
@@ -58,4 +58,3 @@ BattleFrontier_PokemonCenter_1F_Text_GoingThroughEveryChallenge: @ 8267A4B
 
 BattleFrontier_PokemonCenter_1F_Text_Skitty: @ 8267A90
 	.string "SKITTY: Mya myaaah!$"
-

@@ -4,7 +4,7 @@
 
 EverGrandeCity_PokemonLeague_1F_MapScripts:: @ 82295D2
 	map_script MAP_SCRIPT_ON_TRANSITION, EverGrandeCity_PokemonLeague_1F_OnTransition
-	map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
+	//map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
 	.byte 0
 
 EverGrandeCity_PokemonLeague_1F_OnTransition: @ 82295DD
@@ -142,4 +142,3 @@ EverGrandeCity_PokemonLeague_1F_Text_HaventObtainedAllBadges: @ 8229787
 EverGrandeCity_PokemonLeague_1F_Text_GoForth: @ 82297EF
 	.string "TRAINER! Believe in yourself and your\n"
 	.string "POKéMON, and go forth!$"
-

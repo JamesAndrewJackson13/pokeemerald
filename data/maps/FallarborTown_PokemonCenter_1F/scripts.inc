@@ -3,7 +3,7 @@
 
 FallarborTown_PokemonCenter_1F_MapScripts:: @ 8200BCD
 	map_script MAP_SCRIPT_ON_TRANSITION, FallarborTown_PokemonCenter_1F_OnTransition
-	map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
+	//map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
 	.byte 0
 
 FallarborTown_PokemonCenter_1F_OnTransition: @ 8200BD8
@@ -111,4 +111,3 @@ FallarborTown_PokemonCenter_1F_Text_PlantHardyTrees: @ 8200E8B
 	.string "In the fields of FALLARBOR, we plant\n"
 	.string "seedlings of hardy trees that thrive\l"
 	.string "even in volcanic ash.$"
-

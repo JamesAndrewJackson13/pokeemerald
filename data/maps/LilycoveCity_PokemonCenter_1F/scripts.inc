@@ -2,7 +2,7 @@
 
 LilycoveCity_PokemonCenter_1F_MapScripts:: @ 821C5B2
 	map_script MAP_SCRIPT_ON_TRANSITION, LilycoveCity_PokemonCenter_1F_OnTransition
-	map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
+	//map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
 	.byte 0
 
 LilycoveCity_PokemonCenter_1F_OnTransition: @ 821C5BD
@@ -67,4 +67,3 @@ LilycoveCity_PokemonCenter_1F_Text_HaventSeenRottenScoundrels: @ 821C6F6
 	.string "Those rotten scoundrels who steal\n"
 	.string "POKéMON and rip off METEORITES…\p"
 	.string "I haven't seen them around recently.$"
-

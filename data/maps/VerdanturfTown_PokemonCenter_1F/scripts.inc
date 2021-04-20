@@ -2,7 +2,7 @@
 
 VerdanturfTown_PokemonCenter_1F_MapScripts:: @ 8202726
 	map_script MAP_SCRIPT_ON_TRANSITION, VerdanturfTown_PokemonCenter_1F_OnTransition
-	map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
+	//map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
 	.byte 0
 
 VerdanturfTown_PokemonCenter_1F_OnTransition: @ 8202731
@@ -41,4 +41,3 @@ VerdanturfTown_PokemonCenter_1F_Text_VisitForBattleTent: @ 820280B
 	.string "saying.\p"
 	.string "Or is there somebody here that you\n"
 	.string "came to see?$"
-

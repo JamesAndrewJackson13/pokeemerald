@@ -2,7 +2,7 @@
 
 DewfordTown_PokemonCenter_1F_MapScripts:: @ 81FC523
 	map_script MAP_SCRIPT_ON_TRANSITION, DewfordTown_PokemonCenter_1F_OnTransition
-	map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
+	//map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
 	.byte 0
 
 DewfordTown_PokemonCenter_1F_OnTransition: @ 81FC52E
@@ -36,4 +36,3 @@ DewfordTown_PokemonCenter_1F_Text_FaintedMonCanUseHM: @ 81FC5AE
 	.string "Even if a POKéMON faints and can't\n"
 	.string "battle, it can still use a move learned\l"
 	.string "from a HIDDEN MACHINE (HM).$"
-

@@ -2,7 +2,7 @@
 
 FortreeCity_PokemonCenter_1F_MapScripts:: @ 82173D8
 	map_script MAP_SCRIPT_ON_TRANSITION, FortreeCity_PokemonCenter_1F_OnTransition
-	map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
+	//map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
 	.byte 0
 
 FortreeCity_PokemonCenter_1F_OnTransition: @ 82173E3
@@ -54,4 +54,3 @@ FortreeCity_PokemonCenter_1F_Text_DoYouKnowAboutPokenav: @ 821751F
 	.string "want a rematch with you.\p"
 	.string "It's really nifty! Those DEVON guys\n"
 	.string "sure know what they're doing!$"
-

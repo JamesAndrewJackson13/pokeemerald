@@ -2,7 +2,7 @@
 
 PetalburgCity_PokemonCenter_1F_MapScripts:: @ 82079E8
 	map_script MAP_SCRIPT_ON_TRANSITION, PetalburgCity_PokemonCenter_1F_OnTransition
-	map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
+	//map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
 	.byte 0
 
 PetalburgCity_PokemonCenter_1F_OnTransition: @ 82079F3
@@ -97,4 +97,3 @@ PetalburgCity_PokemonCenter_1F_Text_MudkipIsWaterType: @ 8207CB7
 	.string "It's strong against the FIRE type.\p"
 	.string "But, it's weak against GRASS-type\n"
 	.string "and ELECTRIC-type POKéMON.$"
-

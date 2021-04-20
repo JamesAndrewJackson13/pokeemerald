@@ -2,7 +2,7 @@
 
 RustboroCity_PokemonCenter_1F_MapScripts:: @ 8214D62
 	map_script MAP_SCRIPT_ON_TRANSITION, RustboroCity_PokemonCenter_1F_OnTransition
-	map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
+	//map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
 	.byte 0
 
 RustboroCity_PokemonCenter_1F_OnTransition: @ 8214D6D
@@ -46,4 +46,3 @@ RustboroCity_PokemonCenter_1F_Text_HMCutNextDoor: @ 8214E81
 	.string "The man next door gave me an HM!\p"
 	.string "I used it to teach my POKéMON how to\n"
 	.string "CUT down skinny trees.$"
-
