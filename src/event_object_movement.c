@@ -1876,7 +1876,7 @@ const struct ObjectEventGraphicsInfo *GetObjectEventGraphicsInfo(u8 graphicsId)
     {
         graphicsId = OBJ_EVENT_GFX_NINJA_BOY;
     }
-    
+
     return gObjectEventGraphicsInfoPointers[graphicsId];
 }
 
@@ -7536,7 +7536,7 @@ static void ObjectEventUpdateMetatileBehaviors(struct ObjectEvent *objEvent)
 
 static void GetGroundEffectFlags_Reflection(struct ObjectEvent *objEvent, u32 *flags)
 {
-    u32 reflectionFlags[NUM_REFLECTION_TYPES - 1] = { 
+    u32 reflectionFlags[NUM_REFLECTION_TYPES - 1] = {
         [REFL_TYPE_ICE   - 1] = GROUND_EFFECT_FLAG_ICE_REFLECTION,
         [REFL_TYPE_WATER - 1] = GROUND_EFFECT_FLAG_WATER_REFLECTION
     };
@@ -7754,7 +7754,7 @@ static u8 ObjectEventGetNearbyReflectionType(struct ObjectEvent *objEvent)
             RETURN_REFLECTION_TYPE_AT(objEvent->previousCoords.x - j, objEvent->previousCoords.y + one + i)
         }
     }
-    
+
     return REFL_TYPE_NONE;
 }
 
@@ -8196,7 +8196,11 @@ static void DoGroundEffects_OnSpawn(struct ObjectEvent *objEvent, struct Sprite 
 {
     u32 flags;
 
+    #ifdef FEATURE_FIXFREECAMINTERACTIONS
+    if (objEvent->triggerGroundEffectsOnMove && objEvent->localId != OBJ_EVENT_ID_CAMERA)
+    #else
     if (objEvent->triggerGroundEffectsOnMove)
+    #endif
     {
         flags = 0;
         UpdateObjectEventZCoordAndPriority(objEvent, sprite);
@@ -8212,7 +8216,11 @@ static void DoGroundEffects_OnBeginStep(struct ObjectEvent *objEvent, struct Spr
 {
     u32 flags;
 
+#ifdef FEATURE_FIXFREECAMINTERACTIONS
+    if (objEvent->triggerGroundEffectsOnMove && objEvent->localId != OBJ_EVENT_ID_CAMERA)
+#else
     if (objEvent->triggerGroundEffectsOnMove)
+#endif
     {
         flags = 0;
         UpdateObjectEventZCoordAndPriority(objEvent, sprite);
@@ -8229,7 +8237,12 @@ static void DoGroundEffects_OnFinishStep(struct ObjectEvent *objEvent, struct Sp
 {
     u32 flags;
 
+
+    #ifdef FEATURE_FIXFREECAMINTERACTIONS
+    if (objEvent->triggerGroundEffectsOnStop  && objEvent->localId != OBJ_EVENT_ID_CAMERA)
+    #else
     if (objEvent->triggerGroundEffectsOnStop)
+    #endif
     {
         flags = 0;
         UpdateObjectEventZCoordAndPriority(objEvent, sprite);
