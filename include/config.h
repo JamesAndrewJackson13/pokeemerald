@@ -37,6 +37,7 @@
 #define FEATURE_IMPROVEDVBLANK // Improves the vblank to properly put the CPU in low power mode while waiting for v-blank
 #define FEATURE_FIXFREECAMINTERACTIONS // Fixes issues where the free-cam will cause water to ripple and grass to rustle
 #define FEATURE_DONTSHOWENTRIESUNTILPOKEDEX  // Prevents the pokedex entries showing until the player actually has the dex
+#define FEATURE_FASTERHPDRAINRATE 40  // When defined, this will use an alternate hp drain formula. The smaller the value, the faster it will drain. 48 is aprox. the speed of vanilla.
 
 // Various undefined behavior bugs may or may not prevent compilation with
 // newer compilers. So always fix them when using a modern compiler.
