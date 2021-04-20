@@ -91,7 +91,7 @@ void AgbMain()
 #if !MODERN
     RegisterRamReset(RESET_ALL);
 #endif //MODERN
-    *(vu16 *)BG_PLTT = RGB_WHITE; // Set the backdrop to white on startup
+    * (vu16*)BG_PLTT = RGB_WHITE; // Set the backdrop to white on startup
     InitGpuRegManager();
     REG_WAITCNT = WAITCNT_PREFETCH_ENABLE | WAITCNT_WS0_S_1 | WAITCNT_WS0_N_3;
     InitKeys();
@@ -124,8 +124,8 @@ void AgbMain()
         ReadKeys();
 
         if (gSoftResetDisabled == FALSE
-         && (gMain.heldKeysRaw & A_BUTTON)
-         && (gMain.heldKeysRaw & B_START_SELECT) == B_START_SELECT)
+            && (gMain.heldKeysRaw & A_BUTTON)
+            && (gMain.heldKeysRaw & B_START_SELECT) == B_START_SELECT)
         {
             rfu_REQ_stopMode();
             rfu_waitREQComplete();
@@ -396,17 +396,22 @@ static void SerialIntr(void)
 }
 
 static void IntrDummy(void)
-{}
+{
+}
 
 static void WaitForVBlank(void)
 {
     gMain.intrCheck &= ~INTR_FLAG_VBLANK;
 
+#ifdef FEATURE_IMPROVEDVBLANK
+    asm("swi 0x5");  // Inlined call to "VBlankIntrWait" function
+#else
     while (!(gMain.intrCheck & INTR_FLAG_VBLANK))
+#endif
         ;
 }
 
-void SetTrainerHillVBlankCounter(u32 *counter)
+void SetTrainerHillVBlankCounter(u32* counter)
 {
     gTrainerHillVBlankCounter = counter;
 }
