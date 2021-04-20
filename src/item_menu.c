@@ -1992,7 +1992,11 @@ void Task_ItemContext_Sell(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
 
+#ifdef FEATURE_DONTCONSUMETMS
+    if (ItemId_GetPrice(gSpecialVar_ItemId) == 0 || ItemId_GetPocket(gSpecialVar_ItemId) == POCKET_TM_HM)
+#else
     if (ItemId_GetPrice(gSpecialVar_ItemId) == 0)
+#endif
     {
         CopyItemName(gSpecialVar_ItemId, gStringVar2);
         StringExpandPlaceholders(gStringVar4, gText_CantBuyKeyItem);

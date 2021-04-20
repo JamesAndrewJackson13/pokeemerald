@@ -252,7 +252,7 @@ const u8 gText_ThePokemonList[] = _("the POKéMON LIST");
 const u8 gText_TheShop[] = _("the shop");
 const u8 gText_ThePC[] = _("the PC");
 
-const u8 *const gReturnToXStringsTable[] =
+const u8* const gReturnToXStringsTable[] =
 {
     gText_TheField,
     gText_TheBattle,
@@ -268,7 +268,7 @@ const u8 *const gReturnToXStringsTable[] =
     gText_ThePC
 };
 
-const u8 *const gReturnToXStringsTable2[] =
+const u8* const gReturnToXStringsTable2[] =
 {
     gText_TheField,
     gText_TheBattle,
@@ -283,7 +283,7 @@ const u8 gText_TMHMPocket[] = _("TMs & HMs");
 const u8 gText_BerriesPocket[] = _("BERRIES");
 const u8 gText_KeyItemsPocket[] = _("KEY ITEMS");
 
-const u8 *const gPocketNamesStringsTable[] =
+const u8* const gPocketNamesStringsTable[] =
 {
     gText_ItemsPocket,
     gText_PokeBallsPocket,
@@ -350,6 +350,9 @@ const u8 gText_ThankYouIllSendItHome[] = _("Thank you!\nI'll send it to your hom
 const u8 gText_ThanksIllSendItHome[] = _("Thanks!\nI'll send it to your PC at home.");
 const u8 gText_YouDontHaveMoney[] = _("You don't have enough money.{PAUSE_UNTIL_PRESS}");
 const u8 gText_NoMoreRoomForThis[] = _("You have no more room for this\nitem.{PAUSE_UNTIL_PRESS}");
+#ifdef FEATURE_DONTCONSUMETMS
+const u8 gText_YouAlreadyHaveThis[] = _("You already have this item.{PAUSE_UNTIL_PRESS}");
+#endif
 const u8 gText_SpaceForVar1Full[] = _("The space for {STR_VAR_1} is full.{PAUSE_UNTIL_PRESS}");
 const u8 gText_AnythingElseICanHelp[] = _("Is there anything else I can help\nyou with?");
 const u8 gText_CanIHelpWithAnythingElse[] = _("Can I help you with anything else?");
@@ -656,7 +659,7 @@ const u8 gText_Satisfied[] = _("Satisfied");
 const u8 gText_Dissatisfied[] = _("Dissatisfied");
 const u8 gText_DeepSeaTooth[] = _("DEEPSEATOOTH");
 const u8 gText_DeepSeaScale[] = _("DEEPSEASCALE");
-const u8 gText_BlueFlute2[] = _("BLUE FLUTE"); 
+const u8 gText_BlueFlute2[] = _("BLUE FLUTE");
 const u8 gText_YellowFlute2[] = _("YELLOW FLUTE");
 const u8 gText_RedFlute2[] = _("RED FLUTE");
 const u8 gText_WhiteFlute2[] = _("WHITE FLUTE");
@@ -1457,7 +1460,7 @@ ALIGNED(4) const u8 gText_FrontierFacilityClearStreak[] = _("Clear streak: {STR_
 ALIGNED(4) const u8 gText_FrontierFacilityRoomsCleared[] = _("Rooms cleared: {STR_VAR_2}");
 ALIGNED(4) const u8 gText_FrontierFacilityKOsStreak[] = _("KOs in a row: {STR_VAR_2}");
 ALIGNED(4) const u8 gText_FrontierFacilityFloorsCleared[] = _("Floors cleared: {STR_VAR_2}");
-ALIGNED(4) const u8 gText_123Dot[][3] = {_("1."), _("2."), _("3.")};
+ALIGNED(4) const u8 gText_123Dot[][3] = { _("1."), _("2."), _("3.") };
 
 const u8 gText_SavingDontTurnOff2[] = _("SAVING…\nDON'T TURN OFF THE POWER.");
 const u8 gText_BlenderMaxSpeedRecord[] = _("BERRY BLENDER\nMAXIMUM SPEED RECORD!");
@@ -1650,7 +1653,7 @@ const u8 gText_F701Players[] = _("{DYNAMIC 1} players");
 const u8 gText_F702Players[] = _("{DYNAMIC 2} players");
 const u8 gText_F703Players[] = _("{DYNAMIC 3} players");
 
-const u8 *const gTextTable_Players[] = {
+const u8* const gTextTable_Players[] = {
     gText_F700Players,
     gText_F701Players,
     gText_F702Players,
