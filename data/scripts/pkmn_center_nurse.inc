@@ -21,6 +21,7 @@ Common_EventScript_PkmnCenterNurse:: @ 827191E
     specialvar VAR_RESULT, CountPlayerTrainerStars
     compare VAR_RESULT, 4
     goto_if_eq EventScript_PkmnCenterNurse_GoldCard
+    goto EventScript_PkmnCenterNurse_HealPkmn
     end
 
 EventScript_PkmnCenterNurse_Goodbye:: @ 8271954
