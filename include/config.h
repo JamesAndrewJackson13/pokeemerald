@@ -27,6 +27,12 @@
 #define BUGFIX
 
 // EXTRA FEATURES
+// HARDBAKED FEATURES
+// * Extra SaveRam space
+// * DexNav feature
+// * Bag can be sorted
+// * Auto-Run on clicking the R button
+
 // FLAGS
 #define FEATURE_SAVEMEMORYFOOTER  // Shrinks the save footer to exactly the size it needs to be, saving room in sram
 #define FEATURE_SNOWCAUSESHAIL  // Allow areas with snow to cause hail
@@ -44,6 +50,7 @@
 #define FEATURE_RESETSIZEFUNCTION  // Re-implements the otherwise missing `RESET_SIZE` text function
 #define FEATURE_PROPERPLURALGIVEITEM  // Implements a proper plural give item script, to put the "s" at the end of the item
 #define FEATURE_MULTIUSEMEDITEMS  // Doesn't return to the bag when you use some medical items / rare candies
+#define FEATURE_WRAPPINGSUMMARYSCREEN  // When you reach the end of the summary screen, you will wrap back to the first/last pokemon
 // VARS
 #define FEATURE_FASTERHPDRAINRATE 40  // When defined, this will use an alternate hp drain formula. The smaller the value, the faster it will drain. 48 is aprox. the speed of vanilla.
 // END EXTRA FEATURES

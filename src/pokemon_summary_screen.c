@@ -1713,6 +1713,27 @@ static void Task_ChangeSummaryMon(u8 taskId)
     data[0]++;
 }
 
+#ifdef FEATURE_WRAPPINGSUMMARYSCREEN
+static s8 AdvanceMonIndex(s8 delta)
+{
+    struct Pokemon* mon = sMonSummaryScreen->monList.mons;
+    u8 index = sMonSummaryScreen->curMonIndex;
+    u8 numMons = sMonSummaryScreen->maxMonIndex + 1;
+    delta += numMons;
+
+    index = (index + delta) % numMons;
+
+    // skip over any Eggs unless on the Info Page
+    if (sMonSummaryScreen->currPageIndex != PSS_PAGE_INFO)
+        while (GetMonData(&mon[index], MON_DATA_IS_EGG))
+            index = (index + delta) % numMons;
+
+    // to avoid "scrolling" to the same Pokemon
+    return index == sMonSummaryScreen->curMonIndex
+        ? -1
+        : index
+}
+#else
 static s8 AdvanceMonIndex(s8 delta)
 {
     struct Pokemon *mon = sMonSummaryScreen->monList.mons;
@@ -1739,6 +1760,7 @@ static s8 AdvanceMonIndex(s8 delta)
         return index;
     }
 }
+#endif
 
 static s8 AdvanceMultiBattleMonIndex(s8 delta)
 {
