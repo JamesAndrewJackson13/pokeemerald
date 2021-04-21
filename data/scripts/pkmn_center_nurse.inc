@@ -88,7 +88,7 @@ EventScript_PkmnCenterNurse_CheckTrainerHillAndUnionRoom:: @ 82719B1
 EventScript_PkmnCenterNurse_ReturnPkmn:: @ 82719E2
     compare VAR_0x8004, 1
     goto_if_eq EventScript_PkmnCenterNurse_ReturnPkmn2
-    applymovement VAR_0x800B, EventScript_PkmnCenterNurse_Bow
+    applymovement VAR_0x800B, Movement_PkmnCenterNurse_Bow
     waitmovement 0
     message gText_WeHopeToSeeYouAgain
     goto EventScript_PkmnCenterNurse_PlayerTurn
