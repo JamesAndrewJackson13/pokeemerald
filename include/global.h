@@ -532,7 +532,8 @@ struct SaveBlock2
     /*0x64C*/ struct BattleFrontier frontier;
     /*0xF2C*/ u8 itemFlags[ITEM_FLAGS_COUNT];
     /*0xF34*/ bool8 autoRun;
-}; // sizeof=0xF3C
+    /*0xF3C*/ u8 rivalName[PLAYER_NAME_LENGTH + 1];
+}; // sizeof=0xF44
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;
 

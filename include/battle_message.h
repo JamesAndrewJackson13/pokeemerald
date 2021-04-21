@@ -59,13 +59,14 @@
 #define B_TXT_BUFF3 0x34
 #define B_TXT_ATK_TRAINER_NAME 0x35
 #define B_TXT_ATK_TRAINER_CLASS 0x36
-#define B_TXT_ATK_TEAM1 0x37 // Your/The opposing
-#define B_TXT_ATK_TEAM2 0x38 // your/the opposing
+#define B_TXT_ATK_TEAM1 0x37  // Your/The opposing
+#define B_TXT_ATK_TEAM2 0x38  // your/the opposing
 #define B_TXT_DEF_NAME 0x39
-#define B_TXT_DEF_TEAM1 0x3A // Your/The opposing
-#define B_TXT_DEF_TEAM2 0x3B // your/the opposing
+#define B_TXT_DEF_TEAM1 0x3A  // Your/The opposing
+#define B_TXT_DEF_TEAM2 0x3B  // your/the opposing
 #define B_TXT_ACTIVE_NAME 0x3C
-#define B_TXT_ACTIVE_NAME2 0x3D // no Illusion check
+#define B_TXT_ACTIVE_NAME2 0x3D  // no Illusion check
+#define B_TXT_RIVAL_NAME 0x3E  // The stored name of the Rival (Brandon / May)
 
 // for B_TXT_BUFF1, B_TXT_BUFF2 and B_TXT_BUFF3
 
