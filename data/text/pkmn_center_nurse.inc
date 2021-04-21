@@ -16,7 +16,8 @@ gText_RestoredPkmnToFullHealth:: @ 8272798
 
 gText_WeHopeToSeeYouAgain:: @ 82727DB
     @.string "We hope to see you again!$"
-    .string "Good luck out there, trainer!"
+    @.string "Good luck out there, trainer!"
+    .string "There, all healed! We're glad to be of service."
 
 gText_WelcomeCutShort:: @ 82727F5
     .string "Hello, and welcome to\n"
