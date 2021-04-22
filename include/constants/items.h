@@ -705,10 +705,34 @@
 #define ITEM_TAPUNIUM_Z               602
 #define ITEM_ULTRANECROZIUM_Z         603
 
-#define ITEM_RUNNINGSHOES_RUNNING     604
-#define ITEM_RUNNINGSHOES_WALKING     605
+// Mints
+#define ITEM_ADAMANT_MINT             604
+#define ITEM_BOLD_MINT                605
+#define ITEM_BRAVE_MINT               606
+#define ITEM_CALM_MINT                607
+#define ITEM_CAREFUL_MINT             608
+#define ITEM_GENTLE_MINT              609
+#define ITEM_HASTY_MINT               610
+#define ITEM_IMPISH_MINT              611
+#define ITEM_JOLLY_MINT               612
+#define ITEM_LAX_MINT                 613
+#define ITEM_LONELY_MINT              614
+#define ITEM_MILD_MINT                615
+#define ITEM_MODEST_MINT              616
+#define ITEM_NAIVE_MINT               617
+#define ITEM_NAUGHTY_MINT             618
+#define ITEM_QUIET_MINT               619
+#define ITEM_RASH_MINT                620
+#define ITEM_RELAXED_MINT             621
+#define ITEM_SASSY_MINT               622
+#define ITEM_SERIOUS_MINT             623
+#define ITEM_TIMID_MINT               624
 
-#define ITEMS_COUNT 606
+
+#define ITEM_RUNNINGSHOES_RUNNING     625
+#define ITEM_RUNNINGSHOES_WALKING     626
+
+#define ITEMS_COUNT                   627
 #define ITEM_FIELD_ARROW ITEMS_COUNT
 
 // Range of berries given out by various NPCS

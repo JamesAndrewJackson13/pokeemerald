@@ -7923,6 +7923,14 @@ extern const u32 gItemIcon_Runningshoes_Running[];
 extern const u32 gItemIconPalette_Runningshoes_Running[];
 extern const u32 gItemIcon_Runningshoes_Walking[];
 extern const u32 gItemIconPalette_Runningshoes_Walking[];
+// Mints
+extern const u32 gItemIcon_Mint[];
+extern const u32 gItemIconPalette_RedMint[];
+extern const u32 gItemIconPalette_BlueMint[];
+extern const u32 gItemIconPalette_PinkMint[];
+extern const u32 gItemIconPalette_GreenMint[];
+extern const u32 gItemIconPalette_LightBlueMint[];
+extern const u32 gItemIconPalette_YellowMint[];
 
 extern const u32 gItemIcon_ReturnToFieldArrow[];
 extern const u32 gItemIconPalette_ReturnToFieldArrow[];
