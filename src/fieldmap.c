@@ -15,6 +15,7 @@
 #include "trainer_hill.h"
 #include "tv.h"
 #include "constants/rgb.h"
+#include "wild_encounter.h"
 
 struct ConnectionFlags
 {
@@ -51,6 +52,9 @@ struct MapHeader const *const GetMapHeaderFromConnection(struct MapConnection *c
 
 void InitMap(void)
 {
+#ifdef FEATURE_CHAINFISHING
+    gChainFishingStreak = 0;
+#endif
     InitMapLayoutData(&gMapHeader);
     SetOccupiedSecretBaseEntranceMetatiles(gMapHeader.events);
     RunOnLoadMapScript();
@@ -58,6 +62,9 @@ void InitMap(void)
 
 void InitMapFromSavedGame(void)
 {
+#ifdef FEATURE_CHAINFISHING
+    gChainFishingStreak = 0;
+#endif
     InitMapLayoutData(&gMapHeader);
     InitSecretBaseAppearance(FALSE);
     SetOccupiedSecretBaseEntranceMetatiles(gMapHeader.events);

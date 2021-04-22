@@ -49,6 +49,9 @@
 #include "constants/trainers.h"
 #include "constants/weather.h"
 #include "constants/battle_config.h"
+#ifdef FEATURE_CHAINFISHING
+#include "wild_encounter.h"
+#endif
 
 struct SpeciesItem
 {
@@ -2989,12 +2992,10 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     //Determine original trainer ID
     if (otIdType == OT_ID_RANDOM_NO_SHINY) //Pokemon cannot be shiny
     {
-        u32 shinyValue;
         do
         {
             value = Random32();
-            shinyValue = HIHALF(value) ^ LOHALF(value) ^ HIHALF(personality) ^ LOHALF(personality);
-        } while (shinyValue < SHINY_ODDS);
+        } while (IsShinyOtIdPersonality(value, personality));
     }
     else if (otIdType == OT_ID_PRESET) //Pokemon has a preset OT ID
     {
@@ -3007,17 +3008,38 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
               | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
               | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
 
-        if (CheckBagHasItem(ITEM_SHINY_CHARM, 1))
+#ifdef FEATURE_ALLOWSHINYREROLLS
+        if (hasFixedPersonality)
         {
-            u32 shinyValue;
-            u32 rolls = 0;
-            do
+            u32 shinyRerolls = 0;
+#ifdef ITEM_SHINY_CHARM
+            if (CheckBagHasItem(ITEM_SHINY_CHARM, 1))
+                shinyRerolls += 3;  //if you have the shiny charm, add 3 more rolls
+#endif
+#ifdef FEATURE_CHAINFISHING
+            if (gIsFishingEncounter)
+                shinyRerolls += 2 * gChainFishingStreak;  // For every chained fishing pokemon, gain two more rolls. Do **NOT** count the base roll, just the re-roll attempts
+#endif
+            while (shinyRerolls > 0 && !IsShinyOtIdPersonality(value, personality))
             {
                 personality = Random32();
-                shinyValue = HIHALF(value) ^ LOHALF(value) ^ HIHALF(personality) ^ LOHALF(personality);
-                rolls++;
-            } while (shinyValue >= SHINY_ODDS && rolls < I_SHINY_CHARM_REROLLS);
+                --shinyRerolls;
+            }
+    }
+#else
+    #ifdef ITEM_SHINY_CHARM
+        if (CheckBagHasItem(ITEM_SHINY_CHARM, 1))
+        {
+            u32 shinyRerolls = I_SHINY_CHARM_REROLLS;
+
+            while (shinyRerolls > 0 && !IsShinyOtIdPersonality(value, personality))
+            {
+                personality = Random32();
+                --shinyRerolls;
+            }
         }
+    #endif
+#endif
     }
 
     SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality);
