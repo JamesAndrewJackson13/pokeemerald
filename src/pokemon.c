@@ -2697,6 +2697,16 @@ const u8 gStatStageRatios[MAX_STAT_STAGE + 1][2] =
     {40, 10}, // +6, MAX_STAT_STAGE
 };
 
+static const u16 sDeoxysBaseStats[] =
+{
+     50, // Hp
+     95, // Attack
+     90, // Defense
+    180, // Speed
+     95, // Sp.Attack
+     90, // Sp.Defense
+};
+
 const u16 gLinkPlayerFacilityClasses[NUM_MALE_LINK_FACILITY_CLASSES + NUM_FEMALE_LINK_FACILITY_CLASSES] =
 {
     // Male classes

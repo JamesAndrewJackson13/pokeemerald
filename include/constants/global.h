@@ -46,7 +46,7 @@
 #define OBJECT_EVENT_TEMPLATES_COUNT 64
 #define DECOR_MAX_SECRET_BASE 16
 #define DECOR_MAX_PLAYERS_HOUSE 12
-#define APPRENTICE_COUNT 1  // Normally 4
+#define APPRENTICE_COUNT 2  // Normally 4, needs to be greater then 1 because otherwise it causes div by 0?
 #define APPRENTICE_MAX_QUESTIONS 9
 #define MAX_REMATCH_ENTRIES 100 // only REMATCH_TABLE_ENTRIES (78) are used
 #define NUM_CONTEST_WINNERS 13
