@@ -25,5 +25,6 @@
 #define FEATURE_DIZZYNATURECOLORMOD  // Enables Dizzy's nature mod which highlights the effect of natures on a pokemon's stats
 #define FEATURE_NOFIELDPSN  // Makes it so Pokemon wont die from Poison in the field, they'll overcome it with 1hp
 // #define FEATURE_NOFIELDPSN_DONTLOSEFRIENDSHIP  // Makes it so Pokemon whom "get over" psn in the field don't lose friendship (otherwise, they still lose it as if they had fainted)
+#define FEATURE_FASTSURFING  // Allow players to "run" while swimming, to go at mach bike speed
 // VARS
 #define FEATURE_FASTERHPDRAINRATE 40  // When defined, this will use an alternate hp drain formula. The smaller the value, the faster it will drain. 48 is aprox. the speed of vanilla.
