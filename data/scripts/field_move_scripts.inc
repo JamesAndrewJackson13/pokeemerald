@@ -301,16 +301,26 @@ EventScript_FailSweetScent:: @ 8290CAE
 
 Text_FailSweetScent: @ 8290CB7
 	.string "Looks like there's nothing here…$"
-    
-    
+
+
 EventScript_DisableAutoRun::
-    msgbox AutoRunDisabled MSGBOX_SIGN
-    end
-AutoRunDisabled:
-    .string "Auto Run {COLOR RED}Disabled{COLOR DARK_GREY}.$"
-    
+@     msgbox AutoRunDisabled MSGBOX_SIGN
+	showdisableautorunbox
+	playse SE_RG_HELP_CLOSE
+	goto EventScript_WaitAndHideAutoRun
+
+@ AutoRunDisabled:
+@     .string "Auto Run {COLOR RED}Disabled{COLOR DARK_GREY}.$"
+
 EventScript_EnableAutoRun::
-    msgbox AutoRunEnabled MSGBOX_SIGN
-    end
-AutoRunEnabled:
-    .string "Auto Run {COLOR GREEN}Enabled{COLOR DARK_GREY}.$"
+@     msgbox AutoRunEnabled MSGBOX_SIGN
+	showenableautorunbox
+	playse SE_RG_HELP_OPEN
+	goto EventScript_WaitAndHideAutoRun
+
+@ AutoRunEnabled:
+@     .string "Auto Run {COLOR GREEN}Enabled{COLOR DARK_GREY}.$"
+
+EventScript_WaitAndHideAutoRun::
+	delay 90  @ Show for 1.5 sec
+	hideautorunbox

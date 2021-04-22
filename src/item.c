@@ -986,7 +986,7 @@ static bool8 GetSetItemObtained(u16 item, u8 caseId)
     u8 index;
     u8 bit;
     u8 mask;
-    
+
     index = item / 8;
     bit = item % 8;
     mask = 1 << bit;
@@ -998,7 +998,7 @@ static bool8 GetSetItemObtained(u16 item, u8 caseId)
         gSaveBlock2Ptr->itemFlags[index] |= mask;
         return TRUE;
     }
-    
+
     return FALSE;
 }
 
@@ -1008,9 +1008,9 @@ static u8 ReformatItemDescription(u16 item, u8 *dest)
     u8 numLines = 1;
     u8 maxChars = 32;
     u8 *desc = (u8 *)gItems[item].description;
-    
+
     while (*desc != EOS)
-    {        
+    {
         if (count >= maxChars)
         {
             while (*desc != CHAR_SPACE && *desc != CHAR_NEWLINE)
@@ -1019,7 +1019,7 @@ static u8 ReformatItemDescription(u16 item, u8 *dest)
                 dest++;
                 desc++;
             }
-            
+
             *dest = CHAR_NEWLINE;
             count = 0;
             numLines++;
@@ -1027,13 +1027,13 @@ static u8 ReformatItemDescription(u16 item, u8 *dest)
             desc++;
             continue;
         }
-        
+
         *dest = *desc;
         if (*desc == CHAR_NEWLINE)
         {
             *dest = CHAR_SPACE;
         }
-        
+
         dest++;
         desc++;
         count++;
@@ -1046,57 +1046,92 @@ static u8 ReformatItemDescription(u16 item, u8 *dest)
 
 #define ITEM_ICON_X 26
 #define ITEM_ICON_Y 24
-void DrawHeaderBox(void)
+
+void DrawHeaderBox(u16 itemToShow, u8* dst, bool8 handleFlash, u8 numLinesToDraw)
 {
-    struct WindowTemplate template;
-    u16 item = gSpecialVar_0x8006;
-    u8 headerType = gSpecialVar_0x8009;
     u8 textY;
-    u8 *dst;
-    bool8 handleFlash = FALSE;
-    
-    if (Overworld_GetFlashLevel() > 1)
-        handleFlash = TRUE;
-    
-    if (headerType == 1)
-        dst = gStringVar3;
+
+    if (numLinesToDraw == 1)
+        textY = 4;
     else
-        dst = gStringVar1;
-    
-    if (GetSetItemObtained(item, FLAG_GET_OBTAINED))
-    {
-        ShowItemIconSprite(item, FALSE, handleFlash);
-        return; //no box if item obtained previously
-    }
-    
+        textY = 0;
+
+    struct WindowTemplate template;
+
     SetWindowTemplateFields(&template, 0, 1, 1, 28, 3, 15, 8);
     sHeaderBoxWindowId = AddWindow(&template);
     FillWindowPixelBuffer(sHeaderBoxWindowId, PIXEL_FILL(0));
     PutWindowTilemap(sHeaderBoxWindowId);
     CopyWindowToVram(sHeaderBoxWindowId, 3);
     DrawStdFrameWithCustomTileAndPalette(sHeaderBoxWindowId, FALSE, 0x214, 14);
-    
-    if (ReformatItemDescription(item, dst) == 1)
-        textY = 4;
-    else
-        textY = 0;
-    
-    ShowItemIconSprite(item, TRUE, handleFlash);
+
+    ShowItemIconSprite(itemToShow, TRUE, handleFlash);
     AddTextPrinterParameterized(sHeaderBoxWindowId, 0, dst, ITEM_ICON_X + 2, textY, 0, NULL);
 }
 
-void HideHeaderBox(void)
+void HideHeaderBox(bool8 hadItem, bool8 hadMsgBox)
 {
-    DestroyItemIconSprite();
-    
-    if (!GetSetItemObtained(gSpecialVar_0x8006, FLAG_GET_OBTAINED))
+    if (hadItem == TRUE)
+        DestroyItemIconSprite();
+    if (hadMsgBox == TRUE)
     {
-        //header box only exists if haven't seen item before
-        GetSetItemObtained(gSpecialVar_0x8006, FLAG_SET_OBTAINED);
         ClearStdWindowAndFrameToTransparent(sHeaderBoxWindowId, FALSE);
         CopyWindowToVram(sHeaderBoxWindowId, 3);
         RemoveWindow(sHeaderBoxWindowId);
     }
+}
+
+/**
+ * gSpecialVar_0x8006: The item just picked up
+ * gSpecialVar_0x8009: The header type (will decide which gStringVar gets used)
+ */
+void DrawItemHeaderBox(void)
+{
+    struct WindowTemplate template;
+    u16 item = gSpecialVar_0x8006;
+    u8 headerType = gSpecialVar_0x8009;
+    u8* dst = headerType == 1 ? gStringVar3 : gStringVar1;
+    bool8 handleFlash = Overworld_GetFlashLevel() > 1 ? TRUE : FALSE;
+    u8 numOfLinesToDraw;
+
+    if (GetSetItemObtained(item, FLAG_GET_OBTAINED))
+    {
+        ShowItemIconSprite(item, FALSE, handleFlash);
+        return; //no box if item obtained previously
+    }
+    numOfLinesToDraw = ReformatItemDescription(item, dst);
+    DrawHeaderBox(item, dst, handleFlash, numOfLinesToDraw);
+}
+
+void HideItemHeaderBox(void)
+{
+    bool8 haveSeenItemBefore = GetSetItemObtained(gSpecialVar_0x8006, FLAG_GET_OBTAINED);
+
+    // Make sure to set the item as obtained if we just got it for the first time
+    if (haveSeenItemBefore)
+        GetSetItemObtained(gSpecialVar_0x8006, FLAG_SET_OBTAINED);
+
+    HideHeaderBox(TRUE, haveSeenItemBefore);
+}
+
+static const u8 sAutoRunEnabled[]  = _("Auto-run: enabled");
+static const u8 sAutoRunDisabled[] = _("Auto-run: disabled");
+void DrawAutoRunBox(bool8 gettingEnabled)
+{
+    bool8 handleFlash = Overworld_GetFlashLevel() > 1 ? TRUE : FALSE;
+    if (gettingEnabled)
+    {
+        DrawHeaderBox(ITEM_RUNNINGSHOES_RUNNING, sAutoRunEnabled, handleFlash, 1);
+    }
+    else
+    {
+        DrawHeaderBox(ITEM_RUNNINGSHOES_WALKING, sAutoRunDisabled, handleFlash, 1);
+    }
+}
+
+void HideAutoRunBox(void)
+{
+    HideHeaderBox(TRUE, TRUE);
 }
 
 #include "gpu_regs.h"
@@ -1105,21 +1140,21 @@ void HideHeaderBox(void)
 static void ShowItemIconSprite(u16 item, bool8 firstTime, bool8 flash)
 {
 	s16 x, y;
-	u8 iconSpriteId;   
+	u8 iconSpriteId;
     u8 spriteId2 = MAX_SPRITES;
-    
+
     if (flash)
     {
         SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_OBJWIN_ON);
         SetGpuRegBits(REG_OFFSET_WINOUT, WINOUT_WINOBJ_OBJ);
     }
-    
+
     iconSpriteId = AddItemIconSprite(ITEM_TAG, ITEM_TAG, item);
     if (flash)
         spriteId2 = AddItemIconSprite(ITEM_TAG, ITEM_TAG, item);
-    
+
 	if (iconSpriteId != MAX_SPRITES)
-	{        
+	{
         if (!firstTime)
         {
             //show in message box
@@ -1137,7 +1172,7 @@ static void ShowItemIconSprite(u16 item, bool8 firstTime, bool8 flash)
 		gSprites[iconSpriteId].pos2.y = y;
 		gSprites[iconSpriteId].oam.priority = 0;
 	}
-    
+
     if (spriteId2 != MAX_SPRITES)
     {
         gSprites[spriteId2].pos2.x = x;
@@ -1151,12 +1186,12 @@ static void ShowItemIconSprite(u16 item, bool8 firstTime, bool8 flash)
 }
 
 static void DestroyItemIconSprite(void)
-{    
+{
 	FreeSpriteTilesByTag(ITEM_TAG);
 	FreeSpritePaletteByTag(ITEM_TAG);
 	FreeSpriteOamMatrix(&gSprites[sItemIconSpriteId]);
 	DestroySprite(&gSprites[sItemIconSpriteId]);
-    
+
     if (Overworld_GetFlashLevel() > 1 && sItemIconSpriteId2 != MAX_SPRITES)
     {
         //FreeSpriteTilesByTag(ITEM_TAG);

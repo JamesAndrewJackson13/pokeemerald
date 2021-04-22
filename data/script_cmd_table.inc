@@ -229,5 +229,8 @@ gScriptCmdTable:: @ 81DB67C
 	.4byte ScrCmd_bufferitemnameplural      @ 0xe2
     .4byte ScrCmd_showitemdesc				@ 0xe3
     .4byte ScrCmd_hideitemdesc				@ 0xe4
+    .4byte ScrCmd_showenableautorunbox		@ 0xe5
+    .4byte ScrCmd_showdisableautorunbox		@ 0xe6
+    .4byte ScrCmd_hideautorunbox			@ 0xe7
 gScriptCmdTableEnd:: @ 81DBA08
 	.4byte ScrCmd_nop

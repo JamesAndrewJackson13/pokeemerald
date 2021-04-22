@@ -705,7 +705,10 @@
 #define ITEM_TAPUNIUM_Z               602
 #define ITEM_ULTRANECROZIUM_Z         603
 
-#define ITEMS_COUNT 604
+#define ITEM_RUNNINGSHOES_RUNNING     604
+#define ITEM_RUNNINGSHOES_WALKING     605
+
+#define ITEMS_COUNT 606
 #define ITEM_FIELD_ARROW ITEMS_COUNT
 
 // Range of berries given out by various NPCS

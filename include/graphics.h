@@ -7918,6 +7918,12 @@ extern const u32 gItemIconPalette_TapuniumZ[];
 extern const u32 gItemIcon_UltranecroziumZ[];
 extern const u32 gItemIconPalette_UltranecroziumZ[];
 
+// Running Shoes Graphics
+extern const u32 gItemIcon_Runningshoes_Running[];
+extern const u32 gItemIconPalette_Runningshoes_Running[];
+extern const u32 gItemIcon_Runningshoes_Walking[];
+extern const u32 gItemIconPalette_Runningshoes_Walking[];
+
 extern const u32 gItemIcon_ReturnToFieldArrow[];
 extern const u32 gItemIconPalette_ReturnToFieldArrow[];
 
