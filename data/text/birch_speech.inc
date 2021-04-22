@@ -49,6 +49,32 @@ gText_Birch_YourePlayer:: @ 82C8C2A
 	.string "I get it now!\p"
 	.string "$"
 
+gText_Birch_AboutTown::
+	.string "Now that I think about it,\n"
+	.string "you and I will be neighbors!\p"
+	.string "You'll love it in LITTLEROOT.\n"
+	.string "It's got clean air, beautiful nature,\l"
+	.string "and friendly people.\p"
+	.string "Even the wild POKÉMON are friendly!\p"
+	.string "And I know you and\n"
+	.string "my kid will get along great.\p"
+	.string "Oh?\n"
+	.string "Whats their name?\p"
+	.string "$"
+
+gText_Birch_MyKidName::
+	.string "Well, my kid's name is...$"
+
+gText_Birch_ConfirmMyKidName::
+	.string "{RIVAL}{KUN}.$"
+
+gText_Birch_TheyreRival::
+	.string "{RIVAL}{KUN} loves POKÉMON,\n"
+	.string "and is fast to make friends.\p"
+	.string "I'm sure you'll both get to know each\n"
+	.string "other after you finish moving in.\p"
+	.string "$"
+
 gText_Birch_AreYouReady:: @ 82C8C7A
 	.string "All right, are you ready?\p"
 	.string "Your very own adventure is about\n"
