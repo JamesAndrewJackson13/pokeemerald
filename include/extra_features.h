@@ -23,5 +23,7 @@
 #define FEATURE_WRAPPINGSUMMARYSCREEN  // When you reach the end of the summary screen, you will wrap back to the first/last pokemon
 #define FEATURE_SHOWEVIVINSTATSCREEN  // Let the player view their pokemon's EVs and IVs in the stat screen
 #define FEATURE_DIZZYNATURECOLORMOD  // Enables Dizzy's nature mod which highlights the effect of natures on a pokemon's stats
+#define FEATURE_NOFIELDPSN  // Makes it so Pokemon wont die from Poison in the field, they'll overcome it with 1hp
+// #define FEATURE_NOFIELDPSN_DONTLOSEFRIENDSHIP  // Makes it so Pokemon whom "get over" psn in the field don't lose friendship (otherwise, they still lose it as if they had fainted)
 // VARS
 #define FEATURE_FASTERHPDRAINRATE 40  // When defined, this will use an alternate hp drain formula. The smaller the value, the faster it will drain. 48 is aprox. the speed of vanilla.
