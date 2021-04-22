@@ -92,6 +92,7 @@ EventScript_PkmnCenterNurse_ReturnPkmn:: @ 82719E2
     applymovement VAR_0x800B, Movement_PkmnCenterNurse_Bow
     waitmovement 0
     message gText_WeHopeToSeeYouAgain
+    waitmessage
     goto EventScript_PkmnCenterNurse_PlayerTurn
     return
 
@@ -162,7 +163,6 @@ Movement_PkmnCenterNurse_Bow: @ 8271AD0
     step_end
 
 EventScript_PkmnCenterNurse_PlayerTurn::
-    closemessage
     applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceDown
     waitmovement 0
     release
