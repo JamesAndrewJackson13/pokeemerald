@@ -65,6 +65,10 @@ struct Trainer
     /*0x1C*/ u32 aiFlags;
     /*0x20*/ u8 partySize;
     /*0x24*/ union TrainerMonPtr party;
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+             u8 transition : 7;
+             u8 hasCustomTransition : 1;
+#endif
 };
 
 #define TRAINER_ENCOUNTER_MUSIC(trainer)((gTrainers[trainer].encounterMusic_gender & 0x7F))

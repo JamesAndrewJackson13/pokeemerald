@@ -83,6 +83,7 @@ Route119_EventScript_PlayBrendanMusic:: @ 81F4506
 
 Route119_EventScript_BattleMay:: @ 81F450B
 	msgbox Route119_Text_MayIntro, MSGBOX_DEFAULT
+    setvar VAR_MUGSHOT_ID, MUGSHOT_MAY  @ Added for custom mugshot 
 	switch VAR_STARTER_MON
 	case 0, Route119_EventScript_BattleMayTreecko
 	case 1, Route119_EventScript_BattleMayTorchic

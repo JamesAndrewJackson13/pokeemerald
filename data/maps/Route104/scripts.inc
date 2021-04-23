@@ -1,4 +1,4 @@
-@ NOTE: Route 104's sail to Dewford script references local IDs from Dewford's map. 
+@ NOTE: Route 104's sail to Dewford script references local IDs from Dewford's map.
 @  These are labeled in DewfordTown/scripts.inc
 .set LOCALID_RIVAL, 34
 
@@ -152,6 +152,7 @@ Route104_EventScript_MayAskToBattle:: @ 81ECDD0
 
 Route104_EventScript_BattleMay:: @ 81ECDED
 	msgbox Route104_Text_MayIntro, MSGBOX_DEFAULT
+    setvar VAR_MUGSHOT_ID, MUGSHOT_MAY  @ Added for custom mugshot 
 	switch VAR_STARTER_MON
 	case 0, Route104_EventScript_BattleMayTreecko
 	case 1, Route104_EventScript_BattleMayTorchic

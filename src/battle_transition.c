@@ -24,6 +24,9 @@
 #include "constants/songs.h"
 #include "constants/trainers.h"
 #include "constants/rgb.h"
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+#include "event_data.h"
+#endif
 
 struct TransitionData
 {
@@ -259,7 +262,10 @@ static bool8 TrainerPicCb_Nothing(struct Sprite *sprite);
 static bool8 TrainerPicCb_SetSlideOffsets(struct Sprite *sprite);
 static bool8 TrainerPicCb_Slide1(struct Sprite *sprite);
 static bool8 TrainerPicCb_Slide2(struct Sprite *sprite);
-static bool8 TrainerPicCb_Slide3(struct Sprite *sprite);
+static bool8 TrainerPicCb_Slide3(struct Sprite* sprite);
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+static void Phase2Task_Mugshot(u8 taskId);
+#endif
 
 // iwram bss vars
 static s16 sUnusedRectangularSpiralVar;
@@ -361,6 +367,9 @@ static const TaskFunc sPhase2_Tasks[B_TRANSITION_COUNT] =
     [B_TRANSITION_FRONTIER_CIRCLES_CROSS_IN_SEQ] = Phase2Task_FrontierCirclesCrossInSeq,
     [B_TRANSITION_FRONTIER_CIRCLES_ASYMMETRIC_SPIRAL_IN_SEQ] = Phase2Task_FrontierCirclesAsymmetricSpiralInSeq,
     [B_TRANSITION_FRONTIER_CIRCLES_SYMMETRIC_SPIRAL_IN_SEQ] = Phase2Task_FrontierCirclesSymmetricSpiralInSeq,
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+    [B_TRANSITION_MUGSHOT] = Phase2Task_Mugshot,
+#endif
 };
 
 static const TransitionStateFunc sMainTransitionPhases[] =
@@ -520,6 +529,10 @@ static const u8 sMugshotsTrainerPicIDsTable[MUGSHOTS_COUNT] =
     [MUGSHOT_GLACIA] = TRAINER_PIC_ELITE_FOUR_GLACIA,
     [MUGSHOT_DRAKE] = TRAINER_PIC_ELITE_FOUR_DRAKE,
     [MUGSHOT_CHAMPION] = TRAINER_PIC_CHAMPION_WALLACE,
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+    [MUGSHOT_MAY] = TRAINER_PIC_MAY,
+    [MUGSHOT_BRENDAN] = TRAINER_PIC_BRENDAN,
+#endif
 };
 static const s16 sMugshotsOpponentRotationScales[MUGSHOTS_COUNT][2] =
 {
@@ -528,6 +541,10 @@ static const s16 sMugshotsOpponentRotationScales[MUGSHOTS_COUNT][2] =
     [MUGSHOT_GLACIA] =   {0x1B0, 0x1B0},
     [MUGSHOT_DRAKE] =    {0x1A0, 0x1A0},
     [MUGSHOT_CHAMPION] = {0x188, 0x188},
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+    [MUGSHOT_MAY] = {0x200, 0x200},
+    [MUGSHOT_BRENDAN] = {0x200, 0x200},
+#endif
 };
 static const s16 sMugshotsOpponentCoords[MUGSHOTS_COUNT][2] =
 {
@@ -536,6 +553,10 @@ static const s16 sMugshotsOpponentCoords[MUGSHOTS_COUNT][2] =
     [MUGSHOT_GLACIA] =   {-4,    4},
     [MUGSHOT_DRAKE] =    {0,     5},
     [MUGSHOT_CHAMPION] = {-8,    7},
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+    [MUGSHOT_MAY] =      {0,     0},
+    [MUGSHOT_BRENDAN] =  {0,     0},
+#endif
 };
 
 static const TransitionSpriteCallback sTrainerPicSpriteCbs[] =
@@ -831,11 +852,15 @@ static const u16 sMugshotPal_May[] = INCBIN_U16("graphics/battle_transitions/may
 
 static const u16 *const sOpponentMugshotsPals[MUGSHOTS_COUNT] =
 {
-    [MUGSHOT_SIDNEY] = sMugshotPal_Sidney,
-    [MUGSHOT_PHOEBE] = sMugshotPal_Phoebe,
-    [MUGSHOT_GLACIA] = sMugshotPal_Glacia,
-    [MUGSHOT_DRAKE] = sMugshotPal_Drake,
-    [MUGSHOT_CHAMPION] = sMugshotPal_Champion
+    [MUGSHOT_SIDNEY] =   sMugshotPal_Sidney,
+    [MUGSHOT_PHOEBE] =   sMugshotPal_Phoebe,
+    [MUGSHOT_GLACIA] =   sMugshotPal_Glacia,
+    [MUGSHOT_DRAKE] =    sMugshotPal_Drake,
+    [MUGSHOT_CHAMPION] = sMugshotPal_Champion,
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+    [MUGSHOT_BRENDAN] =  sMugshotPal_Drake,
+    [MUGSHOT_MAY] =      sMugshotPal_Glacia,
+#endif
 };
 
 static const u16 *const sPlayerMugshotsPals[GENDER_COUNT] =
@@ -2064,6 +2089,14 @@ static void VBlankCB_Phase2_Wave(void)
     REG_WIN0V = sTransitionStructPtr->WIN0V;
     DmaSet(0, gScanlineEffectRegBuffers[1], &REG_WIN0H, 0xA2400001);
 }
+
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+static void Phase2Task_Mugshot(u8 taskId)
+{
+    gTasks[taskId].tMugshotId = VarGet(VAR_MUGSHOT_ID);
+    Phase2Task_MugShotTransition(taskId);
+}
+#endif
 
 static void Phase2Task_Sidney(u8 taskId)
 {

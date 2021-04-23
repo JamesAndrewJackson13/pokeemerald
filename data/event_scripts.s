@@ -53,6 +53,8 @@
 #include "constants/union_room.h"
 #include "constants/vars.h"
 #include "constants/weather.h"
+#include "constants/battle_transition.h" @ Allows for custom mugshots
+
 	.include "asm/macros.inc"
 	.include "asm/macros/event.inc"
 	.include "constants/constants.inc"
@@ -577,7 +579,7 @@ gStdScripts_End:: @ 81DC2CC
 	.include "data/scripts/new_game.inc"
 	.include "data/scripts/hall_of_fame.inc"
 
-	// Use to enable/disable debug tools
+	@ Use to enable/disable debug tools
 	.include "data/scripts/debug.inc"
 
 EventScript_WhiteOut:: @ 8271857

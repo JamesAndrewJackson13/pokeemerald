@@ -1,6 +1,9 @@
 #include "global.h"
 #include "malloc.h"
 #include "battle.h"
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+#include "battle_transition.h"
+#endif
 #include "data.h"
 #include "graphics.h"
 #include "constants/items.h"

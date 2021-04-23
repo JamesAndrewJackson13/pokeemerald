@@ -32,6 +32,7 @@
 #define FEATURE_NOFIELDPSN  // Makes it so Pokemon wont die from Poison in the field, they'll overcome it with 1hp
 // #define FEATURE_NOFIELDPSN_DONTLOSEFRIENDSHIP  // Makes it so Pokemon whom "get over" psn in the field don't lose friendship (otherwise, they still lose it as if they had fainted)
 #define FEATURE_FASTSURFING  // Allow players to "run" while swimming, to go at mach bike speed
+#define FEATURE_CUSTOMBATTLEMUGSHOTS  // Trainers outside the elite 4 can have battle mugshots (https://github.com/pret/pokeemerald/wiki/Custom-Battle-Mugshots)
 
 // SHINY RELATED
 #define FEATURE_ALLOWSHINYREROLLS  // The critical feature; this allows for other features to do "shiny" re-rolling. Without this, the other features in this section wont work

@@ -11,6 +11,9 @@ void GetBg0TilesDst(u16 **tilemap, u16 **tileset);
 
 extern const struct SpritePalette gSpritePalette_Pokeball;
 
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+#include "constants/battle_transition.h"
+#else
 enum // TRANSITION_MUGSHOT
 {
     MUGSHOT_SIDNEY,
@@ -20,6 +23,7 @@ enum // TRANSITION_MUGSHOT
     MUGSHOT_CHAMPION,
     MUGSHOTS_COUNT
 };
+#endif
 
 // credits for the names go to Dyskinesia, Tetrable and Farore
 // names are naturally subject to change
@@ -67,6 +71,11 @@ enum // TRANSITION_MUGSHOT
 #define B_TRANSITION_FRONTIER_CIRCLES_CROSS_IN_SEQ             39
 #define B_TRANSITION_FRONTIER_CIRCLES_ASYMMETRIC_SPIRAL_IN_SEQ 40
 #define B_TRANSITION_FRONTIER_CIRCLES_SYMMETRIC_SPIRAL_IN_SEQ  41
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+#define B_TRANSITION_MUGSHOT                                   42
+#define B_TRANSITION_COUNT                                     43
+#else
 #define B_TRANSITION_COUNT                                     42
+#endif
 
 #endif // GUARD_BATTLE_TRANSITION_H

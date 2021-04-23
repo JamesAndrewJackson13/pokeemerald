@@ -7286,6 +7286,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7300,6 +7304,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7314,6 +7322,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7328,6 +7340,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_SETUP_FIRST_TURN,
@@ -7342,6 +7358,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7356,6 +7376,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7370,6 +7394,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7384,6 +7412,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7398,6 +7430,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7412,6 +7448,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
         .trainerPic = TRAINER_PIC_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7426,6 +7466,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
         .trainerPic = TRAINER_PIC_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7440,6 +7484,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
         .trainerPic = TRAINER_PIC_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7454,6 +7502,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
         .trainerPic = TRAINER_PIC_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7468,6 +7520,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
         .trainerPic = TRAINER_PIC_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7482,6 +7538,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
         .trainerPic = TRAINER_PIC_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7496,6 +7556,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
         .trainerPic = TRAINER_PIC_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7510,6 +7574,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
         .trainerPic = TRAINER_PIC_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -7524,6 +7592,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
         .trainerPic = TRAINER_PIC_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -8294,6 +8366,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE,
@@ -8308,6 +8384,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE,
@@ -8392,6 +8472,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -8406,6 +8490,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
         .trainerPic = TRAINER_PIC_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_SETUP_FIRST_TURN,
@@ -9260,6 +9348,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -9274,6 +9366,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -9288,6 +9384,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -9302,6 +9402,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
         .trainerPic = TRAINER_PIC_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -9316,6 +9420,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
         .trainerPic = TRAINER_PIC_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -9330,6 +9438,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
         .trainerPic = TRAINER_PIC_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -10758,6 +10870,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
         .trainerPic = TRAINER_PIC_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -10772,6 +10888,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
         .trainerPic = TRAINER_PIC_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
@@ -11948,6 +12068,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_RS_BRENDAN,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = 0,
@@ -11962,6 +12086,10 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_RS_MAY,
         .trainerName = _("{B_RIVAL_NAME}"),
+#ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
+        .hasCustomTransition = TRUE,
+        .transition = B_TRANSITION_MUGSHOT,
+#endif
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = 0,
