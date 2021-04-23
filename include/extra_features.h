@@ -1,3 +1,7 @@
+#ifndef EXTRA_FEATURES_H
+#define EXTRA_FEATURES_H
+
+
 // HARDBAKED FEATURES
 // * Extra SaveRam space
 // * DexNav feature
@@ -5,7 +9,7 @@
 // * Auto-Run on clicking the R button
 // * Trainers can run a script on sight (https://github.com/pret/pokeemerald/wiki/Trainer-Scripts)
 // FLAGS
-#define FEATURE_ALTDEFAULTOPTIONS  // Changes default settings 
+#define FEATURE_ALTDEFAULTOPTIONS  // Changes default settings
 #define FEATURE_SAVEMEMORYFOOTER  // Shrinks the save footer to exactly the size it needs to be, saving room in sram
 #define FEATURE_SNOWCAUSESHAIL  // Allow areas with snow to cause hail
 #define FEATURE_POKECENTERSDISREGARDEGGS  // Make pokecenters disregard eggs during healing animations
@@ -47,3 +51,5 @@
 
 // VARS
 #define FEATURE_FASTERHPDRAINRATE 40  // When defined, this will use an alternate hp drain formula. The smaller the value, the faster it will drain. 48 is aprox. the speed of vanilla.
+
+#endif

@@ -1,3 +1,5 @@
+#include "extra_features.h" // Extra Feature Flags/Vars
+
 #ifndef GUARD_CONSTANTS_GLOBAL_H
 #define GUARD_CONSTANTS_GLOBAL_H
 // Invalid Versions show as "----------" in Gen 4 and Gen 5's summary screen.
