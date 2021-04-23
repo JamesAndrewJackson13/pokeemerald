@@ -29,6 +29,7 @@ Route103_EventScript_Rival:: @ 81EC3C1
 	end
 
 Route103_EventScript_RivalMay:: @ 81EC3DA
+    setvar VAR_MUGSHOT_ID, MUGSHOT_MAY  @ Added for custom mugshot
 	msgbox Route103_Text_MayRoute103Pokemon, MSGBOX_DEFAULT
 	closemessage
 	playbgm MUS_ENCOUNTER_MAY, 1
@@ -46,6 +47,7 @@ Route103_EventScript_RivalMay:: @ 81EC3DA
 	end
 
 Route103_EventScript_RivalBrendan:: @ 81EC434
+    setvar VAR_MUGSHOT_ID, MUGSHOT_BRENDAN  @ Added for custom mugshot
 	msgbox Route103_Text_BrendanRoute103Pokemon, MSGBOX_DEFAULT
 	closemessage
 	playbgm MUS_ENCOUNTER_BRENDAN, 1
@@ -357,4 +359,3 @@ Route103_Text_ShortcutToOldale: @ 81ECBB5
 Route103_Text_RouteSign: @ 81ECC1A
 	.string "ROUTE 103\n"
 	.string "{DOWN_ARROW} OLDALE TOWN$"
-

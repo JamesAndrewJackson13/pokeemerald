@@ -418,6 +418,7 @@ Route110_EventScript_PlayBrendanMusic:: @ 81EF7E6
 	return
 
 Route110_EventScript_MayBattle:: @ 81EF7EB
+    setvar VAR_MUGSHOT_ID, MUGSHOT_MAY  @ Added for custom mugshot
 	msgbox Route110_Text_MayLetsBattle, MSGBOX_DEFAULT
 	switch VAR_STARTER_MON
 	case 0, Route110_EventScript_MayBattleTreecko
@@ -448,6 +449,7 @@ Route110_EventScript_MayDefeated:: @ 81EF84A
 	end
 
 Route110_EventScript_BrendanBattle:: @ 81EF865
+    setvar VAR_MUGSHOT_ID, MUGSHOT_BRENDAN  @ Added for custom mugshot
 	msgbox Route110_Text_BrendanLetsBattle, MSGBOX_DEFAULT
 	switch VAR_STARTER_MON
 	case 0, Route110_EventScript_BrendanBattleTreecko
@@ -1020,4 +1022,3 @@ Route110_Text_KeepAnEyeOutForRival: @ 81F0C33
 	.string "… … … … … …\p"
 	.string "Well, I had better get going.\n"
 	.string "See you again, {PLAYER}{KUN}!$"
-

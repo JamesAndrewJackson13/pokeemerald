@@ -152,7 +152,7 @@ Route104_EventScript_MayAskToBattle:: @ 81ECDD0
 
 Route104_EventScript_BattleMay:: @ 81ECDED
 	msgbox Route104_Text_MayIntro, MSGBOX_DEFAULT
-    setvar VAR_MUGSHOT_ID, MUGSHOT_MAY  @ Added for custom mugshot 
+    setvar VAR_MUGSHOT_ID, MUGSHOT_MAY  @ Added for custom mugshot
 	switch VAR_STARTER_MON
 	case 0, Route104_EventScript_BattleMayTreecko
 	case 1, Route104_EventScript_BattleMayTorchic
@@ -228,6 +228,7 @@ Route104_EventScript_BrendanAskToBattle:: @ 81ECEEC
 
 Route104_EventScript_BattleBrendan:: @ 81ECF09
 	msgbox Route104_Text_BrendanIntro, MSGBOX_DEFAULT
+    setvar VAR_MUGSHOT_ID, MUGSHOT_BRENDAN  @ Added for custom mugshot
 	switch VAR_STARTER_MON
 	case 0, Route104_EventScript_BattleBrendanTreecko
 	case 1, Route104_EventScript_BattleBrendanTorchic

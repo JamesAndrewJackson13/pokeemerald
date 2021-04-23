@@ -884,7 +884,7 @@ RustboroCity_EventScript_MayAskToBattle:: @ 81E1070
 
 RustboroCity_EventScript_BattleMay:: @ 81E1092
 	msgbox RustboroCity_Text_MayImNotGoingToLose, MSGBOX_DEFAULT
-    setvar VAR_MUGSHOT_ID, MUGSHOT_MAY  @ Added for custom mugshot 
+    setvar VAR_MUGSHOT_ID, MUGSHOT_MAY  @ Added for custom mugshot
 	switch VAR_STARTER_MON
 	case 0, RustboroCity_EventScript_BattleMayTreecko
 	case 1, RustboroCity_EventScript_BattleMayTorchic
@@ -954,6 +954,7 @@ RustboroCity_EventScript_BrendanAskToBattle:: @ 81E1174
 
 RustboroCity_EventScript_BattleBrendan:: @ 81E1191
 	msgbox RustboroCity_Text_BrendanIWontGoEasy, MSGBOX_DEFAULT
+    setvar VAR_MUGSHOT_ID, MUGSHOT_BRENDAN  @ Added for custom mugshot
 	switch VAR_STARTER_MON
 	case 0, RustboroCity_EventScript_BattleBrendanTreecko
 	case 1, RustboroCity_EventScript_BattleBrendanTorchic

@@ -83,7 +83,7 @@ Route119_EventScript_PlayBrendanMusic:: @ 81F4506
 
 Route119_EventScript_BattleMay:: @ 81F450B
 	msgbox Route119_Text_MayIntro, MSGBOX_DEFAULT
-    setvar VAR_MUGSHOT_ID, MUGSHOT_MAY  @ Added for custom mugshot 
+    setvar VAR_MUGSHOT_ID, MUGSHOT_MAY  @ Added for custom mugshot
 	switch VAR_STARTER_MON
 	case 0, Route119_EventScript_BattleMayTreecko
 	case 1, Route119_EventScript_BattleMayTorchic
@@ -114,6 +114,7 @@ Route119_EventScript_DefeatedMay:: @ 81F456A
 
 Route119_EventScript_BattleBrendan:: @ 81F4585
 	msgbox Route119_Text_BrendanIntro, MSGBOX_DEFAULT
+    setvar VAR_MUGSHOT_ID, MUGSHOT_BRENDAN  @ Added for custom mugshot
 	switch VAR_STARTER_MON
 	case 0, Route119_EventScript_BattleBrendanTreecko
 	case 1, Route119_EventScript_BattleBrendanTorchic
