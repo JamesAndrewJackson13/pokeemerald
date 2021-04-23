@@ -22,6 +22,9 @@
 		"C_Cpp.vcFormat.newLine.scopeBracesOnSeparateLines": true,
 		"C_Cpp.vcFormat.newLine.beforeOpenBrace.function": "newLine",
 		"C_Cpp.vcFormat.newLine.beforeOpenBrace.block": "newLine",
-		"C_Cpp.vcFormat.newLine.beforeOpenBrace.lambda": "newLine"
+		"C_Cpp.vcFormat.newLine.beforeOpenBrace.lambda": "newLine",
+		"files.exclude": {
+			"berry_fix/**": true
+		}
 	}
 }

@@ -3796,7 +3796,11 @@ static void HandleTurnActionSelectionState(void)
                     }
                     break;
                 case B_ACTION_USE_ITEM:
+                    #ifdef FEATURE_DEBUGMENU
+                    if (FlagGet(FLAG_SYS_NO_BAG_USE) || gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER_NO_PYRAMID | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_RECORDED_LINK))
+                        #else
                     if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER_NO_PYRAMID | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_RECORDED_LINK))
+                        #endif
                     {
                         RecordedBattle_ClearBattlerAction(gActiveBattler, 1);
                         gSelectionBattleScripts[gActiveBattler] = BattleScript_ActionSelectionItemsCantBeUsed;

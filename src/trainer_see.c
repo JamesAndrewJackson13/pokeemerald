@@ -191,6 +191,11 @@ static const struct SpriteTemplate sSpriteTemplate_HeartIcon =
 // code
 bool8 CheckForTrainersWantingBattle(void)
 {
+
+#ifdef FEATURE_DEBUGMENU
+    if (FlagGet(FLAG_SYS_NO_TRAINER_SEE))
+        return FALSE;
+#endif
     u8 i;
     u8 numTrainers;
 

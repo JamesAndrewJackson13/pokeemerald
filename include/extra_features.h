@@ -5,6 +5,7 @@
 // * Auto-Run on clicking the R button
 // * Trainers can run a script on sight (https://github.com/pret/pokeemerald/wiki/Trainer-Scripts)
 // FLAGS
+#define FEATURE_ALTDEFAULTOPTIONS  // Changes default settings 
 #define FEATURE_SAVEMEMORYFOOTER  // Shrinks the save footer to exactly the size it needs to be, saving room in sram
 #define FEATURE_SNOWCAUSESHAIL  // Allow areas with snow to cause hail
 #define FEATURE_POKECENTERSDISREGARDEGGS  // Make pokecenters disregard eggs during healing animations
@@ -31,6 +32,18 @@
 // SHINY RELATED
 #define FEATURE_ALLOWSHINYREROLLS  // The critical feature; this allows for other features to do "shiny" re-rolling. Without this, the other features in this section wont work
 #define FEATURE_CHAINFISHING  // Makes it so that reeling in consecutive pokemon species increases the chance of being shiny
+
+// DEBUG RELATED
+#define FEATURE_DEBUGMENU  // Enables debug mode
+
+// MAJOR EXPANSION BRANCHES
+// Branch defines: Used by other branches to detect each other.
+// Each define must be here for each of RHH's branch you have pulled.
+// e.g. If you have both the battle_engine and pokemon_expansion branch,
+//      then both BATTLE_ENGINE and POKEMON_EXPANSION must be defined here.
+#define BATTLE_ENGINE
+#define POKEMON_EXPANSION
+#define ITEM_EXPANSION
 
 // VARS
 #define FEATURE_FASTERHPDRAINRATE 40  // When defined, this will use an alternate hp drain formula. The smaller the value, the faster it will drain. 48 is aprox. the speed of vanilla.

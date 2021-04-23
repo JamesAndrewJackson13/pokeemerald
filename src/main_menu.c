@@ -36,6 +36,9 @@
 #include "title_screen.h"
 #include "window.h"
 #include "mystery_gift.h"
+#ifdef FEATURE_DEBUGMENU
+#include "main_menu.h"
+#endif
 
 /*
  * Main menu state machine
@@ -226,7 +229,11 @@ static void Task_NewGameBirchSpeech_WaitForWhatsYourNameToPrint(u8);
 static void Task_NewGameBirchSpeech_WaitPressBeforeNameChoice(u8);
 static void Task_NewGameBirchSpeech_StartNamingScreen(u8);
 static void CB2_NewGameBirchSpeech_ReturnFromNamingScreen(void);
+#ifdef FEATURE_DEBUGMENU
+void NewGameBirchSpeech_SetDefaultPlayerName(u8);
+#else
 static void NewGameBirchSpeech_SetDefaultPlayerName(u8);
+#endif
 static void Task_NewGameBirchSpeech_CreateNameYesNo(u8);
 static void Task_NewGameBirchSpeech_ProcessNameYesNoMenu(u8);
 void CreateYesNoMenuParameterized(u8, u8, u16, u16, u8, u8);
@@ -2401,7 +2408,11 @@ static s8 NewGameBirchSpeech_ProcessGenderMenuInput(void)
     return Menu_ProcessInputNoWrap();
 }
 
+#ifdef FEATURE_DEBUGMENU
+void NewGameBirchSpeech_SetDefaultPlayerName(u8 nameId)
+#else
 static void NewGameBirchSpeech_SetDefaultPlayerName(u8 nameId)
+#endif
 {
     const u8* name;
     u8 i;
