@@ -97,4 +97,6 @@ void GetNumMovesSelectedMonHas(void);
 void MoveDeleterChooseMoveToForget(void);
 void ItemUseCB_Mints(u8 taskId, TaskFunc task);
 
+bool8 CanLearnTutorMove(u16, u8);
+
 #endif // GUARD_PARTY_MENU_H
