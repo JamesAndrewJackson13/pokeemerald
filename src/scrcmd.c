@@ -48,6 +48,7 @@
 #include "trainer_see.h"
 #include "tv.h"
 #include "window.h"
+#include "quests.h"
 #include "constants/event_objects.h"
 
 typedef u16 (*SpecialFunc)(void);
@@ -2362,6 +2363,7 @@ bool8 ScrCmd_hideautorunbox(struct ScriptContext* ctx)
     return FALSE;
 }
 
+#ifdef FEATURE_SWAPBIKEBUTTON
 bool8 ScrCmd_showbiketypebox(struct ScriptContext* ctx)
 {
     DrawBikeHeaderBox();
@@ -2372,4 +2374,53 @@ bool8 ScrCmd_hidebiketypebox(struct ScriptContext* ctx)
 {
     HideBikeHeaderBox();
     return FALSE;
+}
+#endif
+bool8 ScrCmd_questmenu(struct ScriptContext *ctx)
+{
+    u8 caseId = ScriptReadByte(ctx);
+    u8 questId = VarGet(ScriptReadByte(ctx));
+
+    switch (caseId)
+    {
+    case QUEST_MENU_OPEN:
+    default:
+        SetQuestMenuActive();
+        BeginNormalPaletteFade(PALETTES_ALL, 2, 16, 0, 0);
+        QuestMenu_Init(0, CB2_ReturnToFieldContinueScriptPlayMapMusic);
+        ScriptContext1_Stop();
+        break;
+    case QUEST_MENU_UNLOCK_QUEST:
+        GetSetQuestFlag(questId, FLAG_SET_UNLOCKED);
+        break;
+    case QUEST_MENU_COMPLETE_QUEST:
+        GetSetQuestFlag(questId, FLAG_SET_COMPLETED);
+        break;
+    case QUEST_MENU_SET_ACTIVE:
+        SetActiveQuest(questId);
+        break;
+    case QUEST_MENU_RESET_ACTIVE:
+        ResetActiveQuest();
+        break;
+    case QUEST_MENU_BUFFER_QUEST_NAME:
+            CopyQuestName(gStringVar1, questId);
+        break;
+    case QUEST_MENU_GET_ACTIVE_QUEST:
+        gSpecialVar_Result = GetActiveQuestIndex();
+        break;
+    case QUEST_MENU_CHECK_UNLOCKED:
+        if (GetSetQuestFlag(questId, FLAG_GET_UNLOCKED))
+            gSpecialVar_Result = TRUE;
+        else
+            gSpecialVar_Result = FALSE;
+        break;
+    case QUEST_MENU_CHECK_COMPLETE:
+        if (GetSetQuestFlag(questId, FLAG_GET_COMPLETED))
+            gSpecialVar_Result = TRUE;
+        else
+            gSpecialVar_Result = FALSE;
+        break;
+    }
+
+    return TRUE;
 }

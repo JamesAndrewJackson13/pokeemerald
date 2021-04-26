@@ -484,7 +484,10 @@ struct RankingHall2P
 };
 
 #include "constants/items.h"
-#define ITEM_FLAGS_COUNT ((ITEMS_COUNT / 8) + ((ITEMS_COUNT % 8) ? 1 : 0))
+#define ITEM_FLAGS_COUNT         ((ITEMS_COUNT / 8) + ((ITEMS_COUNT % 8) ? 1 : 0))
+// quest menu
+#include "constants/quests.h"
+#define SIDE_QUEST_FLAGS_COUNT   ((SIDE_QUEST_COUNT / 8) + ((SIDE_QUEST_COUNT % 8) ? 1 : 0))
 
 struct SaveBlock2
 {
@@ -528,7 +531,10 @@ struct SaveBlock2
     /*0xF2C*/ u8 itemFlags[ITEM_FLAGS_COUNT];
     /*0xF34*/ bool8 autoRun;
     /*0xF3C*/ u8 rivalName[PLAYER_NAME_LENGTH + 1];
-}; // sizeof=0xF44
+    /*0x0F2C*/ u8 unlockedQuests[SIDE_QUEST_FLAGS_COUNT];
+    /*0x????*/ u8 completedQuests[SIDE_QUEST_FLAGS_COUNT];
+    /*0x????*/ u8 activeQuest;
+};
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;
 
@@ -943,6 +949,7 @@ struct MysteryEventStruct
     /*0x344 0x3570*/ u32 unk_344[2][5];
 }; // 0x36C 0x3598
 
+
 // For external event data storage. The majority of these may have never been used.
 // In Emerald, the only known used fields are the PokeCoupon and BoxRS ones, but hacking the distribution discs allows Emerald to receive events and set the others
 struct ExternalEventData
@@ -1096,7 +1103,14 @@ struct SaveBlock1
     /*0x3???*/ struct WaldaPhrase waldaPhrase;
     u8 dexNavSearchLevels[NUM_SPECIES];
     u8 dexNavChain;
-    // sizeof: 0x3???
+    /*0x3B14*/ struct RecordMixingGift recordMixingGift;
+    /*0x3B24*/ u8 seen2[DEX_FLAGS_NO];
+    /*0x3B58*/ LilycoveLady lilycoveLady;
+    /*0x3B98*/ struct TrainerNameRecord trainerNameRecords[20];
+    /*0x3C88*/ u8 registeredTexts[UNION_ROOM_KB_ROW_COUNT][21];
+    /*0x3D5A*/ u8 filler3D5A[0xA];
+    /*0x3D64*/ struct SaveTrainerHill trainerHill;
+    /*0x3D70*/ struct WaldaPhrase waldaPhrase;
 };
 
 extern struct SaveBlock1* gSaveBlock1Ptr;

@@ -9,8 +9,10 @@
 // * DexNav feature
 // * Bag can be sorted
 // * Auto-Run on clicking the R button
+// * Item descriptions on pick-up
 // * Trainers can run a script on sight (https://github.com/pret/pokeemerald/wiki/Trainer-Scripts)
 // * PokedexPlus (https://www.pokecommunity.com/showthread.php?t=441996)
+// * Quest Menu (https://www.pokecommunity.com/showthread.php?t=434462)
 // FLAGS
 #define FEATURE_ALTDEFAULTOPTIONS  // Changes default settings
 #define FEATURE_SAVEMEMORYFOOTER  // Shrinks the save footer to exactly the size it needs to be, saving room in sram

@@ -149,6 +149,7 @@
 	.include "src/trainer_hill.o"
 	.include "src/rayquaza_scene.o"
 	.include "src/dexnav.o"
+	.include "src/quests.o"
 
 gSoundInfo:
     .space 0xFB0

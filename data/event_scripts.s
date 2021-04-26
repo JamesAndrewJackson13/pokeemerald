@@ -55,6 +55,7 @@
 #include "constants/weather.h"
 #include "constants/battle_transition.h" @ Allows for custom mugshots
 
+#include "constants/quests.h"
 	.include "asm/macros.inc"
 	.include "asm/macros/event.inc"
 	.include "constants/constants.inc"
