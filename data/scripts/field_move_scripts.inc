@@ -322,5 +322,12 @@ EventScript_EnableAutoRun::
 @     .string "Auto Run {COLOR GREEN}Enabled{COLOR DARK_GREY}.$"
 
 EventScript_WaitAndHideAutoRun::
-	delay 90  @ Show for 1.5 sec
+	delay 30  @ Show for 1.5 sec
 	hideautorunbox
+	end
+
+EventScript_ShowBikeBox::
+	showbiketypebox
+	delay 30  @ Show for 1.5 sec
+	hidebiketypebox
+	end

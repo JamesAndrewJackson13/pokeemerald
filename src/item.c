@@ -1108,24 +1108,23 @@ void HideItemHeaderBox(void)
     bool8 haveSeenItemBefore = GetSetItemObtained(gSpecialVar_0x8006, FLAG_GET_OBTAINED);
 
     // Make sure to set the item as obtained if we just got it for the first time
-    if (haveSeenItemBefore)
+    if (!haveSeenItemBefore)
         GetSetItemObtained(gSpecialVar_0x8006, FLAG_SET_OBTAINED);
 
-    HideHeaderBox(TRUE, haveSeenItemBefore);
+    HideHeaderBox(TRUE, !haveSeenItemBefore);
 }
 
-static const u8 sAutoRunEnabled[]  = _("Auto-run: enabled");
-static const u8 sAutoRunDisabled[] = _("Auto-run: disabled");
+static const u8 sAutoRunEnabled[]  = _("Auto-run: Enabled");
+static const u8 sAutoRunDisabled[] = _("Auto-run: Disabled");
 void DrawAutoRunBox(bool8 gettingEnabled)
 {
-    bool8 handleFlash = Overworld_GetFlashLevel() > 1 ? TRUE : FALSE;
     if (gettingEnabled)
     {
-        DrawHeaderBox(ITEM_RUNNINGSHOES_RUNNING, sAutoRunEnabled, handleFlash, 1);
+        DrawHeaderBox(ITEM_RUNNINGSHOES_RUNNING, sAutoRunEnabled, EXM_FLASH_ACTIVE, 1);
     }
     else
     {
-        DrawHeaderBox(ITEM_RUNNINGSHOES_WALKING, sAutoRunDisabled, handleFlash, 1);
+        DrawHeaderBox(ITEM_RUNNINGSHOES_WALKING, sAutoRunDisabled, EXM_FLASH_ACTIVE, 1);
     }
 }
 
@@ -1133,6 +1132,23 @@ void HideAutoRunBox(void)
 {
     HideHeaderBox(TRUE, TRUE);
 }
+
+#ifdef FEATURE_SWAPBIKEBUTTON
+static const u8 sBikeModeAcro[] = _("Bike Mode: Acro");
+static const u8 sBikeModeMach[] = _("Bike Mode: Mach");
+void DrawBikeHeaderBox(void)
+{
+    if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_ACRO_BIKE)
+        DrawHeaderBox(ITEM_ACRO_BIKE, sBikeModeAcro, EXM_FLASH_ACTIVE, 1);
+    else
+        DrawHeaderBox(ITEM_MACH_BIKE, sBikeModeMach, EXM_FLASH_ACTIVE, 1);
+}
+
+void HideBikeHeaderBox(void)
+{
+    HideHeaderBox(TRUE, TRUE);
+}
+#endif
 
 #include "gpu_regs.h"
 
@@ -1158,7 +1174,7 @@ static void ShowItemIconSprite(u16 item, bool8 firstTime, bool8 flash)
         if (!firstTime)
         {
             //show in message box
-			x = 213;
+			x = 215;
 			y = 140;
         }
         else

@@ -1663,6 +1663,14 @@
     .byte 0xe7
     .endm
 
+    .macro showbiketypebox
+    .byte 0xe8
+    .endm
+
+    .macro hidebiketypebox
+    .byte 0xe9
+    .endm
+
 
 @ Supplementary
 

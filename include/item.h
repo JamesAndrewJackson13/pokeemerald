@@ -81,6 +81,11 @@ void HideItemHeaderBox(void);
 void DrawAutoRunBox(bool8 gettingEnabled);
 void HideAutoRunBox(void);
 
+#ifdef FEATURE_SWAPBIKEBUTTON
+void DrawBikeHeaderBox(void);
+void HideBikeHeaderBox(void);
+#endif
+
 enum ItemObtainFlags
 {
     FLAG_GET_OBTAINED,

@@ -2361,3 +2361,15 @@ bool8 ScrCmd_hideautorunbox(struct ScriptContext* ctx)
     HideAutoRunBox();
     return FALSE;
 }
+
+bool8 ScrCmd_showbiketypebox(struct ScriptContext* ctx)
+{
+    DrawBikeHeaderBox();
+    return FALSE;
+}
+
+bool8 ScrCmd_hidebiketypebox(struct ScriptContext* ctx)
+{
+    HideBikeHeaderBox();
+    return FALSE;
+}

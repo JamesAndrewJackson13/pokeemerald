@@ -73,6 +73,9 @@ static bool8 TryStartStepCountScript(u16);
 static void UpdateFriendshipStepCounter(void);
 static bool8 UpdatePoisonStepCounter(void);
 static bool8 EnableAutoRun(void);
+#ifdef FEATURE_SWAPBIKEBUTTON
+static void SwapBikeType(void);
+#endif
 
 void FieldClearPlayerInput(struct FieldInput *input)
 {
@@ -216,8 +219,18 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
     if (input->pressedSelectButton && UseRegisteredKeyItemOnField() == TRUE)
         return TRUE;
 
-    if (input->pressedRButton && EnableAutoRun())
+    if (input->pressedRButton)
+    {
+#ifdef FEATURE_SWAPBIKEBUTTON
+        if (EXM_PLAYER_ON_BIKE)
+            SwapBikeType();
+        else
+            EnableAutoRun();
+#else
+        EnableAutoRun();
+#endif
         return TRUE;
+    }
 
 #ifdef FEATURE_DEBUGMENU
     if (input->input_field_1_2)
@@ -1056,7 +1069,6 @@ static bool8 EnableAutoRun(void)
     if (!FlagGet(FLAG_SYS_B_DASH))
         return FALSE;   //auto run unusable until you get running shoes
 
-    PlaySE(SE_SELECT);
     if (gSaveBlock2Ptr->autoRun)
     {
         gSaveBlock2Ptr->autoRun = FALSE;
@@ -1070,3 +1082,25 @@ static bool8 EnableAutoRun(void)
 
     return TRUE;
 }
+
+#ifdef FEATURE_SWAPBIKEBUTTON
+extern const u8 EventScript_ShowBikeBox[];
+static void SwapBikeType(void)
+{
+    if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_MACH_BIKE)
+    {
+        gPlayerAvatar.flags -= PLAYER_AVATAR_FLAG_MACH_BIKE;
+        gPlayerAvatar.flags += PLAYER_AVATAR_FLAG_ACRO_BIKE;
+        SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_ACRO_BIKE);
+        PlaySE(SE_BIKE_HOP);
+    }
+    else
+    {
+        gPlayerAvatar.flags -= PLAYER_AVATAR_FLAG_ACRO_BIKE;
+        gPlayerAvatar.flags += PLAYER_AVATAR_FLAG_MACH_BIKE;
+        SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_MACH_BIKE);
+        PlaySE(SE_BIKE_BELL);
+    }
+    ScriptContext1_SetupScript(EventScript_ShowBikeBox);
+}
+#endif

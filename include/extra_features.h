@@ -1,6 +1,8 @@
 #ifndef EXTRA_FEATURES_H
 #define EXTRA_FEATURES_H
 
+// Extra helpful functions (ONLY USE WITH EXTRA FEATURES)
+#define EXM_FLASH_ACTIVE Overworld_GetFlashLevel() > 1 ? TRUE : FALSE
 
 // HARDBAKED FEATURES
 // * Extra SaveRam space
@@ -33,6 +35,10 @@
 // #define FEATURE_NOFIELDPSN_DONTLOSEFRIENDSHIP  // Makes it so Pokemon whom "get over" psn in the field don't lose friendship (otherwise, they still lose it as if they had fainted)
 #define FEATURE_FASTSURFING  // Allow players to "run" while swimming, to go at mach bike speed
 #define FEATURE_CUSTOMBATTLEMUGSHOTS  // Trainers outside the elite 4 can have battle mugshots (https://github.com/pret/pokeemerald/wiki/Custom-Battle-Mugshots)
+
+// BIKE RELATED
+#define FEATURE_SWAPBIKEBUTTON  // Makes the bike work like G4, letting you swap modes via the menu
+#define EXM_PLAYER_ON_BIKE gPlayerAvatar.flags & (PLAYER_AVATAR_FLAG_MACH_BIKE | PLAYER_AVATAR_FLAG_ACRO_BIKE)  // Macro that does the check for the bike
 
 // SHINY RELATED
 #define FEATURE_ALLOWSHINYREROLLS  // The critical feature; this allows for other features to do "shiny" re-rolling. Without this, the other features in this section wont work
