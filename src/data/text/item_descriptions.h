@@ -1028,7 +1028,11 @@ static const u8 sMachoBraceDesc[] = _(
 
 static const u8 sExpShareDesc[] = _(
     "A hold item that\n"
+#ifdef FEATURE_MODERNEXPSHARE
+    "spreads experience\n"
+#else
     "gets Exp. points\n"
+#endif
     "from battles.");
 
 static const u8 sQuickClawDesc[] = _(

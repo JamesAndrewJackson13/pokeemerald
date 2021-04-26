@@ -502,8 +502,11 @@ struct SaveBlock2
              u16 optionsSound:1; // OPTIONS_SOUND_[MONO/STEREO]
              u16 optionsBattleStyle:1; // OPTIONS_BATTLE_STYLE_[SHIFT/SET]
              u16 optionsBattleSceneOff:1; // whether battle animations are disabled
-             u16 regionMapZoom:1; // whether the map is zoomed in
-    /*0x18*/ struct Pokedex pokedex;
+             u16 regionMapZoom : 1; // whether the map is zoomed in
+#ifdef FEATURE_MODERNEXPSHARE
+             u16 expShare : 1;
+#endif
+             /*0x18*/ struct Pokedex pokedex;
     /*0x90*/ u8 filler_90[0x8];
     /*0x98*/ struct Time localTimeOffset;
     /*0xA0*/ struct Time lastBerryTreeUpdate;

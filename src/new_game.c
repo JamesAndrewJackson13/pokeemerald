@@ -221,6 +221,9 @@ void NewGameInitData(void)
     memset(&gSaveBlock2Ptr->itemFlags, 0, sizeof(gSaveBlock2Ptr->itemFlags));
     memset(gSaveBlock1Ptr->dexNavSearchLevels, 0, sizeof(gSaveBlock1Ptr->dexNavSearchLevels));
     gSaveBlock1Ptr->dexNavChain = 0;
+#ifdef FEATURE_MODERNEXPSHARE
+    gSaveBlock2Ptr->expShare = 0;
+#endif
 }
 
 static void ResetMiniGamesRecords(void)

@@ -35,6 +35,7 @@
 // #define FEATURE_NOFIELDPSN_DONTLOSEFRIENDSHIP  // Makes it so Pokemon whom "get over" psn in the field don't lose friendship (otherwise, they still lose it as if they had fainted)
 #define FEATURE_FASTSURFING  // Allow players to "run" while swimming, to go at mach bike speed
 #define FEATURE_CUSTOMBATTLEMUGSHOTS  // Trainers outside the elite 4 can have battle mugshots (https://github.com/pret/pokeemerald/wiki/Custom-Battle-Mugshots)
+#define FEATURE_MODERNEXPSHARE  // Updates EXP SHARE to behave like it does post G6
 
 // BIKE RELATED
 #define FEATURE_SWAPBIKEBUTTON  // Makes the bike work like G4, letting you swap modes via the menu

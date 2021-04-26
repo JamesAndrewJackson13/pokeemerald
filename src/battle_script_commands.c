@@ -3620,15 +3620,19 @@ static void Cmd_getexp(void)
                     gBattleStruct->wildVictorySong++;
                 }
 
-                if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP))
+                if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP) && !GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_IS_EGG))
                 {
                     if (gBattleStruct->sentInPokes & 1)
                         gBattleMoveDamage = *exp;
                     else
                         gBattleMoveDamage = 0;
 
+#ifdef FEATURE_MODERNEXPSHARE
+                    if (gSaveBlock2Ptr->expShare)
+#else
                     // only give exp share bonus in later gens if the mon wasn't sent out
                     if ((holdEffect == HOLD_EFFECT_EXP_SHARE) && ((gBattleMoveDamage == 0) || (B_SPLIT_EXP < GEN_6)))
+#endif
                         gBattleMoveDamage += gExpShareExp;
                     if (holdEffect == HOLD_EFFECT_LUCKY_EGG)
                         gBattleMoveDamage = (gBattleMoveDamage * 150) / 100;

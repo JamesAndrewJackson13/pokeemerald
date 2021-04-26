@@ -2582,6 +2582,20 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
 
+#ifdef FEATURE_MODERNEXPSHARE
+    [ITEM_EXP_SHARE] =
+    {
+        .name = _("Exp. Share"),
+        .itemId = ITEM_EXP_SHARE,
+        .price = 3000,
+        .holdEffect = HOLD_EFFECT_EXP_SHARE,
+        .description = sExpShareDesc,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_ExpShare,
+        .secondaryId = 0,
+    },
+#else
     [ITEM_EXP_SHARE] =
     {
         .name = _("Exp. Share"),
@@ -2593,7 +2607,7 @@ const struct Item gItems[] =
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
-
+#endif
     [ITEM_QUICK_CLAW] =
     {
         .name = _("Quick Claw"),
@@ -7719,9 +7733,9 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
         .secondaryId = 255  //signature z move
     },
-    
+
     //mints
-    [ITEM_ADAMANT_MINT] = 
+    [ITEM_ADAMANT_MINT] =
     {
         .name = _("Adamant Mint"),
         .itemId = ITEM_ADAMANT_MINT,
@@ -7732,7 +7746,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_ADAMANT,
     },
-    [ITEM_BOLD_MINT] = 
+    [ITEM_BOLD_MINT] =
     {
         .name = _("Bold Mint"),
         .itemId = ITEM_BOLD_MINT,
@@ -7743,7 +7757,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_BOLD,
     },
-    [ITEM_BRAVE_MINT] = 
+    [ITEM_BRAVE_MINT] =
     {
         .name = _("Brave Mint"),
         .itemId = ITEM_BRAVE_MINT,
@@ -7754,7 +7768,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_BRAVE,
     },
-    [ITEM_CALM_MINT] = 
+    [ITEM_CALM_MINT] =
     {
         .name = _("Calm Mint"),
         .itemId = ITEM_CALM_MINT,
@@ -7765,7 +7779,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_CALM,
     },
-    [ITEM_CAREFUL_MINT] = 
+    [ITEM_CAREFUL_MINT] =
     {
         .name = _("Careful Mint"),
         .itemId = ITEM_CAREFUL_MINT,
@@ -7776,7 +7790,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_CAREFUL,
     },
-    [ITEM_GENTLE_MINT] = 
+    [ITEM_GENTLE_MINT] =
     {
         .name = _("Gentle Mint"),
         .itemId = ITEM_GENTLE_MINT,
@@ -7787,7 +7801,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_GENTLE,
     },
-    [ITEM_HASTY_MINT] = 
+    [ITEM_HASTY_MINT] =
     {
         .name = _("Hasty Mint"),
         .itemId = ITEM_HASTY_MINT,
@@ -7798,7 +7812,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_HASTY,
     },
-    [ITEM_IMPISH_MINT] = 
+    [ITEM_IMPISH_MINT] =
     {
         .name = _("Impish Mint"),
         .itemId = ITEM_IMPISH_MINT,
@@ -7809,7 +7823,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_IMPISH,
     },
-    [ITEM_JOLLY_MINT] = 
+    [ITEM_JOLLY_MINT] =
     {
         .name = _("Jolly Mint"),
         .itemId = ITEM_JOLLY_MINT,
@@ -7820,7 +7834,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_JOLLY,
     },
-    [ITEM_LAX_MINT] = 
+    [ITEM_LAX_MINT] =
     {
         .name = _("Lax Mint"),
         .itemId = ITEM_LAX_MINT,
@@ -7831,7 +7845,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_LAX,
     },
-    [ITEM_LONELY_MINT] = 
+    [ITEM_LONELY_MINT] =
     {
         .name = _("Lonely Mint"),
         .itemId = ITEM_LONELY_MINT,
@@ -7842,7 +7856,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_LONELY,
     },
-    [ITEM_MILD_MINT] = 
+    [ITEM_MILD_MINT] =
     {
         .name = _("Mild Mint"),
         .itemId = ITEM_MILD_MINT,
@@ -7853,7 +7867,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_MILD,
     },
-    [ITEM_MODEST_MINT] = 
+    [ITEM_MODEST_MINT] =
     {
         .name = _("Modest Mint"),
         .itemId = ITEM_MODEST_MINT,
@@ -7864,7 +7878,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_MODEST,
     },
-    [ITEM_NAIVE_MINT] = 
+    [ITEM_NAIVE_MINT] =
     {
         .name = _("Naive Mint"),
         .itemId = ITEM_NAIVE_MINT,
@@ -7875,7 +7889,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_NAIVE,
     },
-    [ITEM_NAUGHTY_MINT] = 
+    [ITEM_NAUGHTY_MINT] =
     {
         .name = _("Naughty Mint"),
         .itemId = ITEM_NAUGHTY_MINT,
@@ -7886,7 +7900,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_NAUGHTY,
     },
-    [ITEM_QUIET_MINT] = 
+    [ITEM_QUIET_MINT] =
     {
         .name = _("Quiet Mint"),
         .itemId = ITEM_QUIET_MINT,
@@ -7897,7 +7911,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_QUIET,
     },
-    [ITEM_RASH_MINT] = 
+    [ITEM_RASH_MINT] =
     {
         .name = _("Rash Mint"),
         .itemId = ITEM_RASH_MINT,
@@ -7908,7 +7922,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_RASH,
     },
-    [ITEM_RELAXED_MINT] = 
+    [ITEM_RELAXED_MINT] =
     {
         .name = _("Relaxed Mint"),
         .itemId = ITEM_RELAXED_MINT,
@@ -7919,7 +7933,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_RELAXED,
     },
-    [ITEM_SASSY_MINT] = 
+    [ITEM_SASSY_MINT] =
     {
         .name = _("Sassy Mint"),
         .itemId = ITEM_SASSY_MINT,
@@ -7930,7 +7944,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_SASSY,
     },
-    [ITEM_SERIOUS_MINT] = 
+    [ITEM_SERIOUS_MINT] =
     {
         .name = _("Serious Mint"),
         .itemId = ITEM_SERIOUS_MINT,
@@ -7941,7 +7955,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_SERIOUS,
     },
-    [ITEM_TIMID_MINT] = 
+    [ITEM_TIMID_MINT] =
     {
         .name = _("Timid Mint"),
         .itemId = ITEM_TIMID_MINT,
