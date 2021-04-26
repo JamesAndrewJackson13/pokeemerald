@@ -15,7 +15,8 @@
 			"*.h": "c",
 			"xhash": "c",
 			"xtree": "c",
-			"xutility": "c"
+			"xutility": "c",
+			"xiosbase": "c"
 		},
 		"C_Cpp.formatting": "vcFormat",
 		"C_Cpp.vcFormat.newLine.beforeOpenBrace.type": "newLine",

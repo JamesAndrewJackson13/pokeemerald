@@ -88,11 +88,11 @@
 #define PSS_DATA_WINDOW_INFO_MEMO 3
 
 // Dynamic fields for the Pokemon Skills page
-#define PSS_DATA_WINDOW_SKILLS_HELD_ITEM 0
-#define PSS_DATA_WINDOW_SKILLS_RIBBON_COUNT 1
-#define PSS_DATA_WINDOW_SKILLS_STATS_LEFT 2  // HP, Attack, Defense
-#define PSS_DATA_WINDOW_SKILLS_STATS_RIGHT 3 // Sp. Attack, Sp. Defense, Speed
-#define PSS_DATA_WINDOW_EXP 4                // Exp, next level
+#define PSS_DATA_WINDOW_SKILLS_HELD_ITEM         0
+#define PSS_DATA_WINDOW_SKILLS_RIBBON_COUNT      1
+#define PSS_DATA_WINDOW_SKILLS_STATS_LEFT        2  // HP, Attack, Defense
+#define PSS_DATA_WINDOW_SKILLS_STATS_RIGHT       3  // Sp. Attack, Sp. Defense, Speed
+#define PSS_DATA_WINDOW_EXP                      4  // Exp, next level
 
 // Dynamic fields for the Battle Moves and Contest Moves pages.
 #define PSS_DATA_WINDOW_MOVE_NAMES 0
@@ -169,13 +169,18 @@ static EWRAM_DATA struct PokemonSummaryScreenData
     u8 secondMoveIndex;
     bool8 lockMovesFlag; // This is used to prevent the player from changing position of moves in a battle or when trading.
     u8 bgDisplayOrder;   // Determines the order page backgrounds are loaded while scrolling between them
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
+    u8 summaryScreenMode;
+#else
     u8 filler40CA;
+#endif
     u8 windowIds[8];
     u8 spriteIds[SPRITE_ARR_ID_COUNT];
     bool8 unk40EF;
     s16 switchCounter; // Used for various switch statement cases that decompress/load graphics or pokemon data
     u8 unk_filler4[6];
     u8 splitIconSpriteId;
+    u8 summaryScreenModeSpriteId;
 } *sMonSummaryScreen = NULL;
 
 EWRAM_DATA u8 gLastViewedMonIndex = 0;
@@ -303,7 +308,11 @@ static void SpriteCb_MoveSelector(struct Sprite *sprite);
 static void DestroyMoveSelectorSprites(u8 firstArrayId);
 static void SetMainMoveSelectorColor(u8 whichColor);
 static void KeepMoveSelectorVisible(u8 firstSpriteId);
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
 static void BufferIvOrEvStats(u8 mode);
+static u8 ShowSummeryScreenModeIcon(void);
+static void DestroySummeryScreenModeIcon(void);
+#endif
 
 // const rom data
 #include "data/text/move_descriptions.h"
@@ -641,7 +650,7 @@ static const struct WindowTemplate sPageSkillsTemplate[] =
             .height = 4,
             .paletteNum = 6,
             .baseBlock = 543,
-        },
+        }
 };
 static const struct WindowTemplate sPageMovesTemplate[] = // This is used for both battle and contest moves
     {
@@ -711,8 +720,8 @@ static const u8 sMemoNatureTextColor[] = _("{COLOR LIGHT_RED}{SHADOW GREEN}");
 static const u8 sText_EndParentheses[] = _("{COLOR WHITE}{SHADOW DARK_GREY})");
 static const u8 sMemoMiscTextColor[] = _("{COLOR WHITE}{SHADOW DARK_GREY}"); // This is also affected by palettes, apparently
 static const u8 sStatsLeftColumnLayout[] = _("{DYNAMIC 0}/{DYNAMIC 1}\n{DYNAMIC 2}\n{DYNAMIC 3}");
-#ifdef FEATURE_WRAPPINGSUMMARYSCREEN
-static const u8 sStatsLeftColumnLayoutIVEV[] = _("{DYNAMIC 0}/{DYNAMIC 1}\n{DYNAMIC 2}\n{DYNAMIC 3}");
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
+static const u8 sStatsLeftColumnLayoutIVEV[] = _("{DYNAMIC 0}\n{DYNAMIC 1}\n{DYNAMIC 2}");
 #endif
 static const u8 sStatsRightColumnLayout[] = _("{DYNAMIC 0}\n{DYNAMIC 1}\n{DYNAMIC 2}");
 static const u8 sMovesPPLayout[] = _("{PP}{DYNAMIC 0}/{DYNAMIC 1}");
@@ -722,6 +731,10 @@ static const u8 sMovesPPLayout[] = _("{PP}{DYNAMIC 0}/{DYNAMIC 1}");
 #define TAG_MOVE_TYPES 30002
 #define TAG_MON_MARKINGS 30003
 #define TAG_SPLIT_ICONS 30004
+
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
+#define TAG_SUMMARY_MODE 30005
+#endif
 
 static const u16 sSplitIcons_Pal[] = INCBIN_U16("graphics/interface/split_icons.gbapal");
 static const u32 sSplitIcons_Gfx[] = INCBIN_U32("graphics/interface/split_icons.4bpp.lz");
@@ -778,20 +791,20 @@ static const struct SpriteTemplate sSpriteTemplate_SplitIcons =
         .callback = SpriteCallbackDummy};
 
 static const struct OamData sOamData_MoveTypes =
-    {
-        .y = 0,
-        .affineMode = ST_OAM_AFFINE_OFF,
-        .objMode = ST_OAM_OBJ_NORMAL,
-        .mosaic = 0,
-        .bpp = ST_OAM_4BPP,
-        .shape = SPRITE_SHAPE(32x16),
-        .x = 0,
-        .matrixNum = 0,
-        .size = SPRITE_SIZE(32x16),
-        .tileNum = 0,
-        .priority = 1,
-        .paletteNum = 0,
-        .affineParam = 0,
+{
+    .y = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .mosaic = 0,
+    .bpp = ST_OAM_4BPP,
+    .shape = SPRITE_SHAPE(32x16),
+    .x = 0,
+    .matrixNum = 0,
+    .size = SPRITE_SIZE(32x16),
+    .tileNum = 0,
+    .priority = 1,
+    .paletteNum = 0,
+    .affineParam = 0,
 };
 static const union AnimCmd sSpriteAnim_TypeNormal[] = {
     ANIMCMD_FRAME(TYPE_NORMAL * 8, 0, FALSE, FALSE),
@@ -1081,6 +1094,90 @@ static const struct SpriteTemplate sSpriteTemplate_StatusCondition =
         .callback = SpriteCallbackDummy};
 static const u16 sSummaryMarkingsPalette[] = INCBIN_U16("graphics/interface/summary_markings.gbapal");
 
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
+const u32 sSummaryScreenModePalette[] = INCBIN_U32("graphics/interface/summary_mode_icons.gbapal.lz");
+const u32 sSummaryScreenModeGraphics[] = INCBIN_U32("graphics/interface/summary_mode_icons.4bpp.lz");
+
+static const struct OamData sOamData_SummaryScreenMode =
+{
+    .y = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .mosaic = 0,
+    .bpp = ST_OAM_4BPP,
+    .shape = SPRITE_SHAPE(32x8),
+    .x = 0,
+    .matrixNum = 0,
+    .size = SPRITE_SIZE(32x8),
+    .tileNum = 0,
+    .priority = 1,
+    .paletteNum = 0,
+    .affineParam = 0,
+};
+
+static const union AnimCmd sSpriteAnim_SummaryScreenModeIV[] = {
+    ANIMCMD_FRAME(PSS_STATS_IV * 4, 0, FALSE, FALSE),
+    ANIMCMD_END };
+static const union AnimCmd sSpriteAnim_SummaryScreenModeEV[] = {
+    ANIMCMD_FRAME(PSS_STATS_EV * 4, 0, FALSE, FALSE),
+    ANIMCMD_END };
+
+static const union AnimCmd* const sSpriteAnimTable_SummaryScreenMode[] = {
+    sSpriteAnim_SummaryScreenModeIV,
+    sSpriteAnim_SummaryScreenModeEV,
+};
+static const struct CompressedSpriteSheet sSummaryScreenModeSpriteSheet =
+{
+    .data = sSummaryScreenModeGraphics,
+    .size = 32 * 8 * 2 / 2,
+    .tag = TAG_SUMMARY_MODE };
+static const struct CompressedSpritePalette sSummaryScreenModeSpritePalette =
+{
+    .data = sSummaryScreenModePalette,
+    .tag = TAG_SUMMARY_MODE };
+static const struct SpriteTemplate sSpriteTemplate_SummaryScreenMode =
+{
+    .tileTag = TAG_SUMMARY_MODE,
+    .paletteTag = TAG_SUMMARY_MODE,
+    .oam = &sOamData_SummaryScreenMode,
+    .anims = sSpriteAnimTable_SummaryScreenMode,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCallbackDummy };
+
+static u8 ShowSummeryScreenModeIcon(void)
+{
+    if (sMonSummaryScreen->summaryScreenModeSpriteId == 0xFF)
+        sMonSummaryScreen->summaryScreenModeSpriteId = CreateSprite(&sSpriteTemplate_SummaryScreenMode, 114, 52, 0);
+
+    switch (sMonSummaryScreen->summaryScreenMode)
+    {
+    case PSS_STATS_IV:
+    case PSS_STATS_EV:
+        StartSpriteAnim(&gSprites[sMonSummaryScreen->summaryScreenModeSpriteId], sMonSummaryScreen->summaryScreenMode);
+        gSprites[sMonSummaryScreen->summaryScreenModeSpriteId].invisible = FALSE;
+        break;
+
+    case PSS_STATS_DEFAULT:
+    default:
+        gSprites[sMonSummaryScreen->summaryScreenModeSpriteId].invisible = TRUE;
+        break;
+    }
+
+    return sMonSummaryScreen->summaryScreenModeSpriteId;
+}
+
+static void DestroySummeryScreenModeIcon(void)
+{
+    if (sMonSummaryScreen->summaryScreenModeSpriteId != 0xFF)
+    {
+        gSprites[sMonSummaryScreen->summaryScreenModeSpriteId].invisible = TRUE;
+        DestroySprite(&gSprites[sMonSummaryScreen->summaryScreenModeSpriteId]);
+    }
+    sMonSummaryScreen->summaryScreenModeSpriteId = 0xFF;
+}
+#endif
+
 // code
 static u8 ShowSplitIcon(u32 split)
 {
@@ -1156,6 +1253,9 @@ void ShowPokemonSummaryScreen(u8 mode, void *mons, u8 monIndex, u8 maxMonIndex, 
 
     sMonSummaryScreen->currPageIndex = sMonSummaryScreen->minPageIndex;
     sMonSummaryScreen->splitIconSpriteId = 0xFF;
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
+    sMonSummaryScreen->summaryScreenModeSpriteId = 0xFF;
+#endif
     SummaryScreen_SetUnknownTaskId(0xFF);
 
     if (gMonSpritesGfxPtr == NULL)
@@ -1405,6 +1505,16 @@ static bool8 DecompressGraphics(void)
         LoadCompressedPalette(gMoveTypes_Pal, 0x1D0, 0x60);
         LoadCompressedSpriteSheet(&sSpriteSheet_SplitIcons);
         LoadSpritePalette(&sSpritePal_SplitIcons);
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
+        sMonSummaryScreen->switchCounter++;
+        break;
+    case 13:
+        LoadCompressedSpriteSheet(&sSummaryScreenModeSpriteSheet);
+        sMonSummaryScreen->switchCounter++;
+        break;
+    case 14:
+        LoadCompressedSpritePalette(&sSummaryScreenModeSpritePalette);
+#endif
         sMonSummaryScreen->switchCounter = 0;
         return TRUE;
     }
@@ -1559,6 +1669,39 @@ static void CloseSummaryScreen(u8 taskId)
     }
 }
 
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
+static void ChangeSummaryPageMode(bool8 inc)
+{
+    if (inc == TRUE)
+    {
+        if (sMonSummaryScreen->summaryScreenMode == 2)
+        {
+            sMonSummaryScreen->summaryScreenMode = 0;
+        }
+        else
+        {
+            sMonSummaryScreen->summaryScreenMode = sMonSummaryScreen->summaryScreenMode + 1;
+        }
+    }
+    else
+    {
+        if (sMonSummaryScreen->summaryScreenMode == 0)
+        {
+            sMonSummaryScreen->summaryScreenMode = 2;
+        }
+        else
+        {
+            sMonSummaryScreen->summaryScreenMode = sMonSummaryScreen->summaryScreenMode - 1;
+        }
+    }
+    PlaySE(SE_SELECT);
+
+    BufferIvOrEvStats(sMonSummaryScreen->summaryScreenMode);
+    ShowSummeryScreenModeIcon();
+
+}
+#endif
+
 static void Task_HandleInput(u8 taskId)
 {
     if (MenuHelpers_CallLinkSomething() != TRUE && !gPaletteFade.active)
@@ -1595,6 +1738,12 @@ static void Task_HandleInput(u8 taskId)
                     SwitchToMoveSelection(taskId);
                 }
             }
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
+            else
+            {
+                ChangeSummaryPageMode(TRUE);
+            }
+#endif
         }
         else if (JOY_NEW(B_BUTTON))
         {
@@ -1602,27 +1751,20 @@ static void Task_HandleInput(u8 taskId)
             PlaySE(SE_SELECT);
             BeginCloseSummaryScreen(taskId);
         }
-#ifdef FEATURE_WRAPPINGSUMMARYSCREEN
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
         // show IVs/EVs/stats on button presses
-        else if (gMain.newKeys & R_BUTTON)
+        else if (JOY_NEW(R_BUTTON))
         {
             if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)
             {
-                BufferIvOrEvStats(0);
+                ChangeSummaryPageMode(TRUE);
             }
         }
-        else if (gMain.newKeys & L_BUTTON)
+        else if (JOY_NEW(L_BUTTON))
         {
             if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)
             {
-                BufferIvOrEvStats(1);
-            }
-        }
-        else if (gMain.newKeys & START_BUTTON)
-        {
-            if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)
-            {
-                BufferIvOrEvStats(2);
+                ChangeSummaryPageMode(FALSE);
             }
         }
 #endif
@@ -1736,6 +1878,15 @@ static void Task_ChangeSummaryMon(u8 taskId)
     case 12:
         gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON]].data[2] = 0;
         break;
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
+    case 13:
+        if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)
+        {
+            BufferIvOrEvStats(sMonSummaryScreen->summaryScreenMode);
+            ShowSummeryScreenModeIcon();
+        }
+        break;
+#endif
     default:
         if (MenuHelpers_CallLinkSomething() == 0 && FuncIsActiveTask(Task_ShowStatusWindow) == 0)
         {
@@ -1849,6 +2000,12 @@ static void ChangePage(u8 taskId, s8 delta)
     PlaySE(SE_SELECT);
     ClearPageWindowTilemaps(sMonSummaryScreen->currPageIndex);
     sMonSummaryScreen->currPageIndex += delta;
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
+    if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)
+    {
+        sMonSummaryScreen->summaryScreenMode = 2;
+    }
+#endif
     data[0] = 0;
     if (delta == 1)
         SetTaskFuncWithFollowupFunc(taskId, PssScrollRight, gTasks[taskId].func);
@@ -2965,6 +3122,7 @@ static void PutPageWindowTilemaps(u8 page)
         PutWindowTilemap(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_LEFT);
         PutWindowTilemap(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_RIGHT);
         PutWindowTilemap(PSS_LABEL_WINDOW_POKEMON_SKILLS_EXP);
+        PutWindowTilemap(PSS_LABEL_WINDOW_PROMPT_SWITCH);
         break;
     case PSS_PAGE_BATTLE_MOVES:
         PutWindowTilemap(PSS_LABEL_WINDOW_BATTLE_MOVES_TITLE);
@@ -3014,6 +3172,9 @@ static void ClearPageWindowTilemaps(u8 page)
         ClearWindowTilemap(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_LEFT);
         ClearWindowTilemap(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_RIGHT);
         ClearWindowTilemap(PSS_LABEL_WINDOW_POKEMON_SKILLS_EXP);
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
+        ClearWindowTilemap(PSS_LABEL_WINDOW_PROMPT_INFO);
+#endif
         break;
     case PSS_PAGE_BATTLE_MOVES:
         if (sMonSummaryScreen->mode == PSS_MODE_SELECT_MOVE)
@@ -3371,10 +3532,15 @@ static void PrintSkillsPageText(void)
 {
     PrintHeldItemName();
     PrintRibbonCount();
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
+    BufferIvOrEvStats(sMonSummaryScreen->summaryScreenMode);
+    ShowSummeryScreenModeIcon();
+#else
     BufferLeftColumnStats();
     PrintLeftColumnStats();
     BufferRightColumnStats();
     PrintRightColumnStats();
+#endif
     PrintExpPointsNextLevel();
 }
 
@@ -3390,6 +3556,15 @@ static void Task_PrintSkillsPage(u8 taskId)
     case 2:
         PrintRibbonCount();
         break;
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
+    case 3:
+        BufferIvOrEvStats(sMonSummaryScreen->summaryScreenMode);
+        break;
+    case 4:
+        PrintExpPointsNextLevel();
+        break;
+    case 5:
+#else
     case 3:
         BufferLeftColumnStats();
         break;
@@ -3406,6 +3581,7 @@ static void Task_PrintSkillsPage(u8 taskId)
         PrintExpPointsNextLevel();
         break;
     case 8:
+#endif
         DestroyTask(taskId);
         return;
     }
@@ -3458,6 +3634,7 @@ static void PrintRibbonCount(void)
 #ifdef FEATURE_SHOWEVIVINSTATSCREEN
 
 #ifdef FEATURE_DIZZYNATURECOLORMOD
+
 static void BufferIvOrEvStats(u8 mode)
 {
     u16 hp, hp2, atk, def, spA, spD, spe;
@@ -3466,7 +3643,7 @@ static void BufferIvOrEvStats(u8 mode)
 
     switch (mode)
     {
-    case 0: // iv mode
+    case PSS_STATS_IV:
         hp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_IV);
         atk = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_IV);
         def = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_IV);
@@ -3475,7 +3652,7 @@ static void BufferIvOrEvStats(u8 mode)
         spD = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_IV);
         spe = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_IV);
         break;
-    case 1: // ev mode
+    case PSS_STATS_EV:
         hp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV);
         atk = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV);
         def = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV);
@@ -3484,7 +3661,7 @@ static void BufferIvOrEvStats(u8 mode)
         spD = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV);
         spe = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV);
         break;
-    case 2: // stats mode
+    case PSS_STATS_DEFAULT:
     default:
         hp = sMonSummaryScreen->summary.currentHP;
         hp2 = sMonSummaryScreen->summary.maxHP;
@@ -3502,24 +3679,27 @@ static void BufferIvOrEvStats(u8 mode)
 
     switch (mode)
     {
-    case 0:
-    case 1:
+    case PSS_STATS_IV:
+    case PSS_STATS_EV:
+
         BufferStat(gStringVar1, 0, hp, 0, 7);
-        BufferStat(gStringVar2, 0, atk, 1, 7);
-        BufferStat(gStringVar3, 0, def, 2, 7);
+        BufferStat(gStringVar2, natureMod[STAT_ATK - 1], atk, 1, 7);
+        BufferStat(gStringVar3, natureMod[STAT_DEF - 1], def, 2, 7);
         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sStatsLeftColumnLayoutIVEV);
         PrintLeftColumnStats();
 
-        BufferStat(gStringVar1, 0, spA, 0, 3);
-        BufferStat(gStringVar2, 0, spD, 1, 3);
-        BufferStat(gStringVar3, 0, spe, 2, 3);
+        BufferStat(gStringVar1, natureMod[STAT_SPATK - 1], spA, 0, 3);
+        BufferStat(gStringVar2, natureMod[STAT_SPDEF - 1], spD, 1, 3);
+        BufferStat(gStringVar3, natureMod[STAT_SPEED - 1], spe, 2, 3);
         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sStatsRightColumnLayout);
         PrintRightColumnStats();
         break;
-    case 2:
+    case PSS_STATS_DEFAULT:
     default:
         BufferStat(currHPString, 0, hp, 0, 3);
-        BufferStat(gStringVar1, 0, hp2, 1, 3);
+        ConvertIntToDecimalStringN(gStringVar1, hp2, STR_CONV_MODE_RIGHT_ALIGN, 3);
+        DynamicPlaceholderTextUtil_SetPlaceholderPtr(1, gStringVar1);
+        // BufferStat(gStringVar1, 0, hp2, 1, 3);
         BufferStat(gStringVar2, natureMod[STAT_ATK - 1], atk, 2, 7);
         BufferStat(gStringVar3, natureMod[STAT_DEF - 1], def, 3, 7);
         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sStatsLeftColumnLayout);
@@ -3631,21 +3811,70 @@ static void BufferIvOrEvStats(u8 mode)
 #endif
 
 #ifdef FEATURE_DIZZYNATURECOLORMOD
+// TODO: Get the arrows to work properly
+static const u8 sTextNatureDown[] = _("{SIZE 0}{COLOR BLUE}");
+static const u8 sTextNatureUp[] = _("{SIZE 0}{COLOR LIGHT_RED}");
+static const u8 sTextNatureNeutral[] = _("{SIZE 0}{COLOR WHITE}");
+
+/**
+ *  BLUE: Blue
+ *  LIGHT_RED: Red
+ *  DARK_GREY: Light Grey
+ *  WHITE: Black
+ *  TRANSPARENT: White
+ *  LIGHT_GREY: White
+ *  RED: Dark Grey
+ *  LIGHT_GREEN: light blue
+ *  GREEN: Light orange
+ *  BLUE: Blue
+ *  LIGHT_BLUE: Light red
+ */
+
 static void BufferStat(u8* dst, s8 natureMod, u32 stat, u32 strId, u32 n)
 {
-    static const u8 sTextNatureDown[] = _("{COLOR BLUE}{SIZE 0}{DOWN_ARROW}{RESET_SIZE}");
-    static const u8 sTextNatureUp[] = _("{COLOR RED}{SIZE 0}{UP_ARROW}{RESET_SIZE}");
-    static const u8 sTextNatureNeutral[] = _("{COLOR WHITE}{SIZE 0} {RESET_SIZE}");
     u8* txtPtr;
-
     if (natureMod == 0)
+    {
         txtPtr = StringCopy(dst, sTextNatureNeutral);
+    }
     else if (natureMod > 0)
+    {
         txtPtr = StringCopy(dst, sTextNatureUp);
+    }
     else
+    {
         txtPtr = StringCopy(dst, sTextNatureDown);
+    }
 
-    ConvertIntToDecimalStringN(txtPtr, stat, STR_CONV_MODE_RIGHT_ALIGN, n);
+    bool8 AddOneSpace = natureMod == 0 || (stat > 99 && n == 3);  // The n == 3 thing is a cheesy way to know we're dealing with the right column (where space gets tight)
+    ConvertIntToDecimalStringN(txtPtr, stat, STR_CONV_MODE_RIGHT_ALIGN, n + AddOneSpace);  // We have to add spaces so we can replace  below
+    u8* findLastSpace = dst;
+    // Get past the initial characters
+    while (*findLastSpace != 0x77 && *findLastSpace != 0xFF)
+    {
+        ++findLastSpace;
+    }
+    // Find the final space
+    while (*findLastSpace == 0x77 && *findLastSpace != 0xFF)
+    {
+        ++findLastSpace;
+    }
+    if (*findLastSpace != 0xFF)
+    {
+        --findLastSpace;  // Step back one space
+        if (natureMod == 0)
+        {
+            *findLastSpace = 0x7F;  // char code for 3px space
+        }
+        else if (natureMod > 0)
+        {
+            *findLastSpace = 0x79;  // char code for up arrow
+        }
+        else
+        {
+            *findLastSpace = 0x7A;  // char code for down arrow
+        }
+    }
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(strId, dst);
 }
 
@@ -3710,7 +3939,7 @@ static void BufferLeftColumnStats(void)
 
 static void PrintLeftColumnStats(void)
 {
-    PrintTextOnWindow(AddWindowFromTemplateList(sPageSkillsTemplate, PSS_DATA_WINDOW_SKILLS_STATS_LEFT), gStringVar4, 4, 1, 0, 0);
+    PrintTextOnWindow(AddWindowFromTemplateList(sPageSkillsTemplate, PSS_DATA_WINDOW_SKILLS_STATS_LEFT), gStringVar4, 2, 1, 0, 0);
 }
 
 static void BufferRightColumnStats(void)
@@ -3728,7 +3957,7 @@ static void BufferRightColumnStats(void)
 
 static void PrintRightColumnStats(void)
 {
-    PrintTextOnWindow(AddWindowFromTemplateList(sPageSkillsTemplate, PSS_DATA_WINDOW_SKILLS_STATS_RIGHT), gStringVar4, 2, 1, 0, 0);
+    PrintTextOnWindow(AddWindowFromTemplateList(sPageSkillsTemplate, PSS_DATA_WINDOW_SKILLS_STATS_RIGHT), gStringVar4, 0, 1, 0, 0);
 }
 
 static void PrintExpPointsNextLevel(void)
@@ -4068,6 +4297,9 @@ static void HidePageSpecificSprites(void)
         if (sMonSummaryScreen->spriteIds[i] != SPRITE_NONE)
             SetSpriteInvisibility(i, TRUE);
     }
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
+    DestroySummeryScreenModeIcon();  // Remove the special summery screen mode sprite
+#endif
 }
 
 static void SetTypeIcons(void)

@@ -8166,6 +8166,8 @@ extern const u16 gSummaryScreenAppealJam_Tilemap[];
 extern const u32 gMoveTypes_Gfx[];
 extern const u32 gSummaryMoveSelect_Gfx[];
 extern const u32 gSummaryMoveSelect_Pal[];
+extern const u32 sSummaryScreenModePalette[];
+extern const u32 sSummaryScreenModeGraphics[];
 extern const u32 gStatusGfx_Icons[];
 extern const u32 gStatusPal_Icons[];
 

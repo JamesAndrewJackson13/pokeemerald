@@ -36,4 +36,13 @@ enum PokemonSummaryScreenPage
     PSS_PAGE_COUNT,
 };
 
+#ifdef FEATURE_SHOWEVIVINSTATSCREEN
+enum PokemonStatsMode
+{
+    PSS_STATS_IV,
+    PSS_STATS_EV,
+    PSS_STATS_DEFAULT,
+};
+#endif
+
 #endif // GUARD_POKEMON_SUMMARY_SCREEN_H
