@@ -344,8 +344,8 @@ static void SetSpriteInvisibility(u8 spriteArrayId, bool8 invisible);
 static void CreateTypeIconSprites(void);
 //Stats screen HGSS_Ui
 #define SCROLLING_MON_X 146
-#define HGSS_DECAPPED 0 //0 false, 1 true
-#define HGSS_DARK_MODE 0 //0 false, 1 true
+#define HGSS_DECAPPED FALSE
+#define HGSS_DARK_MODE FALSE
 static void LoadTilesetTilemapHGSS(u8 page);
 static void Task_HandleStatsScreenInput(u8 taskId);
 static void PrintMonStats(u8 taskId, u32 num, u32 value, u32 owned, u32 newEntry);
@@ -2326,10 +2326,11 @@ static bool8 LoadPokedexListPage(u8 page)
         SetBgTilemapBuffer(2, AllocZeroed(BG_SCREEN_SIZE));
         SetBgTilemapBuffer(1, AllocZeroed(BG_SCREEN_SIZE));
         SetBgTilemapBuffer(0, AllocZeroed(BG_SCREEN_SIZE));
-        if (!HGSS_DECAPPED)
-            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenuList_Gfx, 0x2000, 0, 0);
-        else
-            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenuList_DECA_Gfx, 0x2000, 0, 0);
+        #ifdef HGSS_DECAPPED
+        DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenuList_DECA_Gfx, 0x2000, 0, 0);
+        #else
+        DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenuList_Gfx, 0x2000, 0, 0);
+        #endif
         CopyToBgTilemapBuffer(1, gPokedexScreenList_Tilemap, 0, 0);
         CopyToBgTilemapBuffer(3, gPokedexScreenListUnderlay_Tilemap, 0, 0);
         if (page == PAGE_MAIN)
@@ -2412,27 +2413,23 @@ static bool8 LoadPokedexListPage(u8 page)
 
 static void LoadPokedexBgPalette(bool8 isSearchResults)
 {
-    if (!HGSS_DARK_MODE)
-    {
-        if (isSearchResults == TRUE)
-            LoadPalette(gPokedexSearchResults_Pal + 1, 1, 0xBE);
-        else if (!IsNationalPokedexEnabled())
-            LoadPalette(gPokedexDefault_Pal + 1, 1, 0xBE);
-        else
-            LoadPalette(gPokedexNational_Pal + 1, 1, 0xBE);
-        LoadPalette(GetOverworldTextboxPalettePtr(), 0xF0, 32);
-    }
+#ifdef HGSS_DARK_MODE
+    if (isSearchResults == TRUE)
+        LoadPalette(gPokedexSearchResults_dark_Pal + 1, 1, 0xBE);
+    else if (!IsNationalPokedexEnabled())
+        LoadPalette(gPokedexDefault_dark_Pal + 1, 1, 0xBE);
     else
-    {
-        if (isSearchResults == TRUE)
-            LoadPalette(gPokedexSearchResults_dark_Pal + 1, 1, 0xBE);
-        else if (!IsNationalPokedexEnabled())
-            LoadPalette(gPokedexDefault_dark_Pal + 1, 1, 0xBE);
-        else
-            LoadPalette(gPokedexNational_dark_Pal + 1, 1, 0xBE);
-        LoadPalette(GetOverworldTextboxPalettePtr(), 0xF0, 32);
-    }
-
+        LoadPalette(gPokedexNational_dark_Pal + 1, 1, 0xBE);
+    LoadPalette(GetOverworldTextboxPalettePtr(), 0xF0, 32);
+#else
+    if (isSearchResults == TRUE)
+        LoadPalette(gPokedexSearchResults_Pal + 1, 1, 0xBE);
+    else if (!IsNationalPokedexEnabled())
+        LoadPalette(gPokedexDefault_Pal + 1, 1, 0xBE);
+    else
+        LoadPalette(gPokedexNational_Pal + 1, 1, 0xBE);
+    LoadPalette(GetOverworldTextboxPalettePtr(), 0xF0, 32);
+#endif
 }
 
 static void FreeWindowAndBgBuffers(void)
@@ -4364,17 +4361,19 @@ static void Task_HandleCaughtMonPageInput(u8 taskId)
     // Flicker caught screen color
     else if (++gTasks[taskId].tPalTimer & 16)
     {
-        if (!HGSS_DARK_MODE)
-            LoadPalette(gPokedexDefault_Pal + 1, 0x31, 14);
-        else
-            LoadPalette(gPokedexDefault_dark_Pal + 1, 0x31, 14);
+        #ifdef HGSS_DARK_MODE
+        LoadPalette(gPokedexDefault_dark_Pal + 1, 0x31, 14);
+        #else
+        LoadPalette(gPokedexDefault_Pal + 1, 0x31, 14);
+        #endif
     }
     else
     {
-        if (!HGSS_DARK_MODE)
-            LoadPalette(gPokedexDefault_Pal + 1, 0x31, 14); //gPokedexCaughtScreen_Pal
-        else
-            LoadPalette(gPokedexDefault_dark_Pal + 1, 0x31, 14);
+        #ifdef HGSS_DARK_MODE
+        LoadPalette(gPokedexDefault_dark_Pal + 1, 0x31, 14);
+        #else
+        LoadPalette(gPokedexDefault_Pal + 1, 0x31, 14); //gPokedexCaughtScreen_Pal
+        #endif
     }
 }
 
@@ -5329,18 +5328,21 @@ static void Task_LoadSearchMenu(u8 taskId)
             InitWindows(sSearchMenu_WindowTemplate);
             DeactivateAllTextPrinters();
             PutWindowTilemap(0);
-            if (!HGSS_DECAPPED)
-                DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenuSearch_Gfx, 0x2000, 0, 0);
-            else
-                DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenuSearch_DECA_Gfx, 0x2000, 0, 0);
+            #ifdef HGSS_DECAPPED
+            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenuSearch_DECA_Gfx, 0x2000, 0, 0);
+            #else
+            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenuSearch_Gfx, 0x2000, 0, 0);
+            #endif
             if (!IsNationalPokedexEnabled())
                 CopyToBgTilemapBuffer(3, gPokedexScreenSearchHoenn_Tilemap, 0, 0);
             else
                 CopyToBgTilemapBuffer(3, gPokedexScreenSearchNational_Tilemap, 0, 0);
-            if (!HGSS_DARK_MODE)
-                LoadPalette(gPokedexMenuSearch_Pal + 1, 1, 0x7E);
-            else
-                LoadPalette(gPokedexMenuSearch_dark_Pal + 1, 1, 0x7E);
+
+            #ifdef HGSS_DARK_MODE
+            LoadPalette(gPokedexMenuSearch_dark_Pal + 1, 1, 0x7E);
+            #else
+            LoadPalette(gPokedexMenuSearch_Pal + 1, 1, 0x7E);
+            #endif
             gMain.state = 1;
         }
         break;
@@ -6156,50 +6158,31 @@ static void LoadTilesetTilemapHGSS(u8 page)
     switch (page)
     {
     case INFO_SCREEN:
-        if (!HGSS_DECAPPED)
-            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_1_Gfx, 0x2000, 0, 0);
-        else
-            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_1_Gfx, 0x2000, 0, 0);
+        DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_1_Gfx, 0x2000, 0, 0);
         CopyToBgTilemapBuffer(3, gPokedexScreenInfo_Tilemap, 0, 0);
         break;
     case STATS_SCREEN:
-        if (!HGSS_DECAPPED)
-            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_1_Gfx, 0x2000, 0, 0);
-        else
-            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_1_Gfx, 0x2000, 0, 0);
+        DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_1_Gfx, 0x2000, 0, 0);
         CopyToBgTilemapBuffer(3, gPokedexScreenStats_Tilemap, 0, 0);
         break;
     case EVO_SCREEN:
-        if (!HGSS_DECAPPED)
-            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_2_Gfx, 0x2000, 0, 0);
-        else
-            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_2_Gfx, 0x2000, 0, 0);
-        #ifndef POKEMON_EXPANSION
-            CopyToBgTilemapBuffer(3, gPokedexScreenEvolution_Tilemap, 0, 0);
-        #endif
+        DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_2_Gfx, 0x2000, 0, 0);
         #ifdef POKEMON_EXPANSION
-            CopyToBgTilemapBuffer(3, gPokedexScreenEvolution_Tilemap_PE, 0, 0);
+        CopyToBgTilemapBuffer(3, gPokedexScreenEvolution_Tilemap_PE, 0, 0);
+        #else
+        CopyToBgTilemapBuffer(3, gPokedexScreenEvolution_Tilemap, 0, 0);
         #endif
         break;
     case FORMS_SCREEN: //Pokemonexpansion only (rhh)
-        if (!HGSS_DECAPPED)
-            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_2_Gfx, 0x2000, 0, 0);
-        else
-            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_2_Gfx, 0x2000, 0, 0);
+        DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_2_Gfx, 0x2000, 0, 0);
         CopyToBgTilemapBuffer(3, gPokedexScreenForms_Tilemap, 0, 0);
         break;
     case CRY_SCREEN:
-        if (!HGSS_DECAPPED)
-            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_3_Gfx, 0x2000, 0, 0);
-        else
-            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_3_Gfx, 0x2000, 0, 0);
+        DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_3_Gfx, 0x2000, 0, 0);
         CopyToBgTilemapBuffer(3, gPokedexScreenCry_Tilemap, 0, 0);
         break;
     case SIZE_SCREEN:
-        if (!HGSS_DECAPPED)
-            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_3_Gfx, 0x2000, 0, 0);
-        else
-            DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_3_Gfx, 0x2000, 0, 0);
+        DecompressAndLoadBgGfxUsingHeap(3, gPokedexMenu_3_Gfx, 0x2000, 0, 0);
         CopyToBgTilemapBuffer(3, gPokedexScreenSize_Tilemap, 0, 0);
         break;
     }
