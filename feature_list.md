@@ -121,6 +121,10 @@ FEATURE LIST
 * The smaller the value, the faster it will drain.
 * 48 is aprox. the speed of vanilla.
 
+## Set What Poké Ball Individual Trainer Uses(FEATURE_PERTRAINERPOKEBALL)
+* Allow the pokeball used by a trainer to be set on a per-trainer basis
+* https://www.pokecommunity.com/showpost.php?p=10050958&postcount=25
+
 # MOVEMENT
 ## Auto-Running
 * Toggle running on/off, so you don't have to hold a button

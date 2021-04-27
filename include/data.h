@@ -15,14 +15,26 @@ struct MonCoords
 
 struct TrainerMonNoItemDefaultMoves
 {
+#ifdef FEATURE_PERTRAINERPOKEBALL
+    u8 iv;
+    u8 ballType[6];
+    u8 extraBuffer[2];
+#else
     u16 iv;
+#endif
     u8 lvl;
     u16 species;
 };
 
 struct TrainerMonItemDefaultMoves
 {
+#ifdef FEATURE_PERTRAINERPOKEBALL
+    u8 iv;
+    u8 ballType[6];
+    u8 extraBuffer[2];
+#else
     u16 iv;
+#endif
     u8 lvl;
     u16 species;
     u16 heldItem;
@@ -30,7 +42,13 @@ struct TrainerMonItemDefaultMoves
 
 struct TrainerMonNoItemCustomMoves
 {
+#ifdef FEATURE_PERTRAINERPOKEBALL
+    u8 iv;
+    u8 ballType[6];
+    u8 extraBuffer[2];
+#else
     u16 iv;
+#endif
     u8 lvl;
     u16 species;
     u16 moves[MAX_MON_MOVES];
@@ -38,7 +56,13 @@ struct TrainerMonNoItemCustomMoves
 
 struct TrainerMonItemCustomMoves
 {
+#ifdef FEATURE_PERTRAINERPOKEBALL
+    u8 iv;
+    u8 ballType[6];
+    u8 extraBuffer[2];
+#else
     u16 iv;
+#endif
     u8 lvl;
     u16 species;
     u16 heldItem;
