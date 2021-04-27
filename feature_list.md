@@ -87,6 +87,8 @@ FEATURE LIST
 ## Don't Ask to Overwrite Savegame (FEATURE_NOOVERWRITEWARNING)
 * Don't prompt the user with `There is already a save file` confirmation screen when saving
 
+## Let Pokemon Forget Any Move (FEATURE_FORGETANYMOVE)
+
 
 # ITEMS
 ## Item Descriptions on Pick-Up
