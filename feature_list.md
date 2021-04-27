@@ -105,6 +105,9 @@ FEATURE LIST
 ## Don't Consume TMs (FEATURE_DONTCONSUMETMS)
 * Treat TMs the way future games will; basically as HMs
 
+## Modern Style Everstone Nature Passing (FEATURE_MODERNEVERSTONEBREEDING)
+* Updates the way nature passing works when pokemon hold an everstone
+
 
 # BATTLE
 ## Make Field Snow Cause Hail (FEATURE_SNOWCAUSESHAIL)

@@ -417,7 +417,29 @@ static u16 GetEggSpecies(u16 species)
     return species;
 }
 
-static s32 GetParentToInheritNature(struct DayCare *daycare)
+#ifdef FEATURE_MODERNEVERSTONEBREEDING
+#define PARENT_ONE 0
+#define PARENT_TWO 1
+static s32 GetParentToInheritNature(struct DayCare* daycare)
+{
+    bool8 parentOneHasEverstone = GetBoxMonData(&daycare->mons[0].mon, MON_DATA_HELD_ITEM) != ITEM_EVERSTONE;
+    bool8 parentTwoHasEverstone = GetBoxMonData(&daycare->mons[1].mon, MON_DATA_HELD_ITEM) != ITEM_EVERSTONE;
+
+    if (parentOneHasEverstone == TRUE)
+    {
+        if (parentTwoHasEverstone == TRUE)
+            return (Random() >= USHRT_MAX / 2) ? PARENT_ONE : PARENT_TWO;
+        else
+            return PARENT_ONE;
+    }
+    else if (parentTwoHasEverstone == TRUE)
+        return PARENT_TWO;
+    return -1;
+}
+#undef PARENT_ONE
+#undef PARENT_TWO
+#else
+static s32 GetParentToInheritNature(struct DayCare* daycare)
 {
     u32 species[DAYCARE_MON_COUNT];
     s32 i;
@@ -457,6 +479,7 @@ static s32 GetParentToInheritNature(struct DayCare *daycare)
 
     return parent;
 }
+#endif
 
 static void _TriggerPendingDaycareEgg(struct DayCare *daycare)
 {
@@ -1000,7 +1023,7 @@ static bool8 TryProduceOrHatchEgg(struct DayCare *daycare)
 
                 SetMonData(&gPlayerParty[i], MON_DATA_FRIENDSHIP, &eggCycles);
             }
-            else 
+            else
             {
                 gSpecialVar_0x8004 = i;
                 return TRUE;
@@ -1395,7 +1418,6 @@ static u8 ModifyBreedingScoreForOvalCharm(u8 score)
             return 88;
         }
     }
-    
+
     return score;
 }
-

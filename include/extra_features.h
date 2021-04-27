@@ -49,6 +49,7 @@
 #define FEATURE_MULTIUSEMEDITEMS  // Doesn't return to the bag when you use some medical items / rare candies
 #define FEATURE_PROPERPLURALGIVEITEM  // Implements a proper plural give item script, to put the "s" at the end of the item
 #define FEATURE_DONTCONSUMETMS  // Treat TMs the way future games will; basically as HMs
+#define FEATURE_MODERNEVERSTONEBREEDING  // Updates the way nature passing works when pokemon hold an everstone
 
 // BATTLE FEATURES - Mods to battles
 #define FEATURE_SNOWCAUSESHAIL  // Allow areas with snow to cause hail
