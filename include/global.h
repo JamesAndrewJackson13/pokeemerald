@@ -1103,14 +1103,6 @@ struct SaveBlock1
     /*0x3???*/ struct WaldaPhrase waldaPhrase;
     u8 dexNavSearchLevels[NUM_SPECIES];
     u8 dexNavChain;
-    /*0x3B14*/ struct RecordMixingGift recordMixingGift;
-    /*0x3B24*/ u8 seen2[DEX_FLAGS_NO];
-    /*0x3B58*/ LilycoveLady lilycoveLady;
-    /*0x3B98*/ struct TrainerNameRecord trainerNameRecords[20];
-    /*0x3C88*/ u8 registeredTexts[UNION_ROOM_KB_ROW_COUNT][21];
-    /*0x3D5A*/ u8 filler3D5A[0xA];
-    /*0x3D64*/ struct SaveTrainerHill trainerHill;
-    /*0x3D70*/ struct WaldaPhrase waldaPhrase;
 };
 
 extern struct SaveBlock1* gSaveBlock1Ptr;
