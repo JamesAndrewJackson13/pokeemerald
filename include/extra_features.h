@@ -60,6 +60,7 @@
 #define FEATURE_CUSTOMBATTLEMUGSHOTS  // Trainers outside the elite 4 can have battle mugshots (https://github.com/pret/pokeemerald/wiki/Custom-Battle-Mugshots)
 #define FEATURE_FASTERHPDRAINRATE 40  // When defined, this will use an alternate hp drain formula. The smaller the value, the faster it will drain. 48 is aprox. the speed of vanilla.
 #define FEATURE_PERTRAINERPOKEBALL  // Allow the pokeball used by a trainer to be set on a per-trainer basis
+#define FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE  // Changes the color of the move's type to alert players if it's super / not very effective
 
 // MOVEMENT FEATURES - Move your body freely
 #define FEATURE_INDOORRUN  // Allow running while indoors

@@ -36,6 +36,18 @@
 #include "constants/songs.h"
 #include "constants/trainers.h"
 #include "constants/rgb.h"
+#ifdef FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE
+#include "constants/battle_move_effects.h"
+#include "event_data.h"
+#include "battle_util.h"
+
+#define NORMAL_EFFECTIVE   10
+#define SUPER_EFFECTIVE    24
+#define NOT_VERY_EFFECTIVE 25
+#define NO_EFFECT          26
+
+#endif
+
 
 extern struct MusicPlayerInfo gMPlayInfo_BGM;
 
@@ -105,6 +117,9 @@ static void MoveSelectionCreateCursorAt(u8 cursorPos, u8 arg1);
 static void MoveSelectionDestroyCursorAt(u8 cursorPos);
 static void MoveSelectionDisplayPpNumber(void);
 static void MoveSelectionDisplayPpString(void);
+#ifdef FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE
+static void MoveSelectionDisplayMoveTypeDoubles(u8 targetId);
+#endif
 static void MoveSelectionDisplayMoveType(void);
 static void MoveSelectionDisplayMoveNames(void);
 static void HandleMoveSwitching(void);
@@ -426,7 +441,9 @@ static void HandleInputChooseTarget(void)
                     i++;
                     break;
                 }
-
+#ifdef FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE
+                MoveSelectionDisplayMoveTypeDoubles(GetBattlerPosition(gMultiUsePlayerCursor));
+#endif
                 if (gAbsentBattlerFlags & gBitTable[gMultiUsePlayerCursor])
                     i = 0;
             } while (i == 0);
@@ -475,6 +492,9 @@ static void HandleInputChooseTarget(void)
                     i++;
                     break;
                 }
+#ifdef FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE
+                MoveSelectionDisplayMoveTypeDoubles(GetBattlerPosition(gMultiUsePlayerCursor));
+#endif
 
                 if (gAbsentBattlerFlags & gBitTable[gMultiUsePlayerCursor])
                     i = 0;
@@ -1079,7 +1099,7 @@ static void Intro_TryShinyAnimShowHealthbox(void)
     bool32 battlerAnimsDone = FALSE;
 
     // Start shiny animation if applicable for 1st pokemon
-    if (!gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].triedShinyMonAnim 
+    if (!gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].triedShinyMonAnim
      && !gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].ballAnimActive)
         TryShinyAnimation(gActiveBattler, &gPlayerParty[gBattlerPartyIndexes[gActiveBattler]]);
 
@@ -1089,7 +1109,7 @@ static void Intro_TryShinyAnimShowHealthbox(void)
         TryShinyAnimation(gActiveBattler ^ BIT_FLANK, &gPlayerParty[gBattlerPartyIndexes[gActiveBattler ^ BIT_FLANK]]);
 
     // Show healthbox after ball anim
-    if (!gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].ballAnimActive 
+    if (!gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].ballAnimActive
      && !gBattleSpritesDataPtr->healthBoxesData[gActiveBattler ^ BIT_FLANK].ballAnimActive)
     {
         if (!gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].healthboxSlideInStarted)
@@ -1166,7 +1186,7 @@ static void SwitchIn_CleanShinyAnimShowSubstitute(void)
      && gSprites[gBattlerSpriteIds[gActiveBattler]].callback == SpriteCallbackDummy)
     {
         CopyBattleSpriteInvisibility(gActiveBattler);
-        
+
         // Reset shiny anim (even if it didn't occur)
         gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].triedShinyMonAnim = FALSE;
         gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].finishedShinyMonAnim = FALSE;
@@ -1589,6 +1609,81 @@ static void MoveSelectionDisplayPpNumber(void)
     BattlePutTextOnWindow(gDisplayedStringBattle, 9);
 }
 
+#ifdef FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE
+static void MulModifier(u16* modifier, u16 val)
+{
+    *modifier = UQ_4_12_TO_INT((*modifier * val) + UQ_4_12_ROUND);
+}
+
+u8 TypeEffectiveness(struct ChooseMoveStruct *moveInfo, u8 targetId)
+{
+    bool8 isInverse = (B_FLAG_INVERSE_BATTLE != 0 && FlagGet(B_FLAG_INVERSE_BATTLE)) ? TRUE : FALSE;
+
+    if (gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].power == 0)
+        return NORMAL_EFFECTIVE;
+    else
+    {
+        u16 mod = sTypeEffectivenessTable[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type][gBattleMons[targetId].type1];
+
+        if (gBattleMons[targetId].type2 != gBattleMons[targetId].type1)
+        {
+            u16 mod2 = sTypeEffectivenessTable[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type][gBattleMons[targetId].type2];
+            MulModifier(&mod, mod2);
+        }
+
+        if (gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].effect == EFFECT_TWO_TYPED_MOVE)
+        {
+            u16 mod3 = sTypeEffectivenessTable[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].argument][gBattleMons[targetId].type1];
+            MulModifier(&mod, mod3);
+
+            if (gBattleMons[targetId].type2 != gBattleMons[targetId].type1)
+            {
+                u16 mod4 = sTypeEffectivenessTable[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].argument][gBattleMons[targetId].type2];
+                MulModifier(&mod, mod4);
+            }
+        }
+
+        if (mod == UQ_4_12(0.0)) {
+            if(isInverse)
+                return SUPER_EFFECTIVE;
+            else
+                return NO_EFFECT;
+        }
+        else if (mod <= UQ_4_12(0.5)) {
+            if(isInverse)
+                return SUPER_EFFECTIVE;
+            else
+                return NOT_VERY_EFFECTIVE;
+        }
+        else if (mod >= UQ_4_12(2.0)) {
+            if(isInverse)
+                return NOT_VERY_EFFECTIVE;
+            else
+                return SUPER_EFFECTIVE;
+        }
+        else
+            return NORMAL_EFFECTIVE;
+    }
+}
+
+static void MoveSelectionDisplayMoveTypeDoubles(u8 targetId)
+{
+    u8 *txtPtr;
+    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
+
+    txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceType);
+    txtPtr[0] = EXT_CTRL_CODE_BEGIN;
+    txtPtr++;
+    txtPtr[0] = 6;
+    txtPtr++;
+    txtPtr[0] = 1;
+    txtPtr++;
+
+    StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
+    BattlePutTextOnWindow(gDisplayedStringBattle, TypeEffectiveness(moveInfo, targetId));
+}
+#endif
+
 static void MoveSelectionDisplayMoveType(void)
 {
     u8 *txtPtr;
@@ -1600,7 +1695,11 @@ static void MoveSelectionDisplayMoveType(void)
     *(txtPtr)++ = 1;
 
     StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
+#ifdef FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE
+    BattlePutTextOnWindow(gDisplayedStringBattle, TypeEffectiveness(moveInfo, 1));
+#else
     BattlePutTextOnWindow(gDisplayedStringBattle, 10);
+#endif
 }
 
 static void MoveSelectionCreateCursorAt(u8 cursorPosition, u8 arg1)

@@ -133,4 +133,7 @@ bool8 ShouldGetStatBadgeBoost(u16 flagId, u8 battlerId);
 u8 GetBattleMoveSplit(u32 moveId);
 bool32 HasEnoughHpToEatBerry(u32 battlerId, u32 hpFraction, u32 itemId);
 
+extern const u16 sInverseTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES];
+extern const u16 sTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES];
+
 #endif // GUARD_BATTLE_UTIL_H

@@ -138,6 +138,10 @@ FEATURE LIST
 * Allow the pokeball used by a trainer to be set on a per-trainer basis
 * https://www.pokecommunity.com/showpost.php?p=10050958&postcount=25
 
+## Show Type Effectiveness In-Battle (FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE)
+* Changes the color of the move's type to alert players if it's super / not very effective
+
+
 # MOVEMENT
 ## Auto-Running
 * Toggle running on/off, so you don't have to hold a button
