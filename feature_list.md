@@ -16,6 +16,11 @@ FEATURE LIST
 * Modern items (Through G8)
 * Update older items to act like modern games
 
+## Improved Trainer Code
+* Cleans up trainer code so it's easier to edit
+* Adds extra features to trainers to make battles special
+* SHINEY POKEMANZ OH EM GEE
+
 ## DexNav
 * Port the DexNav from the remake versions of the game
 

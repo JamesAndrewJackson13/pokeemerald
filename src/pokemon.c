@@ -3000,56 +3000,73 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
         personality = Random32();
 
     //Determine original trainer ID
-    if (otIdType == OT_ID_RANDOM_NO_SHINY) //Pokemon cannot be shiny
+    switch (otIdType)
     {
-        do
+        case OT_ID_SHINY:
         {
-            value = Random32();
-        } while (IsShinyOtIdPersonality(value, personality));
-    }
-    else if (otIdType == OT_ID_PRESET) //Pokemon has a preset OT ID
-    {
-        value = fixedOtId;
-    }
-    else //Player is the OT
-    {
-        value = gSaveBlock2Ptr->playerTrainerId[0]
-              | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
-              | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
-              | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
+            value = HIHALF(personality) ^ LOHALF(personality);
+        }
+        break;
+
+        case OT_ID_RANDOM_NO_SHINY:  //Pokemon cannot be shiny
+        {
+            do
+            {
+                value = Random32();
+            } while (IsShinyOtIdPersonality(value, personality));
+        }
+        break;
+
+        case OT_ID_PRESET:  //Pokemon has a preset OT ID
+        {
+            value = fixedOtId;
+        }
+        break;
+
+        default:  //Player is the O
+        {
+            value = gSaveBlock2Ptr->playerTrainerId[0]
+                | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
+                | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
+                | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
 
 #ifdef FEATURE_ALLOWSHINYREROLLS
-        if (hasFixedPersonality)
-        {
-            u32 shinyRerolls = 0;
-#ifdef ITEM_SHINY_CHARM
-            if (CheckBagHasItem(ITEM_SHINY_CHARM, 1))
-                shinyRerolls += 3;  //if you have the shiny charm, add 3 more rolls
-#endif
-#ifdef FEATURE_CHAINFISHING
-            if (gIsFishingEncounter)
-                shinyRerolls += 2 * gChainFishingStreak;  // For every chained fishing pokemon, gain two more rolls. Do **NOT** count the base roll, just the re-roll attempts
-#endif
-            while (shinyRerolls > 0 && !IsShinyOtIdPersonality(value, personality))
+            if (hasFixedPersonality)
             {
-                personality = Random32();
-                --shinyRerolls;
+                u32 shinyRerolls = 0;
+    #ifdef ITEM_SHINY_CHARM
+                if (CheckBagHasItem(ITEM_SHINY_CHARM, 1))
+                {
+                    shinyRerolls += 3;  //if you have the shiny charm, add 3 more rolls
+                }
+    #endif
+    #ifdef FEATURE_CHAINFISHING
+                if (gIsFishingEncounter)
+                {
+                    shinyRerolls += 2 * gChainFishingStreak;  // For every chained fishing pokemon, gain two more rolls. Do **NOT** count the base roll, just the re-roll attempts
+                }
+    #endif
+                while (shinyRerolls > 0 && !IsShinyOtIdPersonality(value, personality))
+                {
+                    personality = Random32();
+                    --shinyRerolls;
+                }
             }
-    }
 #else
     #ifdef ITEM_SHINY_CHARM
-        if (CheckBagHasItem(ITEM_SHINY_CHARM, 1))
-        {
-            u32 shinyRerolls = I_SHINY_CHARM_REROLLS;
-
-            while (shinyRerolls > 0 && !IsShinyOtIdPersonality(value, personality))
+            if (CheckBagHasItem(ITEM_SHINY_CHARM, 1))
             {
-                personality = Random32();
-                --shinyRerolls;
+                u32 shinyRerolls = I_SHINY_CHARM_REROLLS;
+
+                while (shinyRerolls > 0 && !IsShinyOtIdPersonality(value, personality))
+                {
+                    personality = Random32();
+                    --shinyRerolls;
+                }
             }
-        }
     #endif
 #endif
+        }
     }
 
     SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality);
@@ -3129,7 +3146,7 @@ void CreateMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV,
     CreateMon(mon, species, level, fixedIV, 1, personality, OT_ID_PLAYER_ID, 0);
 }
 
-void CreateMonWithGenderNatureLetter(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 gender, u8 nature, u8 unownLetter)
+void CreateMonWithGenderNatureLetter(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 gender, u8 nature, u8 unownLetter, u8 otIdType)
 {
     u32 personality;
 
