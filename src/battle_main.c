@@ -1850,7 +1850,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 {
                     u8 ball = partyData[i].ballType;
                     SetMonData(&party[i], MON_DATA_POKEBALL, &ball);
-                }`
+                }
                 break;
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET:
