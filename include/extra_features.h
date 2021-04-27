@@ -51,6 +51,7 @@
 #define FEATURE_PROPERPLURALGIVEITEM  // Implements a proper plural give item script, to put the "s" at the end of the item
 #define FEATURE_DONTCONSUMETMS  // Treat TMs the way future games will; basically as HMs
 #define FEATURE_MODERNEVERSTONEBREEDING  // Updates the way nature passing works when pokemon hold an everstone
+#define FEATURE_EXTRAPREMIERBALLS  // LGPE-style Premier Ball giveaway; buying n*10 balls will get you n free premier balls
 
 // BATTLE FEATURES - Mods to battles
 #define FEATURE_SNOWCAUSESHAIL  // Allow areas with snow to cause hail

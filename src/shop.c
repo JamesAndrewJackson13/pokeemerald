@@ -1107,6 +1107,37 @@ static void BuyMenuSubtractMoney(u8 taskId)
     }
 }
 
+#ifdef FEATURE_EXTRAPREMIERBALLS
+static void Task_ReturnToItemListAfterItemPurchase(u8 taskId)
+{
+    s16* data = gTasks[taskId].data;
+
+    if (gMain.newKeys & (A_BUTTON | B_BUTTON))
+    {
+        PlaySE(SE_SELECT);
+        if ((ItemId_GetPocket(tItemId) == POCKET_POKE_BALLS) && tItemCount > 9 && AddBagItem(ITEM_PREMIER_BALL, tItemCount / 10) == TRUE)
+        {
+            if (tItemCount > 19)
+            {
+                BuyMenuDisplayMessage(taskId, gText_ThrowInPremierBalls, BuyMenuReturnToItemList);
+            }
+            else
+            {
+                BuyMenuDisplayMessage(taskId, gText_ThrowInPremierBall, BuyMenuReturnToItemList);
+            }
+        }
+        else if ((ItemId_GetPocket(tItemId) == POCKET_TM_HM))
+        {
+            RedrawListMenu(tListTaskId);
+            BuyMenuReturnToItemList(taskId);
+        }
+        else
+        {
+            BuyMenuReturnToItemList(taskId);
+        }
+}
+}
+#else
 static void Task_ReturnToItemListAfterItemPurchase(u8 taskId)
 {
     s16* data = gTasks[taskId].data;
@@ -1124,6 +1155,7 @@ static void Task_ReturnToItemListAfterItemPurchase(u8 taskId)
         }
     }
 }
+#endif
 
 static void Task_ReturnToItemListAfterDecorationPurchase(u8 taskId)
 {

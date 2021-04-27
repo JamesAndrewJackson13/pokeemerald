@@ -88,6 +88,8 @@ FEATURE LIST
 * Don't prompt the user with `There is already a save file` confirmation screen when saving
 
 ## Let Pokemon Forget Any Move (FEATURE_FORGETANYMOVE)
+* Let Pokemon forget any move, such as HM moves
+* https://www.pokecommunity.com/showpost.php?p=10178662&postcount=110
 
 
 # ITEMS
@@ -109,6 +111,9 @@ FEATURE LIST
 
 ## Modern Style Everstone Nature Passing (FEATURE_MODERNEVERSTONEBREEDING)
 * Updates the way nature passing works when pokemon hold an everstone
+
+## LGPE-style Premier Balls (FEATURE_EXTRAPREMIERBALLS)
+* Buying n*10 balls will get you n free premier balls
 
 
 # BATTLE
