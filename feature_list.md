@@ -1,0 +1,157 @@
+FEATURE LIST
+===
+
+# MAJOR EXPANSIONS
+## Battle Engine Expansion
+* Updates moves (including those from modern games
+* Adds the physical special split
+* Better handle various moves
+
+## Pokemon Expansion
+* Adds all pokemon through G8
+* Adds additional forms to Pokemon
+* Adds Mega-evolutions
+
+## Item Expansion
+* Modern items (Through G8)
+* Update older items to act like modern games
+
+## DexNav
+* Port the DexNav from the remake versions of the game
+
+## PokedexPlus
+* Upgraded pokedex based on HG/SS
+* Has a dark mode
+* Lets you see every move the pokemon can learn
+* Lets you see the different forms a pokemon can have
+* Tells you how the pokemon can evolve
+
+## Quests
+* Lets you have "quests" in the game
+* On finishing quests, players can be rewarded with items
+* https://www.pokecommunity.com/showthread.php?t=434462
+
+
+# CORE GAME
+## Cleaned Up the Save Ram
+* Removed needless parts of Save Ram so other features can save data.
+
+## Remove Japanese Grammer Tables (FEATURE_REMOVEJPNGRAMMERTABLES)
+* Removes grammar tables and related function checks that aren't needed in the english version of the game
+
+## Reset Size Function (FEATURE_RESETSIZEFUNCTION)
+* Re-implements the otherwise missing `RESET_SIZE` text function
+
+## Improved V-Blank (FEATURE_IMPROVEDVBLANK)
+* Improves the vblank to properly put the CPU in low power mode while waiting for v-blank
+
+## Save Memory Footer Changes (FEATURE_SAVEMEMORYFOOTER)
+* Shrinks the save footer to exactly the size it needs to be, saving room in sram
+
+## Fix Free Camera Interactions (FEATURE_FIXFREECAMINTERACTIONS)
+* Fixes issues where the free-cam will cause water to ripple and grass to rustle
+
+## Remove Union Room Code (FEATURE_REMOVEUNIONROOM)
+* Removes the union room checks, since the wireless adapter can't be emulated and it causes pauses in-game (You also need to undo script changes listed here: https://github.com/pret/pokeemerald/wiki/Disabling-Union-Room-check-when-entering-Pok%C3%A9mon-Centers.)
+
+
+# BASIC GAME
+## Alt Default Options (FEATURE_ALTDEFAULTOPTIONS)
+* Changes default settings
+  * optionsTextSpeed = ~~OPTIONS_TEXT_SPEED_MID~~=>**OPTIONS_TEXT_SPEED_FAST**
+  * optionsSound = ~~OPTIONS_SOUND_MONO~~=>**OPTIONS_SOUND_STEREO**
+
+## Pokemon Center Disregard Eggs (FEATURE_POKECENTERSDISREGARDEGGS)
+* Make pokecenters disregard eggs during healing animations
+
+## Lowercase After First Character Picked (FEATURE_LOWERCASEAFTERFIRSTCHAR)
+* After the first character is picked, auto select the lowercase keyboard
+
+## Don't Show Pokedex Entries Until Pokedex (FEATURE_DONTSHOWENTRIESUNTILPOKEDEX)
+* Prevents the pokedex entries showing until the player actually has the dex
+
+
+# MENUS
+## Remove the Contest Tab (FEATURE_REMOVECONTESTTAB)
+* Removes the contest tab from the Pokemon Summary screens
+
+## Color the Stat Effect of Nature (FEATURE_DIZZYNATURECOLORMOD)
+* Enables Dizzy's nature mod which highlights the effect of natures on a pokemon's stats
+
+## Show EVs / IVs in Pokemon Summary Screen (FEATURE_SHOWEVIVINSTATSCREEN)
+* Let the player view their pokemon's EVs and IVs in the stat screen
+
+## Make the Summary Screen Wrap (FEATURE_WRAPPINGSUMMARYSCREEN)
+* When you reach the end of the summary screen, you will wrap back to the first/last pokemon
+
+
+# ITEMS
+## Item Descriptions on Pick-Up
+* A pop-up will show the first time you get an item to show what the item does
+* On picking up items after the first time, the picture of the item is shown in the "stored in the bag" message box
+
+## Sortable Bag
+* Allows the bag to be sorted via the start button
+
+## Use Med Items without Returning to the Bag (FEATURE_MULTIUSEMEDITEMS)
+* Doesn't return to the bag when you use some medical items / rare candies
+
+## Added a Proper Plural Give Item Function (FEATURE_PROPERPLURALGIVEITEM)
+* Implements a proper plural give item script, to put the "s" at the end of the item
+
+## Don't Consume TMs (FEATURE_DONTCONSUMETMS)
+* Treat TMs the way future games will; basically as HMs
+
+
+# BATTLE
+## Make Field Snow Cause Hail (FEATURE_SNOWCAUSESHAIL)
+* Allow areas with snow to cause hail
+
+## Whiteouts Uses Modern Money Loss Formula(FEATURE_MODERNWHITEOUTMONEYLOSS)
+* Changes the amount of money lost on whiteout to be more like modern pokemon games (Also modify `battle_scripts_1.s`)
+
+## Gen6 Style Exp. Share (FEATURE_MODERNEXPSHARE)
+* Updates EXP SHARE to behave like it does post G6
+
+## Allow More Trainers to have Intro Mug-Shots(FEATURE_CUSTOMBATTLEMUGSHOTS)
+* Trainers outside the elite 4 can have battle mugshots (https://github.com/pret/pokeemerald/wiki/Custom-Battle-Mugshots)
+
+## Make HP Drain Faster(FEATURE_FASTERHPDRAINRATE [40])
+* When defined, this will use an alternate hp drain formula.
+* The smaller the value, the faster it will drain.
+* 48 is aprox. the speed of vanilla.
+
+# MOVEMENT
+## Auto-Running
+* Toggle running on/off, so you don't have to hold a button
+
+## Indoor Running (FEATURE_INDOORRUN)
+* Allow running while indoors
+
+## Faster Surfing (FEATURE_FASTSURFING)
+* Allow players to "run" while swimming, to go at mach bike speed
+
+## Pokemon Will Survive Poison in the Field(FEATURE_NOFIELDPSN)
+* Makes it so Pokemon wont die from Poison in the field, they'll overcome it with 1hp
+
+## ~~Pokemon Don't Lose Friendship when they Survive Poison(FEATURE_NOFIELDPSN_DONTLOSEFRIENDSHIP)~~
+* Makes it so Pokemon whom "get over" psn in the field don't lose friendship (otherwise, they still lose it as if they had fainted)
+
+## Black and White Repel (FEATURE_MODERNREPEL)
+* Asks if you want to re-apply repel whenever one runs out
+
+
+# BIKE
+## Swap Bike Type via a Button (FEATURE_SWAPBIKEBUTTON)
+* Makes the bike work like G4, letting you swap modes via the menu
+
+# SHINY
+## Allow Shinny Re-Rolls (FEATURE_ALLOWSHINYREROLLS)
+* The critical feature; this allows for other features to do "shiny" re-rolling (Without this, the other features in this section wont work).
+
+## Chain Fishing (FEATURE_CHAINFISHING)
+* Makes it so that reeling in consecutive pokemon species increases the chance of being shiny
+
+# DEBUG
+## Debug Menu (FEATURE_DEBUGMENU)
+* Enables the debug menu
