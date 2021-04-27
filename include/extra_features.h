@@ -74,5 +74,6 @@
 
 // DEBUG RELATED - HELLO, I AM ERROR
 #define FEATURE_DEBUGMENU  // Enables debug mode
+#define FEATURE_SKIPINTRO  // Skips the Rayquaza intro, to speed up debugging
 
 #endif

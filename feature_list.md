@@ -159,3 +159,6 @@ FEATURE LIST
 # DEBUG
 ## Debug Menu (FEATURE_DEBUGMENU)
 * Enables the debug menu
+
+## Skip the Main Intro (FEATURE_SKIPINTRO)
+* Skips the Rayquaza intro, to speed up debugging
