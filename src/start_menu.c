@@ -1020,11 +1020,16 @@ static u8 SaveFileExistsCallback(void)
 {
     if (gDifferentSaveFile == TRUE)
     {
+        // We want to keep this, since this warning is about overwriting a DIFFERENT player's save data
         ShowSaveMessage(gText_DifferentSaveFile, SaveConfirmOverwriteDefaultNoCallback);
     }
     else
     {
+#ifdef FEATURE_NOOVERWRITEWARNING
+        sSaveDialogCallback = SaveSavingMessageCallback;
+#else
         ShowSaveMessage(gText_AlreadySavedFile, SaveConfirmOverwriteCallback);
+#endif
     }
 
     return SAVE_IN_PROGRESS;

@@ -84,6 +84,9 @@ FEATURE LIST
 ## Make the Summary Screen Wrap (FEATURE_WRAPPINGSUMMARYSCREEN)
 * When you reach the end of the summary screen, you will wrap back to the first/last pokemon
 
+## Don't Ask to Overwrite Savegame (FEATURE_NOOVERWRITEWARNING)
+* Don't prompt the user with `There is already a save file` confirmation screen when saving
+
 
 # ITEMS
 ## Item Descriptions on Pick-Up

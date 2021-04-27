@@ -43,6 +43,7 @@
 #define FEATURE_DIZZYNATURECOLORMOD  // Enables Dizzy's nature mod which highlights the effect of natures on a pokemon's stats
 #define FEATURE_SHOWEVIVINSTATSCREEN  // Let the player view their pokemon's EVs and IVs in the stat screen
 #define FEATURE_WRAPPINGSUMMARYSCREEN  // When you reach the end of the summary screen, you will wrap back to the first/last pokemon
+#define FEATURE_NOOVERWRITEWARNING  // Don't prompt the user with `There is already a save file` confirmation screen when saving
 
 // ITEM FEATURES - Updates to how items work
 #define FEATURE_MULTIUSEMEDITEMS  // Doesn't return to the bag when you use some medical items / rare candies
