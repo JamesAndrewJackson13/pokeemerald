@@ -41,6 +41,7 @@ bool32 sub_800924C(u8 *str, s32 n);
 u8 GetExtCtrlCodeLength(u8 code);
 s32 StringCompareWithoutExtCtrlCodes(const u8 *str1, const u8 *str2);
 void ConvertInternationalString(u8 *s, u8 language);
-void StripExtCtrlCodes(u8 *str);
+void StripExtCtrlCodes(u8* str);
+char* ConvertToAscii(const u8* str);
 
 #endif // GUARD_STRING_UTIL_H

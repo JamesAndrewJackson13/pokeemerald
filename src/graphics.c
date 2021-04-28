@@ -1763,10 +1763,10 @@ const u16 gPokedexDefault_Pal[]             = INCBIN_U16("graphics/pokedex/HGSS_
 const u16 gPokedexNational_Pal[]            = INCBIN_U16("graphics/pokedex/HGSS_palette_national.gbapal");
 const u16 gPokedexMenuSearch_Pal[]          = INCBIN_U16("graphics/pokedex/HGSS_palette_search_menu.gbapal");
 const u16 gPokedexSearchResults_Pal[]       = INCBIN_U16("graphics/pokedex/HGSS_palette_search_results.gbapal");
-const u16 gPokedexDefault_dark_Pal[]             = INCBIN_U16("graphics/pokedex/HGSS_palette_default_dark.gbapal");
-const u16 gPokedexNational_dark_Pal[]            = INCBIN_U16("graphics/pokedex/HGSS_palette_national_dark.gbapal");
-const u16 gPokedexMenuSearch_dark_Pal[]          = INCBIN_U16("graphics/pokedex/HGSS_palette_search_menu_dark.gbapal");
-const u16 gPokedexSearchResults_dark_Pal[]       = INCBIN_U16("graphics/pokedex/HGSS_palette_search_results_dark.gbapal");
+const u16 gPokedexDefault_dark_Pal[]        = INCBIN_U16("graphics/pokedex/HGSS_palette_default_dark.gbapal");
+const u16 gPokedexNational_dark_Pal[]       = INCBIN_U16("graphics/pokedex/HGSS_palette_national_dark.gbapal");
+const u16 gPokedexMenuSearch_dark_Pal[]     = INCBIN_U16("graphics/pokedex/HGSS_palette_search_menu_dark.gbapal");
+const u16 gPokedexSearchResults_dark_Pal[]  = INCBIN_U16("graphics/pokedex/HGSS_palette_search_results_dark.gbapal");
 
 const u32 gPokedexMenuList_Gfx[]        = INCBIN_U32("graphics/pokedex/HGSS_tileset_menu_list.4bpp.lz");
 const u32 gPokedexMenuList_DECA_Gfx[]   = INCBIN_U32("graphics/pokedex/HGSS_tileset_menu_list_DECA.4bpp.lz");

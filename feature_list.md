@@ -104,6 +104,9 @@ FEATURE LIST
 * Let Pokemon forget any move, such as HM moves
 * https://www.pokecommunity.com/showpost.php?p=10178662&postcount=110
 
+## Let Players Set the Pokedex's Look
+* You can change the look of the Pokedex; either Light or Dark mode.
+
 
 # ITEMS
 ## Item Descriptions on Pick-Up
@@ -192,3 +195,6 @@ FEATURE LIST
 
 ## Skip the Main Intro (FEATURE_SKIPINTRO)
 * Skips the Rayquaza intro, to speed up debugging
+
+## Enable mGBA Print (FEATURE_MGBAPRINT)
+* Enables mGBA printf

@@ -514,7 +514,11 @@ struct SaveBlock2
 #else
     /*0x16*/ u16 filler_16_6 : 1;
 #endif
+#ifdef FEATURE_MODERNEXPSHARE
+    /*0x16*/ u16 optionsDexMode : 1;
+#else
     /*0x16*/ u16 filler_16_7 : 1;
+#endif
     /*0x17*/ u8 filler_17;
     /*0x18*/ struct Pokedex pokedex;
     /*0x90*/ u8 filler_90[0x8];

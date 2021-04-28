@@ -17,6 +17,8 @@
 #include "strings.h"
 #include "gba/m4a_internal.h"
 #include "constants/rgb.h"
+#include "mgba.h"
+#include "../gflib/string_util.h"
 
 #define Y_DIFF 16 // Difference in pixels between items.
 
@@ -32,6 +34,7 @@ enum
     MENUITEM_EXP_BAR,
     MENUITEM_UNIT_SYSTEM,
     MENUITEM_FRAMETYPE,
+    MENUITEM_DEXTYPE,
     MENUITEM_CANCEL,
     MENUITEM_COUNT,
 };
@@ -61,6 +64,7 @@ static void BattleScene_DrawChoices(int selection, int y, u8 textSpeed);
 static void BattleStyle_DrawChoices(int selection, int y, u8 textSpeed);
 static void HpBar_DrawChoices(int selection, int y, u8 textSpeed);
 static void UnitSystem_DrawChoices(int selection, int y, u8 textSpeed);
+static void DexMode_DrawChoices(int selection, int y, u8 textSpeed);
 static void Sound_DrawChoices(int selection, int y, u8 textSpeed);
 static void FrameType_DrawChoices(int selection, int y, u8 textSpeed);
 static void ButtonMode_DrawChoices(int selection, int y, u8 textSpeed);
@@ -90,6 +94,7 @@ struct
     [MENUITEM_HP_BAR] = {HpBar_DrawChoices, ElevenOptions_ProcessInput},
     [MENUITEM_EXP_BAR] = {HpBar_DrawChoices, ElevenOptions_ProcessInput},
     [MENUITEM_UNIT_SYSTEM] = {UnitSystem_DrawChoices, TwoOptions_ProcessInput},
+    [MENUITEM_DEXTYPE] = {DexMode_DrawChoices, TwoOptions_ProcessInput},
     [MENUITEM_CANCEL] = {NULL, NULL},
 };
 
@@ -103,6 +108,7 @@ static const u8 sEqualSignGfx[] = INCBIN_U8("graphics/misc/option_menu_equals_si
 static const u8 sText_HpBar[] = _("HP BAR");
 static const u8 sText_ExpBar[] = _("EXP BAR");
 static const u8 sText_UnitSystem[] = _("Unit System");
+static const u8 sText_DexType[] = _("Dex Visual");
 
 static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
 {
@@ -115,10 +121,13 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_HP_BAR]      = sText_HpBar,
     [MENUITEM_EXP_BAR]     = sText_ExpBar,
     [MENUITEM_UNIT_SYSTEM] = sText_UnitSystem,
+    [MENUITEM_DEXTYPE]     = sText_DexType,
     [MENUITEM_CANCEL]      = gText_OptionMenuCancel,
 };
 
 static const u8 sText_Instant[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}INSTANT");
+static const u8 sText_Light[] =   _("{COLOR GREEN}{SHADOW LIGHT_GREEN}LIGHT");
+static const u8 sText_Dark[] =    _("{COLOR GREEN}{SHADOW LIGHT_GREEN}DARK");
 
 static const u8 *const sTextSpeedStrings[] = {gText_TextSpeedSlow, gText_TextSpeedMid, gText_TextSpeedFast, sText_Instant};
 
@@ -263,15 +272,16 @@ void CB2_InitOptionMenu(void)
         taskId = CreateTask(Task_OptionMenuFadeIn, 0);
 
         sOptions = AllocZeroed(sizeof(*sOptions));
-        sOptions->sel[MENUITEM_TEXTSPEED] = gSaveBlock2Ptr->optionsTextSpeed;
+        sOptions->sel[MENUITEM_TEXTSPEED]   = gSaveBlock2Ptr->optionsTextSpeed;
         sOptions->sel[MENUITEM_BATTLESCENE] = gSaveBlock2Ptr->optionsBattleSceneOff;
         sOptions->sel[MENUITEM_BATTLESTYLE] = gSaveBlock2Ptr->optionsBattleStyle;
-        sOptions->sel[MENUITEM_SOUND] = gSaveBlock2Ptr->optionsSound;
-        sOptions->sel[MENUITEM_BUTTONMODE] = gSaveBlock2Ptr->optionsButtonMode;
-        sOptions->sel[MENUITEM_FRAMETYPE] = gSaveBlock2Ptr->optionsWindowFrameType;
-        sOptions->sel[MENUITEM_HP_BAR] = gSaveBlock2Ptr->optionsHpBarSpeed;
-        sOptions->sel[MENUITEM_EXP_BAR] = gSaveBlock2Ptr->optionsExpBarSpeed;
+        sOptions->sel[MENUITEM_SOUND]       = gSaveBlock2Ptr->optionsSound;
+        sOptions->sel[MENUITEM_BUTTONMODE]  = gSaveBlock2Ptr->optionsButtonMode;
+        sOptions->sel[MENUITEM_FRAMETYPE]   = gSaveBlock2Ptr->optionsWindowFrameType;
+        sOptions->sel[MENUITEM_HP_BAR]      = gSaveBlock2Ptr->optionsHpBarSpeed;
+        sOptions->sel[MENUITEM_EXP_BAR]     = gSaveBlock2Ptr->optionsExpBarSpeed;
         sOptions->sel[MENUITEM_UNIT_SYSTEM] = gSaveBlock2Ptr->optionsUnitSystem;
+        sOptions->sel[MENUITEM_DEXTYPE]     = gSaveBlock2Ptr->optionsDexMode;
 
         for (i = 0; i < 7; i++)
             DrawChoices(i, i * Y_DIFF, 0xFF);
@@ -423,15 +433,19 @@ static void Task_OptionMenuProcessInput(u8 taskId)
 
 static void Task_OptionMenuSave(u8 taskId)
 {
-    gSaveBlock2Ptr->optionsTextSpeed = sOptions->sel[MENUITEM_TEXTSPEED];
-    gSaveBlock2Ptr->optionsBattleSceneOff = sOptions->sel[MENUITEM_BATTLESCENE];
-    gSaveBlock2Ptr->optionsBattleStyle = sOptions->sel[MENUITEM_BATTLESTYLE];
-    gSaveBlock2Ptr->optionsSound = sOptions->sel[MENUITEM_SOUND];
-    gSaveBlock2Ptr->optionsButtonMode = sOptions->sel[MENUITEM_BUTTONMODE];
+    gSaveBlock2Ptr->optionsTextSpeed =       sOptions->sel[MENUITEM_TEXTSPEED];
+    gSaveBlock2Ptr->optionsBattleSceneOff =  sOptions->sel[MENUITEM_BATTLESCENE];
+    gSaveBlock2Ptr->optionsBattleStyle =     sOptions->sel[MENUITEM_BATTLESTYLE];
+    gSaveBlock2Ptr->optionsSound =           sOptions->sel[MENUITEM_SOUND];
+    gSaveBlock2Ptr->optionsButtonMode =      sOptions->sel[MENUITEM_BUTTONMODE];
     gSaveBlock2Ptr->optionsWindowFrameType = sOptions->sel[MENUITEM_FRAMETYPE];
-    gSaveBlock2Ptr->optionsHpBarSpeed = sOptions->sel[MENUITEM_HP_BAR];
-    gSaveBlock2Ptr->optionsExpBarSpeed = sOptions->sel[MENUITEM_EXP_BAR];
-    gSaveBlock2Ptr->optionsUnitSystem = sOptions->sel[MENUITEM_UNIT_SYSTEM];
+    gSaveBlock2Ptr->optionsHpBarSpeed =      sOptions->sel[MENUITEM_HP_BAR];
+    gSaveBlock2Ptr->optionsExpBarSpeed =     sOptions->sel[MENUITEM_EXP_BAR];
+    gSaveBlock2Ptr->optionsUnitSystem =      sOptions->sel[MENUITEM_UNIT_SYSTEM];
+    gSaveBlock2Ptr->optionsDexMode =         sOptions->sel[MENUITEM_DEXTYPE];
+
+    mgba_printf(MGBA_LOG_DEBUG, "%s %d", ConvertToAscii(sText_DexType), gSaveBlock2Ptr->optionsDexMode);
+
 
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
     gTasks[taskId].func = Task_OptionMenuFadeOut;
@@ -592,31 +606,33 @@ static void HpBar_DrawChoices(int selection, int y, u8 textSpeed)
     }
 }
 
-static void BattleScene_DrawChoices(int selection, int y, u8 textSpeed)
+static void doTwoChoices(const u8* text1, const u8* text2, int selection, int y, u8 textSpeed)
 {
-    u8 styles[2] = {0};
+    u8 styles[2] = { 0, 0 };
 
     styles[selection] = 1;
-    DrawOptionMenuChoice(gText_BattleSceneOn, 104, y, styles[0], textSpeed);
-    DrawOptionMenuChoice(gText_BattleSceneOff, GetStringRightAlignXOffset(1, gText_BattleSceneOff, 198), y, styles[1], textSpeed);
+    DrawOptionMenuChoice(text1, 104, y, styles[0], textSpeed);
+    DrawOptionMenuChoice(text2, GetStringRightAlignXOffset(1, text2, 198), y, styles[1], textSpeed);
+}
+
+static void BattleScene_DrawChoices(int selection, int y, u8 textSpeed)
+{
+    doTwoChoices(gText_BattleSceneOn, gText_BattleSceneOff, selection, y, textSpeed);
 }
 
 static void BattleStyle_DrawChoices(int selection, int y, u8 textSpeed)
 {
-    u8 styles[2] = {0, 0};
-
-    styles[selection] = 1;
-    DrawOptionMenuChoice(gText_BattleStyleShift, 104, y, styles[0], textSpeed);
-    DrawOptionMenuChoice(gText_BattleStyleSet, GetStringRightAlignXOffset(1, gText_BattleStyleSet, 198), y, styles[1], textSpeed);
+    doTwoChoices(gText_BattleStyleShift, gText_BattleStyleSet, selection, y, textSpeed);
 }
 
 static void UnitSystem_DrawChoices(int selection, int y, u8 textSpeed)
 {
-    u8 styles[2] = {0, 0};
+    doTwoChoices(gText_UnitSystemMetric, gText_UnitSystemImperial, selection, y, textSpeed);
+}
 
-    styles[selection] = 1;
-    DrawOptionMenuChoice(gText_UnitSystemMetric, 104, y, styles[0], textSpeed);
-    DrawOptionMenuChoice(gText_UnitSystemImperial, GetStringRightAlignXOffset(1, sText_Instant, 198), y, styles[1], textSpeed);
+static void DexMode_DrawChoices(int selection, int y, u8 textSpeed)
+{
+    doTwoChoices(sText_Light, sText_Dark, selection, y, textSpeed);
 }
 
 static void FourOptions_DrawChoices(const u8 *const *const strings, int selection, int y, u8 textSpeed)

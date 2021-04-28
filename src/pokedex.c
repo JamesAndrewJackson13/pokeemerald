@@ -46,6 +46,9 @@
 #include "constants/party_menu.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
+#ifdef FEATURE_MGBAPRINT
+#include "mgba.h"
+#endif
 
 enum
 {
@@ -2413,23 +2416,28 @@ static bool8 LoadPokedexListPage(u8 page)
 
 static void LoadPokedexBgPalette(bool8 isSearchResults)
 {
-#ifdef HGSS_DARK_MODE
-    if (isSearchResults == TRUE)
-        LoadPalette(gPokedexSearchResults_dark_Pal + 1, 1, 0xBE);
-    else if (!IsNationalPokedexEnabled())
-        LoadPalette(gPokedexDefault_dark_Pal + 1, 1, 0xBE);
+    if (gSaveBlock2Ptr->optionsDexMode == TRUE)
+    {
+        mgba_printf(MGBA_LOG_DEBUG, "LOADING DARK MODE PAL");
+        if (isSearchResults == TRUE)
+            LoadPalette(gPokedexSearchResults_dark_Pal + 1, 1, 0xBE);
+        else if (!IsNationalPokedexEnabled())
+            LoadPalette(gPokedexDefault_dark_Pal + 1, 1, 0xBE);
+        else
+            LoadPalette(gPokedexNational_dark_Pal + 1, 1, 0xBE);
+        LoadPalette(GetOverworldTextboxPalettePtr(), 0xF0, 32);
+    }
     else
-        LoadPalette(gPokedexNational_dark_Pal + 1, 1, 0xBE);
-    LoadPalette(GetOverworldTextboxPalettePtr(), 0xF0, 32);
-#else
-    if (isSearchResults == TRUE)
-        LoadPalette(gPokedexSearchResults_Pal + 1, 1, 0xBE);
-    else if (!IsNationalPokedexEnabled())
-        LoadPalette(gPokedexDefault_Pal + 1, 1, 0xBE);
-    else
-        LoadPalette(gPokedexNational_Pal + 1, 1, 0xBE);
-    LoadPalette(GetOverworldTextboxPalettePtr(), 0xF0, 32);
-#endif
+    {
+        mgba_printf(MGBA_LOG_DEBUG, "LOADING TRUE MODE PAL");
+        if (isSearchResults == TRUE)
+            LoadPalette(gPokedexSearchResults_Pal + 1, 1, 0xBE);
+        else if (!IsNationalPokedexEnabled())
+            LoadPalette(gPokedexDefault_Pal + 1, 1, 0xBE);
+        else
+            LoadPalette(gPokedexNational_Pal + 1, 1, 0xBE);
+        LoadPalette(GetOverworldTextboxPalettePtr(), 0xF0, 32);
+    }
 }
 
 static void FreeWindowAndBgBuffers(void)
@@ -4361,19 +4369,29 @@ static void Task_HandleCaughtMonPageInput(u8 taskId)
     // Flicker caught screen color
     else if (++gTasks[taskId].tPalTimer & 16)
     {
-        #ifdef HGSS_DARK_MODE
-        LoadPalette(gPokedexDefault_dark_Pal + 1, 0x31, 14);
-        #else
-        LoadPalette(gPokedexDefault_Pal + 1, 0x31, 14);
-        #endif
+        if(gSaveBlock2Ptr->optionsDexMode == TRUE)
+        {
+            mgba_printf(MGBA_LOG_DEBUG, "LOADING DARK MODE PAL");
+            LoadPalette(gPokedexDefault_dark_Pal + 1, 0x31, 14);
+        }
+        else
+        {
+            mgba_printf(MGBA_LOG_DEBUG, "LOADING LIGHT MODE PAL");
+            LoadPalette(gPokedexDefault_Pal + 1, 0x31, 14);
+        }
     }
     else
     {
-        #ifdef HGSS_DARK_MODE
-        LoadPalette(gPokedexDefault_dark_Pal + 1, 0x31, 14);
-        #else
-        LoadPalette(gPokedexDefault_Pal + 1, 0x31, 14); //gPokedexCaughtScreen_Pal
-        #endif
+        if (gSaveBlock2Ptr->optionsDexMode == TRUE)
+        {
+            mgba_printf(MGBA_LOG_DEBUG, "LOADING DARK MODE PAL");
+            LoadPalette(gPokedexDefault_dark_Pal + 1, 0x31, 14);
+        }
+        else
+        {
+            mgba_printf(MGBA_LOG_DEBUG, "LOADING LIGHT MODE PAL");
+            LoadPalette(gPokedexDefault_Pal + 1, 0x31, 14);
+        }
     }
 }
 
@@ -5429,11 +5447,16 @@ static void Task_LoadSearchMenu(u8 taskId)
             else
                 CopyToBgTilemapBuffer(3, gPokedexScreenSearchNational_Tilemap, 0, 0);
 
-            #ifdef HGSS_DARK_MODE
-            LoadPalette(gPokedexMenuSearch_dark_Pal + 1, 1, 0x7E);
-            #else
-            LoadPalette(gPokedexMenuSearch_Pal + 1, 1, 0x7E);
-            #endif
+            if (gSaveBlock2Ptr->optionsDexMode == TRUE)
+            {
+                mgba_printf(MGBA_LOG_DEBUG, "LOADING DARK MODE PAL");
+                LoadPalette(gPokedexMenuSearch_dark_Pal + 1, 1, 0x7E);
+            }
+            else
+            {
+                mgba_printf(MGBA_LOG_DEBUG, "LOADING LIGHT MODE PAL");
+                LoadPalette(gPokedexMenuSearch_Pal + 1, 1, 0x7E);
+            }
             gMain.state = 1;
         }
         break;
