@@ -1672,7 +1672,7 @@
     .endm
 
     .macro questmenu case:req, questId:req
-    .byte 0xe3
+    .byte 0xea
     .byte \case
     .byte \questId
     .endm
@@ -1680,6 +1680,14 @@
     .macro openquestmenu
     questmenu 0 0
     .endm
+
+.ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
+	@ Checks to see if the player has a Pokemon in their party. Result returns to VAR_RESULT
+    .macro checkpartymon species:req
+    .byte 0xeb
+    .2byte \species
+    .endm
+.endif
 
 
 @ Supplementary

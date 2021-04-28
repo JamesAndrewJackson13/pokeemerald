@@ -67,6 +67,9 @@ FEATURE LIST
 ## Remove Union Room Code (FEATURE_REMOVEUNIONROOM)
 * Removes the union room checks, since the wireless adapter can't be emulated and it causes pauses in-game (You also need to undo script changes listed here: https://github.com/pret/pokeemerald/wiki/Disabling-Union-Room-check-when-entering-Pok%C3%A9mon-Centers.)
 
+## Add Check for Pokemon Species Script Command (FEATURE_CHECKFORPOKEMONSPECIESSCRIPT)
+* Adds a new script command that will check if a particular pokemon species is in the party (by Vexio)
+
 
 # BASIC GAME
 ## Alt Default Options (FEATURE_ALTDEFAULTOPTIONS)
