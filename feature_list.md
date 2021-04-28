@@ -134,6 +134,9 @@ FEATURE LIST
 ## LGPE-style Premier Balls (FEATURE_EXTRAPREMIERBALLS)
 * Buying n*10 balls will get you n free premier balls
 
+## Check How Much Ash Collected (FEATURE_CHECKASHCOLLECTED)
+* Checking how much ash you collected with the Soot Sack
+
 
 # BATTLE
 ## Make Field Snow Cause Hail (FEATURE_SNOWCAUSESHAIL)

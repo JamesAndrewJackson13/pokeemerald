@@ -3643,7 +3643,12 @@ const struct Item gItems[] =
         .importance = 1,
         .pocket = POCKET_KEY_ITEMS,
         .type = ITEM_USE_BAG_MENU,
+#ifdef FEATURE_CHECKASHCOLLECTED
+        .fieldUseFunc = ItemUseOutOfBattle_SootSack,
+        .secondaryId = 0,
+#else
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+#endif
     },
 
     [ITEM_BASEMENT_KEY] =
