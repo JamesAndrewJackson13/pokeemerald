@@ -95,7 +95,6 @@ static void InitPlayerTrainerId(void)
 // L=A isnt set here for some reason.
 static void SetDefaultOptions(void)
 {
-
 #ifdef FEATURE_ALTDEFAULTOPTIONS
     gSaveBlock2Ptr->optionsTextSpeed = OPTIONS_TEXT_SPEED_FAST;
     gSaveBlock2Ptr->optionsWindowFrameType = 0;
@@ -103,6 +102,9 @@ static void SetDefaultOptions(void)
     gSaveBlock2Ptr->optionsBattleStyle = OPTIONS_BATTLE_STYLE_SHIFT;
     gSaveBlock2Ptr->optionsBattleSceneOff = FALSE;
     gSaveBlock2Ptr->regionMapZoom = FALSE;
+    gSaveBlock2Ptr->optionsUnitSystem = 1;  //tx_optionsPlus
+    gSaveBlock2Ptr->optionsHpBarSpeed = 0;  //tx_optionsPlus
+    gSaveBlock2Ptr->optionsExpBarSpeed = 0; //tx_optionsPlus
 #else
     gSaveBlock2Ptr->optionsTextSpeed = OPTIONS_TEXT_SPEED_MID;
     gSaveBlock2Ptr->optionsWindowFrameType = 0;
@@ -110,6 +112,9 @@ static void SetDefaultOptions(void)
     gSaveBlock2Ptr->optionsBattleStyle = OPTIONS_BATTLE_STYLE_SHIFT;
     gSaveBlock2Ptr->optionsBattleSceneOff = FALSE;
     gSaveBlock2Ptr->regionMapZoom = FALSE;
+    gSaveBlock2Ptr->optionsUnitSystem = 1;  //tx_optionsPlus
+    gSaveBlock2Ptr->optionsHpBarSpeed = 0;  //tx_optionsPlus
+    gSaveBlock2Ptr->optionsExpBarSpeed = 0; //tx_optionsPlus
 #endif
 }
 
