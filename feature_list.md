@@ -107,6 +107,9 @@ FEATURE LIST
 ## Let Players Set the Pokedex's Look
 * You can change the look of the Pokedex; either Light or Dark mode.
 
+## Hidden Power Type in Summary Screen (FEATURE_HIDDENPOWERTYPEINSUMMARYSCREEN)
+* Shows what type Hidden Power is on the Summary Screen
+
 
 # ITEMS
 ## Item Descriptions on Pick-Up
@@ -156,8 +159,12 @@ FEATURE LIST
 
 ## Trainer class-based Poke Balls (FEATURE_TRAINERCLASSPOKEBALL)
 * Give all trainers of a class a new default ball type
+
 ## Show Type Effectiveness In-Battle (FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE)
 * Changes the color of the move's type to alert players if it's super / not very effective
+
+## Hidden Power Type Shown in Battle Screen (FEATUER_HIDDENPOWERTYPEINBATTLESCREEN)
+* Shows what type Hidden Power is on the battle screen
 
 
 # MOVEMENT

@@ -45,6 +45,7 @@
 #define FEATURE_WRAPPINGSUMMARYSCREEN  // When you reach the end of the summary screen, you will wrap back to the first/last pokemon
 #define FEATURE_NOOVERWRITEWARNING  // Don't prompt the user with `There is already a save file` confirmation screen when saving
 #define FEATURE_FORGETANYMOVE  // Let Pokemon forget any move, such as HM moves
+#define FEATURE_HIDDENPOWERTYPEINSUMMARYSCREEN  // Shows what type Hidden Power is on the Summary Screen
 
 // ITEM FEATURES - Updates to how items work
 #define FEATURE_MULTIUSEMEDITEMS  // Doesn't return to the bag when you use some medical items / rare candies
@@ -62,6 +63,7 @@
 #define FEATURE_PERTRAINERPOKEBALL  // Allow the pokeball used by a trainer to be set on a per-trainer basis
 #define FEATURE_TRAINERCLASSPOKEBALL  // Give all trainers of a class a new default ball type
 #define FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE  // Changes the color of the move's type to alert players if it's super / not very effective
+#define FEATUER_HIDDENPOWERTYPEINBATTLESCREEN  // Shows what type Hidden Power is on the battle screen
 
 // MOVEMENT FEATURES - Move your body freely
 #define FEATURE_INDOORRUN  // Allow running while indoors

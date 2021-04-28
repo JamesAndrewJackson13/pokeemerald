@@ -36,6 +36,9 @@
 #include "constants/songs.h"
 #include "constants/trainers.h"
 #include "constants/rgb.h"
+#ifdef FEATURE_HIDDENPOWERTYPEINSUMMARYSCREEN
+#include "custom_utils.h"
+#endif
 #ifdef FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE
 #include "constants/battle_move_effects.h"
 #include "event_data.h"
@@ -1679,22 +1682,47 @@ static void MoveSelectionDisplayMoveTypeDoubles(u8 targetId)
     txtPtr[0] = 1;
     txtPtr++;
 
+#ifdef FEATUER_HIDDENPOWERTYPEINBATTLESCREEN
+    if (moveInfo->moves[gMoveSelectionCursor[gActiveBattler]] == MOVE_HIDDEN_POWER)
+    {
+        u8 type = getHiddenPowerType(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]]);
+        StringCopy(txtPtr, gTypeNames[type & 0x3F]);
+    }
+    else
+    {
+        StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
+    }
+#else
     StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
+#endif
     BattlePutTextOnWindow(gDisplayedStringBattle, TypeEffectiveness(moveInfo, targetId));
 }
 #endif
 
 static void MoveSelectionDisplayMoveType(void)
 {
-    u8 *txtPtr;
-    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
+    u8* txtPtr;
+    struct ChooseMoveStruct* moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
 
     txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceType);
     *(txtPtr)++ = EXT_CTRL_CODE_BEGIN;
     *(txtPtr)++ = EXT_CTRL_CODE_SIZE;
     *(txtPtr)++ = 1;
 
+#ifdef FEATUER_HIDDENPOWERTYPEINBATTLESCREEN
+    if (moveInfo->moves[gMoveSelectionCursor[gActiveBattler]] == MOVE_HIDDEN_POWER)
+    {
+        u8 type = getHiddenPowerType(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]]);
+        StringCopy(txtPtr, gTypeNames[type & 0x3F]);
+    }
+    else
+    {
+        StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
+    }
+#else
     StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
+#endif
+    
 #ifdef FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE
     BattlePutTextOnWindow(gDisplayedStringBattle, TypeEffectiveness(moveInfo, 1));
 #else
