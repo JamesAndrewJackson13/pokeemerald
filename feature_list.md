@@ -36,6 +36,14 @@ FEATURE LIST
 * On finishing quests, players can be rewarded with items
 * https://www.pokecommunity.com/showthread.php?t=434462
 
+## Improved Option List
+* Adds a better option list with more options
+* Adds a mute option
+* Adds an instant text function
+* Adds an HP Bar speed option
+* Adds an Exp bar speed option
+* Adds an option to swap between imperial and metric units
+
 
 # CORE GAME
 ## Cleaned Up the Save Ram
@@ -134,7 +142,7 @@ FEATURE LIST
 ## Allow More Trainers to have Intro Mug-Shots(FEATURE_CUSTOMBATTLEMUGSHOTS)
 * Trainers outside the elite 4 can have battle mugshots (https://github.com/pret/pokeemerald/wiki/Custom-Battle-Mugshots)
 
-## Make HP Drain Faster(FEATURE_FASTERHPDRAINRATE [40])
+## ~~Make HP Drain Faster(FEATURE_FASTERHPDRAINRATE [40])~~
 * When defined, this will use an alternate hp drain formula.
 * The smaller the value, the faster it will drain.
 * 48 is aprox. the speed of vanilla.
