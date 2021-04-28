@@ -154,6 +154,8 @@ FEATURE LIST
 * Allow the pokeball used by a trainer to be set on a per-trainer basis
 * https://www.pokecommunity.com/showpost.php?p=10050958&postcount=25
 
+## Trainer class-based Poke Balls (FEATURE_TRAINERCLASSPOKEBALL)
+* Give all trainers of a class a new default ball type
 ## Show Type Effectiveness In-Battle (FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE)
 * Changes the color of the move's type to alert players if it's super / not very effective
 

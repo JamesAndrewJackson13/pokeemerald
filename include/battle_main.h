@@ -21,6 +21,14 @@ struct UnknownPokemonStruct4
     /*0x1D*/ u8 language;
 };
 
+#ifdef FEATURE_TRAINERCLASSPOKEBALL
+struct TrainerBall
+{
+    u8 classId;
+    u8 Ball; // make this a u16 if needed
+};
+#endif
+
 #define TYPE_NAME_LENGTH 6
 #define ABILITY_NAME_LENGTH 12
 
