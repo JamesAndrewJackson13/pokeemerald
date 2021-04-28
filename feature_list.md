@@ -69,6 +69,7 @@ FEATURE LIST
 
 ## Add Check for Pokemon Species Script Command (FEATURE_CHECKFORPOKEMONSPECIESSCRIPT)
 * Adds a new script command that will check if a particular pokemon species is in the party (by Vexio)
+* https://www.pokecommunity.com/showpost.php?p=10213715&postcount=167
 
 
 # BASIC GAME
