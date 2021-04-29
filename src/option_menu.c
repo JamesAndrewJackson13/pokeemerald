@@ -444,7 +444,6 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2Ptr->optionsUnitSystem =      sOptions->sel[MENUITEM_UNIT_SYSTEM];
     gSaveBlock2Ptr->optionsDexMode =         sOptions->sel[MENUITEM_DEXTYPE];
 
-    mgba_printf(MGBA_LOG_DEBUG, "%s %d", ConvertToAscii(sText_DexType), gSaveBlock2Ptr->optionsDexMode);
 
 
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
