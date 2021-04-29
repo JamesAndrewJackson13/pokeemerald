@@ -1118,14 +1118,20 @@ static const u8 sAutoRunEnabled[]  = _("Auto-run: Enabled");
 static const u8 sAutoRunDisabled[] = _("Auto-run: Disabled");
 void DrawAutoRunBox(bool8 gettingEnabled)
 {
+    u8* dst;
+    u16 toShow;
     if (gettingEnabled)
     {
-        DrawHeaderBox(ITEM_RUNNINGSHOES_RUNNING, sAutoRunEnabled, EXM_FLASH_ACTIVE, 1);
+        dst = &sAutoRunEnabled;
+        toShow = ITEM_RUNNINGSHOES_RUNNING;
     }
     else
     {
-        DrawHeaderBox(ITEM_RUNNINGSHOES_WALKING, sAutoRunDisabled, EXM_FLASH_ACTIVE, 1);
+        dst = &sAutoRunDisabled;
+        toShow = ITEM_RUNNINGSHOES_WALKING;
     }
+    DrawHeaderBox(toShow, dst, EXM_FLASH_ACTIVE, 1);
+
 }
 
 void HideAutoRunBox(void)
@@ -1138,10 +1144,19 @@ static const u8 sBikeModeAcro[] = _("Bike Mode: Acro");
 static const u8 sBikeModeMach[] = _("Bike Mode: Mach");
 void DrawBikeHeaderBox(void)
 {
+    u8* dst;
+    u16 toShow;
     if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_ACRO_BIKE)
-        DrawHeaderBox(ITEM_ACRO_BIKE, sBikeModeAcro, EXM_FLASH_ACTIVE, 1);
+    {
+        dst = &sBikeModeAcro;
+        toShow = ITEM_ACRO_BIKE;
+    }
     else
-        DrawHeaderBox(ITEM_MACH_BIKE, sBikeModeMach, EXM_FLASH_ACTIVE, 1);
+    {
+        dst = &sBikeModeMach;
+        toShow = ITEM_MACH_BIKE;
+    }
+    DrawHeaderBox(toShow, dst, EXM_FLASH_ACTIVE, 1);
 }
 
 void HideBikeHeaderBox(void)
