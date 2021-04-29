@@ -3291,4 +3291,14 @@ extern const u8 gText_PkmnForSwap[];
 extern const u8 gText_SamePkmnInPartyAlready[];
 extern const u8 gText_Cancel3[];
 
+#ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
+// Rotom change form
+extern const u8 gText_MicrowaveOven[];
+extern const u8 gText_WashingMachine[];
+extern const u8 gText_Refrigerator[];
+extern const u8 gText_ElectricFan[];
+extern const u8 gText_Lawnmower[];
+extern const u8 gText_Recall[];
+#endif
+
 #endif // GUARD_STRINGS_H

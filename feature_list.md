@@ -72,7 +72,7 @@ FEATURE LIST
 * https://www.pokecommunity.com/showpost.php?p=10213715&postcount=167
 
 
-# BASIC GAME
+# BASE GAME
 ## Alt Default Options (FEATURE_ALTDEFAULTOPTIONS)
 * Changes default settings
   * optionsTextSpeed = ~~OPTIONS_TEXT_SPEED_MID~~=>**OPTIONS_TEXT_SPEED_FAST**
@@ -89,6 +89,10 @@ FEATURE LIST
 
 ## Stair Warps (FEATURE_STAIRWARPS)
 * Re-adds the FR/LG style stairs that warp you to new maps
+
+## Allow Rotom to Change Form at Birch's Lab (FEATURE_ROTOMCHANGEFORM)
+* Allows for Rotom's form to be changed via a box in Birch's Lab
+
 
 
 # MENUS

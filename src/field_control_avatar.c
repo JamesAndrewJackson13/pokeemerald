@@ -38,6 +38,9 @@
 #include "constants/maps.h"
 #include "constants/songs.h"
 #include "constants/trainer_hill.h"
+#ifdef FEATURE_MGBAPRINT
+#include "mgba.h"
+#endif
 
 static EWRAM_DATA u8 sWildEncounterImmunitySteps = 0;
 static EWRAM_DATA u16 sPreviousPlayerMetatileBehavior = 0;
@@ -74,7 +77,7 @@ static void UpdateFriendshipStepCounter(void);
 static bool8 UpdatePoisonStepCounter(void);
 static bool8 EnableAutoRun(void);
 #ifdef FEATURE_SWAPBIKEBUTTON
-static void SwapBikeType(void);
+static bool8 SwapBikeType(void);
 #endif
 
 void FieldClearPlayerInput(struct FieldInput *input)
@@ -223,13 +226,12 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
     {
 #ifdef FEATURE_SWAPBIKEBUTTON
         if (EXM_PLAYER_ON_BIKE)
-            SwapBikeType();
+            return SwapBikeType();
         else
-            EnableAutoRun();
+            return EnableAutoRun();
 #else
-        EnableAutoRun();
+        return EnableAutoRun();
 #endif
-        return TRUE;
     }
 
 #ifdef FEATURE_DEBUGMENU
@@ -1114,13 +1116,12 @@ static bool8 EnableAutoRun(void)
         gSaveBlock2Ptr->autoRun = TRUE;
         ScriptContext1_SetupScript(EventScript_EnableAutoRun);
     }
-
     return TRUE;
 }
 
 #ifdef FEATURE_SWAPBIKEBUTTON
 extern const u8 EventScript_ShowBikeBox[];
-static void SwapBikeType(void)
+static bool8 SwapBikeType(void)
 {
     if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_MACH_BIKE)
     {
@@ -1137,5 +1138,7 @@ static void SwapBikeType(void)
         PlaySE(SE_BIKE_BELL);
     }
     ScriptContext1_SetupScript(EventScript_ShowBikeBox);
+    return TRUE;
+
 }
 #endif

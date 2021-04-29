@@ -580,6 +580,11 @@ gStdScripts_End:: @ 81DC2CC
 	.include "data/scripts/new_game.inc"
 	.include "data/scripts/hall_of_fame.inc"
 
+
+
+	@ Allows for Rotom to change forms by looking at a box in Birch's lab
+	.include "data/scripts/rotom.inc"
+
 	@ Use to enable/disable debug tools
 	.include "data/scripts/debug.inc"
 

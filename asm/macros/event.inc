@@ -1682,10 +1682,25 @@
     .endm
 
 #ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
-    @ Checks to see if the player has a Pokemon in their party. Result returns to VAR_RESULT
-    .macro checkpartymon species:req
+    @ Counts how many of a Pokemon are in the player's party. Result returns to VAR_RESULT
+    .macro countpartymon species:req normalizeForms=FALSE
     .byte 0xeb
     .2byte \species
+    .2byte \normalizeForms
+    .endm
+
+    @ Checks to see if the player has a Pokemon in their party. Result returns to VAR_RESULT
+    .macro checkpartymon species:req normalizeForms=FALSE
+    .byte 0xec
+    .2byte \species
+    .2byte \normalizeForms
+    .endm
+
+    @ Finds the first index of a pokemon in the player's party, or returns the PARTY_SIZE. Result returns to VAR_RESULT
+    .macro firstinpartymon species:req normalizeForms=FALSE
+    .byte 0xed
+    .2byte \species
+    .2byte \normalizeForms
     .endm
 #endif
 

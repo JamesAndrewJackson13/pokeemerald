@@ -2115,3 +2115,13 @@ const u8 gText_SideQuestReward_27[] = _("Reward 27");
 const u8 gText_SideQuestReward_28[] = _("Reward 28");
 const u8 gText_SideQuestReward_29[] = _("Reward 29");
 const u8 gText_SideQuestReward_30[] = _("Reward 30");
+
+#ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
+// Rotom form options
+const u8 gText_MicrowaveOven[] = _("Microwave Oven");
+const u8 gText_WashingMachine[] = _("Washing Machine");
+const u8 gText_Refrigerator[] = _("Refrigerator");
+const u8 gText_ElectricFan[] = _("Electric Fan");
+const u8 gText_Lawnmower[] = _("Lawnmower");
+const u8 gText_Recall[] = _("Recall");
+#endif

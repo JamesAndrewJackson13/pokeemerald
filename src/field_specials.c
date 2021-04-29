@@ -67,6 +67,10 @@
 #include "constants/weather.h"
 #include "constants/metatile_labels.h"
 #include "palette.h"
+#ifdef FEATURE_MGBAPRINT
+#include "mgba.h"
+#include "../gflib/string_util.h"
+#endif
 
 EWRAM_DATA bool8 gBikeCyclingChallenge = FALSE;
 EWRAM_DATA u8 gBikeCollisions = 0;
@@ -526,9 +530,9 @@ void SpawnLinkPartnerObjectEvent(void)
     s16 x = 0;
     s16 y = 0;
     u8 movementTypes[] = {
-        MOVEMENT_TYPE_FACE_UP, 
-        MOVEMENT_TYPE_FACE_LEFT, 
-        MOVEMENT_TYPE_FACE_DOWN, 
+        MOVEMENT_TYPE_FACE_UP,
+        MOVEMENT_TYPE_FACE_LEFT,
+        MOVEMENT_TYPE_FACE_DOWN,
         MOVEMENT_TYPE_FACE_RIGHT
     };
     s8 coordOffsets[][2] = {
@@ -1427,8 +1431,8 @@ bool8 Special_AreLeadMonEVsMaxedOut(void)
 
 u8 TryUpdateRusturfTunnelState(void)
 {
-    if (!FlagGet(FLAG_RUSTURF_TUNNEL_OPENED) 
-        && gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(RUSTURF_TUNNEL) 
+    if (!FlagGet(FLAG_RUSTURF_TUNNEL_OPENED)
+        && gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(RUSTURF_TUNNEL)
         && gSaveBlock1Ptr->location.mapNum == MAP_NUM(RUSTURF_TUNNEL))
     {
         if (FlagGet(FLAG_HIDE_RUSTURF_TUNNEL_ROCK_1))
@@ -1715,7 +1719,7 @@ void OffsetCameraForBattle(void)
     SetCameraPanning(8, 0);
 }
 
-const struct WindowTemplate gElevatorFloor_WindowTemplate = 
+const struct WindowTemplate gElevatorFloor_WindowTemplate =
 {
     .bg = 0,
     .tilemapLeft = 21,
@@ -2025,27 +2029,27 @@ void BufferVarsForIVRater(void)
 
 bool8 UsedPokemonCenterWarp(void)
 {
-    static const u16 sPokemonCenters[] = 
-    { 
-        MAP_OLDALE_TOWN_POKEMON_CENTER_1F, 
-        MAP_DEWFORD_TOWN_POKEMON_CENTER_1F, 
-        MAP_LAVARIDGE_TOWN_POKEMON_CENTER_1F, 
-        MAP_FALLARBOR_TOWN_POKEMON_CENTER_1F, 
-        MAP_VERDANTURF_TOWN_POKEMON_CENTER_1F, 
-        MAP_PACIFIDLOG_TOWN_POKEMON_CENTER_1F, 
-        MAP_PETALBURG_CITY_POKEMON_CENTER_1F, 
-        MAP_SLATEPORT_CITY_POKEMON_CENTER_1F, 
-        MAP_MAUVILLE_CITY_POKEMON_CENTER_1F, 
-        MAP_RUSTBORO_CITY_POKEMON_CENTER_1F, 
-        MAP_FORTREE_CITY_POKEMON_CENTER_1F, 
-        MAP_LILYCOVE_CITY_POKEMON_CENTER_1F, 
-        MAP_MOSSDEEP_CITY_POKEMON_CENTER_1F, 
-        MAP_SOOTOPOLIS_CITY_POKEMON_CENTER_1F, 
-        MAP_EVER_GRANDE_CITY_POKEMON_CENTER_1F, 
-        MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F, 
-        MAP_BATTLE_FRONTIER_POKEMON_CENTER_1F, 
-        MAP_UNION_ROOM, 
-        0xFFFF 
+    static const u16 sPokemonCenters[] =
+    {
+        MAP_OLDALE_TOWN_POKEMON_CENTER_1F,
+        MAP_DEWFORD_TOWN_POKEMON_CENTER_1F,
+        MAP_LAVARIDGE_TOWN_POKEMON_CENTER_1F,
+        MAP_FALLARBOR_TOWN_POKEMON_CENTER_1F,
+        MAP_VERDANTURF_TOWN_POKEMON_CENTER_1F,
+        MAP_PACIFIDLOG_TOWN_POKEMON_CENTER_1F,
+        MAP_PETALBURG_CITY_POKEMON_CENTER_1F,
+        MAP_SLATEPORT_CITY_POKEMON_CENTER_1F,
+        MAP_MAUVILLE_CITY_POKEMON_CENTER_1F,
+        MAP_RUSTBORO_CITY_POKEMON_CENTER_1F,
+        MAP_FORTREE_CITY_POKEMON_CENTER_1F,
+        MAP_LILYCOVE_CITY_POKEMON_CENTER_1F,
+        MAP_MOSSDEEP_CITY_POKEMON_CENTER_1F,
+        MAP_SOOTOPOLIS_CITY_POKEMON_CENTER_1F,
+        MAP_EVER_GRANDE_CITY_POKEMON_CENTER_1F,
+        MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F,
+        MAP_BATTLE_FRONTIER_POKEMON_CENTER_1F,
+        MAP_UNION_ROOM,
+        0xFFFF
     };
 
     int i;
@@ -2078,71 +2082,71 @@ void UpdateFrontierManiac(u16 daysSince)
 
 void ShowFrontierManiacMessage(void)
 {
-    static const u8 *const sFrontierManiacMessages[][FRONTIER_MANIAC_MESSAGE_COUNT] = 
+    static const u8 *const sFrontierManiacMessages[][FRONTIER_MANIAC_MESSAGE_COUNT] =
     {
         [FRONTIER_MANIAC_BATTLE_TOWER_SINGLES] =
-        { 
-            BattleFrontier_Lounge2_Text_SalonMaidenIsThere, 
-            BattleFrontier_Lounge2_Text_SalonMaidenSilverMons, 
-            BattleFrontier_Lounge2_Text_SalonMaidenGoldMons 
+        {
+            BattleFrontier_Lounge2_Text_SalonMaidenIsThere,
+            BattleFrontier_Lounge2_Text_SalonMaidenSilverMons,
+            BattleFrontier_Lounge2_Text_SalonMaidenGoldMons
         },
         [FRONTIER_MANIAC_BATTLE_TOWER_DOUBLES] =
-        { 
-            BattleFrontier_Lounge2_Text_DoubleBattleAdvice1, 
-            BattleFrontier_Lounge2_Text_DoubleBattleAdvice2, 
-            BattleFrontier_Lounge2_Text_DoubleBattleAdvice3 
+        {
+            BattleFrontier_Lounge2_Text_DoubleBattleAdvice1,
+            BattleFrontier_Lounge2_Text_DoubleBattleAdvice2,
+            BattleFrontier_Lounge2_Text_DoubleBattleAdvice3
         },
-        [FRONTIER_MANIAC_BATTLE_TOWER_MULTIS] = 
-        { 
-            BattleFrontier_Lounge2_Text_MultiBattleAdvice, 
-            BattleFrontier_Lounge2_Text_MultiBattleAdvice, 
-            BattleFrontier_Lounge2_Text_MultiBattleAdvice 
+        [FRONTIER_MANIAC_BATTLE_TOWER_MULTIS] =
+        {
+            BattleFrontier_Lounge2_Text_MultiBattleAdvice,
+            BattleFrontier_Lounge2_Text_MultiBattleAdvice,
+            BattleFrontier_Lounge2_Text_MultiBattleAdvice
         },
         [FRONTIER_MANIAC_BATTLE_TOWER_LINK] =
-        { 
-            BattleFrontier_Lounge2_Text_LinkMultiBattleAdvice, 
-            BattleFrontier_Lounge2_Text_LinkMultiBattleAdvice, 
-            BattleFrontier_Lounge2_Text_LinkMultiBattleAdvice 
+        {
+            BattleFrontier_Lounge2_Text_LinkMultiBattleAdvice,
+            BattleFrontier_Lounge2_Text_LinkMultiBattleAdvice,
+            BattleFrontier_Lounge2_Text_LinkMultiBattleAdvice
         },
         [FRONTIER_MANIAC_BATTLE_DOME] =
-        { 
-            BattleFrontier_Lounge2_Text_DomeAceIsThere, 
-            BattleFrontier_Lounge2_Text_DomeAceSilverMons, 
-            BattleFrontier_Lounge2_Text_DomeAceGoldMons 
+        {
+            BattleFrontier_Lounge2_Text_DomeAceIsThere,
+            BattleFrontier_Lounge2_Text_DomeAceSilverMons,
+            BattleFrontier_Lounge2_Text_DomeAceGoldMons
         },
         [FRONTIER_MANIAC_BATTLE_FACTORY] =
-        { 
-            BattleFrontier_Lounge2_Text_FactoryHeadIsThere, 
-            BattleFrontier_Lounge2_Text_FactoryHeadSilverMons, 
-            BattleFrontier_Lounge2_Text_FactoryHeadGoldMons 
+        {
+            BattleFrontier_Lounge2_Text_FactoryHeadIsThere,
+            BattleFrontier_Lounge2_Text_FactoryHeadSilverMons,
+            BattleFrontier_Lounge2_Text_FactoryHeadGoldMons
         },
         [FRONTIER_MANIAC_BATTLE_PALACE] =
-        { 
-            BattleFrontier_Lounge2_Text_PalaceMavenIsThere, 
-            BattleFrontier_Lounge2_Text_PalaceMavenSilverMons, 
-            BattleFrontier_Lounge2_Text_PalaceMavenGoldMons 
+        {
+            BattleFrontier_Lounge2_Text_PalaceMavenIsThere,
+            BattleFrontier_Lounge2_Text_PalaceMavenSilverMons,
+            BattleFrontier_Lounge2_Text_PalaceMavenGoldMons
         },
         [FRONTIER_MANIAC_BATTLE_ARENA] =
-        { 
-            BattleFrontier_Lounge2_Text_ArenaTycoonIsThere, 
-            BattleFrontier_Lounge2_Text_ArenaTycoonSilverMons, 
-            BattleFrontier_Lounge2_Text_ArenaTycoonGoldMons 
+        {
+            BattleFrontier_Lounge2_Text_ArenaTycoonIsThere,
+            BattleFrontier_Lounge2_Text_ArenaTycoonSilverMons,
+            BattleFrontier_Lounge2_Text_ArenaTycoonGoldMons
         },
-        [FRONTIER_MANIAC_BATTLE_PIKE] = 
-        { 
-            BattleFrontier_Lounge2_Text_PikeQueenIsThere, 
-            BattleFrontier_Lounge2_Text_PikeQueenSilverMons, 
-            BattleFrontier_Lounge2_Text_PikeQueenGoldMons 
+        [FRONTIER_MANIAC_BATTLE_PIKE] =
+        {
+            BattleFrontier_Lounge2_Text_PikeQueenIsThere,
+            BattleFrontier_Lounge2_Text_PikeQueenSilverMons,
+            BattleFrontier_Lounge2_Text_PikeQueenGoldMons
         },
         [FRONTIER_MANIAC_BATTLE_PYRAMID] =
-        { 
-            BattleFrontier_Lounge2_Text_PyramidKingIsThere, 
-            BattleFrontier_Lounge2_Text_PyramidKingSilverMons, 
-            BattleFrontier_Lounge2_Text_PyramidKingGoldMons 
+        {
+            BattleFrontier_Lounge2_Text_PyramidKingIsThere,
+            BattleFrontier_Lounge2_Text_PyramidKingSilverMons,
+            BattleFrontier_Lounge2_Text_PyramidKingGoldMons
         },
     };
 
-    static const u8 sFrontierManiacStreakThresholds[][FRONTIER_MANIAC_MESSAGE_COUNT - 1] = 
+    static const u8 sFrontierManiacStreakThresholds[][FRONTIER_MANIAC_MESSAGE_COUNT - 1] =
     {
         [FRONTIER_MANIAC_BATTLE_TOWER_SINGLES] = { 21, 56 },
         [FRONTIER_MANIAC_BATTLE_TOWER_DOUBLES] = { 21, 35 },
@@ -2166,7 +2170,7 @@ void ShowFrontierManiacMessage(void)
         case FRONTIER_MANIAC_BATTLE_TOWER_DOUBLES:
         case FRONTIER_MANIAC_BATTLE_TOWER_MULTIS:
         case FRONTIER_MANIAC_BATTLE_TOWER_LINK:
-            if (gSaveBlock2Ptr->frontier.towerWinStreaks[facility][FRONTIER_LVL_50] 
+            if (gSaveBlock2Ptr->frontier.towerWinStreaks[facility][FRONTIER_LVL_50]
                 >= gSaveBlock2Ptr->frontier.towerWinStreaks[facility][FRONTIER_LVL_OPEN])
             {
                 winStreak = gSaveBlock2Ptr->frontier.towerWinStreaks[facility][FRONTIER_LVL_50];
@@ -2177,7 +2181,7 @@ void ShowFrontierManiacMessage(void)
             }
             break;
         case FRONTIER_MANIAC_BATTLE_DOME:
-            if (gSaveBlock2Ptr->frontier.domeWinStreaks[FRONTIER_MODE_SINGLES][FRONTIER_LVL_50] 
+            if (gSaveBlock2Ptr->frontier.domeWinStreaks[FRONTIER_MODE_SINGLES][FRONTIER_LVL_50]
                 >= gSaveBlock2Ptr->frontier.domeWinStreaks[FRONTIER_MODE_SINGLES][FRONTIER_LVL_OPEN])
             {
                 winStreak = gSaveBlock2Ptr->frontier.domeWinStreaks[FRONTIER_MODE_SINGLES][FRONTIER_LVL_50];
@@ -2188,7 +2192,7 @@ void ShowFrontierManiacMessage(void)
             }
             break;
         case FRONTIER_MANIAC_BATTLE_FACTORY:
-            if (gSaveBlock2Ptr->frontier.factoryWinStreaks[FRONTIER_MODE_SINGLES][FRONTIER_LVL_50] 
+            if (gSaveBlock2Ptr->frontier.factoryWinStreaks[FRONTIER_MODE_SINGLES][FRONTIER_LVL_50]
                 >= gSaveBlock2Ptr->frontier.factoryWinStreaks[FRONTIER_MODE_SINGLES][FRONTIER_LVL_OPEN])
             {
                 winStreak = gSaveBlock2Ptr->frontier.factoryWinStreaks[FRONTIER_MODE_SINGLES][FRONTIER_LVL_50];
@@ -2199,7 +2203,7 @@ void ShowFrontierManiacMessage(void)
             }
             break;
         case FRONTIER_MANIAC_BATTLE_PALACE:
-            if (gSaveBlock2Ptr->frontier.palaceWinStreaks[FRONTIER_MODE_SINGLES][FRONTIER_LVL_50] 
+            if (gSaveBlock2Ptr->frontier.palaceWinStreaks[FRONTIER_MODE_SINGLES][FRONTIER_LVL_50]
                 >= gSaveBlock2Ptr->frontier.palaceWinStreaks[FRONTIER_MODE_SINGLES][FRONTIER_LVL_OPEN])
             {
                 winStreak = gSaveBlock2Ptr->frontier.palaceWinStreaks[FRONTIER_MODE_SINGLES][FRONTIER_LVL_50];
@@ -2210,7 +2214,7 @@ void ShowFrontierManiacMessage(void)
             }
             break;
         case FRONTIER_MANIAC_BATTLE_ARENA:
-            if (gSaveBlock2Ptr->frontier.arenaWinStreaks[FRONTIER_LVL_50] 
+            if (gSaveBlock2Ptr->frontier.arenaWinStreaks[FRONTIER_LVL_50]
                 >= gSaveBlock2Ptr->frontier.arenaWinStreaks[FRONTIER_LVL_OPEN])
             {
                 winStreak = gSaveBlock2Ptr->frontier.arenaWinStreaks[FRONTIER_LVL_50];
@@ -2221,7 +2225,7 @@ void ShowFrontierManiacMessage(void)
             }
             break;
         case FRONTIER_MANIAC_BATTLE_PIKE:
-            if (gSaveBlock2Ptr->frontier.pikeWinStreaks[FRONTIER_LVL_50] 
+            if (gSaveBlock2Ptr->frontier.pikeWinStreaks[FRONTIER_LVL_50]
                 >= gSaveBlock2Ptr->frontier.pikeWinStreaks[FRONTIER_LVL_OPEN])
             {
                 winStreak = gSaveBlock2Ptr->frontier.pikeWinStreaks[FRONTIER_LVL_50];
@@ -2232,7 +2236,7 @@ void ShowFrontierManiacMessage(void)
             }
             break;
         case FRONTIER_MANIAC_BATTLE_PYRAMID:
-            if (gSaveBlock2Ptr->frontier.pyramidWinStreaks[FRONTIER_LVL_50] 
+            if (gSaveBlock2Ptr->frontier.pyramidWinStreaks[FRONTIER_LVL_50]
                 >= gSaveBlock2Ptr->frontier.pyramidWinStreaks[FRONTIER_LVL_OPEN])
             {
                 winStreak = gSaveBlock2Ptr->frontier.pyramidWinStreaks[FRONTIER_LVL_50];
@@ -2434,13 +2438,13 @@ void ShowScrollableMultichoice(void)
     }
 }
 
-static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] = 
+static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] =
 {
-    [SCROLL_MULTI_NONE] = 
+    [SCROLL_MULTI_NONE] =
     {
         gText_Exit
     },
-    [SCROLL_MULTI_GLASS_WORKSHOP_VENDOR] = 
+    [SCROLL_MULTI_GLASS_WORKSHOP_VENDOR] =
     {
         gText_BlueFlute,
         gText_YellowFlute,
@@ -2451,7 +2455,7 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
         gText_PrettyDesk,
         gText_Exit
     },
-    [SCROLL_MULTI_POKEMON_FAN_CLUB_RATER] = 
+    [SCROLL_MULTI_POKEMON_FAN_CLUB_RATER] =
     {
         gText_0Pts,
         gText_10Pts,
@@ -2466,7 +2470,7 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
         gText_100Pts,
         gText_QuestionMark
     },
-    [SCROLL_MULTI_BF_EXCHANGE_CORNER_DECOR_VENDOR_1] = 
+    [SCROLL_MULTI_BF_EXCHANGE_CORNER_DECOR_VENDOR_1] =
     {
         gText_KissPoster16BP,
         gText_KissCushion32BP,
@@ -2540,7 +2544,7 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
         gText_ExchangeService,
         gText_Exit
     },
-    [SCROLL_MULTI_BF_MOVE_TUTOR_1] = 
+    [SCROLL_MULTI_BF_MOVE_TUTOR_1] =
     {
         gText_Softboiled16BP,
         gText_SeismicToss24BP,
@@ -2554,7 +2558,7 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
         gText_SwordsDance48BP,
         gText_Exit
     },
-    [SCROLL_MULTI_BF_MOVE_TUTOR_2] = 
+    [SCROLL_MULTI_BF_MOVE_TUTOR_2] =
     {
         gText_DefenseCurl16BP,
         gText_Snore24BP,
@@ -2901,7 +2905,7 @@ void UpdateFrontierGambler(u16 daysSince)
 
 void ShowFrontierGamblerLookingMessage(void)
 {
-    static const u8 *const sFrontierGamblerLookingMessages[] = 
+    static const u8 *const sFrontierGamblerLookingMessages[] =
     {
         BattleFrontier_Lounge3_Text_ChallengeBattleTowerSingle,
         BattleFrontier_Lounge3_Text_ChallengeBattleTowerDouble,
@@ -2924,7 +2928,7 @@ void ShowFrontierGamblerLookingMessage(void)
 
 void ShowFrontierGamblerGoMessage(void)
 {
-    static const u8 *const sFrontierGamblerGoMessages[] = 
+    static const u8 *const sFrontierGamblerGoMessages[] =
     {
         BattleFrontier_Lounge3_Text_GetToBattleTowerSingle,
         BattleFrontier_Lounge3_Text_GetToBattleTowerDouble,
@@ -2945,19 +2949,19 @@ void ShowFrontierGamblerGoMessage(void)
 
 void FrontierGamblerSetWonOrLost(bool8 won)
 {
-    static const u16 sFrontierChallenges[] = 
+    static const u16 sFrontierChallenges[] =
     {
         FRONTIER_CHALLENGE(FRONTIER_FACILITY_TOWER,   FRONTIER_MODE_SINGLES),
         FRONTIER_CHALLENGE(FRONTIER_FACILITY_TOWER,   FRONTIER_MODE_DOUBLES),
         FRONTIER_CHALLENGE(FRONTIER_FACILITY_TOWER,   FRONTIER_MODE_MULTIS),
         FRONTIER_CHALLENGE(FRONTIER_FACILITY_DOME,    FRONTIER_MODE_SINGLES),
         FRONTIER_CHALLENGE(FRONTIER_FACILITY_DOME,    FRONTIER_MODE_DOUBLES),
-        FRONTIER_CHALLENGE(FRONTIER_FACILITY_FACTORY, FRONTIER_MODE_SINGLES), 
-        FRONTIER_CHALLENGE(FRONTIER_FACILITY_FACTORY, FRONTIER_MODE_DOUBLES), 
-        FRONTIER_CHALLENGE(FRONTIER_FACILITY_PALACE,  FRONTIER_MODE_SINGLES), 
-        FRONTIER_CHALLENGE(FRONTIER_FACILITY_PALACE,  FRONTIER_MODE_DOUBLES), 
-        FRONTIER_CHALLENGE(FRONTIER_FACILITY_ARENA,   FRONTIER_MODE_SINGLES), 
-        FRONTIER_CHALLENGE(FRONTIER_FACILITY_PIKE,    FRONTIER_MODE_SINGLES), 
+        FRONTIER_CHALLENGE(FRONTIER_FACILITY_FACTORY, FRONTIER_MODE_SINGLES),
+        FRONTIER_CHALLENGE(FRONTIER_FACILITY_FACTORY, FRONTIER_MODE_DOUBLES),
+        FRONTIER_CHALLENGE(FRONTIER_FACILITY_PALACE,  FRONTIER_MODE_SINGLES),
+        FRONTIER_CHALLENGE(FRONTIER_FACILITY_PALACE,  FRONTIER_MODE_DOUBLES),
+        FRONTIER_CHALLENGE(FRONTIER_FACILITY_ARENA,   FRONTIER_MODE_SINGLES),
+        FRONTIER_CHALLENGE(FRONTIER_FACILITY_PIKE,    FRONTIER_MODE_SINGLES),
         FRONTIER_CHALLENGE(FRONTIER_FACILITY_PYRAMID, FRONTIER_MODE_SINGLES)
     };
 
@@ -3145,31 +3149,31 @@ static void HideFrontierExchangeCornerItemIcon(u16 menu, u16 unused)
 }
 
 static const u16 sBattleFrontier_TutorMoves1[] =
-{ 
-    MOVE_SOFT_BOILED, 
-    MOVE_SEISMIC_TOSS, 
-    MOVE_DREAM_EATER, 
-    MOVE_MEGA_PUNCH, 
-    MOVE_MEGA_KICK, 
-    MOVE_BODY_SLAM, 
-    MOVE_ROCK_SLIDE, 
-    MOVE_COUNTER, 
-    MOVE_THUNDER_WAVE, 
-    MOVE_SWORDS_DANCE 
+{
+    MOVE_SOFT_BOILED,
+    MOVE_SEISMIC_TOSS,
+    MOVE_DREAM_EATER,
+    MOVE_MEGA_PUNCH,
+    MOVE_MEGA_KICK,
+    MOVE_BODY_SLAM,
+    MOVE_ROCK_SLIDE,
+    MOVE_COUNTER,
+    MOVE_THUNDER_WAVE,
+    MOVE_SWORDS_DANCE
 };
 
 static const u16 sBattleFrontier_TutorMoves2[] =
-{ 
-    MOVE_DEFENSE_CURL, 
-    MOVE_SNORE, 
-    MOVE_MUD_SLAP, 
-    MOVE_SWIFT, 
-    MOVE_ICY_WIND, 
-    MOVE_ENDURE, 
-    MOVE_PSYCH_UP, 
-    MOVE_ICE_PUNCH, 
-    MOVE_THUNDER_PUNCH, 
-    MOVE_FIRE_PUNCH 
+{
+    MOVE_DEFENSE_CURL,
+    MOVE_SNORE,
+    MOVE_MUD_SLAP,
+    MOVE_SWIFT,
+    MOVE_ICY_WIND,
+    MOVE_ENDURE,
+    MOVE_PSYCH_UP,
+    MOVE_ICE_PUNCH,
+    MOVE_THUNDER_PUNCH,
+    MOVE_FIRE_PUNCH
 };
 
 void BufferBattleFrontierTutorMoveName(void)
@@ -3186,7 +3190,7 @@ void BufferBattleFrontierTutorMoveName(void)
 
 static void ShowBattleFrontierTutorWindow(u8 menu, u16 selection)
 {
-    static const struct WindowTemplate sBattleFrontierTutor_WindowTemplate = 
+    static const struct WindowTemplate sBattleFrontierTutor_WindowTemplate =
     {
         .bg = 0,
         .tilemapLeft = 1,
@@ -3210,7 +3214,7 @@ static void ShowBattleFrontierTutorWindow(u8 menu, u16 selection)
 
 static void ShowBattleFrontierTutorMoveDescription(u8 menu, u16 selection)
 {
-    static const u8 *const sBattleFrontier_TutorMoveDescriptions1[] = 
+    static const u8 *const sBattleFrontier_TutorMoveDescriptions1[] =
     {
         BattleFrontier_Lounge7_Text_SoftboiledDesc,
         BattleFrontier_Lounge7_Text_SeismicTossDesc,
@@ -3225,7 +3229,7 @@ static void ShowBattleFrontierTutorMoveDescription(u8 menu, u16 selection)
         gText_Exit,
     };
 
-    static const u8 *const sBattleFrontier_TutorMoveDescriptions2[] = 
+    static const u8 *const sBattleFrontier_TutorMoveDescriptions2[] =
     {
         BattleFrontier_Lounge7_Text_DefenseCurlDesc,
         BattleFrontier_Lounge7_Text_SnoreDesc,
@@ -3340,20 +3344,20 @@ void sub_813AF48(void)
 }
 
 // Undefine Scrollable Multichoice task data macros
-#undef tMaxItemsOnScreen  
-#undef tNumItems           
-#undef tLeft               
-#undef tTop                 
-#undef tWidth              
-#undef tHeight             
-#undef tKeepOpenAfterSelect 
-#undef tScrollOffset      
-#undef tSelectedRow        
-#undef tScrollMultiId       
-#undef tScrollArrowId       
-#undef tWindowId            
-#undef tListTaskId         
-#undef tTaskId              
+#undef tMaxItemsOnScreen
+#undef tNumItems
+#undef tLeft
+#undef tTop
+#undef tWidth
+#undef tHeight
+#undef tKeepOpenAfterSelect
+#undef tScrollOffset
+#undef tSelectedRow
+#undef tScrollMultiId
+#undef tScrollArrowId
+#undef tWindowId
+#undef tListTaskId
+#undef tTaskId
 
 void DoDeoxysRockInteraction(void)
 {
@@ -3692,7 +3696,7 @@ u32 GetMartEmployeeObjectEventId(void)
     static const u8 sPokeMarts[][3] =
     {
         { MAP_GROUP(OLDALE_TOWN_MART),     MAP_NUM(OLDALE_TOWN_MART),     1 },
-        { MAP_GROUP(LAVARIDGE_TOWN_MART),  MAP_NUM(LAVARIDGE_TOWN_MART),  1 }, 
+        { MAP_GROUP(LAVARIDGE_TOWN_MART),  MAP_NUM(LAVARIDGE_TOWN_MART),  1 },
         { MAP_GROUP(FALLARBOR_TOWN_MART),  MAP_NUM(FALLARBOR_TOWN_MART),  1 },
         { MAP_GROUP(VERDANTURF_TOWN_MART), MAP_NUM(VERDANTURF_TOWN_MART), 1 },
         { MAP_GROUP(PETALBURG_CITY_MART),  MAP_NUM(PETALBURG_CITY_MART),  1 },
@@ -3735,7 +3739,7 @@ bool32 ShouldDistributeEonTicket(void)
 {
     if (!VarGet(VAR_DISTRIBUTE_EON_TICKET))
         return FALSE;
-    
+
     return TRUE;
 }
 
@@ -3799,17 +3803,17 @@ static void Task_LinkRetireStatusWithBattleTowerPartner(u8 taskId)
                 gSpecialVar_0x8005 = gBlockRecvBuffer[1][0];
                 ResetBlockReceivedFlag(1);
 
-                if (gSpecialVar_0x8004 == BATTLE_TOWER_LINK_RETIRE 
+                if (gSpecialVar_0x8004 == BATTLE_TOWER_LINK_RETIRE
                  && gSpecialVar_0x8005 == BATTLE_TOWER_LINK_RETIRE)
                 {
                     gSpecialVar_Result = BATTLE_TOWER_LINKSTAT_BOTH_RETIRE;
                 }
-                else if (gSpecialVar_0x8004 == BATTLE_TOWER_LINK_CONTINUE 
+                else if (gSpecialVar_0x8004 == BATTLE_TOWER_LINK_CONTINUE
                       && gSpecialVar_0x8005 == BATTLE_TOWER_LINK_RETIRE)
                 {
                     gSpecialVar_Result = BATTLE_TOWER_LINKSTAT_MEMBER_RETIRE;
                 }
-                else if (gSpecialVar_0x8004 == BATTLE_TOWER_LINK_RETIRE 
+                else if (gSpecialVar_0x8004 == BATTLE_TOWER_LINK_RETIRE
                       && gSpecialVar_0x8005 == BATTLE_TOWER_LINK_CONTINUE)
                 {
                     gSpecialVar_Result = BATTLE_TOWER_LINKSTAT_LEADER_RETIRE;
@@ -4031,13 +4035,13 @@ bool8 InPokemonCenter(void)
 }
 
 /*  Summary of the Lilycove Trainer Fan Club, because it's a little messy
-    
+
     ## The Fan Club room itself
     There are initially 4 members of the Fan Club (+ an interviewer), none of whom are fans of the player
     After becoming the champion there will be 8 members of the Fan Club, 3 of whom are automatically fans of the player
     After this point, if a club member is a fan of the player they will sit at the front table and comment on the player
     If they are not fans of the player, they will sit at the far table and can make comments about a different trainer (see BufferFanClubTrainerName)
-    
+
     ## Gaining/losing fans
     After every link battle the player will gain a fan if they won, or lose a fan if they lost
     If the player has at least 3 fans, this is the only way to gain fans
@@ -4106,16 +4110,16 @@ void UpdateTrainerFanClubGameClear(void)
 }
 
 // If the player has < 3 fans, gain a new fan whenever the counter reaches 20+
-// Defeating Drake or participating in a Contest increments the counter by 2 
+// Defeating Drake or participating in a Contest increments the counter by 2
 // Participating at Battle Tower or in a Secret Base battle increments the counter by 1
 u8 TryGainNewFanFromCounter(u8 incrementId)
 {
-    static const u8 sCounterIncrements[] = 
-    { 
-        [FANCOUNTER_DEFEATED_DRAKE]    = 2, 
-        [FANCOUNTER_BATTLED_AT_BASE]   = 1, 
-        [FANCOUNTER_FINISHED_CONTEST]  = 2, 
-        [FANCOUNTER_USED_BATTLE_TOWER] = 1 
+    static const u8 sCounterIncrements[] =
+    {
+        [FANCOUNTER_DEFEATED_DRAKE]    = 2,
+        [FANCOUNTER_BATTLED_AT_BASE]   = 1,
+        [FANCOUNTER_FINISHED_CONTEST]  = 2,
+        [FANCOUNTER_USED_BATTLE_TOWER] = 1
     };
 
     if (VarGet(VAR_LILYCOVE_FAN_CLUB_STATE) == 2)
@@ -4148,16 +4152,16 @@ u8 TryGainNewFanFromCounter(u8 incrementId)
 // If all the members are already fans of the player then this redundantly sets the first fan in the list to be a fan
 static u16 PlayerGainRandomTrainerFan(void)
 {
-    static const u8 sFanClubMemberIds[NUM_TRAINER_FAN_CLUB_MEMBERS] = 
-    { 
-        FANCLUB_MEMBER1, 
-        FANCLUB_MEMBER2, 
-        FANCLUB_MEMBER3, 
-        FANCLUB_MEMBER4, 
-        FANCLUB_MEMBER5, 
+    static const u8 sFanClubMemberIds[NUM_TRAINER_FAN_CLUB_MEMBERS] =
+    {
+        FANCLUB_MEMBER1,
+        FANCLUB_MEMBER2,
+        FANCLUB_MEMBER3,
+        FANCLUB_MEMBER4,
+        FANCLUB_MEMBER5,
         FANCLUB_MEMBER6,
-        FANCLUB_MEMBER7, 
-        FANCLUB_MEMBER8 
+        FANCLUB_MEMBER7,
+        FANCLUB_MEMBER8
     };
 
     u8 i;
@@ -4184,16 +4188,16 @@ static u16 PlayerGainRandomTrainerFan(void)
 // If no fan was lost while looping, the last current fan in the list will stop being a fan
 static u16 PlayerLoseRandomTrainerFan(void)
 {
-    static const u8 sFanClubMemberIds[NUM_TRAINER_FAN_CLUB_MEMBERS] = 
-    { 
-        FANCLUB_MEMBER1, 
-        FANCLUB_MEMBER6, 
-        FANCLUB_MEMBER7, 
-        FANCLUB_MEMBER4, 
-        FANCLUB_MEMBER3, 
-        FANCLUB_MEMBER5, 
-        FANCLUB_MEMBER8, 
-        FANCLUB_MEMBER2 
+    static const u8 sFanClubMemberIds[NUM_TRAINER_FAN_CLUB_MEMBERS] =
+    {
+        FANCLUB_MEMBER1,
+        FANCLUB_MEMBER6,
+        FANCLUB_MEMBER7,
+        FANCLUB_MEMBER4,
+        FANCLUB_MEMBER3,
+        FANCLUB_MEMBER5,
+        FANCLUB_MEMBER8,
+        FANCLUB_MEMBER2
     };
 
     u8 i;
@@ -4414,3 +4418,176 @@ u8 Script_TryGainNewFanFromCounter(void)
 {
     return TryGainNewFanFromCounter(gSpecialVar_0x8004);
 }
+
+#ifdef FEATURE_ROTOMCHANGEFORM
+#define ROTOM_FORM_HEAT  0
+#define ROTOM_FORM_WASH  1
+#define ROTOM_FORM_FROST 2
+#define ROTOM_FORM_FAN   3
+#define ROTOM_FORM_MOW   4
+#define ROTOM_FORM_BASE  5
+#define NUM_ROTOM_FORMS ROTOM_FORM_BASE + 1
+
+
+static const u16 sRotomFormMoves[NUM_ROTOM_FORMS] =
+{
+    [ROTOM_FORM_HEAT] = MOVE_OVERHEAT,
+    [ROTOM_FORM_WASH] = MOVE_HYDRO_PUMP,
+    [ROTOM_FORM_FROST] = MOVE_BLIZZARD,
+    [ROTOM_FORM_FAN] = MOVE_AIR_SLASH,
+    [ROTOM_FORM_MOW] = MOVE_LEAF_STORM,
+    [ROTOM_FORM_BASE] = MOVE_THUNDER_SHOCK,
+};
+
+// Rotom form change specials
+// Vars used:
+// gSpecialVar_0x8004: set to the party slot of the chosen Rotom, or the first Rotom found if there's only one
+// gSpecialVar_0x8005: set to the form to change Rotom to (e.g. SPECIES_ROTOM_WASH)
+// gSpecialVar_0x8006: special move learned by Rotom after form change (set by ChangeRotomForm)
+// gSpecialVar_0x8007: Rotom's initial form
+// gSpecialVar_0x8008: Rotom's initial special move (set by RotomForgetSpecialMove)
+
+u8 FindRotomSpecialMoveIndex(struct Pokemon* mon, u16 specialMove)
+{
+    u8 i;
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (GetMonData(mon, MON_DATA_MOVE1 + i, NULL) == specialMove)
+            return i;
+    }
+    return 0xFF;
+}
+
+// Rotom's initial form must be loaded into gSpecialVar_0x8007 before use.
+// It will return in gSpecialVar_Result if the player needs the option to learn the move.
+bool8 RotomSpecialMoveHandler(void)
+{
+    bool8 foundSpecialMove, replaceSpecialMove = TRUE;
+    u16 priorForm, newForm, oldSpecialMove, newSpecialMove, moveResult, i, specialMoveIndex;
+
+
+    struct Pokemon* mon = &gPlayerParty[gSpecialVar_0x8004];
+    priorForm = gSpecialVar_0x8007;
+    newForm = GetMonData(mon, MON_DATA_SPECIES2, NULL);
+
+    // temp use i to hold the old special move index
+    if (priorForm == SPECIES_ROTOM)
+        i = ROTOM_FORM_BASE;
+    else
+        i = priorForm - SPECIES_ROTOM_HEAT;
+    oldSpecialMove = sRotomFormMoves[i];
+
+    // temp use i to hold the new special move index
+    if (newForm == SPECIES_ROTOM)
+        i = ROTOM_FORM_BASE;
+    else
+        i = newForm - SPECIES_ROTOM_HEAT;
+    newSpecialMove = sRotomFormMoves[i];
+
+    specialMoveIndex = FindRotomSpecialMoveIndex(mon, oldSpecialMove);
+    foundSpecialMove = specialMoveIndex != 0xFF;
+
+
+    if (newForm == SPECIES_ROTOM)
+    {
+        // When turning back into the core species, you only get the special move if the Rotom's only move is their form's special one
+        if (foundSpecialMove)
+            for (i = 0; i < MAX_MON_MOVES; i++)
+            {
+                // Ignore the special move
+                if (i == specialMoveIndex)
+                    continue;
+                if (GetMonData(mon, MON_DATA_MOVE1 + i, NULL) != MOVE_NONE)
+                {
+                    // If we find a non-special move, we just remove the special move; don't replace it.
+                    replaceSpecialMove = FALSE;
+                    break;
+                }
+            }
+        else
+        {
+            replaceSpecialMove = FALSE;
+        }
+    }
+
+    if (foundSpecialMove)
+    {
+        mgba_printf(MGBA_LOG_DEBUG, "foundSpecialMove == TRUE");
+        RemoveMonPPBonus(mon, i);
+        // We reuse oldSpecialMove to temp-hold "MOVE_NONE" so we can clear out the previous special move
+        oldSpecialMove = MOVE_NONE;
+        SetMonData(mon, MON_DATA_MOVE1 + specialMoveIndex, &oldSpecialMove);
+        if (replaceSpecialMove)
+            SetMonData(mon, MON_DATA_MOVE1 + specialMoveIndex, &newSpecialMove);
+        else
+        {
+            // If we're not replacing the special move, then we should shift the moves down ala the move deleter
+            for (i = specialMoveIndex; i < MAX_MON_MOVES - 1; i++)
+                ShiftMoveSlot(mon, i, i + 1);
+        }
+    }
+    else if (replaceSpecialMove)
+    {
+        mgba_printf(MGBA_LOG_DEBUG, "foundSpecialMove == FALSE, replaceSpecialMove == TRUE");
+        moveResult = GiveMoveToMon(mon, newSpecialMove);
+        // If we couldn't add the move, we need to let the player have a chance to forget a move for it
+        if (moveResult == MON_HAS_MAX_MOVES)
+        {
+            mgba_printf(MGBA_LOG_DEBUG, "moveResult == MON_HAS_MAX_MOVES");
+            gSpecialVar_0x8006 = newSpecialMove;
+            mgba_printf(MGBA_LOG_DEBUG, "PLAYER NEEDS TO PICK MOVE TO REMOVE");
+            return TRUE;
+        }
+    }
+    mgba_printf(MGBA_LOG_DEBUG, "PLAYER DOESNT NEED TO DO ANYTHING");
+    return FALSE;
+
+}
+
+// Gets Rotom's current form and the matching move, stores them in gSpecialVar_0x8007 and gSpecialVar_0x8008
+void GetRotomState(void)
+{
+    gSpecialVar_0x8007 = GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPECIES2, NULL);
+}
+
+// Changes Rotom's form
+void ChangeRotomForm(void)
+{
+    u16 currentForm, newForm;
+
+    currentForm = GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPECIES2, NULL);
+    newForm = gSpecialVar_0x8005;
+
+    SetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPECIES, &newForm);
+    SetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPECIES2, &newForm);
+    CalculateMonStats(&gPlayerParty[gSpecialVar_0x8004]);
+}
+
+// Teaches Rotom's forms their special moves
+// Rotom MUST have an empty moveslot first
+// Move to teach must be stored in gSpecialVar_0x8006
+void TeachRotomMove(void)
+{
+    GiveMoveToMon(&gPlayerParty[gSpecialVar_0x8004], gSpecialVar_0x8006);
+}
+
+// Checks if the species stored in gSpecialVar_0x8004 is a Rotom form
+bool8 IsSelectedMonRotom(void)
+{
+    u32 species;
+
+    species = GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPECIES2, NULL);
+    if (SpeciesToNationalPokedexNum(species) == SPECIES_ROTOM)
+        return TRUE;
+    return FALSE;
+}
+
+
+#undef ROTOM_FORM_BASE
+#undef ROTOM_FORM_HEAT
+#undef ROTOM_FORM_WASH
+#undef ROTOM_FORM_FROST
+#undef ROTOM_FORM_FAN
+#undef ROTOM_FORM_MOW
+#undef NUM_ROTOM_FORMS
+#endif

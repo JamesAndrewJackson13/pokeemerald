@@ -378,7 +378,6 @@ static void Task_ChoosePartyMon(u8 taskId);
 static void Task_ChooseMonForMoveRelearner(u8);
 static void CB2_ChooseMonForMoveRelearner(void);
 static void Task_BattlePyramidChooseMonHeldItems(u8);
-static void ShiftMoveSlot(struct Pokemon*, u8, u8);
 static void BlitBitmapToPartyWindow_LeftColumn(u8, u8, u8, u8, u8, u8);
 static void BlitBitmapToPartyWindow_RightColumn(u8, u8, u8, u8, u8, u8);
 static void CursorCb_Summary(u8);
@@ -6509,7 +6508,7 @@ void MoveDeleterForgetMove(void)
         ShiftMoveSlot(&gPlayerParty[gSpecialVar_0x8004], i, i + 1);
 }
 
-static void ShiftMoveSlot(struct Pokemon* mon, u8 slotTo, u8 slotFrom)
+void ShiftMoveSlot(struct Pokemon* mon, u8 slotTo, u8 slotFrom)
 {
     u16 move1 = GetMonData(mon, MON_DATA_MOVE1 + slotTo);
     u16 move0 = GetMonData(mon, MON_DATA_MOVE1 + slotFrom);
@@ -6576,7 +6575,7 @@ static const u8 sText_MintDone[] = _("{STR_VAR_1}'s nature became\n{STR_VAR_2}!{
 static void Task_Mints(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
-    
+
     switch (tState)
     {
     case 0:
@@ -6590,7 +6589,7 @@ static void Task_Mints(u8 taskId)
             gTasks[taskId].func = Task_ReturnToChooseMonAfterText;
             return;
         }
-        
+
         gPartyMenuUseExitCallback = TRUE;
         GetMonNickname(&gPlayerParty[tMonId], gStringVar1);
         StringCopy(gStringVar2, gNatureNamePointers[tNewNature]);
@@ -6618,7 +6617,7 @@ static void Task_Mints(u8 taskId)
             gPartyMenuUseExitCallback = FALSE;
             PlaySE(SE_SELECT);
             ScheduleBgCopyTilemapToVram(2);
-            
+
             // Don't exit party selections screen, return to choosing a mon.
             ClearStdWindowAndFrameToTransparent(6, 0);
             ClearWindowTilemap(6);
@@ -6641,7 +6640,7 @@ static void Task_Mints(u8 taskId)
     case 5:
         SetMonData(&gPlayerParty[tMonId], MON_DATA_HIDDEN_NATURE, &tNewNature);
         CalculateMonStats(&gPlayerParty[tMonId]);
-        
+
         RemoveBagItem(gSpecialVar_ItemId, 1);
         gTasks[taskId].func = Task_ClosePartyMenu;
         break;
@@ -6660,4 +6659,3 @@ void ItemUseCB_Mints(u8 taskId, TaskFunc task)
     SetWordTaskArg(taskId, tOldFunc, (uintptr_t)(gTasks[taskId].func));
     gTasks[taskId].func = Task_Mints;
 }
-

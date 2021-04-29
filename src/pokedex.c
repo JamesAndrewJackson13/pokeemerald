@@ -2418,7 +2418,6 @@ static void LoadPokedexBgPalette(bool8 isSearchResults)
 {
     if (gSaveBlock2Ptr->optionsDexMode == TRUE)
     {
-        mgba_printf(MGBA_LOG_DEBUG, "LOADING DARK MODE PAL");
         if (isSearchResults == TRUE)
             LoadPalette(gPokedexSearchResults_dark_Pal + 1, 1, 0xBE);
         else if (!IsNationalPokedexEnabled())
@@ -2429,7 +2428,6 @@ static void LoadPokedexBgPalette(bool8 isSearchResults)
     }
     else
     {
-        mgba_printf(MGBA_LOG_DEBUG, "LOADING TRUE MODE PAL");
         if (isSearchResults == TRUE)
             LoadPalette(gPokedexSearchResults_Pal + 1, 1, 0xBE);
         else if (!IsNationalPokedexEnabled())
@@ -4371,12 +4369,10 @@ static void Task_HandleCaughtMonPageInput(u8 taskId)
     {
         if(gSaveBlock2Ptr->optionsDexMode == TRUE)
         {
-            mgba_printf(MGBA_LOG_DEBUG, "LOADING DARK MODE PAL");
             LoadPalette(gPokedexDefault_dark_Pal + 1, 0x31, 14);
         }
         else
         {
-            mgba_printf(MGBA_LOG_DEBUG, "LOADING LIGHT MODE PAL");
             LoadPalette(gPokedexDefault_Pal + 1, 0x31, 14);
         }
     }
@@ -4384,12 +4380,10 @@ static void Task_HandleCaughtMonPageInput(u8 taskId)
     {
         if (gSaveBlock2Ptr->optionsDexMode == TRUE)
         {
-            mgba_printf(MGBA_LOG_DEBUG, "LOADING DARK MODE PAL");
             LoadPalette(gPokedexDefault_dark_Pal + 1, 0x31, 14);
         }
         else
         {
-            mgba_printf(MGBA_LOG_DEBUG, "LOADING LIGHT MODE PAL");
             LoadPalette(gPokedexDefault_Pal + 1, 0x31, 14);
         }
     }
@@ -5449,12 +5443,10 @@ static void Task_LoadSearchMenu(u8 taskId)
 
             if (gSaveBlock2Ptr->optionsDexMode == TRUE)
             {
-                mgba_printf(MGBA_LOG_DEBUG, "LOADING DARK MODE PAL");
                 LoadPalette(gPokedexMenuSearch_dark_Pal + 1, 1, 0x7E);
             }
             else
             {
-                mgba_printf(MGBA_LOG_DEBUG, "LOADING LIGHT MODE PAL");
                 LoadPalette(gPokedexMenuSearch_Pal + 1, 1, 0x7E);
             }
             gMain.state = 1;

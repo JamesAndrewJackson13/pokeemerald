@@ -39,6 +39,9 @@
 #define FEATURE_LOWERCASEAFTERFIRSTCHAR  // After the first character is picked, auto select the lowercase keyboard
 #define FEATURE_DONTSHOWENTRIESUNTILPOKEDEX  // Prevents the pokedex entries showing until the player actually has the dex
 #define FEATURE_STAIRWARPS  // Re-adds the FR/LG style stairs that warp you to new maps
+#ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
+#define FEATURE_ROTOMCHANGEFORM  // Allows for Rotom's form to be changed via a box in Birch's Lab (Depends on FEATURE_CHECKFORPOKEMONSPECIESSCRIPT)
+#endif
 
 // MENU FEATURES - Changes to how various menus work
 #define FEATURE_REMOVECONTESTTAB // Removes the contest tab
