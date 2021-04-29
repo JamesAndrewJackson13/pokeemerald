@@ -38,6 +38,7 @@
 #define FEATURE_POKECENTERSDISREGARDEGGS  // Make pokecenters disregard eggs during healing animations
 #define FEATURE_LOWERCASEAFTERFIRSTCHAR  // After the first character is picked, auto select the lowercase keyboard
 #define FEATURE_DONTSHOWENTRIESUNTILPOKEDEX  // Prevents the pokedex entries showing until the player actually has the dex
+#define FEATURE_STAIRWARPS  // Re-adds the FR/LG style stairs that warp you to new maps
 
 // MENU FEATURES - Changes to how various menus work
 #define FEATURE_REMOVECONTESTTAB // Removes the contest tab

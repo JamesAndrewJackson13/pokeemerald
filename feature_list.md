@@ -87,6 +87,9 @@ FEATURE LIST
 ## Don't Show Pokedex Entries Until Pokedex (FEATURE_DONTSHOWENTRIESUNTILPOKEDEX)
 * Prevents the pokedex entries showing until the player actually has the dex
 
+## Stair Warps (FEATURE_STAIRWARPS)
+* Re-adds the FR/LG style stairs that warp you to new maps
+
 
 # MENUS
 ## Remove the Contest Tab (FEATURE_REMOVECONTESTTAB)

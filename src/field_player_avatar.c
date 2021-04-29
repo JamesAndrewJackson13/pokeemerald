@@ -8,6 +8,9 @@
 #include "field_effect_helpers.h"
 #include "field_player_avatar.h"
 #include "fieldmap.h"
+#ifdef FEATURE_STAIRWARPS
+#include "field_screen_effect.h"
+#endif
 #include "menu.h"
 #include "metatile_behavior.h"
 #include "overworld.h"
@@ -620,6 +623,12 @@ static void PlayerNotOnBikeMoving(u8 direction, u16 heldKeys)
             PlayerNotOnBikeCollideWithFarawayIslandMew(direction);
             return;
         }
+#ifdef FEATURE_STAIRWARPS
+        else if (collision == COLLISION_STAIR_WARP)
+        {
+            PlayerFaceDirection(direction);
+        }
+#endif
         else
         {
             u8 adjustedCollision = collision - COLLISION_STOP_SURFING;
@@ -688,6 +697,11 @@ static u8 CheckForPlayerAvatarCollision(u8 direction)
 
     x = playerObjEvent->currentCoords.x;
     y = playerObjEvent->currentCoords.y;
+
+#ifdef FEATURE_STAIRWARPS
+    if (IsDirectionalStairWarpMetatileBehavior(MapGridGetMetatileBehaviorAt(x, y), direction))
+        return COLLISION_STAIR_WARP;
+#endif
     MoveCoords(direction, &x, &y);
     return CheckForObjectEventCollision(playerObjEvent, x, y, direction, MapGridGetMetatileBehaviorAt(x, y));
 }

@@ -245,10 +245,17 @@ static const u8 sTileBitAttributes[] =
     [MB_WIRELESS_BOX_RESULTS] = TILE_ATTRIBUTES(FALSE, FALSE, FALSE),
     [MB_TRAINER_HILL_TIMER] = TILE_ATTRIBUTES(FALSE, FALSE, FALSE),
     [MB_SKY_PILLAR_CLOSED_DOOR] = TILE_ATTRIBUTES(FALSE, FALSE, FALSE),
+#ifdef FEATURE_STAIRWARPS
+    [MB_UP_RIGHT_STAIR_WARP] = TILE_ATTRIBUTES(FALSE, FALSE, FALSE),
+    [MB_UP_LEFT_STAIR_WARP] = TILE_ATTRIBUTES(FALSE, FALSE, FALSE),
+    [MB_DOWN_RIGHT_STAIR_WARP] = TILE_ATTRIBUTES(FALSE, FALSE, FALSE),
+    [MB_DOWN_LEFT_STAIR_WARP] = TILE_ATTRIBUTES(FALSE, FALSE, FALSE),
+#else
     [MB_UNUSED_EB] = TILE_ATTRIBUTES(FALSE, FALSE, FALSE),
     [MB_UNUSED_EC] = TILE_ATTRIBUTES(FALSE, FALSE, FALSE),
     [MB_UNUSED_ED] = TILE_ATTRIBUTES(FALSE, FALSE, FALSE),
     [MB_UNUSED_EE] = TILE_ATTRIBUTES(FALSE, FALSE, FALSE),
+#endif
     [MB_UNUSED_EF] = TILE_ATTRIBUTES(FALSE, FALSE, FALSE),
 };
 
@@ -631,11 +638,11 @@ bool8 MetatileBehavior_IsCableBoxResults1(u8 metatileBehavior)
 
 bool8 MetatileBehavior_IsOpenSecretBaseDoor(u8 metatileBehavior)
 {
-    if (metatileBehavior == MB_SECRET_BASE_SPOT_RED_CAVE_OPEN 
+    if (metatileBehavior == MB_SECRET_BASE_SPOT_RED_CAVE_OPEN
      || metatileBehavior == MB_SECRET_BASE_SPOT_BROWN_CAVE_OPEN
-     || metatileBehavior == MB_SECRET_BASE_SPOT_YELLOW_CAVE_OPEN 
+     || metatileBehavior == MB_SECRET_BASE_SPOT_YELLOW_CAVE_OPEN
      || metatileBehavior == MB_SECRET_BASE_SPOT_TREE_LEFT_OPEN
-     || metatileBehavior == MB_SECRET_BASE_SPOT_SHRUB_OPEN 
+     || metatileBehavior == MB_SECRET_BASE_SPOT_SHRUB_OPEN
      || metatileBehavior == MB_SECRET_BASE_SPOT_BLUE_CAVE_OPEN
      || metatileBehavior == MB_SECRET_BASE_SPOT_TREE_RIGHT_OPEN)
         return TRUE;
@@ -1495,3 +1502,45 @@ bool8 MetatileBehavior_IsTrainerHillTimer(u8 metatileBehavior)
     else
         return FALSE;
 }
+
+#ifdef FEATURE_STAIRWARPS
+bool8 MetatileBehavior_IsDirectionalUpRightStairWarp(u8 metatileBehavior)
+{
+    if (metatileBehavior == MB_UP_RIGHT_STAIR_WARP)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+bool8 MetatileBehavior_IsDirectionalUpLeftStairWarp(u8 metatileBehavior)
+{
+    if (metatileBehavior == MB_UP_LEFT_STAIR_WARP)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+bool8 MetatileBehavior_IsDirectionalDownRightStairWarp(u8 metatileBehavior)
+{
+    if (metatileBehavior == MB_DOWN_RIGHT_STAIR_WARP)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+bool8 MetatileBehavior_IsDirectionalDownLeftStairWarp(u8 metatileBehavior)
+{
+    if (metatileBehavior == MB_DOWN_LEFT_STAIR_WARP)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+bool8 MetatileBehavior_IsDirectionalStairWarp(u8 metatileBehavior)
+{
+    if (metatileBehavior >= MB_UP_RIGHT_STAIR_WARP && metatileBehavior <= MB_DOWN_LEFT_STAIR_WARP)
+        return TRUE;
+    else
+        return FALSE;
+}
+#endif

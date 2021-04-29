@@ -1681,13 +1681,13 @@
     questmenu 0 0
     .endm
 
-.ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
-	@ Checks to see if the player has a Pokemon in their party. Result returns to VAR_RESULT
+#ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
+    @ Checks to see if the player has a Pokemon in their party. Result returns to VAR_RESULT
     .macro checkpartymon species:req
     .byte 0xeb
     .2byte \species
     .endm
-.endif
+#endif
 
 
 @ Supplementary

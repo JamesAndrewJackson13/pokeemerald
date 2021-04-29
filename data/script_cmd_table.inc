@@ -235,9 +235,9 @@ gScriptCmdTable:: @ 81DB67C
     .4byte ScrCmd_showbiketypebox           @ 0xe8
     .4byte ScrCmd_hidebiketypebox           @ 0xe9
     .4byte ScrCmd_questmenu                 @ 0xea
-.ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
-    .4byte checkpartymon                    @ 0xeb
-.endif
+#ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
+    .4byte ScrCmd_checkpartymon                    @ 0xeb
+#endif
 
 gScriptCmdTableEnd:: @ 81DBA08
     .4byte ScrCmd_nop
