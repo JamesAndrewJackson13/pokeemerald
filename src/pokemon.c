@@ -60,8 +60,12 @@ struct SpeciesItem
 };
 
 // this file's functions
-static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon);
-static union PokemonSubstruct *GetSubstruct(struct BoxPokemon *boxMon, u32 personality, u8 substructType);
+static u16 CalculateBoxMonChecksum(struct BoxPokemon* boxMon);
+#ifdef FEATURE_REMOVEPOKEENCRYPTION
+static union PokemonSubstruct* GetSubstruct(struct BoxPokemon* boxMon, u8 substructType);
+#else
+static union PokemonSubstruct* GetSubstruct(struct BoxPokemon* boxMon, u32 personality, u8 substructType);
+#endif
 static void EncryptBoxMon(struct BoxPokemon *boxMon);
 static void DecryptBoxMon(struct BoxPokemon *boxMon);
 static void Task_PlayMapChosenOrBattleBGM(u8 taskId);
@@ -3071,10 +3075,11 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
 
     SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality);
     SetBoxMonData(boxMon, MON_DATA_OT_ID, &value);
-
+#ifndef FEATURE_REMOVEPOKEENCRYPTION
     checksum = CalculateBoxMonChecksum(boxMon);
     SetBoxMonData(boxMon, MON_DATA_CHECKSUM, &checksum);
     EncryptBoxMon(boxMon);
+#endif
     GetSpeciesName(speciesName, species);
     SetBoxMonData(boxMon, MON_DATA_NICKNAME, speciesName);
     SetBoxMonData(boxMon, MON_DATA_LANGUAGE, &gGameLanguage);
@@ -3618,6 +3623,7 @@ void CreateEventLegalEnemyMon(void)
     }
 }
 
+#ifndef FEATURE_REMOVEPOKEENCRYPTION
 static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon)
 {
     u16 checksum = 0;
@@ -3641,6 +3647,7 @@ static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon)
 
     return checksum;
 }
+#endif
 
 #define CALC_STAT(base, iv, ev, statIndex, field)               \
 {                                                               \
@@ -4141,7 +4148,14 @@ case n:                                                                 \
     }                                                                   \
 
 
-static union PokemonSubstruct *GetSubstruct(struct BoxPokemon *boxMon, u32 personality, u8 substructType)
+#ifdef FEATURE_REMOVEPOKEENCRYPTION
+static union PokemonSubstruct* GetSubstruct(struct BoxPokemon* boxMon, u8 substructType)
+{
+    union PokemonSubstruct* substructs = boxMon->secure.substructs;
+    return &substructs[substructType];
+}
+#else
+static union PokemonSubstruct* GetSubstruct(struct BoxPokemon* boxMon, u32 personality, u8 substructType)
 {
     union PokemonSubstruct *substruct = NULL;
 
@@ -4175,6 +4189,7 @@ static union PokemonSubstruct *GetSubstruct(struct BoxPokemon *boxMon, u32 perso
 
     return substruct;
 }
+#endif
 
 u32 GetMonData(struct Pokemon *mon, s32 field, u8* data)
 {
@@ -4234,7 +4249,8 @@ u32 GetMonData(struct Pokemon *mon, s32 field, u8* data)
     return ret;
 }
 
-u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
+
+u32 GetBoxMonData(struct BoxPokemon* boxMon, s32 field, u8* data)
 {
     s32 i;
     u32 retVal = 0;
@@ -4246,6 +4262,12 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
     // Any field greater than MON_DATA_ENCRYPT_SEPARATOR is encrypted and must be treated as such
     if (field > MON_DATA_ENCRYPT_SEPARATOR)
     {
+#ifdef FEATURE_REMOVEPOKEENCRYPTION
+        substruct0 = &(GetSubstruct(boxMon, 0)->type0);
+        substruct1 = &(GetSubstruct(boxMon, 1)->type1);
+        substruct2 = &(GetSubstruct(boxMon, 2)->type2);
+        substruct3 = &(GetSubstruct(boxMon, 3)->type3);
+#else
         substruct0 = &(GetSubstruct(boxMon, boxMon->personality, 0)->type0);
         substruct1 = &(GetSubstruct(boxMon, boxMon->personality, 1)->type1);
         substruct2 = &(GetSubstruct(boxMon, boxMon->personality, 2)->type2);
@@ -4259,6 +4281,7 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
             boxMon->isEgg = 1;
             substruct3->isEgg = 1;
         }
+#endif
     }
 
     switch (field)
@@ -4582,8 +4605,10 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
         break;
     }
 
+#ifndef FEATURE_REMOVEPOKEENCRYPTION
     if (field > MON_DATA_ENCRYPT_SEPARATOR)
         EncryptBoxMon(boxMon);
+#endif
 
     return retVal;
 }
@@ -4647,6 +4672,12 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
 
     if (field > MON_DATA_ENCRYPT_SEPARATOR)
     {
+#ifdef FEATURE_REMOVEPOKEENCRYPTION
+        substruct0 = &(GetSubstruct(boxMon, 0)->type0);
+        substruct1 = &(GetSubstruct(boxMon, 1)->type1);
+        substruct2 = &(GetSubstruct(boxMon, 2)->type2);
+        substruct3 = &(GetSubstruct(boxMon, 3)->type3);
+#else
         substruct0 = &(GetSubstruct(boxMon, boxMon->personality, 0)->type0);
         substruct1 = &(GetSubstruct(boxMon, boxMon->personality, 1)->type1);
         substruct2 = &(GetSubstruct(boxMon, boxMon->personality, 2)->type2);
@@ -4662,6 +4693,7 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
             EncryptBoxMon(boxMon);
             return;
         }
+#endif
     }
 
     switch (field)
@@ -4903,11 +4935,13 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         break;
     }
 
+#ifndef FEATURE_REMOVEPOKEENCRYPTION
     if (field > MON_DATA_ENCRYPT_SEPARATOR)
     {
         boxMon->checksum = CalculateBoxMonChecksum(boxMon);
         EncryptBoxMon(boxMon);
     }
+#endif
 }
 
 void CopyMon(void *dest, void *src, size_t size)

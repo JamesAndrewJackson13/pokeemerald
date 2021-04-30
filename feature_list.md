@@ -71,6 +71,10 @@ FEATURE LIST
 * Adds a new script command that will check if a particular pokemon species is in the party (by Vexio)
 * https://www.pokecommunity.com/showpost.php?p=10213715&postcount=167
 
+## Remove Pokemon Encryption (FEATURE_REMOVEPOKEENCRYPTION)
+* Removes the encryption on pokemon data
+* https://www.pokecommunity.com/showthread.php?p=10114674#post10114674
+
 
 # BASE GAME
 ## Alt Default Options (FEATURE_ALTDEFAULTOPTIONS)

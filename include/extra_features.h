@@ -32,6 +32,7 @@
 #define FEATURE_FIXFREECAMINTERACTIONS  // Fixes issues where the free-cam will cause water to ripple and grass to rustle
 #define FEATURE_REMOVEUNIONROOM  // Removes the union room checks, since the wireless adapter can't be emulated and it causes pauses in-game (You also need to undo script changes listed here: https://github.com/pret/pokeemerald/wiki/Disabling-Union-Room-check-when-entering-Pok%C3%A9mon-Centers.)
 #define FEATURE_CHECKFORPOKEMONSPECIESSCRIPT  // Adds a new script command that will check if a particular pokemon species is in the party (by Vexio)
+#define FEATURE_REMOVEPOKEENCRYPTION  // Removes the encryption on pokemon data
 
 // BASE GAME FEATURES - Tweaks to the general game
 #define FEATURE_ALTDEFAULTOPTIONS  // Changes default settings
