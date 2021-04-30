@@ -41,6 +41,9 @@
 #include "constants/moves.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
+#ifdef FEATURE_MGBAPRINT
+#include "mgba.h"
+#endif
 
 struct WallpaperTable
 {
@@ -464,8 +467,10 @@ EWRAM_DATA static u8 sMovingMonOrigBoxPos = 0;
 EWRAM_DATA static bool8 sCanOnlyMove = 0;
 
 // This file's functions.
-static void CreatePCMenu(u8 whichMenu, s16 *windowIdPtr);
+static void CreatePCMenu(u8 whichMenu, s16* windowIdPtr);
+#ifndef FEATURE_PORTABLEPC
 static void Cb2_EnterPSS(u8 boxOption);
+#endif
 static u8 GetCurrentBoxOption(void);
 static u8 HandleInput(void);
 static u8 sub_80CDC2C(void);
@@ -1849,13 +1854,26 @@ static void FieldCb_ReturnToPcMenu(void)
     u8 taskId;
     MainCallback vblankCb = gMain.vblankCallback;
 
-    SetVBlankCallback(NULL);
-    taskId = CreateTask(Task_PokemonStorageSystemPC, 80);
-    gTasks[taskId].data[0] = 0;
-    gTasks[taskId].data[1] = sPreviousBoxOption;
-    Task_PokemonStorageSystemPC(taskId);
-    SetVBlankCallback(vblankCb);
-    FadeInFromBlack();
+#ifdef FEATURE_PORTABLEPC
+    if (FlagGet(FLAG_POKEMONPCMENU) == TRUE)
+    {
+#endif
+        SetVBlankCallback(NULL);
+        taskId = CreateTask(Task_PokemonStorageSystemPC, 80);
+        gTasks[taskId].data[0] = 0;
+        gTasks[taskId].data[1] = sPreviousBoxOption;
+        Task_PokemonStorageSystemPC(taskId);
+        SetVBlankCallback(vblankCb);
+        FadeInFromBlack();
+#ifdef FEATURE_PORTABLEPC
+    }
+    else
+    {
+        SetVBlankCallback(CB2_ReturnToField);
+        FadeInFromBlack();
+        //DisableInterrupts(FLAG_POKEMONPCMENU);  // This was causing the game to crash. I haven't seen issues without it?
+    }
+#endif
 }
 
 static void CreatePCMenu(u8 whichMenu, s16 *windowIdPtr)
@@ -2152,7 +2170,11 @@ static void Cb2_PSS(void)
     BuildOamBuffer();
 }
 
+#ifdef FEATURE_PORTABLEPC
+void Cb2_EnterPSS(u8 boxOption)
+#else
 static void Cb2_EnterPSS(u8 boxOption)
+#endif
 {
     ResetTasks();
     sCurrentBoxOption = boxOption;
@@ -7435,7 +7457,7 @@ static u8 HandleInput_OnButtons(void)
             sPSSData->field_CD2 = -1;
             if (sBoxCursorPosition == 0)
                 cursorPosition = IN_BOX_COUNT - 1 - 5;
-            else 
+            else
                 cursorPosition = IN_BOX_COUNT - 1;
             sPSSData->field_CD7 = 1;
             break;

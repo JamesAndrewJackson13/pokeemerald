@@ -79,6 +79,9 @@ FEATURE LIST
 * Move a held item between two Pokemon without needing to put things back in the bag
 * https://www.pokecommunity.com/showthread.php?p=10120157#post10120157
 
+## Portable PC (FEATURE_PORTABLEPC)
+* Allow use of the PC from AAAAAAAAAAANYWHERE (via the main menu)
+* https://www.pokecommunity.com/showpost.php?p=10127351&postcount=48
 
 # BASE GAME
 ## Alt Default Options (FEATURE_ALTDEFAULTOPTIONS)

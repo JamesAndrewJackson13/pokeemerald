@@ -3102,7 +3102,9 @@ extern const u8 gText_Smartness[];
 extern const u8 gText_Cuteness[];
 extern const u8 gText_Beauty3[];
 
-////side quests
+/* side quest data */
+//menu
+extern const u8 gText_MenuQuest[];
 //names
 extern const u8 gText_SideQuestName_1[];
 extern const u8 gText_SideQuestName_2[];
@@ -3307,6 +3309,10 @@ extern const u8 gMenuText_Move[];
 extern const u8 gText_MoveItemWhere[];
 extern const u8 gText_XsYAnd[];
 extern const u8 gText_XsYWereSwapped[];
+#endif
+
+#ifdef FEATURE_PORTABLEPC
+extern const u8 gText_MenuPC[];
 #endif
 
 #endif // GUARD_STRINGS_H

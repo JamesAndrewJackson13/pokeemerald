@@ -54,7 +54,11 @@
 #define FLAG_UNUSED_0x023    0x23 // Unused Flag
 #define FLAG_UNUSED_0x024    0x24 // Unused Flag
 #endif
+#ifdef FEATURE_PORTABLEPC
+#define FLAG_POKEMONPCMENU   0x25 // PC Menu Flag
+#else
 #define FLAG_UNUSED_0x025    0x25 // Unused Flag
+#endif
 #define FLAG_UNUSED_0x026    0x26 // Unused Flag
 #define FLAG_UNUSED_0x027    0x27 // Unused Flag
 #define FLAG_UNUSED_0x028    0x28 // Unused Flag
@@ -658,7 +662,7 @@
 #define FLAG_HIDDEN_ITEM_ROUTE_128_HEART_SCALE_2             (FLAG_HIDDEN_ITEMS_START + 0x5D)
 #define FLAG_HIDDEN_ITEM_ROUTE_128_HEART_SCALE_3             (FLAG_HIDDEN_ITEMS_START + 0x5E)
 
-#define FLAG_QUEST_MENU_ACTIVE  0x264 // Unused Flag
+#define FLAG_QUEST_MENU_ACTIVE  0x264
 #define FLAG_UNUSED_0x265  0x265 // Unused Flag
 #define FLAG_UNUSED_0x266  0x266 // Unused Flag
 #define FLAG_UNUSED_0x267  0x267 // Unused Flag

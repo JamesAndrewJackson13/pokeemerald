@@ -54,6 +54,9 @@ enum
     MENU_ACTION_POKEDEX,
     MENU_ACTION_POKEMON,
     MENU_ACTION_BAG,
+#ifdef FEATURE_PORTABLEPC
+    MENU_ACTION_PC,
+#endif
     MENU_ACTION_POKENAV,
     MENU_ACTION_PLAYER,
     MENU_ACTION_SAVE,
@@ -97,6 +100,9 @@ EWRAM_DATA static u8 sSaveInfoWindowId = 0;
 static bool8 StartMenuPokedexCallback(void);
 static bool8 StartMenuPokemonCallback(void);
 static bool8 StartMenuBagCallback(void);
+#ifdef FEATURE_PORTABLEPC
+static bool8 StartMenuPCCallback(void);
+#endif
 static bool8 StartMenuPokeNavCallback(void);
 static bool8 StartMenuPlayerNameCallback(void);
 static bool8 StartMenuSaveCallback(void);
@@ -159,12 +165,14 @@ static const u8* const sPyramidFloorNames[] =
 static const struct WindowTemplate sPyramidFloorWindowTemplate_2 = {0, 1, 1, 0xA, 4, 0xF, 8};
 static const struct WindowTemplate sPyramidFloorWindowTemplate_1 = {0, 1, 1, 0xC, 4, 0xF, 8};
 
-static const u8 sText_QuestMenu[] = _("QUESTS");
 static const struct MenuAction sStartMenuItems[] =
 {
     [MENU_ACTION_POKEDEX]           = {gText_MenuPokedex, {.u8_void = StartMenuPokedexCallback}},
     [MENU_ACTION_POKEMON]           = {gText_MenuPokemon, {.u8_void = StartMenuPokemonCallback}},
     [MENU_ACTION_BAG]               = {gText_MenuBag, {.u8_void = StartMenuBagCallback}},
+#ifdef FEATURE_PORTABLEPC
+    [MENU_ACTION_PC]                = {gText_MenuPC, {.u8_void = StartMenuPCCallback}},
+#endif
     [MENU_ACTION_POKENAV]           = {gText_MenuPokenav, {.u8_void = StartMenuPokeNavCallback}},
     [MENU_ACTION_PLAYER]            = {gText_MenuPlayer, {.u8_void = StartMenuPlayerNameCallback}},
     [MENU_ACTION_SAVE]              = {gText_MenuSave, {.u8_void = StartMenuSaveCallback}},
@@ -176,7 +184,7 @@ static const struct MenuAction sStartMenuItems[] =
     [MENU_ACTION_RETIRE_FRONTIER]   = {gText_MenuRetire, {.u8_void = StartMenuBattlePyramidRetireCallback}},
     [MENU_ACTION_PYRAMID_BAG]       = {gText_MenuBag, {.u8_void = StartMenuBattlePyramidBagCallback}},
     [MENU_ACTION_DEXNAV]            = {gText_MenuDexNav, {.u8_void = StartMenuDexNavCallback}},
-    [MENU_ACTION_QUEST_MENU]        = {sText_QuestMenu, {.u8_void = QuestMenuCallback}},
+    [MENU_ACTION_QUEST_MENU]        = {gText_MenuQuest, {.u8_void = QuestMenuCallback}},
 };
 
 static const struct BgTemplate sBgTemplates_LinkBattleSave[] =
@@ -303,8 +311,16 @@ static void BuildNormalStartMenu(void)
     if (FlagGet(FLAG_SYS_DEXNAV_GET))
         AddStartMenuAction(MENU_ACTION_DEXNAV);
 
+#ifdef FEATURE_PORTABLEPC
+    if (FlagGet(FLAG_SYS_POKEMON_GET) == TRUE)
+    {
+        AddStartMenuAction(MENU_ACTION_POKEMON);
+        AddStartMenuAction(MENU_ACTION_PC);
+    }
+#else
     if (FlagGet(FLAG_SYS_POKEMON_GET) == TRUE)
         AddStartMenuAction(MENU_ACTION_POKEMON);
+#endif
 
     AddStartMenuAction(MENU_ACTION_BAG);
 
@@ -665,6 +681,22 @@ static bool8 StartMenuBagCallback(void)
 
     return FALSE;
 }
+
+#ifdef FEATURE_PORTABLEPC
+static bool8 StartMenuPCCallback(void)
+{
+    u8 taskId;
+    if (!gPaletteFade.active)
+    {
+        PlayRainStoppingSoundEffect();
+        RemoveExtraStartMenuWindows();
+        Cb2_EnterPSS(2);
+        return TRUE;
+    }
+
+    return FALSE;
+}
+#endif
 
 static bool8 StartMenuPokeNavCallback(void)
 {
