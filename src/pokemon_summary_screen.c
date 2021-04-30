@@ -47,6 +47,9 @@
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "constants/battle_config.h"
+#ifdef FEATURE_HIDDENPOWERTYPEINSUMMARYSCREEN
+#include "custom_utils.h"
+#endif
 
 // Screen titles (upper left)
 #define PSS_LABEL_WINDOW_POKEMON_INFO_TITLE 0
