@@ -53,6 +53,7 @@
 #define FEATURE_FORGETANYMOVE  // Let Pokemon forget any move, such as HM moves
 #define FEATURE_HIDDENPOWERTYPEINSUMMARYSCREEN  // Shows what type Hidden Power is on the Summary Screen
 #define FEATURE_CHECKASHCOLLECTED  // Checking how much ash you collected with the Soot Sack
+#define FEATURE_MOVEITEMBETWEENPOKEMON  // Move a held item between two Pokemon without needing to put things back in the bag
 
 // ITEM FEATURES - Updates to how items work
 #define FEATURE_MULTIUSEMEDITEMS  // Doesn't return to the bag when you use some medical items / rare candies

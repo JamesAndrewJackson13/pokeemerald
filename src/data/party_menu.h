@@ -37,9 +37,9 @@ enum
 
 static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
 {
-    [PARTY_BOX_LEFT_COLUMN] = 
+    [PARTY_BOX_LEFT_COLUMN] =
     {
-        BlitBitmapToPartyWindow_LeftColumn, 
+        BlitBitmapToPartyWindow_LeftColumn,
         {
             //The below are the x, y, width, and height for each of the following info
             24, 11, 40, 13, // Nickname
@@ -48,12 +48,12 @@ static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
             38, 37, 24,  8, // HP
             53, 37, 24,  8, // Max HP
             24, 35, 48,  3  // HP bar
-        }, 
+        },
         12, 34, 64, 16      // Description text (e.g. NO USE)
     },
-    [PARTY_BOX_RIGHT_COLUMN] = 
+    [PARTY_BOX_RIGHT_COLUMN] =
     {
-        BlitBitmapToPartyWindow_RightColumn, 
+        BlitBitmapToPartyWindow_RightColumn,
         {
              // See above comment
              22,  3, 40, 13, // Nickname
@@ -62,7 +62,7 @@ static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
             102, 12, 24,  8, // HP
             117, 12, 24,  8, // Max HP
              88, 10, 48,  3  // HP bar
-        }, 
+        },
         77, 4, 64, 16        // Description text
     },
 };
@@ -73,7 +73,7 @@ static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
 // Pokemon icon (x, y), held item (x, y), status condition (x, y), menu pokeball (x, y)
 static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
 {
-    [PARTY_LAYOUT_SINGLE] = 
+    [PARTY_LAYOUT_SINGLE] =
     {
         { 16,  40,  20,  50,  50,  52,  16,  34},
         {104,  18, 108,  28, 136,  27, 102,  25},
@@ -82,7 +82,7 @@ static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
         {104,  90, 108, 100, 136,  99, 102,  97},
         {104, 114, 108, 124, 136, 123, 102, 121},
     },
-    [PARTY_LAYOUT_DOUBLE] = 
+    [PARTY_LAYOUT_DOUBLE] =
     {
         {16, 24, 20, 34, 50, 36, 16, 18},
         {16, 80, 20, 90, 50, 92, 16, 74},
@@ -91,7 +91,7 @@ static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
         {104, 82, 108, 92, 136, 91, 102, 89},
         {104, 114, 108, 124, 136, 123, 102, 121},
     },
-    [PARTY_LAYOUT_MULTI] = 
+    [PARTY_LAYOUT_MULTI] =
     {
         {16, 24, 20, 34, 50, 36, 16, 18},
         {16, 80, 20, 90, 50, 92, 16, 74},
@@ -100,7 +100,7 @@ static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
         {104, 82, 106, 92, 136, 91, 102, 89},
         {104, 106, 106, 116, 136, 115, 102, 113},
     },
-    [PARTY_LAYOUT_MULTI_SHOWCASE] = 
+    [PARTY_LAYOUT_MULTI_SHOWCASE] =
     {
         {16, 32, 20, 42, 50, 44, 16, 26},
         {104, 34, 106, 44, 136, 43, 102, 41},
@@ -492,9 +492,15 @@ static const struct WindowTemplate sItemGiveTakeWindowTemplate =
 {
     .bg = 2,
     .tilemapLeft = 23,
+#ifdef FEATURE_MOVEITEMBETWEENPOKEMON
+    .tilemapTop = 11,
+    .width = 6,
+    .height = 8,
+#else
     .tilemapTop = 13,
     .width = 6,
     .height = 6,
+#endif
     .paletteNum = 14,
     .baseBlock = 0x39D,
 };
@@ -649,7 +655,10 @@ static const u8 *const sActionStringTable[] =
     [PARTY_MSG_BOOST_PP_WHICH_MOVE]    = gText_BoostPp,
     [PARTY_MSG_DO_WHAT_WITH_ITEM]      = gText_DoWhatWithItem,
     [PARTY_MSG_DO_WHAT_WITH_MAIL]      = gText_DoWhatWithMail,
-    [PARTY_MSG_ALREADY_HOLDING_ONE]    = gText_AlreadyHoldingOne,
+    [PARTY_MSG_ALREADY_HOLDING_ONE] = gText_AlreadyHoldingOne,
+#ifdef FEATURE_MOVEITEMBETWEENPOKEMON
+    [PARTY_MSG_MOVE_ITEM_WHERE] = gText_MoveItemWhere,
+#endif
 };
 
 static const u8 *const sDescriptionStringTable[] =
@@ -685,6 +694,9 @@ enum
     MENU_ITEM,
     MENU_GIVE,
     MENU_TAKE_ITEM,
+#ifdef FEATURE_MOVEITEMBETWEENPOKEMON
+    MENU_MOVE_ITEM,
+#endif
     MENU_MAIL,
     MENU_TAKE_MAIL,
     MENU_READ,
@@ -734,6 +746,9 @@ struct
     [MENU_ITEM] = {gText_Item, CursorCb_Item},
     [MENU_GIVE] = {gMenuText_Give, CursorCb_Give},
     [MENU_TAKE_ITEM] = {gText_Take, CursorCb_TakeItem},
+#ifdef FEATURE_MOVEITEMBETWEENPOKEMON
+    [MENU_MOVE_ITEM] = {gMenuText_Move, CursorCb_MoveItem},
+#endif
     [MENU_MAIL] = {gText_Mail, CursorCb_Mail},
     [MENU_TAKE_MAIL] = {gText_Take2, CursorCb_TakeMail},
     [MENU_READ] = {gText_Read2, CursorCb_Read},
@@ -769,9 +784,15 @@ static const u8 sPartyMenuAction_SendOutSummaryCancel[] = {MENU_SEND_OUT, MENU_S
 static const u8 sPartyMenuAction_SummaryCancel[] = {MENU_SUMMARY, MENU_CANCEL1};
 static const u8 sPartyMenuAction_EnterSummaryCancel[] = {MENU_ENTER, MENU_SUMMARY, MENU_CANCEL1};
 static const u8 sPartyMenuAction_NoEntrySummaryCancel[] = {MENU_NO_ENTRY, MENU_SUMMARY, MENU_CANCEL1};
-static const u8 sPartyMenuAction_StoreSummaryCancel[] = {MENU_STORE, MENU_SUMMARY, MENU_CANCEL1};
-static const u8 sPartyMenuAction_GiveTakeItemCancel[] = {MENU_GIVE, MENU_TAKE_ITEM, MENU_CANCEL2};
-static const u8 sPartyMenuAction_ReadTakeMailCancel[] = {MENU_READ, MENU_TAKE_MAIL, MENU_CANCEL2};
+static const u8 sPartyMenuAction_StoreSummaryCancel[] = { MENU_STORE, MENU_SUMMARY, MENU_CANCEL1 };
+static const u8 sPartyMenuAction_GiveTakeItemCancel[] = {
+     MENU_GIVE,
+     MENU_TAKE_ITEM,
+#ifdef FEATURE_MOVEITEMBETWEENPOKEMON
+    MENU_MOVE_ITEM,
+#endif
+     MENU_CANCEL2 };
+static const u8 sPartyMenuAction_ReadTakeMailCancel[] = { MENU_READ, MENU_TAKE_MAIL, MENU_CANCEL2 };
 static const u8 sPartyMenuAction_RegisterSummaryCancel[] = {MENU_REGISTER, MENU_SUMMARY, MENU_CANCEL1};
 static const u8 sPartyMenuAction_TradeSummaryCancel1[] = {MENU_TRADE1, MENU_SUMMARY, MENU_CANCEL1};
 static const u8 sPartyMenuAction_TradeSummaryCancel2[] = {MENU_TRADE2, MENU_SUMMARY, MENU_CANCEL1};

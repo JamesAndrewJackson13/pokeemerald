@@ -3301,4 +3301,12 @@ extern const u8 gText_Lawnmower[];
 extern const u8 gText_Recall[];
 #endif
 
+#ifdef FEATURE_MOVEITEMBETWEENPOKEMON
+// Moving items between pokemon
+extern const u8 gMenuText_Move[];
+extern const u8 gText_MoveItemWhere[];
+extern const u8 gText_XsYAnd[];
+extern const u8 gText_XsYWereSwapped[];
+#endif
+
 #endif // GUARD_STRINGS_H

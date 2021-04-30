@@ -75,6 +75,10 @@ FEATURE LIST
 * Removes the encryption on pokemon data
 * https://www.pokecommunity.com/showthread.php?p=10114674#post10114674
 
+## Move Item Between Pokemon (FEATURE_MOVEITEMBETWEENPOKEMON)
+* Move a held item between two Pokemon without needing to put things back in the bag
+* https://www.pokecommunity.com/showthread.php?p=10120157#post10120157
+
 
 # BASE GAME
 ## Alt Default Options (FEATURE_ALTDEFAULTOPTIONS)
