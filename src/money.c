@@ -10,7 +10,18 @@
 #include "strings.h"
 #include "decompress.h"
 
+#ifdef FEATURE_MAXMONEY
+#define MAX_MONEY FEATURE_MAXMONEY
+#else
 #define MAX_MONEY 999999
+#endif
+
+#ifdef FEATURE_SETMONEYCAP
+#define MONEY_NUM_DIGITS FEATURE_SETMONEYCAP
+#else
+#define MONEY_NUM_DIGITS 999999
+#endif
+
 
 EWRAM_DATA static u8 sMoneyBoxWindowId = 0;
 EWRAM_DATA static u8 sMoneyLabelSpriteId = 0;
@@ -132,7 +143,12 @@ void SubtractMoneyFromVar0x8005(void)
 
 void PrintMoneyAmountInMoneyBox(u8 windowId, int amount, u8 speed)
 {
+
+#ifdef FEATURE_SETMONEYCAP
+    PrintMoneyAmount(windowId, (74 - 6 * FEATURE_SETMONEYCAP), 1, amount, speed);
+#else
     PrintMoneyAmount(windowId, 0x26, 1, amount, speed);
+#endif
 }
 
 void PrintMoneyAmount(u8 windowId, u8 x, u8 y, int amount, u8 speed)
@@ -140,9 +156,9 @@ void PrintMoneyAmount(u8 windowId, u8 x, u8 y, int amount, u8 speed)
     u8 *txtPtr;
     s32 strLength;
 
-    ConvertIntToDecimalStringN(gStringVar1, amount, STR_CONV_MODE_LEFT_ALIGN, 6);
+    ConvertIntToDecimalStringN(gStringVar1, amount, STR_CONV_MODE_LEFT_ALIGN, MONEY_NUM_DIGITS);
 
-    strLength = 6 - StringLength(gStringVar1);
+    strLength = MONEY_NUM_DIGITS - StringLength(gStringVar1);
     txtPtr = gStringVar4;
 
     while (strLength-- > 0)

@@ -1184,7 +1184,11 @@ static void BuyMenuPrintItemQuantityAndPrice(u8 taskId)
     s16* data = gTasks[taskId].data;
 
     FillWindowPixelBuffer(4, PIXEL_FILL(1));
+#ifdef FEATURE_SETMONEYCAP
+    PrintMoneyAmount(4, (74 - 6 * FEATURE_SETMONEYCAP), 1, sShopData->totalCost, TEXT_SPEED_FF);
+#else
     PrintMoneyAmount(4, 38, 1, sShopData->totalCost, TEXT_SPEED_FF);
+#endif
     ConvertIntToDecimalStringN(gStringVar1, tItemCount, STR_CONV_MODE_LEADING_ZEROS, BAG_ITEM_CAPACITY_DIGITS);
     StringExpandPlaceholders(gStringVar4, gText_xVar1);
     BuyMenuPrint(4, gStringVar4, 0, 1, 0, 0);

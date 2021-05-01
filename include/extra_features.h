@@ -43,6 +43,8 @@
 #ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
 #define FEATURE_ROTOMCHANGEFORM  // Allows for Rotom's form to be changed via a box in Birch's Lab (Depends on FEATURE_CHECKFORPOKEMONSPECIESSCRIPT)
 #endif
+#define FEATURE_SETMONEYCAP (7)  // Mo' money, mo' problems (Set to the number of digits you want the cap to be at)
+#define FEATURE_MAXMONEY (9999999)  // Mo' money, mo' problems (Set to the max amount of cash you want the cap to be at)
 
 // MENU FEATURES - Changes to how various menus work
 #define FEATURE_REMOVECONTESTTAB // Removes the contest tab

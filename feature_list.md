@@ -104,6 +104,11 @@ FEATURE LIST
 ## Allow Rotom to Change Form at Birch's Lab (FEATURE_ROTOMCHANGEFORM)
 * Allows for Rotom's form to be changed via a box in Birch's Lab
 
+## Expanded Money Cap (FEATURE_SETMONEYCAP) (FEATURE_MAXMONEY)
+* Mo' money, mo' problems
+* Set `FEATURE_SETMONEYCAP` to the number of digits you want the cap to be at
+* Set `FEATURE_MAXMONEY` to the literal money cap
+* Make sure the two aggree or else shit'll get weird
 
 
 # MENUS
