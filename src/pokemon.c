@@ -7615,8 +7615,13 @@ void BattleAnimateFrontSprite(struct Sprite* sprite, u16 species, bool8 noCry, u
 {
     if (gHitMarker & HITMARKER_NO_ANIMATIONS && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK)))
         DoMonFrontSpriteAnimation(sprite, species, noCry, arg3 | 0x80);
+#ifdef FEATURE_NICKNAMEPOKEMONINMENU
+    else if (gSaveBlock2Ptr->optionsPokeAnimations)
+        DoMonFrontSpriteAnimation(sprite, species, noCry, arg3 | 0x80);
+#endif
     else
         DoMonFrontSpriteAnimation(sprite, species, noCry, arg3);
+
 }
 
 void DoMonFrontSpriteAnimation(struct Sprite* sprite, u16 species, bool8 noCry, u8 arg3)
@@ -7665,21 +7670,32 @@ void DoMonFrontSpriteAnimation(struct Sprite* sprite, u16 species, bool8 noCry, 
 
 void PokemonSummaryDoMonAnimation(struct Sprite* sprite, u16 species, bool8 oneFrame)
 {
-    if (!oneFrame && HasTwoFramesAnimation(species))
-        StartSpriteAnim(sprite, 1);
-    if (sMonAnimationDelayTable[species - 1] != 0)
+#ifdef FEATURE_NICKNAMEPOKEMONINMENU
+    if (gSaveBlock2Ptr->optionsPokeAnimations)
     {
-        u8 taskId = CreateTask(Task_PokemonSummaryAnimateAfterDelay, 0);
-        STORE_PTR_IN_TASK(sprite, taskId, 0);
-        gTasks[taskId].data[2] = sMonFrontAnimIdsTable[species - 1];
-        gTasks[taskId].data[3] = sMonAnimationDelayTable[species - 1];
-        SummaryScreen_SetUnknownTaskId(taskId);
-        SetSpriteCB_MonAnimDummy(sprite);
+        sprite->callback = SpriteCallbackDummy;
     }
     else
     {
-        StartMonSummaryAnimation(sprite, sMonFrontAnimIdsTable[species - 1]);
+#endif
+        if (!oneFrame && HasTwoFramesAnimation(species))
+            StartSpriteAnim(sprite, 1);
+        if (sMonAnimationDelayTable[species - 1] != 0)
+        {
+            u8 taskId = CreateTask(Task_PokemonSummaryAnimateAfterDelay, 0);
+            STORE_PTR_IN_TASK(sprite, taskId, 0);
+            gTasks[taskId].data[2] = sMonFrontAnimIdsTable[species - 1];
+            gTasks[taskId].data[3] = sMonAnimationDelayTable[species - 1];
+            SummaryScreen_SetUnknownTaskId(taskId);
+            SetSpriteCB_MonAnimDummy(sprite);
+        }
+        else
+        {
+            StartMonSummaryAnimation(sprite, sMonFrontAnimIdsTable[species - 1]);
+        }
+#ifdef FEATURE_NICKNAMEPOKEMONINMENU
     }
+#endif
 }
 
 void StopPokemonAnimationDelayTask(void)
@@ -7691,15 +7707,27 @@ void StopPokemonAnimationDelayTask(void)
 
 void BattleAnimateBackSprite(struct Sprite* sprite, u16 species)
 {
-    if (gHitMarker & HITMARKER_NO_ANIMATIONS && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK)))
+#ifdef FEATURE_NICKNAMEPOKEMONINMENU
+    if (gSaveBlock2Ptr->optionsPokeAnimations)
     {
         sprite->callback = SpriteCallbackDummy;
     }
     else
     {
-        LaunchAnimationTaskForBackSprite(sprite, GetSpeciesBackAnimSet(species));
-        sprite->callback = SpriteCallbackDummy_2;
+#endif
+        if (gHitMarker & HITMARKER_NO_ANIMATIONS && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK)))
+        {
+            sprite->callback = SpriteCallbackDummy;
+        }
+        else
+        {
+            LaunchAnimationTaskForBackSprite(sprite, GetSpeciesBackAnimSet(species));
+            sprite->callback = SpriteCallbackDummy_2;
+        }
+#ifdef FEATURE_NICKNAMEPOKEMONINMENU
     }
+#endif
+
 }
 
 u8 sub_806EF08(u8 arg0)

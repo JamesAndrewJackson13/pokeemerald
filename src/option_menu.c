@@ -28,13 +28,18 @@ enum
     MENUITEM_TEXTSPEED,
     MENUITEM_BATTLESCENE,
     MENUITEM_BATTLESTYLE,
+#ifdef FEATURE_TOGGLEPOKEMONBATTLEANIMATIONS
+    MENUITEM_POKEANIMATION,
+#endif
     MENUITEM_SOUND,
     MENUITEM_BUTTONMODE,
     MENUITEM_HP_BAR,
     MENUITEM_EXP_BAR,
     MENUITEM_UNIT_SYSTEM,
     MENUITEM_FRAMETYPE,
+#ifdef FEATURE_CHANGEDEXLOOK
     MENUITEM_DEXTYPE,
+#endif
     MENUITEM_CANCEL,
     MENUITEM_COUNT,
 };
@@ -69,6 +74,7 @@ static void BattleStyle_DrawChoices(int selection, u16 y, u8 textSpeed);
 static void HpBar_DrawChoices(int selection, u16 y, u8 textSpeed);
 static void UnitSystem_DrawChoices(int selection, u16 y, u8 textSpeed);
 static void DexMode_DrawChoices(int selection, u16 y, u8 textSpeed);
+static void PokeAnimation_DrawChoices(int selection, u16 y, u8 textSpeed);
 static void Sound_DrawChoices(int selection, u16 y, u8 textSpeed);
 static void FrameType_DrawChoices(int selection, u16 y, u8 textSpeed);
 static void ButtonMode_DrawChoices(int selection, u16 y, u8 textSpeed);
@@ -92,13 +98,18 @@ struct
     [MENUITEM_TEXTSPEED] = {TextSpeed_DrawChoices, FourOptions_ProcessInput},
     [MENUITEM_BATTLESCENE] = {BattleScene_DrawChoices, TwoOptions_ProcessInput},
     [MENUITEM_BATTLESTYLE] = {BattleStyle_DrawChoices, BattleStyle_ProcessInput},
+#ifdef FEATURE_TOGGLEPOKEMONBATTLEANIMATIONS
+    [MENUITEM_POKEANIMATION] = {PokeAnimation_DrawChoices, TwoOptions_ProcessInput},
+#endif
     [MENUITEM_SOUND] = {Sound_DrawChoices, Sound_ProcessInput},
     [MENUITEM_BUTTONMODE] = {ButtonMode_DrawChoices, ThreeOptions_ProcessInput},
     [MENUITEM_FRAMETYPE] = {FrameType_DrawChoices, FrameType_ProcessInput},
     [MENUITEM_HP_BAR] = {HpBar_DrawChoices, ElevenOptions_ProcessInput},
     [MENUITEM_EXP_BAR] = {HpBar_DrawChoices, ElevenOptions_ProcessInput},
     [MENUITEM_UNIT_SYSTEM] = {UnitSystem_DrawChoices, TwoOptions_ProcessInput},
+#ifdef FEATURE_CHANGEDEXLOOK
     [MENUITEM_DEXTYPE] = {DexMode_DrawChoices, TwoOptions_ProcessInput},
+#endif
     [MENUITEM_CANCEL] = {NULL, NULL},
 };
 
@@ -108,13 +119,18 @@ static const u16 sNumberOfChoices[MENUITEM_COUNT] =
     [MENUITEM_TEXTSPEED] = 4,
     [MENUITEM_BATTLESCENE] = 2,
     [MENUITEM_BATTLESTYLE] = 2,
+#ifdef FEATURE_TOGGLEPOKEMONBATTLEANIMATIONS
+    [MENUITEM_POKEANIMATION] = 2,
+#endif
     [MENUITEM_SOUND] = 3,
     [MENUITEM_BUTTONMODE] = 3,
     [MENUITEM_FRAMETYPE] = 20,
     [MENUITEM_HP_BAR] = 11,
     [MENUITEM_EXP_BAR] = 11,
     [MENUITEM_UNIT_SYSTEM] = 2,
+#ifdef FEATURE_CHANGEDEXLOOK
     [MENUITEM_DEXTYPE] = 2,
+#endif
     [MENUITEM_CANCEL] = 0,
 };
 
@@ -124,13 +140,18 @@ static const bool8 sShowSelectionArrows[MENUITEM_COUNT] =
     [MENUITEM_TEXTSPEED] = TRUE,
     [MENUITEM_BATTLESCENE] = TRUE,
     [MENUITEM_BATTLESTYLE] = TRUE,
+#ifdef FEATURE_TOGGLEPOKEMONBATTLEANIMATIONS
+    [MENUITEM_POKEANIMATION] = TRUE,
+#endif
     [MENUITEM_SOUND] = TRUE,
     [MENUITEM_BUTTONMODE] = TRUE,
     [MENUITEM_FRAMETYPE] = TRUE,
     [MENUITEM_HP_BAR] = TRUE,
     [MENUITEM_EXP_BAR] = TRUE,
     [MENUITEM_UNIT_SYSTEM] = TRUE,
+#ifdef FEATURE_CHANGEDEXLOOK
     [MENUITEM_DEXTYPE] = TRUE,
+#endif
     [MENUITEM_CANCEL] = FALSE,
 };
 
@@ -163,13 +184,18 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_TEXTSPEED]   = gText_TextSpeed,
     [MENUITEM_BATTLESCENE] = gText_BattleScene,
     [MENUITEM_BATTLESTYLE] = gText_BattleStyle,
+#ifdef FEATURE_TOGGLEPOKEMONBATTLEANIMATIONS
+    [MENUITEM_POKEANIMATION] = gText_PokeAnimation,
+#endif
     [MENUITEM_SOUND]       = gText_Sound,
     [MENUITEM_BUTTONMODE]  = gText_ButtonMode,
     [MENUITEM_FRAMETYPE]   = gText_Frame,
     [MENUITEM_HP_BAR]      = sText_HpBar,
     [MENUITEM_EXP_BAR]     = sText_ExpBar,
     [MENUITEM_UNIT_SYSTEM] = sText_UnitSystem,
-    [MENUITEM_DEXTYPE]     = sText_DexType,
+#ifdef FEATURE_CHANGEDEXLOOK
+    [MENUITEM_DEXTYPE]     = gText_DexType,
+#endif
     [MENUITEM_CANCEL]      = gText_OptionMenuCancel,
 };
 
@@ -371,7 +397,12 @@ void CB2_InitOptionMenu(void)
         sOptions->sel[MENUITEM_HP_BAR]      = gSaveBlock2Ptr->optionsHpBarSpeed;
         sOptions->sel[MENUITEM_EXP_BAR]     = gSaveBlock2Ptr->optionsExpBarSpeed;
         sOptions->sel[MENUITEM_UNIT_SYSTEM] = gSaveBlock2Ptr->optionsUnitSystem;
-        sOptions->sel[MENUITEM_DEXTYPE]     = gSaveBlock2Ptr->optionsDexMode;
+#ifdef FEATURE_CHANGEDEXLOOK
+        sOptions->sel[MENUITEM_DEXTYPE] = gSaveBlock2Ptr->optionsDexMode;
+#endif
+#ifdef FEATURE_TOGGLEPOKEMONBATTLEANIMATIONS
+        sOptions->sel[MENUITEM_POKEANIMATION] = gSaveBlock2Ptr->optionsPokeAnimations;
+#endif
 
         for (i = 0; i < 7; i++)
             DrawChoices(i, i * Y_DIFF, 0xFF);
@@ -541,7 +572,12 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2Ptr->optionsHpBarSpeed =      sOptions->sel[MENUITEM_HP_BAR];
     gSaveBlock2Ptr->optionsExpBarSpeed =     sOptions->sel[MENUITEM_EXP_BAR];
     gSaveBlock2Ptr->optionsUnitSystem =      sOptions->sel[MENUITEM_UNIT_SYSTEM];
+#ifdef FEATURE_CHANGEDEXLOOK
     gSaveBlock2Ptr->optionsDexMode =         sOptions->sel[MENUITEM_DEXTYPE];
+#endif
+#ifdef FEATURE_TOGGLEPOKEMONBATTLEANIMATIONS
+    gSaveBlock2Ptr->optionsPokeAnimations =  sOptions->sel[MENUITEM_POKEANIMATION];
+#endif
 
 
 
@@ -730,10 +766,19 @@ static void UnitSystem_DrawChoices(int selection, u16 y, u8 textSpeed)
     doTwoChoices(gText_UnitSystemMetric, gText_UnitSystemImperial, selection, y, textSpeed);
 }
 
+#ifdef FEATURE_CHANGEDEXLOOK
 static void DexMode_DrawChoices(int selection, u16 y, u8 textSpeed)
 {
     doTwoChoices(gText_Light, gText_Dark, selection, y, textSpeed);
 }
+#endif
+
+#ifdef FEATURE_TOGGLEPOKEMONBATTLEANIMATIONS
+static void PokeAnimation_DrawChoices(int selection, u16 y, u8 textSpeed)
+{
+    doTwoChoices(gText_BattleSceneOn, gText_BattleSceneOff, selection, y, textSpeed);
+}
+#endif
 
 static void FourOptions_DrawChoices(const u8 *const *const strings, int selection, u16 y, u8 textSpeed)
 {

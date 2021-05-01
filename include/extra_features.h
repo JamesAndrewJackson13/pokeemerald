@@ -50,6 +50,7 @@
 #define FEATURE_SHOWEVIVINSTATSCREEN  // Let the player view their pokemon's EVs and IVs in the stat screen
 #define FEATURE_WRAPPINGSUMMARYSCREEN  // When you reach the end of the summary screen, you will wrap back to the first/last pokemon
 #define FEATURE_NOOVERWRITEWARNING  // Don't prompt the user with `There is already a save file` confirmation screen when saving
+#define FEATURE_CHANGEDEXLOOK  // Lets you change the look of the PokeDex
 #define FEATURE_FORGETANYMOVE  // Let Pokemon forget any move, such as HM moves
 #define FEATURE_HIDDENPOWERTYPEINSUMMARYSCREEN  // Shows what type Hidden Power is on the Summary Screen
 #define FEATURE_MOVEITEMBETWEENPOKEMON  // Move a held item between two Pokemon without needing to put things back in the bag
@@ -75,6 +76,7 @@
 #define FEATURE_TRAINERCLASSPOKEBALL  // Give all trainers of a class a new default ball type
 #define FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE  // Changes the color of the move's type to alert players if it's super / not very effective
 #define FEATUER_HIDDENPOWERTYPEINBATTLESCREEN  // Shows what type Hidden Power is on the battle screen
+#define FEATURE_TOGGLEPOKEMONBATTLEANIMATIONS  // Toggleable front/back sprite animations
 
 // MOVEMENT FEATURES - Move your body freely
 #define FEATURE_INDOORRUN  // Allow running while indoors

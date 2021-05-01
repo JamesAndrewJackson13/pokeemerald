@@ -2416,7 +2416,8 @@ static bool8 LoadPokedexListPage(u8 page)
 
 static void LoadPokedexBgPalette(bool8 isSearchResults)
 {
-    if (gSaveBlock2Ptr->optionsDexMode == TRUE)
+#ifdef FEATURE_CHANGEDEXLOOK
+    if (gSaveBlock2Ptr->optionsDexMode == POKEDEX_VISUAL_DARKMODE)
     {
         if (isSearchResults == TRUE)
             LoadPalette(gPokedexSearchResults_dark_Pal + 1, 1, 0xBE);
@@ -2428,6 +2429,7 @@ static void LoadPokedexBgPalette(bool8 isSearchResults)
     }
     else
     {
+#endif
         if (isSearchResults == TRUE)
             LoadPalette(gPokedexSearchResults_Pal + 1, 1, 0xBE);
         else if (!IsNationalPokedexEnabled())
@@ -2435,7 +2437,9 @@ static void LoadPokedexBgPalette(bool8 isSearchResults)
         else
             LoadPalette(gPokedexNational_Pal + 1, 1, 0xBE);
         LoadPalette(GetOverworldTextboxPalettePtr(), 0xF0, 32);
+#ifdef FEATURE_CHANGEDEXLOOK
     }
+#endif
 }
 
 static void FreeWindowAndBgBuffers(void)
@@ -4367,25 +4371,33 @@ static void Task_HandleCaughtMonPageInput(u8 taskId)
     // Flicker caught screen color
     else if (++gTasks[taskId].tPalTimer & 16)
     {
+#ifdef FEATURE_CHANGEDEXLOOK
         if(gSaveBlock2Ptr->optionsDexMode == TRUE)
         {
             LoadPalette(gPokedexDefault_dark_Pal + 1, 0x31, 14);
         }
         else
         {
+#endif
             LoadPalette(gPokedexDefault_Pal + 1, 0x31, 14);
+#ifdef FEATURE_CHANGEDEXLOOK
         }
+#endif
     }
     else
     {
-        if (gSaveBlock2Ptr->optionsDexMode == TRUE)
+#ifdef FEATURE_CHANGEDEXLOOK
+        if(gSaveBlock2Ptr->optionsDexMode == TRUE)
         {
             LoadPalette(gPokedexDefault_dark_Pal + 1, 0x31, 14);
         }
         else
         {
+#endif
             LoadPalette(gPokedexDefault_Pal + 1, 0x31, 14);
+#ifdef FEATURE_CHANGEDEXLOOK
         }
+#endif
     }
 }
 
@@ -5441,14 +5453,18 @@ static void Task_LoadSearchMenu(u8 taskId)
             else
                 CopyToBgTilemapBuffer(3, gPokedexScreenSearchNational_Tilemap, 0, 0);
 
+#ifdef FEATURE_CHANGEDEXLOOK
             if (gSaveBlock2Ptr->optionsDexMode == TRUE)
             {
                 LoadPalette(gPokedexMenuSearch_dark_Pal + 1, 1, 0x7E);
             }
             else
             {
+#endif
                 LoadPalette(gPokedexMenuSearch_Pal + 1, 1, 0x7E);
+#ifdef FEATURE_CHANGEDEXLOOK
             }
+#endif
             gMain.state = 1;
         }
         break;

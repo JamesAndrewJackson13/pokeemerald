@@ -1,6 +1,9 @@
 #ifndef GUARD_POKEDEX_H
 #define GUARD_POKEDEX_H
 
+#define POKEDEX_VISUAL_DARKMODE (TRUE)
+#define POKEDEX_VISUAL_LIGHTMODE (FALSE)
+
 extern u8 gUnusedPokedexU8;
 extern void (*gPokedexVBlankCB)(void);
 

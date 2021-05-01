@@ -301,6 +301,9 @@ extern const u8 gText_BattleSceneOn[];
 extern const u8 gText_BattleSceneOff[];
 extern const u8 gText_BattleStyleShift[];
 extern const u8 gText_BattleStyleSet[];
+#ifdef FEATURE_TOGGLEPOKEMONBATTLEANIMATIONS
+extern const u8 gText_PokeAnimation[];
+#endif
 extern const u8 gText_UnitSystemMetric[];   //tx_optionsPlus
 extern const u8 gText_UnitSystemImperial[]; //tx_optionsPlus
 extern const u8 gText_SoundMono[];
@@ -316,7 +319,9 @@ extern const u8 gText_Dark[];
 extern const u8 sText_HpBar[];
 extern const u8 sText_ExpBar[];
 extern const u8 sText_UnitSystem[];
-extern const u8 sText_DexType[];
+#ifdef FEATURE_CHANGEDEXLOOK
+extern const u8 gText_DexType[];
+#endif
 extern const u8 gText_Option[];
 extern const u8 gText_OptionMenu[];
 extern const u8 gText_TextSpeed[];

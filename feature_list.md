@@ -126,7 +126,7 @@ FEATURE LIST
 * Let Pokemon forget any move, such as HM moves
 * https://www.pokecommunity.com/showpost.php?p=10178662&postcount=110
 
-## Let Players Set the Pokedex's Look
+## Let Players Set the Pokedex's Look (FEATURE_CHANGEDEXLOOK)
 * You can change the look of the Pokedex; either Light or Dark mode.
 
 ## Hidden Power Type in Summary Screen (FEATURE_HIDDENPOWERTYPEINSUMMARYSCREEN)

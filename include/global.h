@@ -514,12 +514,24 @@ struct SaveBlock2
 #else
     /*0x16*/ u16 filler_16_6 : 1;
 #endif
-#ifdef FEATURE_MODERNEXPSHARE
+#ifdef FEATURE_CHANGEDEXLOOK
     /*0x16*/ u16 optionsDexMode : 1;
 #else
     /*0x16*/ u16 filler_16_7 : 1;
 #endif
-    /*0x17*/ u8 filler_17;
+#ifdef FEATURE_TOGGLEPOKEMONBATTLEANIMATIONS
+    /*0x17*/ u16 optionsPokeAnimations: 1;
+#else
+    /*0x17*/ u16 filler_17_0 : 1;
+#endif
+    /*0x17*/ u16 filler_17_0 : 1;
+    /*0x17*/ u16 filler_17_1 : 1;
+    /*0x17*/ u16 filler_17_2 : 1;
+    /*0x17*/ u16 filler_17_3 : 1;
+    /*0x17*/ u16 filler_17_4 : 1;
+    /*0x17*/ u16 filler_17_5 : 1;
+    /*0x17*/ u16 filler_17_6 : 1;
+    /*0x17*/ u16 filler_17_7 : 1;
     /*0x18*/ struct Pokedex pokedex;
     /*0x90*/ u8 filler_90[0x8];
     /*0x98*/ struct Time localTimeOffset;

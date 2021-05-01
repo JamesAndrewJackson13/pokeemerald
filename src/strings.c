@@ -1535,12 +1535,17 @@ const u8 gText_ButtonTypeNormal[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Normal")
 const u8 gText_ButtonTypeLR[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}LR");
 const u8 gText_ButtonTypeLEqualsA[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}L=A");
 const u8 gText_Instant[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Instant");
-const u8 gText_Light[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Light");
-const u8 gText_Dark[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Dark");
 const u8 sText_HpBar[] = _("HP Bar");
 const u8 sText_ExpBar[] = _("EXP Bar");
 const u8 sText_UnitSystem[] = _("Unit System");
-const u8 sText_DexType[] = _("Dex Visual");
+#ifdef FEATURE_TOGGLEPOKEMONBATTLEANIMATIONS
+const u8 gText_PokeAnimation[] = _("Battle Intros");
+#endif
+#ifdef FEATURE_CHANGEDEXLOOK
+const u8 gText_DexType[] = _("Dex Visual");
+const u8 gText_Light[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Light");
+const u8 gText_Dark[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Dark");
+#endif
 const u8 gText_NumPlayerLink[] = _("{STR_VAR_1}P LINK");
 const u8 gText_BronzeCard[] = _("Bronze");
 const u8 gText_CopperCard[] = _("Copper");
