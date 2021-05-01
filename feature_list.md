@@ -132,6 +132,9 @@ FEATURE LIST
 ## Hidden Power Type in Summary Screen (FEATURE_HIDDENPOWERTYPEINSUMMARYSCREEN)
 * Shows what type Hidden Power is on the Summary Screen
 
+## Pokemon Nickname via the Menu (FEATURE_NICKNAMEPOKEMONINMENU)
+* Lets you change a Pokemon's nickname via the menu
+
 
 # ITEMS
 ## Item Descriptions on Pick-Up

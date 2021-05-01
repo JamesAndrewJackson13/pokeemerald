@@ -3322,4 +3322,8 @@ extern const u8 gText_XsYWereSwapped[];
 extern const u8 gText_MenuPC[];
 #endif
 
+#ifdef FEATURE_NICKNAMEPOKEMONINMENU
+extern const u8 gText_Nickname[];
+#endif
+
 #endif // GUARD_STRINGS_H

@@ -2147,3 +2147,7 @@ const u8 gText_XsYWereSwapped[] = _("{STR_VAR_1}'s\l{STR_VAR_2} were swapped!{PA
 #ifdef FEATURE_PORTABLEPC
 const u8 gText_MenuPC[] = _("PC");
 #endif
+
+#ifdef FEATURE_NICKNAMEPOKEMONINMENU
+const u8 gText_Nickname[] = _("NICKNAME");
+#endif
