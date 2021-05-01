@@ -9526,4 +9526,9 @@ extern const u8 gMailTilemap_Retro[];
 extern const u8 gMonMarkingsMenu_Gfx[];
 extern const u16 gMonMarkingsMenu_Pal[];
 
+#ifdef FEATURE_OLDCABLE
+extern const u32 gItemIcon_MysteriousCable[];
+extern const u32 gItemIconPalette_MysteriousCable[];
+#endif
+
 #endif //GUARD_GRAPHICS_H

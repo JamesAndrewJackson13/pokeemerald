@@ -42,5 +42,8 @@ void Task_UseDigEscapeRopeOnField(u8 taskId);
 u8 CanUseDigOrEscapeRopeOnCurMap(void);
 u8 CheckIfItemIsTMHMOrEvolutionStone(u16 itemId);
 void ItemUseOutOfBattle_Mints(u8 taskId);
+#ifdef FEATURE_OLDCABLE
+void ItemUseOutOfBattle_OldCable(u8 taskId);
+#endif
 
 #endif // GUARD_ITEM_USE_H

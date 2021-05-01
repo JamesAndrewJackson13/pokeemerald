@@ -1210,4 +1210,13 @@ void ItemUseOutOfBattle_Mints(u8 taskId)
     SetUpItemUseCallback(taskId);
 }
 
+
+#ifdef FEATURE_OLDCABLE
+void ItemUseOutOfBattle_OldCable(u8 taskId)
+{
+    gItemUseCB = ItemUseCB_MysteriousCable;
+    SetUpItemUseCallback(taskId);
+}
+#endif
+
 #undef tUsingRegisteredKeyItem

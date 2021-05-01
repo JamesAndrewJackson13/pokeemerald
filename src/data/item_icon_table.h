@@ -650,6 +650,10 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_TAPUNIUM_Z] = {gItemIcon_TapuniumZ, gItemIconPalette_TapuniumZ},
     [ITEM_ULTRANECROZIUM_Z] = {gItemIcon_UltranecroziumZ, gItemIconPalette_UltranecroziumZ},
 
+#ifdef FEATURE_OLDCABLE
+    [ITEM_OLD_CABLE] = { gItemIcon_MysteriousCable, gItemIconPalette_MysteriousCable },
+#endif
+
     // Icon to represent the running/walking shoes
     [ITEM_RUNNINGSHOES_RUNNING] = { gItemIcon_Runningshoes_Running, gItemIconPalette_Runningshoes_Running },
     [ITEM_RUNNINGSHOES_WALKING] = { gItemIcon_Runningshoes_Walking, gItemIconPalette_Runningshoes_Walking },

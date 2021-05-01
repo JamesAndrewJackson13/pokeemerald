@@ -6418,24 +6418,41 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 mode, u16 evolutionItem, u
         break;
     case EVO_MODE_ITEM_USE:
     case EVO_MODE_ITEM_CHECK:
-        for (i = 0; i < EVOS_PER_MON; i++)
+#ifdef FEATURE_OLDCABLE
+        if (evolutionItem == ITEM_OLD_CABLE)
         {
-            switch (gEvolutionTable[species][i].method)
+            for (i = 0; i < EVOS_PER_MON; i++)
             {
-            case EVO_ITEM:
-                if (gEvolutionTable[species][i].param == evolutionItem)
-                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
-                break;
-            case EVO_ITEM_FEMALE:
-                if (GetMonGender(mon) == MON_FEMALE && gEvolutionTable[species][i].param == evolutionItem)
-                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
-                break;
-            case EVO_ITEM_MALE:
-                if (GetMonGender(mon) == MON_MALE && gEvolutionTable[species][i].param == evolutionItem)
-                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
-                break;
+                if (gEvolutionTable[species][i].method == EVO_TRADE
+                    || gEvolutionTable[species][i].method == EVO_TRADE_SPECIFIC_MON
+                    || gEvolutionTable[species][i].method == EVO_TRADE_ITEM && gEvolutionTable[species][i].param == heldItem)
+                        targetSpecies = gEvolutionTable[species][i].targetSpecies;
             }
         }
+        else
+        {
+#endif
+            for (i = 0; i < EVOS_PER_MON; i++)
+            {
+                switch (gEvolutionTable[species][i].method)
+                {
+                case EVO_ITEM:
+                    if (gEvolutionTable[species][i].param == evolutionItem)
+                        targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                    break;
+                case EVO_ITEM_FEMALE:
+                    if (GetMonGender(mon) == MON_FEMALE && gEvolutionTable[species][i].param == evolutionItem)
+                        targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                    break;
+                case EVO_ITEM_MALE:
+                    if (GetMonGender(mon) == MON_MALE && gEvolutionTable[species][i].param == evolutionItem)
+                        targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                    break;
+                }
+            }
+#ifdef FEATURE_OLDCABLE
+        }
+#endif
         break;
     }
 

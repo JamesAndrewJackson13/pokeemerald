@@ -5373,6 +5373,30 @@ void ItemUseCB_EvolutionStone(u8 taskId, TaskFunc task)
     }
 }
 
+#ifdef FEATURE_OLDCABLE
+void ItemUseCB_MysteriousCable(u8 taskId, TaskFunc task)
+{
+    PlaySE(SE_SELECT);
+    gCB2_AfterEvolution = gPartyMenu.exitCallback;
+    u8 partyIndex = gPartyMenu.slotId;
+    struct Pokemon* mon = &gPlayerParty[partyIndex];
+    u16 targetSpecies = GetEvolutionTargetSpecies(mon, EVO_MODE_ITEM_USE, gSpecialVar_ItemId, SPECIES_NONE);
+
+    if (targetSpecies == SPECIES_NONE)
+    {
+        gPartyMenuUseExitCallback = FALSE;
+        DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
+        ScheduleBgCopyTilemapToVram(2);
+        gTasks[taskId].func = task;
+    }
+    else
+    {
+        BeginEvolutionScene(mon, targetSpecies, FALSE, partyIndex);
+        FreePartyPointers();
+    }
+}
+#endif
+
 u8 GetItemEffectType(u16 item)
 {
     const u8* itemEffect;

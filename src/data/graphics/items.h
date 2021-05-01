@@ -1638,6 +1638,11 @@ const u32 gItemIconPalette_TapuniumZ[] = INCBIN_U32("graphics/items/icon_palette
 const u32 gItemIcon_UltranecroziumZ[] = INCBIN_U32("graphics/items/icons/ultranecrozium_z.4bpp.lz");
 const u32 gItemIconPalette_UltranecroziumZ[] = INCBIN_U32("graphics/items/icon_palettes/ultranecrozium_z.gbapal.lz");
 
+#ifdef FEATURE_OLDCABLE
+const u32 gItemIcon_MysteriousCable[] = INCBIN_U32("graphics/items/icons/mysterious_cable.4bpp.lz");
+const u32 gItemIconPalette_MysteriousCable[] = INCBIN_U32("graphics/items/icon_palettes/mysterious_cable.gbapal.lz");
+#endif
+
 // Running shoe items
 const u32 gItemIcon_Runningshoes_Running[] = INCBIN_U32("graphics/items/icons/runningshoes_running.4bpp.lz");
 const u32 gItemIconPalette_Runningshoes_Running[] = INCBIN_U32("graphics/items/icon_palettes/runningshoes_running.gbapal.lz");

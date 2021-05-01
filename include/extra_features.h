@@ -52,7 +52,6 @@
 #define FEATURE_NOOVERWRITEWARNING  // Don't prompt the user with `There is already a save file` confirmation screen when saving
 #define FEATURE_FORGETANYMOVE  // Let Pokemon forget any move, such as HM moves
 #define FEATURE_HIDDENPOWERTYPEINSUMMARYSCREEN  // Shows what type Hidden Power is on the Summary Screen
-#define FEATURE_CHECKASHCOLLECTED  // Checking how much ash you collected with the Soot Sack
 #define FEATURE_MOVEITEMBETWEENPOKEMON  // Move a held item between two Pokemon without needing to put things back in the bag
 #define FEATURE_PORTABLEPC  // Allow use of the PC from AAAAAAAAAAANYWHERE (via the main menu)
 
@@ -62,6 +61,8 @@
 #define FEATURE_DONTCONSUMETMS  // Treat TMs the way future games will; basically as HMs
 #define FEATURE_MODERNEVERSTONEBREEDING  // Updates the way nature passing works when pokemon hold an everstone
 #define FEATURE_EXTRAPREMIERBALLS  // LGPE-style Premier Ball giveaway; buying n*10 balls will get you n free premier balls
+#define FEATURE_CHECKASHCOLLECTED  // Checking how much ash you collected with the Soot Sack
+#define FEATURE_OLDCABLE  // An item to replace all trade based evolutions
 
 // BATTLE FEATURES - Mods to battles
 #define FEATURE_SNOWCAUSESHAIL  // Allow areas with snow to cause hail
@@ -83,7 +84,7 @@
 
 // BIKE RELATED - I want to ride my bike
 #define FEATURE_SWAPBIKEBUTTON  // Makes the bike work like G4, letting you swap modes via the menu
-#define EXM_PLAYER_ON_BIKE gPlayerAvatar.flags & (PLAYER_AVATAR_FLAG_MACH_BIKE | PLAYER_AVATAR_FLAG_ACRO_BIKE)  // Macro that does the check for the bike
+#define EXM_PLAYER_ON_BIKE (gPlayerAvatar.flags & (PLAYER_AVATAR_FLAG_MACH_BIKE | PLAYER_AVATAR_FLAG_ACRO_BIKE))  // Macro that does the check for the bike
 
 // SHINY RELATED - Make shiny pokemon work differently
 #define FEATURE_ALLOWSHINYREROLLS  // The critical feature; this allows for other features to do "shiny" re-rolling. Without this, the other features in this section wont work

@@ -7971,4 +7971,17 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_TIMID,
     },
+#ifdef FEATURE_OLDCABLE
+    [ITEM_OLD_CABLE] =
+    {
+        .name = _("Old Cable"),
+        .itemId = ITEM_OLD_CABLE,
+        .price = 0,
+        .description = sOldCableDesc,
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_OldCable,
+    },
+#endif
 };

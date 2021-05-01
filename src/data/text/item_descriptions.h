@@ -3118,3 +3118,10 @@ static const u8 sTimidMintDesc[] = _(
     "Changes the nature\n"
     "of a Pokémon to\n"
     "Timid");
+
+#ifdef FEATURE_OLDCABLE
+static const u8 sOldCableDesc[] = _(
+    "A forgotten cable\n"
+    "that evolves some\n"
+    "Pokémon. Obsolete.\n");
+#endif

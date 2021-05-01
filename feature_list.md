@@ -159,6 +159,9 @@ FEATURE LIST
 ## Check How Much Ash Collected (FEATURE_CHECKASHCOLLECTED)
 * Checking how much ash you collected with the Soot Sack
 
+## Mysterious Cable (FEATURE_OLDCABLE)
+* An item to replace all trade based evolutions
+* Doesn't replace them; just lets you also use this item instead
 
 # BATTLE
 ## Make Field Snow Cause Hail (FEATURE_SNOWCAUSESHAIL)

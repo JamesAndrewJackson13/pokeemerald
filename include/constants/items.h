@@ -728,11 +728,14 @@
 #define ITEM_SERIOUS_MINT             623
 #define ITEM_TIMID_MINT               624
 
+#ifdef FEATURE_OLDCABLE
+#define ITEM_OLD_CABLE         625
+#endif
 
-#define ITEM_RUNNINGSHOES_RUNNING     625
-#define ITEM_RUNNINGSHOES_WALKING     626
+#define ITEM_RUNNINGSHOES_RUNNING     626
+#define ITEM_RUNNINGSHOES_WALKING     627
 
-#define ITEMS_COUNT                   627
+#define ITEMS_COUNT                   628
 #define ITEM_FIELD_ARROW ITEMS_COUNT
 
 // Range of berries given out by various NPCS
