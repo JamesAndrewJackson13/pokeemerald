@@ -213,6 +213,7 @@ FEATURE LIST
 
 ## Indoor Running (FEATURE_INDOORRUN)
 * Allow running while indoors
+* https://www.pokecommunity.com/showpost.php?p=9990848&postcount=14
 
 ## Faster Surfing (FEATURE_FASTSURFING)
 * Allow players to "run" while swimming, to go at mach bike speed

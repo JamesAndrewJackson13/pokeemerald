@@ -1060,8 +1060,12 @@ void Bike_HandleBumpySlopeJump(void)
 
 bool32 IsRunningDisallowed(u8 metatile)
 {
+    #ifdef FEATURE_INDOORRUN
+    if (IsRunningDisallowedByMetatile(metatile) == TRUE)
+    #else
     if (!(gMapHeader.flags & MAP_ALLOW_RUNNING) || IsRunningDisallowedByMetatile(metatile) == TRUE)
-        return TRUE;
+    #endif
+    return TRUE;
     else
         return FALSE;
 }
