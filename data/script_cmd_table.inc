@@ -239,6 +239,7 @@ gScriptCmdTable:: @ 81DB67C
     .4byte ScrCmd_countpartymon             @ 0xeb
     .4byte ScrCmd_checkpartymon             @ 0xec
     .4byte ScrCmd_firstinpartymon           @ 0xed
+    .4byte ScrCmd_ispartymonatindexoftype   @ 0xee
 #endif
 
 gScriptCmdTableEnd:: @ 81DBA08

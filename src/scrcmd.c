@@ -1580,6 +1580,8 @@ bool8 ScrCmd_bufferpartymonnick(struct ScriptContext *ctx)
 
     GetMonData(&gPlayerParty[partyIndex], MON_DATA_NICKNAME, sScriptStringVars[stringVarIndex]);
     StringGetEnd10(sScriptStringVars[stringVarIndex]);
+    // mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_bufferpartymonnick | stringVarIndex: %d | partyIndex: %d | sScriptStringVars[stringVarIndex] %s", stringVarIndex, partyIndex, ConvertToAscii(sScriptStringVars[stringVarIndex]));
+
     return FALSE;
 }
 
@@ -2432,22 +2434,43 @@ bool8 ScrCmd_questmenu(struct ScriptContext* ctx)
 
 #ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
 
+bool8 isPokemonInPartyOfType(u8 partyIndex, u16 speciesToFind, bool8 normalizeForms)
+{
+    u16 curSpecies1, curSpecies2;
+    struct Pokemon* pokemon = &gPlayerParty[partyIndex];
+    if (GetMonData(pokemon, MON_DATA_SANITY_HAS_SPECIES) && !GetMonData(pokemon, MON_DATA_IS_EGG))
+    {
+        curSpecies1 = GetMonData(pokemon, MON_DATA_SPECIES, NULL);
+        if (normalizeForms == TRUE)
+            curSpecies2 = SpeciesToNationalPokedexNum(curSpecies1);
+        else
+            curSpecies2 = curSpecies1;
+        // mgba_printf(MGBA_LOG_DEBUG, "isPokemonInPartyOfType | partyIndex: %d | toFind: %s | curSpecies (base): %s | curSpecies (checked): %s | result: %s",
+                                                              partyIndex,
+                                                                                 ConvertToAscii(gSpeciesNames[speciesToFind]),
+                                                                                            ConvertToAscii(gSpeciesNames[curSpecies1]),
+                                                                                                                     ConvertToAscii(gSpeciesNames[curSpecies2]),
+                                                                                                                                                curSpecies2 == speciesToFind ? "TRUE" : "FALSE");
+
+        if (curSpecies2 == speciesToFind)
+            return TRUE;
+    }
+    return FALSE;
+}
+
 u16 findFirstInstancesOfPokemonInParty(u16 speciesToFind, bool8 normalizeForms)
 {
     u8 i;
     u16 curSpecies;
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        struct Pokemon* pokemon = &gPlayerParty[i];
-        if (GetMonData(pokemon, MON_DATA_SANITY_HAS_SPECIES) && !GetMonData(pokemon, MON_DATA_IS_EGG))
+        if (isPokemonInPartyOfType(i, speciesToFind, normalizeForms))
         {
-            curSpecies = GetMonData(pokemon, MON_DATA_SPECIES, NULL);
-            if (normalizeForms == TRUE)
-                curSpecies = SpeciesToNationalPokedexNum(speciesToFind);
-            if (curSpecies == speciesToFind)
-                return i;
+            // mgba_printf(MGBA_LOG_DEBUG, "findFirstInstancesOfPokemonInParty | %d | %s", i, ConvertToAscii(gSpeciesNames[speciesToFind]));
+            return i;
         }
     }
+    // mgba_printf(MGBA_LOG_DEBUG, "findFirstInstancesOfPokemonInParty | %d | %s", PARTY_SIZE, ConvertToAscii(gSpeciesNames[speciesToFind]));
     return PARTY_SIZE;
 }
 
@@ -2457,28 +2480,23 @@ u16 countInstancesOfPokemonInParty(u16 speciesToFind, bool8 normalizeForms)
     u16 curSpecies;
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        struct Pokemon* pokemon = &gPlayerParty[i];
-        if (GetMonData(pokemon, MON_DATA_SANITY_HAS_SPECIES) && !GetMonData(pokemon, MON_DATA_IS_EGG))
-        {
-            curSpecies = GetMonData(pokemon, MON_DATA_SPECIES, NULL);
-            if (normalizeForms == TRUE)
-                curSpecies = SpeciesToNationalPokedexNum(speciesToFind);
-            if (curSpecies == speciesToFind)
-                count++;
-        }
+        if (isPokemonInPartyOfType(i, speciesToFind, normalizeForms))
+            ++count;
     }
+    // mgba_printf(MGBA_LOG_DEBUG, "countInstancesOfPokemonInParty | %d | %s", count, ConvertToAscii(gSpeciesNames[speciesToFind]));
+
     return count;
 }
 
 bool8 ScrCmd_countpartymon(struct ScriptContext* ctx)
 {
     u16 speciesToFind = VarGet(ScriptReadHalfword(ctx));
-    bool8 normalizeForms = VarGet(ScriptReadHalfword(ctx));
+    bool8 normalizeForms = VarGet(ScriptReadByte(ctx));
     if (normalizeForms == TRUE)
         speciesToFind = SpeciesToNationalPokedexNum(speciesToFind);
 
     gSpecialVar_Result = countInstancesOfPokemonInParty(speciesToFind, normalizeForms);
-    mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_countpartymon | %s | %s | %d | %s", ConvertToAscii(gSpeciesNames[speciesToFind]), normalizeForms == TRUE ? "TRUE" : "FALSE", gSpecialVar_Result);
+    // mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_countpartymon | %s | %s | %d | %s", ConvertToAscii(gSpeciesNames[speciesToFind]), normalizeForms == TRUE ? "TRUE" : "FALSE", gSpecialVar_Result);
 
     return FALSE;
 }
@@ -2486,26 +2504,40 @@ bool8 ScrCmd_countpartymon(struct ScriptContext* ctx)
 bool8 ScrCmd_checkpartymon(struct ScriptContext* ctx)
 {
     u16 speciesToFind = VarGet(ScriptReadHalfword(ctx));
-    bool8 normalizeForms = VarGet(ScriptReadHalfword(ctx));
+    bool8 normalizeForms = VarGet(ScriptReadByte(ctx));
     if (normalizeForms == TRUE)
         speciesToFind = SpeciesToNationalPokedexNum(speciesToFind);
     if (findFirstInstancesOfPokemonInParty(speciesToFind, normalizeForms) < PARTY_SIZE)
         gSpecialVar_Result = TRUE;
     else
         gSpecialVar_Result = FALSE;
-    mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_checkpartymon | %s | %s | %d | %s", ConvertToAscii(gSpeciesNames[speciesToFind]), normalizeForms == TRUE ? "TRUE" : "FALSE", findFirstInstancesOfPokemonInParty(speciesToFind, normalizeForms), gSpecialVar_Result == TRUE ? "TRUE" : "FALSE");
+    // mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_checkpartymon | %s | %s | %d | %s", ConvertToAscii(gSpeciesNames[speciesToFind]), normalizeForms == TRUE ? "TRUE" : "FALSE", findFirstInstancesOfPokemonInParty(speciesToFind, normalizeForms), gSpecialVar_Result == TRUE ? "TRUE" : "FALSE");
     return FALSE;
 }
 
 bool8 ScrCmd_firstinpartymon(struct ScriptContext* ctx)
 {
     u16 speciesToFind = VarGet(ScriptReadHalfword(ctx));
-    bool8 normalizeForms = VarGet(ScriptReadHalfword(ctx));
+    bool8 normalizeForms = VarGet(ScriptReadByte(ctx));
     if (normalizeForms == TRUE)
         speciesToFind = SpeciesToNationalPokedexNum(speciesToFind);
 
     gSpecialVar_Result = findFirstInstancesOfPokemonInParty(speciesToFind, normalizeForms);
-    mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_firstinpartymon | %s | %s | %d | %s", ConvertToAscii(gSpeciesNames[speciesToFind]), normalizeForms == TRUE ? "TRUE" : "FALSE", gSpecialVar_Result);
+    // mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_firstinpartymon | %s | %s | %d", ConvertToAscii(gSpeciesNames[speciesToFind]), normalizeForms == TRUE ? "TRUE" : "FALSE", gSpecialVar_Result);
+
+    return FALSE;
+}
+
+bool8 ScrCmd_ispartymonatindexoftype(struct ScriptContext* ctx)
+{
+    u16 partyIndex = VarGet(ScriptReadHalfword(ctx));
+    u16 speciesToFind = VarGet(ScriptReadHalfword(ctx));
+    bool8 normalizeForms = VarGet(ScriptReadByte(ctx));
+    if (normalizeForms == TRUE)
+        speciesToFind = SpeciesToNationalPokedexNum(speciesToFind);
+
+    gSpecialVar_Result = isPokemonInPartyOfType(partyIndex, speciesToFind, normalizeForms);
+    // mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_ispartymonatindexoftype | %d | %s | %s | %s", partyIndex, ConvertToAscii(gSpeciesNames[speciesToFind]), normalizeForms == TRUE ? "TRUE" : "FALSE", gSpecialVar_Result == TRUE ? "TRUE" : "FALSE");
 
     return FALSE;
 }

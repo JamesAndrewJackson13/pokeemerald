@@ -783,6 +783,16 @@ const struct MenuAction MultichoiceList_RotomAppliances[] =
 };
 #endif
 
+#ifdef FEATURE_DEOXYSCHANGEFORM
+const struct MenuAction MultichoiceList_DeoxysForms[] =
+{
+    {gText_DeoxysNormalForm},
+    {gText_DeoxysAttackForm},
+    {gText_DeoxysDefenseForm},
+    {gText_DeoxysSpeedForm},
+};
+#endif
+
 static const struct MenuAction MultichoiceList_Exit[] =
 {
     {gText_Exit},
@@ -912,6 +922,9 @@ static const struct MultichoiceListStruct sMultichoiceLists[] =
     [MULTI_TAG_MATCH_TYPE]             = MULTICHOICE(MultichoiceList_TagMatchType),
 #ifdef FEATURE_ROTOMCHANGEFORM
     [MULTI_ROTOM_APPLIANCES]           = MULTICHOICE(MultichoiceList_RotomAppliances),
+#endif
+#ifdef FEATURE_DEOXYSCHANGEFORM
+    [MULTI_DEOXYS_FORMS]               = MULTICHOICE(MultichoiceList_DeoxysForms),
 #endif
 };
 

@@ -3315,6 +3315,14 @@ extern const u8 gText_Lawnmower[];
 extern const u8 gText_Recall[];
 #endif
 
+#ifdef FEATURE_DEOXYSCHANGEFORM
+// Deoxys change form
+extern const u8 gText_DeoxysNormalForm[];
+extern const u8 gText_DeoxysAttackForm[];
+extern const u8 gText_DeoxysDefenseForm[];
+extern const u8 gText_DeoxysSpeedForm[];
+#endif
+
 #ifdef FEATURE_MOVEITEMBETWEENPOKEMON
 // Moving items between pokemon
 extern const u8 gMenuText_Move[];

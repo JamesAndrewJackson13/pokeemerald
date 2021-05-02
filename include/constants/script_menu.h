@@ -125,6 +125,9 @@
 #ifdef FEATURE_ROTOMCHANGEFORM
 #define MULTI_ROTOM_APPLIANCES             114
 #endif
+#ifdef FEATURE_DEOXYSCHANGEFORM
+#define MULTI_DEOXYS_FORMS                 115
+#endif
 
 // Lilycove SS Tidal Multichoice Selections
 #define SSTIDAL_SELECTION_SLATEPORT        0

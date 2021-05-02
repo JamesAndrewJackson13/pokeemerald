@@ -42,6 +42,7 @@
 #define FEATURE_STAIRWARPS  // Re-adds the FR/LG style stairs that warp you to new maps
 #ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
 #define FEATURE_ROTOMCHANGEFORM  // Allows for Rotom's form to be changed via a box in Birch's Lab (Depends on FEATURE_CHECKFORPOKEMONSPECIESSCRIPT)
+#define FEATURE_DEOXYSCHANGEFORM  // Allows for Deoxys' form to be changed in the field as per future games in the series
 #endif
 #define FEATURE_SETMONEYCAP (7)  // Mo' money, mo' problems (Set to the number of digits you want the cap to be at)
 #define FEATURE_MAXMONEY (9999999)  // Mo' money, mo' problems (Set to the max amount of cash you want the cap to be at)

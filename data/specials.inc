@@ -542,3 +542,6 @@ gSpecials:: @ 81DBA64
 	def_special TeachRotomMove
 	def_special IsSelectedMonRotom
 	def_special RotomSpecialMoveHandler
+#ifdef FEATURE_DEOXYSCHANGEFORM
+	def_special TryChangeDeoxysForm
+#endif

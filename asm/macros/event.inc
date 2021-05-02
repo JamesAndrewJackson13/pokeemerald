@@ -1686,21 +1686,29 @@
     .macro countpartymon species:req normalizeForms=FALSE
     .byte 0xeb
     .2byte \species
-    .2byte \normalizeForms
+    .byte \normalizeForms
     .endm
 
     @ Checks to see if the player has a Pokemon in their party. Result returns to VAR_RESULT
     .macro checkpartymon species:req normalizeForms=FALSE
     .byte 0xec
     .2byte \species
-    .2byte \normalizeForms
+    .byte \normalizeForms
     .endm
 
     @ Finds the first index of a pokemon in the player's party, or returns the PARTY_SIZE. Result returns to VAR_RESULT
     .macro firstinpartymon species:req normalizeForms=FALSE
     .byte 0xed
     .2byte \species
-    .2byte \normalizeForms
+    .byte \normalizeForms
+    .endm
+
+    @ Finds the first index of a pokemon in the player's party, or returns the PARTY_SIZE. Result returns to VAR_RESULT
+    .macro ispartymonatindexoftype partyIndex:req species:req normalizeForms=FALSE
+    .byte 0xee
+    .2byte \partyIndex
+    .2byte \species
+    .byte \normalizeForms
     .endm
 #endif
 

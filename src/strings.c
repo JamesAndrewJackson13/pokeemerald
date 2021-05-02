@@ -2141,6 +2141,14 @@ const u8 gText_Lawnmower[] = _("Lawnmower");
 const u8 gText_Recall[] = _("Recall");
 #endif
 
+#ifdef FEATURE_DEOXYSCHANGEFORM
+// Deoxys change form
+const u8 gText_DeoxysNormalForm[] = _("Normal Form");
+const u8 gText_DeoxysAttackForm[] = _("Attack Form");
+const u8 gText_DeoxysDefenseForm[] = _("Defense Form");
+const u8 gText_DeoxysSpeedForm[] = _("Speed Form");
+#endif
+
 #ifdef FEATURE_MOVEITEMBETWEENPOKEMON
 // Moving items between pokemon
 const u8 gMenuText_Move[] = _("MOVE");

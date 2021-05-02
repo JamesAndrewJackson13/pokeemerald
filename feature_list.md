@@ -110,6 +110,10 @@ FEATURE LIST
 * Set `FEATURE_MAXMONEY` to the literal money cap
 * Make sure the two aggree or else shit'll get weird
 
+## Allow Rotom to Change Form at Professor Cozmo's House (FEATURE_DEOXYSCHANGEFORM)
+* Allows for Deoxys' form to be changed in the field as per future games in the series
+* https://www.pokecommunity.com/showpost.php?p=10259063&postcount=197
+
 
 # MENUS
 ## Remove the Contest Tab (FEATURE_REMOVECONTESTTAB)

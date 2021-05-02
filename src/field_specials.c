@@ -67,6 +67,9 @@
 #include "constants/weather.h"
 #include "constants/metatile_labels.h"
 #include "palette.h"
+#ifdef FEATURE_DEOXYSCHANGEFORM
+#include "constants/metatile_behaviors.h"
+#endif
 #ifdef FEATURE_MGBAPRINT
 #include "mgba.h"
 #include "../gflib/string_util.h"
@@ -4512,7 +4515,7 @@ bool8 RotomSpecialMoveHandler(void)
 
     if (foundSpecialMove)
     {
-        mgba_printf(MGBA_LOG_DEBUG, "foundSpecialMove == TRUE");
+        // mgba_printf(MGBA_LOG_DEBUG, "foundSpecialMove == TRUE");
         RemoveMonPPBonus(mon, i);
         // We reuse oldSpecialMove to temp-hold "MOVE_NONE" so we can clear out the previous special move
         oldSpecialMove = MOVE_NONE;
@@ -4528,18 +4531,18 @@ bool8 RotomSpecialMoveHandler(void)
     }
     else if (replaceSpecialMove)
     {
-        mgba_printf(MGBA_LOG_DEBUG, "foundSpecialMove == FALSE, replaceSpecialMove == TRUE");
+        // mgba_printf(MGBA_LOG_DEBUG, "foundSpecialMove == FALSE, replaceSpecialMove == TRUE");
         moveResult = GiveMoveToMon(mon, newSpecialMove);
         // If we couldn't add the move, we need to let the player have a chance to forget a move for it
         if (moveResult == MON_HAS_MAX_MOVES)
         {
-            mgba_printf(MGBA_LOG_DEBUG, "moveResult == MON_HAS_MAX_MOVES");
+            // mgba_printf(MGBA_LOG_DEBUG, "moveResult == MON_HAS_MAX_MOVES");
             gSpecialVar_0x8006 = newSpecialMove;
-            mgba_printf(MGBA_LOG_DEBUG, "PLAYER NEEDS TO PICK MOVE TO REMOVE");
+            // mgba_printf(MGBA_LOG_DEBUG, "PLAYER NEEDS TO PICK MOVE TO REMOVE");
             return TRUE;
         }
     }
-    mgba_printf(MGBA_LOG_DEBUG, "PLAYER DOESNT NEED TO DO ANYTHING");
+    // mgba_printf(MGBA_LOG_DEBUG, "PLAYER DOESNT NEED TO DO ANYTHING");
     return FALSE;
 
 }
@@ -4590,4 +4593,57 @@ bool8 IsSelectedMonRotom(void)
 #undef ROTOM_FORM_FAN
 #undef ROTOM_FORM_MOW
 #undef NUM_ROTOM_FORMS
+
+#ifdef FEATURE_DEOXYSCHANGEFORM
+
+#define DEOXYS_FORM_NORMAL (0)
+#define DEOXYS_FORM_ATTACK (1)
+#define DEOXYS_FORM_DEFENSE (2)
+#define DEOXYS_FORM_SPEED (3)
+/**
+ *  Will change the Deoxys at the provided party index into the requested form, assuming it's not already that form
+ * @param gSpecialVar_0x8004 - The party index of the Deoxys to change forms
+ * @param gSpecialVar_0x8005 - The form to change into
+ * @return bool Did the Deoxys change forms? Should only be false if they were already the form requested.
+ *
+ *  @note This does not sanity check the value at 0x8004, it's expected you check that prior to calling this
+ **/
+bool16 TryChangeDeoxysForm(void)
+{
+#ifdef POKEMON_EXPANSION
+    u16 baseSpecies = GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPECIES);
+    u16 targetSpecies;
+    u8 isValidChange;
+    if (gSpecialVar_0x8005 == DEOXYS_FORM_NORMAL)
+    {
+        targetSpecies = SPECIES_DEOXYS;
+    }
+    else
+    {
+        // The other forms go in order, so we can just add the selection index minus one to the first form (which is attack)
+        targetSpecies = SPECIES_DEOXYS_ATTACK + gSpecialVar_0x8005 - 1;
+    }
+
+    isValidChange = (baseSpecies != targetSpecies);
+
+    if (isValidChange)
+    {
+        SetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPECIES, &targetSpecies);
+        CalculateMonStats(&gPlayerParty[gSpecialVar_0x8004]);
+    }
+
+    // mgba_printf(MGBA_LOG_DEBUG, "TryChangeDeoxysForm | gSpecialVar_0x8004: %d | gSpecialVar_0x8005: %d | baseSpecies: %s (%d) | targetSpecies: %s (%d) | isValidChange: %s",
+                                                       gSpecialVar_0x8004,      gSpecialVar_0x8005,      ConvertToAscii(gSpeciesNames[baseSpecies]),
+                                                                                                            baseSpecies,        ConvertToAscii(gSpeciesNames[targetSpecies]),
+                                                                                                                                    targetSpecies,       isValidChange ? "TRUE" : "FALSE");
+    return isValidChange;
+
+#endif
+}
+#undef DEOXYS_FORM_NORMAL
+#undef DEOXYS_FORM_ATTACK
+#undef DEOXYS_FORM_DEFENSE
+#undef DEOXYS_FORM_SPEED
+#endif
+
 #endif

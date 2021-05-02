@@ -1,0 +1,220 @@
+// NOTE: FLAG_TEMP_A hides the event_object tied to the Deoxys Meteorite
+
+// FILE CONSTS
+const DEOXYS_FORM_NORMAL = 0
+const DEOXYS_FORM_ATTACK = 1
+const DEOXYS_FORM_DEFENSE = 2
+const DEOXYS_FORM_SPEED = 3
+
+const METATILE_DISPLAYCASE_TOP = 0x35B
+const METATILE_DISPLAYCASE_BOT = 0x363
+
+mapscripts FallarborTown_CozmosHouse_MapScripts {
+    MAP_SCRIPT_ON_LOAD {
+        if(flag(FLAG_SHOW_METEORITE)) {
+            // When the flag is set, show the Deoxys Meteorite case
+            setmetatile(9, 4, METATILE_DISPLAYCASE_TOP, FALSE)
+            setmetatile(9, 5, METATILE_DISPLAYCASE_BOT, TRUE)
+        } else {
+            // When the flag is not set, hide the event_object that runs the Deoxys change form script
+            setflag(FLAG_TEMP_A)
+        }
+    }
+
+    MAP_SCRIPT_ON_TRANSITION {
+        // Whenever we have TM27, we've given the meteorite up. Therefore, set the flag to show the meteorite from now on in the house
+        if(flag(FLAG_RECEIVED_TM27)) {
+            setflag(FLAG_SHOW_METEORITE)
+        }
+    }
+}
+
+script FallarborTown_CozmosHouse_EventScript_ProfCozmo {
+    lock
+    faceplayer
+    if(flag(FLAG_RECEIVED_TM27)) {
+        msgbox("PROF. COZMO: Oh, I can't believe it.\n"
+               "This is really, really great!\p"
+               "This is really going to help my research!")
+    } else {
+        checkitem(ITEM_METEORITE, 1)
+        if(var(VAR_RESULT)) {
+            goto(FallarborTown_CozmosHouse_EventScript_PlayerHasMeteorite)
+        } else {
+            goto(FallarborTown_CozmosHouse_Text_MeteoriteWillNeverBeMineNow)
+        }
+    }
+    release
+    end
+}
+
+script FallarborTown_CozmosHouse_Text_MeteoriteWillNeverBeMineNow {
+    msgbox("PROF. COZMO: Oh…\n"
+           "I never should have let myself be\l"
+           "conned into telling TEAM MAGMA where\l"
+           "you can find METEORITES…\p"
+           "That METEORITE from METEOR FALLS…\n"
+           "It's never going to be mine now…")
+}
+
+script FallarborTown_CozmosHouse_Text_ReallyGoingToHelpMyResearch {
+    msgbox("PROF. COZMO: Oh, I can't believe it.\n"
+	       "This is really, really great!\p"
+	       "This is really going to help my research!")
+}
+
+
+script FallarborTown_CozmosHouse_EventScript_PlayerHasMeteorite {
+    if(flag(FLAG_TEMP_2)) {
+        msgbox("PROF. COZMO: Please, may I have that\n"
+               "METEORITE?\p"
+               "I'm not asking for it for free.\n"
+               "How about in exchange for this TM?", MSGBOX_YESNO)
+    } else {
+        goto(FallarborTown_CozmosHouse_Text_MeteoriteWillNeverBeMineNow)
+        msgbox("Oh!\n"
+               "Hah?\p"
+               "That item…\p"
+               "Could it be?\p"
+               "Is it the METEORITE that TEAM MAGMA\n"
+               "took from METEOR FALLS?\p"
+               "Please, may I have it?\p"
+               "I'm not asking for it for free.\n"
+               "How about in exchange for this TM?", MSGBOX_YESNO)
+    }
+    if(var(VAR_RESULT)) {
+        msgbox("PROF. COZMO: This TM, it represents\n"
+               "my feeling of gratitude.\l"
+               "Please use it!")
+        giveitem(ITEM_TM27)
+        if (!var(VAR_RESULT)) {
+            goto(Common_EventScript_ShowBagIsFull)
+        }
+        setvar(VAR_0x8004, ITEM_METEORITE)
+        call(Common_EventScript_PlayerHandedOverTheItem)
+        setflag(FLAG_RECEIVED_TM27)
+        goto(FallarborTown_CozmosHouse_Text_ReallyGoingToHelpMyResearch)
+    } else {
+        setflag(FLAG_TEMP_2)
+        msgbox("PROF. COZMO: Oh, but…\n"
+               "I'm crushed with disappointment…")
+    }
+
+}
+
+script FallarborTown_CozmosHouse_EventScript_CozmosWife {
+    lock
+    faceplayer
+    if (flag(FLAG_RECEIVED_TM27)) {
+        msgbox("Look at PROF. COZMO…\n"
+               "He's so happy! I think it's cute.")
+    } elif (flag(FLAG_DEFEATED_EVIL_TEAM_MT_CHIMNEY)) {
+        msgbox("Poor PROF. COZMO…\n"
+               "He's so depressed… I feel sorry for him")
+    } else {
+        msgbox("PROF. COZMO went off to METEOR FALLS\n"
+               "on ROUTE 114 with some people from\l"
+               "TEAM MAGMA.")
+    }
+    release
+    end
+}
+
+script FallarborTown_CozmosHouse_EventScript_Deoxys_ChangeForms {
+    lock
+    checkpartymon(SPECIES_DEOXYS, TRUE)
+    if (var(VAR_RESULT)) {
+        // There is a Deoxys in the party, offer the player the chance to change forms
+        countpartymon(SPECIES_DEOXYS, TRUE)
+        if (var(VAR_RESULT) == 1) {
+            // There's only one Deoxys, so we will auto-select them and ask
+            firstinpartymon(SPECIES_DEOXYS, TRUE)
+            copyvar(VAR_0x8004, VAR_RESULT)
+            msgbox(format("Deoxys is reacting to the meteorite...\p"
+                          "Would you like to bring the Deoxys in your party closer to the meteorite?"), MSGBOX_YESNO)
+            if(!var(VAR_RESULT)) {
+                // If no was picked, end early
+                release
+                end
+            }
+        } else {
+            // The player needs to select the Deoxys to change the form of
+            msgbox(format("Deoxys is reacting to the meteorite...\p"
+                          "Would you like to bring one of the Deoxys in your party closer to the meteorite?"), MSGBOX_YESNO)
+            if(!var(VAR_RESULT)) {
+                // If no was picked, end early
+                release
+                end
+            }
+            do {
+                // The player needs to pick which Deoxys will change form
+                special(ChoosePartyMon)
+                waitstate
+                if(var(VAR_0x8004) > PARTY_SIZE) {
+                    // If cancel was picked, end early
+                    release
+                    end
+                }
+                ispartymonatindexoftype(VAR_0x8004, SPECIES_DEOXYS, TRUE)
+                if(!var(VAR_RESULT)) {
+                    // invalid pokemon selected, show message and re-show select screen
+                    msgbox(format("Please select a Deoxys."))
+                }
+            } while(!var(VAR_RESULT))
+        }
+        bufferpartymonnick(0, VAR_0x8004)
+        // Let the player decide which form to change their Deoxys into
+        msgbox(format("Which form should {STR_VAR_1} take?"))
+        do {
+            multichoice(0,0,MULTI_DEOXYS_FORMS,0)
+            if(var(VAR_RESULT) == MULTI_B_PRESSED) {
+                // if menu is canceled, end early
+                release
+                end
+            }
+            copyvar(VAR_0x8005, VAR_RESULT)
+            specialvar(VAR_RESULT, TryChangeDeoxysForm)
+            if(!var(VAR_RESULT)) {
+                // Deoxys was already that form, show message and re-show form select
+                switch(var(VAR_0x8005)) {
+                    case DEOXYS_FORM_NORMAL:
+                        msgbox(format("{STR_VAR_1} is already in Normal form.\pSelect a new form.\p"))
+                        break
+                    case DEOXYS_FORM_ATTACK:
+                        msgbox(format("{STR_VAR_1} is already in Attack form.\pSelect a new form.\p"))
+                        break
+                    case DEOXYS_FORM_DEFENSE:
+                        msgbox(format("{STR_VAR_1} is already in Defense form.\pSelect a new form.\p"))
+                        break
+                    case DEOXYS_FORM_SPEED:
+                        msgbox(format("{STR_VAR_1} is already in Speed form.\pSelect a new form.\p"))
+                        break
+                }
+            }
+
+        } while(!var(VAR_RESULT))
+
+        playmoncry(SPECIES_DEOXYS, 0)
+        switch(var(VAR_0x8005)) {
+            case DEOXYS_FORM_NORMAL:
+                msgbox(format("{STR_VAR_1} shifted into Normal form."))
+                break
+            case DEOXYS_FORM_ATTACK:
+                msgbox(format("{STR_VAR_1} shifted into Attack form."))
+                break
+            case DEOXYS_FORM_DEFENSE:
+                msgbox(format("{STR_VAR_1} shifted into Defense form."))
+                break
+            case DEOXYS_FORM_SPEED:
+                msgbox(format("{STR_VAR_1} shifted into Speed form."))
+                break
+        }
+        waitmoncry
+        waitbuttonpress
+    } else {
+        // Say a generic phrase
+        msgbox(format("A strange meteorite shines inside the case."))
+    }
+    release
+    end
+}
