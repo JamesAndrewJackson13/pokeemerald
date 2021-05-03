@@ -150,6 +150,7 @@
 	.include "src/rayquaza_scene.o"
 	.include "src/dexnav.o"
 	.include "src/quests.o"
+	.include "src/mugshot.o"
 
 gSoundInfo:
     .space 0xFB0

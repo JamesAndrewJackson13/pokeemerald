@@ -2542,3 +2542,19 @@ bool8 ScrCmd_ispartymonatindexoftype(struct ScriptContext* ctx)
     return FALSE;
 }
 #endif
+
+#ifdef FEATURE_ADDLOCKTARGET
+bool8 ScrCmd_locktarget(struct ScriptContext* ctx)
+{
+    if (IsUpdateLinkStateCBActive())
+    {
+        return FALSE;
+    }
+    else
+    {
+        ScriptFreezeTargetObjectEvent();
+        SetupNativeScript(ctx, IsFreezePlayerFinished);
+        return TRUE;
+    }
+}
+#endif

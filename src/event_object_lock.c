@@ -199,6 +199,20 @@ bool8 IsFreezeObjectAndPlayerFinished(void)
     }
 }
 
+#ifdef FEATURE_ADDLOCKTARGET
+void ScriptFreezeTargetObjectEvent(void)
+{
+    u8 taskId;
+
+    taskId = CreateTask(Task_FreezeSelectedObjectAndPlayer, 80);
+    if (!gObjectEvents[gSelectedObjectEvent].singleMovementActive)
+    {
+        FreezeObjectEvent(&gObjectEvents[gSelectedObjectEvent]);
+        gTasks[taskId].tObjectFrozen = TRUE;
+    }
+}
+#endif
+
 #undef tPlayerFrozen
 #undef tObjectFrozen
 #undef tObjectId

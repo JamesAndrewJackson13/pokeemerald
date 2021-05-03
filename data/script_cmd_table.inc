@@ -241,6 +241,9 @@ gScriptCmdTable:: @ 81DB67C
     .4byte ScrCmd_firstinpartymon           @ 0xed
     .4byte ScrCmd_ispartymonatindexoftype   @ 0xee
 #endif
+#ifdef FEATURE_ADDLOCKTARGET
+    .4byte ScrCmd_locktarget                @ 0xef
+#endif
 
 gScriptCmdTableEnd:: @ 81DBA08
     .4byte ScrCmd_nop

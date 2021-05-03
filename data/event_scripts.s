@@ -53,7 +53,8 @@
 #include "constants/union_room.h"
 #include "constants/vars.h"
 #include "constants/weather.h"
-#include "constants/battle_transition.h" @ Allows for custom mugshots
+#include "constants/battle_transition.h"  @ Allows for custom mugshots
+#include "constants/mugshots.h"  @ Allows for mugshots during conversations
 
 #include "constants/quests.h"
     .include "asm/macros.inc"

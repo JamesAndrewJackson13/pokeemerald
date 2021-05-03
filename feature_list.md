@@ -83,6 +83,14 @@ FEATURE LIST
 * Allow use of the PC from AAAAAAAAAAANYWHERE (via the main menu)
 * https://www.pokecommunity.com/showpost.php?p=10127351&postcount=48
 
+## Add `locktarget` Script Command (FEATURE_ADDLOCKTARGET)
+* Adds a `locktarget` command that only locks the player down
+
+## Display Mugshots / Other Images in the Overworld
+* Lets you show pics when in the overworld. 
+* https://www.pokecommunity.com/showthread.php?p=10345947#post10345947
+
+
 # BASE GAME
 ## Alt Default Options (FEATURE_ALTDEFAULTOPTIONS)
 * Changes default settings
