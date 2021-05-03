@@ -87,8 +87,11 @@ FEATURE LIST
 * Adds a `locktarget` command that only locks the player down
 
 ## Display Mugshots / Other Images in the Overworld
-* Lets you show pics when in the overworld. 
+* Lets you show pics when in the overworld.
 * https://www.pokecommunity.com/showthread.php?p=10345947#post10345947
+
+## Enable the Reset RTC Feature (FEATURE_ENABLERESETTRC)
+* Enable the existing RTC Reset feature
 
 
 # BASE GAME
@@ -183,6 +186,7 @@ FEATURE LIST
 * An item to replace all trade based evolutions
 * Doesn't replace them; just lets you also use this item instead
 
+
 # BATTLE
 ## Make Field Snow Cause Hail (FEATURE_SNOWCAUSESHAIL)
 * Allow areas with snow to cause hail
@@ -213,6 +217,9 @@ FEATURE LIST
 
 ## Hidden Power Type Shown in Battle Screen (FEATUER_HIDDENPOWERTYPEINBATTLESCREEN)
 * Shows what type Hidden Power is on the battle screen
+
+## Weight AI Against Non-Effective Moves (FEATURE_WEIGHTAIAGAINSTNONEFFECTIVEMOVED)
+* Re-weights some of the AI logic so it is less ok with non-effective moves
 
 
 # MOVEMENT

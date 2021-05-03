@@ -34,6 +34,7 @@
 #define FEATURE_CHECKFORPOKEMONSPECIESSCRIPT  // Adds a new script command that will check if a particular pokemon species is in the party (by Vexio)
 #define FEATURE_REMOVEPOKEENCRYPTION  // Removes the encryption on pokemon data
 #define FEATURE_ADDLOCKTARGET  // Adds a `locktarget` command that only locks the player down
+#define FEATURE_ENABLERESETTRC  // Enable the existing RTC Reset feature
 
 // BASE GAME FEATURES - Tweaks to the general game
 #define FEATURE_ALTDEFAULTOPTIONS  // Changes default settings
@@ -81,6 +82,7 @@
 #define FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE  // Changes the color of the move's type to alert players if it's super / not very effective
 #define FEATUER_HIDDENPOWERTYPEINBATTLESCREEN  // Shows what type Hidden Power is on the battle screen
 #define FEATURE_TOGGLEPOKEMONBATTLEANIMATIONS  // Toggleable front/back sprite animations
+#define FEATURE_WEIGHTAIAGAINSTNONEFFECTIVEMOVED  // Re-weights some of the AI logic so it is less ok with non-effective moves
 
 // MOVEMENT FEATURES - Move your body freely
 #define FEATURE_INDOORRUN  // Allow running while indoors
