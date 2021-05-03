@@ -2446,11 +2446,11 @@ bool8 isPokemonInPartyOfType(u8 partyIndex, u16 speciesToFind, bool8 normalizeFo
         else
             curSpecies2 = curSpecies1;
         // mgba_printf(MGBA_LOG_DEBUG, "isPokemonInPartyOfType | partyIndex: %d | toFind: %s | curSpecies (base): %s | curSpecies (checked): %s | result: %s",
-                                                              partyIndex,
-                                                                                 ConvertToAscii(gSpeciesNames[speciesToFind]),
-                                                                                            ConvertToAscii(gSpeciesNames[curSpecies1]),
-                                                                                                                     ConvertToAscii(gSpeciesNames[curSpecies2]),
-                                                                                                                                                curSpecies2 == speciesToFind ? "TRUE" : "FALSE");
+                                                            //   partyIndex,
+                                                                                //  ConvertToAscii(gSpeciesNames[speciesToFind]),
+                                                                                            // ConvertToAscii(gSpeciesNames[curSpecies1]),
+                                                                                                                    //  ConvertToAscii(gSpeciesNames[curSpecies2]),
+                                                                                                                                                // curSpecies2 == speciesToFind ? "TRUE" : "FALSE");
 
         if (curSpecies2 == speciesToFind)
             return TRUE;

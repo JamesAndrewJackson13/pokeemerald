@@ -4633,9 +4633,9 @@ bool16 TryChangeDeoxysForm(void)
     }
 
     // mgba_printf(MGBA_LOG_DEBUG, "TryChangeDeoxysForm | gSpecialVar_0x8004: %d | gSpecialVar_0x8005: %d | baseSpecies: %s (%d) | targetSpecies: %s (%d) | isValidChange: %s",
-                                                       gSpecialVar_0x8004,      gSpecialVar_0x8005,      ConvertToAscii(gSpeciesNames[baseSpecies]),
-                                                                                                            baseSpecies,        ConvertToAscii(gSpeciesNames[targetSpecies]),
-                                                                                                                                    targetSpecies,       isValidChange ? "TRUE" : "FALSE");
+                                                    //    gSpecialVar_0x8004,      gSpecialVar_0x8005,      ConvertToAscii(gSpeciesNames[baseSpecies]),
+                                                                                                            // baseSpecies,        ConvertToAscii(gSpeciesNames[targetSpecies]),
+                                                                                                                                    // targetSpecies,       isValidChange ? "TRUE" : "FALSE");
     return isValidChange;
 
 #endif
