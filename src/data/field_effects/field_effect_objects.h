@@ -30,7 +30,11 @@ static const struct SpriteFrameImage sPicTable_ShadowExtraLarge[] = {
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowSmall = {
     .tileTag = 0xFFFF,
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    .paletteTag = OBJ_EVENT_PAL_TAG_BRENDAN,
+#else
     .paletteTag = 0xFFFF,
+#endif
     .oam = &gObjectEventBaseOam_8x8,
     .anims = sAnimTable_Shadow,
     .images = sPicTable_ShadowSmall,
@@ -40,7 +44,11 @@ const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowSmall = {
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowMedium = {
     .tileTag = 0xFFFF,
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    .paletteTag = OBJ_EVENT_PAL_TAG_BRENDAN,
+#else
     .paletteTag = 0xFFFF,
+#endif
     .oam = &gObjectEventBaseOam_16x8,
     .anims = sAnimTable_Shadow,
     .images = sPicTable_ShadowMedium,
@@ -50,7 +58,11 @@ const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowMedium = {
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowLarge = {
     .tileTag = 0xFFFF,
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    .paletteTag = OBJ_EVENT_PAL_TAG_BRENDAN,
+#else
     .paletteTag = 0xFFFF,
+#endif
     .oam = &gObjectEventBaseOam_32x8,
     .anims = sAnimTable_Shadow,
     .images = sPicTable_ShadowLarge,
@@ -60,7 +72,11 @@ const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowLarge = {
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowExtraLarge = {
     .tileTag = 0xFFFF,
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    .paletteTag = OBJ_EVENT_PAL_TAG_BRENDAN,
+#else
     .paletteTag = 0xFFFF,
+#endif
     .oam = &gObjectEventBaseOam_64x32,
     .anims = sAnimTable_Shadow,
     .images = sPicTable_ShadowExtraLarge,
@@ -267,7 +283,11 @@ static const union AnimCmd *const sAnimTable_Arrow[] =
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_Arrow = {
     .tileTag = 0xFFFF,
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    .paletteTag = OBJ_EVENT_PAL_TAG_BRENDAN,
+#else
     .paletteTag = 0xFFFF,
+#endif
     .oam = &gObjectEventBaseOam_16x16,
     .anims = sAnimTable_Arrow,
     .images = sPicTable_Arrow,
@@ -931,7 +951,11 @@ static const union AnimCmd *const sAnimTable_Sparkle[] =
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_Sparkle = {
     .tileTag = 0xFFFF,
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    .paletteTag = OBJ_EVENT_PAL_TAG_NPC_2,
+#else
     .paletteTag = 0xFFFF,
+#endif
     .oam = &gObjectEventBaseOam_16x16,
     .anims = sAnimTable_Sparkle,
     .images = sPicTable_Sparkle,
@@ -975,7 +999,11 @@ static const union AnimCmd *const sAnimTable_TreeDisguise[] =
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_TreeDisguise = {
     .tileTag = 0xFFFF,
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    .paletteTag = OBJ_EVENT_PAL_TAG_NPC_3,
+#else
     .paletteTag = 0xFFFF,
+#endif
     .oam = &gObjectEventBaseOam_16x32,
     .anims = sAnimTable_TreeDisguise,
     .images = sPicTable_TreeDisguise,
@@ -1019,7 +1047,11 @@ static const union AnimCmd *const sAnimTable_MountainDisguise[] =
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_MountainDisguise = {
     .tileTag = 0xFFFF,
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    .paletteTag = OBJ_EVENT_PAL_TAG_NPC_2,
+#else
     .paletteTag = 0xFFFF,
+#endif
     .oam = &gObjectEventBaseOam_16x32,
     .anims = sAnimTable_MountainDisguise,
     .images = sPicTable_MountainDisguise,
@@ -1039,7 +1071,11 @@ static const struct SpriteFrameImage sPicTable_SandDisguisePlaceholder[] = {
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_SandDisguisePlaceholder = {
     .tileTag = 0xFFFF,
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    .paletteTag = OBJ_EVENT_PAL_TAG_NPC_1,
+#else
     .paletteTag = 0xFFFF,
+#endif
     .oam = &gObjectEventBaseOam_16x32,
     .anims = sAnimTable_TreeDisguise,
     .images = sPicTable_SandDisguisePlaceholder,
@@ -1064,7 +1100,11 @@ static const union AnimCmd *const sAnimTable_Bird[] =
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_Bird = {
     .tileTag = 0xFFFF,
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    .paletteTag = OBJ_EVENT_PAL_TAG_BRENDAN,
+#else
     .paletteTag = 0xFFFF,
+#endif
     .oam = &gObjectEventBaseOam_32x32,
     .anims = sAnimTable_Bird,
     .images = sPicTable_Bird,
@@ -1147,14 +1187,14 @@ static const union AnimCmd *const sAnimTable_AshPuff[] =
     sAnim_AshPuff,
 };
 
-const struct SpriteTemplate gFieldEffectObjectTemplate_AshPuff = 
+const struct SpriteTemplate gFieldEffectObjectTemplate_AshPuff =
 {
-    .tileTag = 0xFFFF, 
-    .paletteTag = FLDEFF_PAL_TAG_ASH, 
-    .oam = &gObjectEventBaseOam_16x16, 
-    .anims = sAnimTable_AshPuff, 
-    .images = sPicTable_AshPuff, 
-    .affineAnims = gDummySpriteAffineAnimTable, 
+    .tileTag = 0xFFFF,
+    .paletteTag = FLDEFF_PAL_TAG_ASH,
+    .oam = &gObjectEventBaseOam_16x16,
+    .anims = sAnimTable_AshPuff,
+    .images = sPicTable_AshPuff,
+    .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCB_AshPuff
 };
 
@@ -1183,14 +1223,14 @@ static const union AnimCmd *const sAnimTable_AshLaunch[] =
     sAnim_AshLaunch,
 };
 
-const struct SpriteTemplate gFieldEffectObjectTemplate_AshLaunch = 
+const struct SpriteTemplate gFieldEffectObjectTemplate_AshLaunch =
 {
-    .tileTag = 0xFFFF, 
-    .paletteTag = FLDEFF_PAL_TAG_ASH, 
-    .oam = &gObjectEventBaseOam_16x16, 
-    .anims = sAnimTable_AshLaunch, 
-    .images = sPicTable_AshLaunch, 
-    .affineAnims = gDummySpriteAffineAnimTable, 
+    .tileTag = 0xFFFF,
+    .paletteTag = FLDEFF_PAL_TAG_ASH,
+    .oam = &gObjectEventBaseOam_16x16,
+    .anims = sAnimTable_AshLaunch,
+    .images = sPicTable_AshLaunch,
+    .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCB_AshLaunch
 };
 
@@ -1289,7 +1329,7 @@ const struct SpriteTemplate gFieldEffectObjectTemplate_Rayquaza = {
 static const struct SpritePalette sSpritePalette_Unused = {gObjectEventPal_Npc3, FLDEFF_PAL_TAG_UNKNOWN};
 
 // cave dust
-static const struct SpriteFrameImage sPicTable_CaveDust[] = 
+static const struct SpriteFrameImage sPicTable_CaveDust[] =
 {
     overworld_frame(gFieldEffectObjectPic_CaveDust, 2, 2, 0),
     overworld_frame(gFieldEffectObjectPic_CaveDust, 2, 2, 1),

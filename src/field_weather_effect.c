@@ -31,6 +31,11 @@ const u8 gWeatherAshTiles[] = INCBIN_U8("graphics/weather/ash.4bpp");
 const u8 gWeatherRainTiles[] = INCBIN_U8("graphics/weather/rain.4bpp");
 const u8 gWeatherSandstormTiles[] = INCBIN_U8("graphics/weather/sandstorm.4bpp");
 
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+const struct SpritePalette sFogSpritePalette = { gFogPalette, 0x1201 };
+const struct SpritePalette sCloudsSpritePalette = { gCloudsWeatherPalette, 0x1207 };
+const struct SpritePalette sSandstormSpritePalette = { gSandstormWeatherPalette, 0x1204 };
+#endif
 //------------------------------------------------------------------------------
 // WEATHER_SUNNY_CLOUDS
 //------------------------------------------------------------------------------
@@ -85,7 +90,11 @@ static const union AnimCmd *const sCloudSpriteAnimCmds[] =
 static const struct SpriteTemplate sCloudSpriteTemplate =
     {
         .tileTag = 0x1200,
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+        .paletteTag = 0x1207,
+#else
         .paletteTag = 0x1201,
+#endif
         .oam = &sCloudSpriteOamData,
         .anims = sCloudSpriteAnimCmds,
         .images = NULL,
@@ -181,7 +190,11 @@ static void CreateCloudSprites(void)
         return;
 
     LoadSpriteSheet(&sCloudSpriteSheet);
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    LoadCustomWeatherSpritePalette(&sCloudsSpritePalette);
+#else
     LoadCustomWeatherSpritePalette(gCloudsWeatherPalette);
+#endif
     for (i = 0; i < NUM_CLOUD_SPRITES; i++)
     {
         spriteId = CreateSprite(&sCloudSpriteTemplate, 0, 0, 0xFF);
@@ -214,7 +227,11 @@ static void DestroyCloudSprites(void)
             DestroySprite(gWeatherPtr->sprites.s1.cloudSprites[i]);
     }
 
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    FreeSpriteTilesByTag(0x1207);
+#else
     FreeSpriteTilesByTag(0x1200);
+#endif
     gWeatherPtr->cloudSpritesCreated = FALSE;
 }
 
@@ -1445,6 +1462,9 @@ static void CreateFogHorizontalSprites(void)
                 sprite->pos1.x = (i % 5) * 64 + 32;
                 sprite->pos1.y = (i / 5) * 64 + 32;
                 gWeatherPtr->sprites.s2.fogHSprites[i] = sprite;
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+                sprite->oam.paletteNum = gWeatherPtr->altGammaSpritePalIndex;
+#endif
             }
             else
             {
@@ -1603,7 +1623,11 @@ static const union AnimCmd *const sAshSpriteAnimCmds[] =
 static const struct SpriteTemplate sAshSpriteTemplate =
     {
         .tileTag = 4610,
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+        .paletteTag = 0x1201,
+#else
         .paletteTag = 0x1200,
+#endif
         .oam = &sAshSpriteOamData,
         .anims = sAshSpriteAnimCmds,
         .images = NULL,
@@ -1624,6 +1648,9 @@ static void CreateAshSprites(void)
 
     if (!gWeatherPtr->ashSpritesCreated)
     {
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+        LoadCustomWeatherSpritePalette(&sFogSpritePalette);
+#endif
         for (i = 0; i < NUM_ASH_SPRITES; i++)
         {
             spriteId = CreateSpriteAtEnd(&sAshSpriteTemplate, 0, 0, 0x4E);
@@ -1820,7 +1847,11 @@ static const union AnimCmd *const sFogDiagonalSpriteAnimCmds[] =
 static const struct SpriteTemplate sFogDiagonalSpriteTemplate =
     {
         .tileTag = 0x1203,
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+        .paletteTag = 0x1201,
+#else
         .paletteTag = 0x1200,
+#endif
         .oam = &sFogDiagonalSpriteOamData,
         .anims = sFogDiagonalSpriteAnimCmds,
         .images = NULL,
@@ -1842,6 +1873,9 @@ static void CreateFogDiagonalSprites(void)
     {
         fogDiagonalSpriteSheet = gFogDiagonalSpriteSheet;
         LoadSpriteSheet(&fogDiagonalSpriteSheet);
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+        LoadCustomWeatherSpritePalette(&sFogSpritePalette);
+#endif
         for (i = 0; i < NUM_FOG_DIAGONAL_SPRITES; i++)
         {
             spriteId = CreateSpriteAtEnd(&sFogDiagonalSpriteTemplate, 0, (i / 5) * 64, 0xFF);
@@ -2067,7 +2101,11 @@ static const union AnimCmd *const sSandstormSpriteAnimCmds[] =
 static const struct SpriteTemplate sSandstormSpriteTemplate =
     {
         .tileTag = 0x1204,
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+        .paletteTag = 0x1204,
+#else
         .paletteTag = 0x1201,
+#endif
         .oam = &sSandstormSpriteOamData,
         .anims = sSandstormSpriteAnimCmds,
         .images = NULL,
@@ -2100,7 +2138,11 @@ static void CreateSandstormSprites(void)
     if (!gWeatherPtr->sandstormSpritesCreated)
     {
         LoadSpriteSheet(&sSandstormSpriteSheet);
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+        LoadCustomWeatherSpritePalette(&sSandstormSpritePalette);
+#else
         LoadCustomWeatherSpritePalette(gSandstormWeatherPalette);
+#endif
         for (i = 0; i < NUM_SANDSTORM_SPRITES; i++)
         {
             spriteId = CreateSpriteAtEnd(&sSandstormSpriteTemplate, 0, (i / 5) * 64, 1);

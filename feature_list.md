@@ -93,6 +93,9 @@ FEATURE LIST
 ## Enable the Reset RTC Feature (FEATURE_ENABLERESETTRC)
 * Enable the existing RTC Reset feature
 
+## Dynamic Overworld Palettes (FEATURE_DYNAMICOVERWORLDPALETTES)
+* Enables dynamic overworld palettes
+
 
 # BASE GAME
 ## Alt Default Options (FEATURE_ALTDEFAULTOPTIONS)

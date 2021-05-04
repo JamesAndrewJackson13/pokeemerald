@@ -29,6 +29,9 @@
 #include "constants/mauville_old_man.h"
 #include "constants/trainer_types.h"
 #include "constants/union_room.h"
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+#include "field_weather.h"
+#endif
 
 // this file was known as evobjmv.c in Game Freak's original source
 
@@ -54,8 +57,10 @@ static u8 setup##_callback(struct ObjectEvent *objectEvent, struct Sprite *sprit
     return 0;\
 }
 
+#ifndef FEATURE_DYNAMICOVERWORLDPALETTES
 EWRAM_DATA u8 sCurrentReflectionType = 0;
 EWRAM_DATA u16 sCurrentSpecialObjectPaletteTag = 0;
+#endif
 EWRAM_DATA struct LockedAnimObjectEvents *gLockedAnimObjectEvents = {0};
 
 static void MoveCoordsInDirection(u32, s16 *, s16 *, s16, s16);
@@ -113,7 +118,9 @@ static void UpdateObjectEventVisibility(struct ObjectEvent *, struct Sprite *);
 static void MakeObjectTemplateFromObjectEventTemplate(struct ObjectEventTemplate *, struct SpriteTemplate *, const struct SubspriteTable **);
 static void GetObjectEventMovingCameraOffset(s16 *, s16 *);
 static struct ObjectEventTemplate *GetObjectEventTemplateByLocalIdAndMap(u8, u8, u8);
+#ifndef FEATURE_DYNAMICOVERWORLDPALETTES
 static void LoadObjectEventPalette(u16);
+#endif
 static void RemoveObjectEventIfOutsideView(struct ObjectEvent *);
 static void sub_808E1B8(u8, s16, s16);
 static void SetPlayerAvatarObjectEventIdAndObjectId(u8, u8);
@@ -134,9 +141,11 @@ static void InitSpriteForFigure8Anim(struct Sprite *sprite);
 static bool8 AnimateSpriteInFigure8(struct Sprite *sprite);
 static void UpdateObjectEventSprite(struct Sprite *);
 
+#ifndef FEATURE_DYNAMICOVERWORLDPALETTES
 const u8 gReflectionEffectPaletteMap[] = {1, 1, 6, 7, 8, 9, 6, 7, 8, 9, 11, 11, 0, 0, 0, 0};
+#endif
 
-const struct SpriteTemplate gCameraSpriteTemplate = {0, 0xFFFF, &gDummyOamData, gDummySpriteAnimTable, NULL, gDummySpriteAffineAnimTable, ObjectCB_CameraObject};
+const struct SpriteTemplate gCameraSpriteTemplate = { 0, 0xFFFF, &gDummyOamData, gDummySpriteAnimTable, NULL, gDummySpriteAffineAnimTable, ObjectCB_CameraObject };
 
 void (*const gCameraObjectFuncs[])(struct Sprite *) = {
     CameraObject_0,
@@ -438,13 +447,18 @@ const u8 gInitialMovementTypeFacingDirections[] = {
 #define OBJ_EVENT_PAL_TAG_RS_MAY                  0x1123
 #define OBJ_EVENT_PAL_TAG_NONE                    0x11FF
 
+#ifndef FEATURE_DYNAMICOVERWORLDPALETTES
 #include "data/object_events/object_event_graphics_info_pointers.h"
+#endif
 #include "data/field_effects/field_effect_object_template_pointers.h"
 #include "data/object_events/object_event_pic_tables.h"
 #include "data/object_events/object_event_anims.h"
 #include "data/object_events/base_oam.h"
 #include "data/object_events/object_event_subsprites.h"
 #include "data/object_events/object_event_graphics_info.h"
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+#include "data/object_events/object_event_graphics_info_pointers.h"
+#endif
 
 static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Npc1,                  OBJ_EVENT_PAL_TAG_NPC_1},
@@ -485,6 +499,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {NULL,                                  0x0000},
 };
 
+#ifndef FEATURE_DYNAMICOVERWORLDPALETTES
 static const u16 sReflectionPaletteTags_Brendan[] = {
     OBJ_EVENT_PAL_TAG_BRENDAN_REFLECTION,
     OBJ_EVENT_PAL_TAG_BRENDAN_REFLECTION,
@@ -665,6 +680,7 @@ static const u16 *const sObjectPaletteTagSets[] = {
     sObjectPaletteTags2,
     sObjectPaletteTags3,
 };
+#endif
 
 #include "data/object_events/berry_tree_graphics_tables.h"
 #include "data/field_effects/field_effect_objects.h"
@@ -1329,10 +1345,19 @@ void RemoveObjectEventByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup)
 
 static void RemoveObjectEventInternal(struct ObjectEvent *objectEvent)
 {
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    u8 paletteNum;
+#endif
     struct SpriteFrameImage image;
     image.size = GetObjectEventGraphicsInfo(objectEvent->graphicsId)->size;
     gSprites[objectEvent->spriteId].images = &image;
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    paletteNum = gSprites[objectEvent->spriteId].oam.paletteNum;
+#endif
     DestroySprite(&gSprites[objectEvent->spriteId]);
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    FieldEffectFreePaletteIfUnused(paletteNum);
+#endif
 }
 
 void RemoveAllObjectEventsExceptPlayer(void)
@@ -1361,6 +1386,13 @@ static u8 TrySetupObjectEventSprite(struct ObjectEventTemplate *objectEventTempl
 
     objectEvent = &gObjectEvents[objectEventId];
     graphicsInfo = GetObjectEventGraphicsInfo(objectEvent->graphicsId);
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    if (spriteTemplate->paletteTag != 0xFFFF)
+    {
+        LoadObjectEventPalette(spriteTemplate->paletteTag);
+        UpdatePaletteGammaType(IndexOfSpritePaletteTag(spriteTemplate->paletteTag), GAMMA_ALT);
+    }
+#else
     paletteSlot = graphicsInfo->paletteSlot;
     if (paletteSlot == 0)
     {
@@ -1375,11 +1407,14 @@ static u8 TrySetupObjectEventSprite(struct ObjectEventTemplate *objectEventTempl
         paletteSlot -= 16;
         sub_808EAB0(graphicsInfo->paletteTag, paletteSlot);
     }
+#endif
 
     if (objectEvent->movementType == MOVEMENT_TYPE_INVISIBLE)
         objectEvent->invisible = TRUE;
 
+#ifndef FEATURE_DYNAMICOVERWORLDPALETTES
     *(u16 *)&spriteTemplate->paletteTag = 0xFFFF;
+#endif
     spriteId = CreateSprite(spriteTemplate, 0, 0, 0);
     if (spriteId == MAX_SPRITES)
     {
@@ -1393,7 +1428,9 @@ static u8 TrySetupObjectEventSprite(struct ObjectEventTemplate *objectEventTempl
     sprite->centerToCornerVecY = -(graphicsInfo->height >> 1);
     sprite->pos1.x += 8;
     sprite->pos1.y += 16 + sprite->centerToCornerVecY;
+#ifndef FEATURE_DYNAMICOVERWORLDPALETTES
     sprite->oam.paletteNum = paletteSlot;
+#endif
     sprite->coordOffsetEnabled = TRUE;
     sprite->data[0] = objectEventId;
     objectEvent->spriteId = spriteId;
@@ -1551,11 +1588,15 @@ u8 CreateObjectSprite(u8 graphicsId, u8 a1, s16 x, s16 y, u8 z, u8 direction)
         sprite->coordOffsetEnabled = TRUE;
         sprite->data[0] = a1;
         sprite->data[1] = z;
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+        if (graphicsInfo->paletteSlot >= 16)
+#else
         if (graphicsInfo->paletteSlot == 10)
         {
             LoadSpecialObjectReflectionPalette(graphicsInfo->paletteTag, graphicsInfo->paletteSlot);
         }
         else if (graphicsInfo->paletteSlot >= 16)
+#endif
         {
             sub_808EAB0(graphicsInfo->paletteTag, graphicsInfo->paletteSlot | 0xf0);
         }
@@ -1689,6 +1730,13 @@ static void sub_808E1B8(u8 objectEventId, s16 x, s16 y)
     spriteFrameImage.size = graphicsInfo->size;
     MakeObjectTemplateFromObjectEventGraphicsInfoWithCallbackIndex(objectEvent->graphicsId, objectEvent->movementType, &spriteTemplate, &subspriteTables);
     spriteTemplate.images = &spriteFrameImage;
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    if (spriteTemplate.paletteTag != 0xFFFF)
+    {
+        LoadObjectEventPalette(spriteTemplate.paletteTag);
+        UpdatePaletteGammaType(IndexOfSpritePaletteTag(spriteTemplate.paletteTag), GAMMA_ALT);
+    }
+#else
     *(u16 *)&spriteTemplate.paletteTag = 0xFFFF;
     paletteSlot = graphicsInfo->paletteSlot;
     if (paletteSlot == 0)
@@ -1704,7 +1752,8 @@ static void sub_808E1B8(u8 objectEventId, s16 x, s16 y)
         paletteSlot -= 16;
         sub_808EAB0(graphicsInfo->paletteTag, paletteSlot);
     }
-    *(u16 *)&spriteTemplate.paletteTag = 0xFFFF;
+    *(u16*)&spriteTemplate.paletteTag = 0xFFFF;
+#endif
     spriteId = CreateSprite(&spriteTemplate, 0, 0, 0);
     if (spriteId != MAX_SPRITES)
     {
@@ -1724,7 +1773,9 @@ static void sub_808E1B8(u8 objectEventId, s16 x, s16 y)
         {
             SetSubspriteTables(sprite, subspriteTables);
         }
+#ifndef FEATURE_DYNAMICOVERWORLDPALETTES
         sprite->oam.paletteNum = paletteSlot;
+#endif
         sprite->coordOffsetEnabled = TRUE;
         sprite->data[0] = objectEventId;
         objectEvent->spriteId = spriteId;
@@ -1771,10 +1822,12 @@ void ObjectEventSetGraphicsId(struct ObjectEvent *objectEvent, u8 graphicsId)
     {
         PatchObjectPalette(graphicsInfo->paletteTag, graphicsInfo->paletteSlot);
     }
+#ifndef FEATURE_DYNAMICOVERWORLDPALETTES
     else if (paletteSlot == 10)
     {
         LoadSpecialObjectReflectionPalette(graphicsInfo->paletteTag, graphicsInfo->paletteSlot);
     }
+#endif
     else if (paletteSlot >= 16)
     {
         paletteSlot -= 16;
@@ -1851,9 +1904,17 @@ static void SetBerryTreeGraphics(struct ObjectEvent *objectEvent, struct Sprite 
         if (berryId > ITEM_TO_BERRY(LAST_BERRY_INDEX))
             berryId = 0;
 
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+        LoadObjectEventPalette(gBerryTreePaletteTagTablePointers[berryId][berryStage]);
+#endif
         ObjectEventSetGraphicsId(objectEvent, gBerryTreeObjectEventGraphicsIdTablePointers[berryId][berryStage]);
         sprite->images = gBerryTreePicTablePointers[berryId];
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+        sprite->oam.paletteNum = IndexOfSpritePaletteTag(gBerryTreePaletteTagTablePointers[berryId][berryStage]);
+        UpdatePaletteGammaType(sprite->oam.paletteNum, GAMMA_ALT);
+#else
         sprite->oam.paletteNum = gBerryTreePaletteSlotTablePointers[berryId][berryStage];
+#endif
         StartSpriteAnim(sprite, berryStage);
     }
 }
@@ -1965,7 +2026,11 @@ void FreeAndReserveObjectSpritePalettes(void)
     gReservedSpritePaletteCount = 12;
 }
 
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+void LoadObjectEventPalette(u16 paletteTag)
+#else
 static void LoadObjectEventPalette(u16 paletteTag)
+#endif
 {
     u16 i = FindObjectEventPaletteIndexByTag(paletteTag);
 
@@ -2025,6 +2090,7 @@ static u8 FindObjectEventPaletteIndexByTag(u16 tag)
     return 0xFF;
 }
 
+#ifndef FEATURE_DYNAMICOVERWORLDPALETTES
 void LoadPlayerObjectReflectionPalette(u16 tag, u8 slot)
 {
     u8 i;
@@ -2055,6 +2121,7 @@ void LoadSpecialObjectReflectionPalette(u16 tag, u8 slot)
         }
     }
 }
+#endif
 
 static void sub_808EAB0(u16 tag, u8 slot)
 {
@@ -2505,6 +2572,7 @@ void OverrideSecretBaseDecorationSpriteScript(u8 localId, u8 mapNum, u8 mapGroup
     }
 }
 
+#ifndef FEATURE_DYNAMICOVERWORLDPALETTES
 void InitObjectEventPalettes(u8 palSlot)
 {
     FreeAndReserveObjectSpritePalettes();
@@ -2538,6 +2606,7 @@ u16 GetObjectPaletteTag(u8 palSlot)
     }
     return OBJ_EVENT_PAL_TAG_NONE;
 }
+#endif
 
 movement_type_empty_callback(MovementType_None)
 movement_type_def(MovementType_WanderAround, gMovementTypeFuncs_WanderAround)
