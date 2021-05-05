@@ -19,6 +19,7 @@ mapscripts FallarborTown_CozmosHouse_MapScripts {
             // When the flag is not set, hide the event_object that runs the Deoxys change form script
             setflag(FLAG_TEMP_A)
         }
+        hideobjectat(3, MAP_FALLARBOR_TOWN_COZMOS_HOUSE)
     }
 
     MAP_SCRIPT_ON_TRANSITION {

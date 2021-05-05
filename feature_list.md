@@ -44,6 +44,9 @@ FEATURE LIST
 * Adds an Exp bar speed option
 * Adds an option to swap between imperial and metric units
 
+## Triple Layer Metatiles
+* Allows for use of all three layers at the same time
+
 
 # CORE GAME
 ## Cleaned Up the Save Ram

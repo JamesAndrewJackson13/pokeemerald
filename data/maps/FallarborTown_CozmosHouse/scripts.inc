@@ -4,14 +4,16 @@ FallarborTown_CozmosHouse_MapScripts::
 	.byte 0
 
 FallarborTown_CozmosHouse_MapScripts_MAP_SCRIPT_ON_LOAD:
-	goto_if_set FLAG_SHOW_METEORITE, FallarborTown_CozmosHouse_MapScripts_MAP_SCRIPT_ON_LOAD_1
+	goto_if_set FLAG_SHOW_METEORITE, FallarborTown_CozmosHouse_MapScripts_MAP_SCRIPT_ON_LOAD_2
 	setflag FLAG_TEMP_A
+FallarborTown_CozmosHouse_MapScripts_MAP_SCRIPT_ON_LOAD_1:
+	hideobjectat 3, MAP_FALLARBOR_TOWN_COZMOS_HOUSE
 	return
 
-FallarborTown_CozmosHouse_MapScripts_MAP_SCRIPT_ON_LOAD_1:
+FallarborTown_CozmosHouse_MapScripts_MAP_SCRIPT_ON_LOAD_2:
 	setmetatile 9, 4, 0x35B, FALSE
 	setmetatile 9, 5, 0x363, TRUE
-	return
+	goto FallarborTown_CozmosHouse_MapScripts_MAP_SCRIPT_ON_LOAD_1
 
 FallarborTown_CozmosHouse_MapScripts_MAP_SCRIPT_ON_TRANSITION:
 	goto_if_set FLAG_RECEIVED_TM27, FallarborTown_CozmosHouse_MapScripts_MAP_SCRIPT_ON_TRANSITION_1
