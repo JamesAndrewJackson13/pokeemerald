@@ -60,11 +60,15 @@
 #define FLAG_UNUSED_0x025    0x25 // Unused Flag
 #endif
 // #ifdef FEATURE_DEOXYSCHANGEFORM
-#define FLAG_SHOW_METEORITE  0x26
+#define FLAG_SHOW_METEORITE  0x26 // Should the Deoxys Meteorite show up?
 // #else
 // #define FLAG_UNUSED_0x026    0x26 // Unused Flag
 // #endif
+#ifdef FEATURE_SPAWNINVISIBLEPLAYER
+#define FLAG_SPAWN_INVISIBLE 0x27 // Should the player be invisible on next spawn?
+#else
 #define FLAG_UNUSED_0x027    0x27 // Unused Flag
+#endif
 #define FLAG_UNUSED_0x028    0x28 // Unused Flag
 #define FLAG_UNUSED_0x029    0x29 // Unused Flag
 #define FLAG_UNUSED_0x02A    0x2A // Unused Flag

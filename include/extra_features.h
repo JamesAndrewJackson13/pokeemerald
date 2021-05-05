@@ -38,6 +38,7 @@
 #define FEATURE_DYNAMICOVERWORLDPALETTES  // Enables dynamic overworld palettes
 #define FEATURE_FRLGTEXTCOLOR  // Re-implements the textcolor script command from FRLG
 #define FEATURE_UNIQUELYSHUFFLEARRAY  // Adds a method to uniquely shuffle arrays
+#define FEATURE_SPAWNINVISIBLEPLAYER  // Lets you spawn the player as invisible, useful for cut scenes and the like
 
 // BASE GAME FEATURES - Tweaks to the general game
 #define FEATURE_ALTDEFAULTOPTIONS  // Changes default settings

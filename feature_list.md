@@ -104,6 +104,12 @@ FEATURE LIST
 * Adds a method to uniquely shuffle arrays
 * https://github.com/pret/pokeemerald/wiki/Uniquely-Shuffle-Array
 
+## Spaw Invisible Player Flag(FEATURE_SPAWNINVISIBLEPLAYER)
+* Lets you spawn the player as invisible, useful for cut scenes and the like
+* When you want the player to appear again, you must use the applymovement command that includes a set_visible movement command.
+* https://github.com/pret/pokeemerald/wiki/Spawn-Invisible-Player
+
+
 
 # BASE GAME
 ## Alt Default Options (FEATURE_ALTDEFAULTOPTIONS)
