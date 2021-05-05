@@ -277,23 +277,3 @@ void BlendPalette(u16 palOffset, u16 numEntries, u8 coeff, u16 blendColor)
                                       b + (((data2->b - b) * coeff) >> 4));
     }
 }
-
-#ifdef FEATURE_UNIQUELYSHUFFLEARRAY
-/*
-Inputs:
-    list: array of u16 values
-    count: size of the array (or number of elements to shuffle)
-*/
-void ShuffleList(u16* list, u16 count)
-{
-    u16 i;
-
-    for (i = (count - 1); i > 0; i--)
-    {
-        u16 j = Random() % (i + 1);
-        u16 arr = list[j];
-        list[j] = list[i];
-        list[i] = arr;
-    }
-}
-#endif
