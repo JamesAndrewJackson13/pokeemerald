@@ -96,6 +96,10 @@ FEATURE LIST
 ## Dynamic Overworld Palettes (FEATURE_DYNAMICOVERWORLDPALETTES)
 * Enables dynamic overworld palettes
 
+## Implementing the “textcolor” script command from FRLG (FEATURE_FRLGTEXTCOLOR)
+* Re-implements the textcolor script command from FRLG
+* https://github.com/pret/pokeemerald/wiki/Implementing-the-%E2%80%9Ctextcolor%E2%80%9D-script-command-from-FRLG-and-give-object-events-their-own-text-colour
+
 
 # BASE GAME
 ## Alt Default Options (FEATURE_ALTDEFAULTOPTIONS)

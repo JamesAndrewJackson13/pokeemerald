@@ -30,7 +30,12 @@ EWRAM_DATA u16 gSpecialVar_Facing = 0;
 EWRAM_DATA u16 gSpecialVar_MonBoxId = 0;
 EWRAM_DATA u16 gSpecialVar_MonBoxPos = 0;
 EWRAM_DATA u16 gSpecialVar_Unused_0x8014 = 0;
-EWRAM_DATA static u8 gSpecialFlags[SPECIAL_FLAGS_SIZE] = {0};
+EWRAM_DATA static u8 gSpecialFlags[SPECIAL_FLAGS_SIZE] = { 0 };
+
+#ifdef FEATURE_FRLGTEXTCOLOR
+EWRAM_DATA u16 gSpecialVar_TextColor = 0;
+EWRAM_DATA u16 gSpecialVar_PrevTextColor = 0;
+#endif
 
 extern u16 *const gSpecialVars[];
 

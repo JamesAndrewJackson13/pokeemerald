@@ -2170,3 +2170,15 @@ void BufferSaveMenuText(u8 textId, u8 *dest, u8 color)
             break;
     }
 }
+
+
+#ifdef FEATURE_FRLGTEXTCOLOR
+void AddTextPrinterForMessageWithTextColor(bool8 allowSkippingDelayWithButtonPress)
+{
+    u8 color;
+    gTextFlags.canABSpeedUpPrint = allowSkippingDelayWithButtonPress;
+
+    color = ContextNpcGetTextColor();
+    AddTextPrinterParameterized2(0, 1, gStringVar4, GetPlayerTextSpeedDelay(), NULL, gSpecialVar_TextColor, 1, 3);
+}
+#endif

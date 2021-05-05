@@ -174,6 +174,10 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
     gSpecialVar_LastTalked = 0;
     gSelectedObjectEvent = 0;
 
+#ifdef FEATURE_FRLGTEXTCOLOR
+    gSpecialVar_TextColor = 0xFF;
+#endif
+
     playerDirection = GetPlayerFacingDirection();
     GetPlayerPosition(&position);
     metatileBehavior = MapGridGetMetatileBehaviorAt(position.x, position.y);

@@ -244,6 +244,9 @@ gScriptCmdTable:: @ 81DB67C
 #ifdef FEATURE_ADDLOCKTARGET
     .4byte ScrCmd_locktarget                @ 0xef
 #endif
+#ifdef FEATURE_FRLGTEXTCOLOR
+    .4byte ScrCmd_locktarget                @ 0xf0
+#endif
 
 gScriptCmdTableEnd:: @ 81DBA08
     .4byte ScrCmd_nop

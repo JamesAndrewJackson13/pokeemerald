@@ -270,7 +270,7 @@
 #define VAR_DEXNAV_SPECIES                   0x40F7 // Registered dexnav species
 #define VAR_DEXNAV_STEP_COUNTER              0x40F8 // steps for finding hidden pokemon
 #ifdef FEATURE_CUSTOMBATTLEMUGSHOTS
-#define VAR_MUGSHOT_ID                       0x40F9 // Unused Var
+#define VAR_MUGSHOT_ID                       0x40F9 // Mugshot to show
 #else
 #define VAR_UNUSED_0x40F9                    0x40F9 // Unused Var
 #endif
@@ -307,9 +307,16 @@
 #define VAR_CONTEST_CATEGORY          0x8011
 #define VAR_MON_BOX_ID                0x8012
 #define VAR_MON_BOX_POS               0x8013
+#ifdef FEATURE_FRLGTEXTCOLOR
 #define VAR_UNUSED_0x8014             0x8014
 #define VAR_TRAINER_BATTLE_OPPONENT_A 0x8015 // Alias of gTrainerBattleOpponent_A
-
+#define VAR_UNUSED_0x8014             0x8016
+#define SPECIAL_VARS_END              0x8016
+#else
+#define VAR_UNUSED_0x8014             0x8014
+#define VAR_TRAINER_BATTLE_OPPONENT_A 0x8015 // Alias of gTrainerBattleOpponent_A
 #define SPECIAL_VARS_END              0x8015
+#endif
+
 
 #endif // GUARD_CONSTANTS_VARS_H

@@ -2558,3 +2558,12 @@ bool8 ScrCmd_locktarget(struct ScriptContext* ctx)
     }
 }
 #endif
+
+#ifdef FEATURE_FRLGTEXTCOLOR
+bool8 ScrCmd_textcolor(struct ScriptContext* ctx)
+{
+    gSpecialVar_PrevTextColor = gSpecialVar_TextColor;
+    gSpecialVar_TextColor = ScriptReadByte(ctx);
+    return FALSE;
+}
+#endif

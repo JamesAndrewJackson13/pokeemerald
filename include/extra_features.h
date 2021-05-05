@@ -36,6 +36,7 @@
 #define FEATURE_ADDLOCKTARGET  // Adds a `locktarget` command that only locks the player down
 #define FEATURE_ENABLERESETTRC  // Enable the existing RTC Reset feature
 #define FEATURE_DYNAMICOVERWORLDPALETTES  // Enables dynamic overworld palettes
+#define FEATURE_FRLGTEXTCOLOR  // Re-implements the textcolor script command from FRLG
 
 // BASE GAME FEATURES - Tweaks to the general game
 #define FEATURE_ALTDEFAULTOPTIONS  // Changes default settings

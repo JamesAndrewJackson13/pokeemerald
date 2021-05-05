@@ -105,7 +105,7 @@ static bool8 ForceShowFieldAutoScrollMessage(const u8 *str)
     return TRUE;
 }
 
-// Same as ShowFieldMessage, but instead of accepting a 
+// Same as ShowFieldMessage, but instead of accepting a
 // string arg it just prints whats already in gStringVar4
 bool8 ShowFieldMessageFromBuffer(void)
 {
@@ -125,7 +125,11 @@ static void ExpandStringAndStartDrawFieldMessage(const u8* str, bool32 allowSkip
 
 static void StartDrawFieldMessage(void)
 {
+#ifdef FEATURE_FRLGTEXTCOLOR
+    AddTextPrinterForMessageWithTextColor(TRUE);
+#else
     AddTextPrinterForMessage(TRUE);
+#endif
     CreateTask_DrawFieldMessage();
 }
 
