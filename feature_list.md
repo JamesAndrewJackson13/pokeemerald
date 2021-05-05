@@ -100,6 +100,10 @@ FEATURE LIST
 * Re-implements the textcolor script command from FRLG
 * https://github.com/pret/pokeemerald/wiki/Implementing-the-%E2%80%9Ctextcolor%E2%80%9D-script-command-from-FRLG-and-give-object-events-their-own-text-colour
 
+## Uniquely Shuffle Array (FEATURE_UNIQUELYSHUFFLEARRAY)
+* Adds a method to uniquely shuffle arrays
+* https://github.com/pret/pokeemerald/wiki/Uniquely-Shuffle-Array
+
 
 # BASE GAME
 ## Alt Default Options (FEATURE_ALTDEFAULTOPTIONS)

@@ -37,6 +37,7 @@
 #define FEATURE_ENABLERESETTRC  // Enable the existing RTC Reset feature
 #define FEATURE_DYNAMICOVERWORLDPALETTES  // Enables dynamic overworld palettes
 #define FEATURE_FRLGTEXTCOLOR  // Re-implements the textcolor script command from FRLG
+#define FEATURE_UNIQUELYSHUFFLEARRAY  // Adds a method to uniquely shuffle arrays
 
 // BASE GAME FEATURES - Tweaks to the general game
 #define FEATURE_ALTDEFAULTOPTIONS  // Changes default settings
