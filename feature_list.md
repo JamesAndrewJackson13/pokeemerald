@@ -142,6 +142,9 @@ FEATURE LIST
 * Allows for Deoxys' form to be changed in the field as per future games in the series
 * https://www.pokecommunity.com/showpost.php?p=10259063&postcount=197
 
+## Shuckle makes Berry Juice (FEATURE_SHUCKLEBERRYJUICE)
+* Allows Shuckle to make Berry Juice when they hold a berry
+* https://github.com/pret/pokeemerald/wiki/Shuckle-makes-Berry-Juice
 
 # MENUS
 ## Remove the Contest Tab (FEATURE_REMOVECONTESTTAB)
