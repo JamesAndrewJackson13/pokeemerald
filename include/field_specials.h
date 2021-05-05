@@ -31,5 +31,8 @@ bool8 UsedPokemonCenterWarp(void);
 void ResetFanClub(void);
 bool8 ShouldShowBoxWasFullMessage(void);
 void SetPCBoxToSendMon(u8 boxId);
+#ifdef FEATURE_FRLGTEXTCOLOR
+u8 ContextNpcGetTextColor(void);
+#endif
 
 #endif // GUARD_FIELD_SPECIALS_H

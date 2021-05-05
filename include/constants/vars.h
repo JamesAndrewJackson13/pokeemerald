@@ -308,9 +308,9 @@
 #define VAR_MON_BOX_ID                0x8012
 #define VAR_MON_BOX_POS               0x8013
 #ifdef FEATURE_FRLGTEXTCOLOR
-#define VAR_UNUSED_0x8014             0x8014
+#define VAR_TEXT_COLOR                0x8014
 #define VAR_TRAINER_BATTLE_OPPONENT_A 0x8015 // Alias of gTrainerBattleOpponent_A
-#define VAR_UNUSED_0x8014             0x8016
+#define VAR_PREV_TEXT_COLOR           0x8016
 #define SPECIAL_VARS_END              0x8016
 #else
 #define VAR_UNUSED_0x8014             0x8014

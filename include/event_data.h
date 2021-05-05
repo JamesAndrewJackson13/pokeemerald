@@ -52,7 +52,7 @@ extern u16 gSpecialVar_Unused_0x8014;
 
 #ifdef FEATURE_FRLGTEXTCOLOR
 extern u16 gSpecialVar_TextColor;
-extern u16; gSpecialVar_PrevTextColor;
+extern u16 gSpecialVar_PrevTextColor;
 #endif
 
 #endif // GUARD_EVENT_DATA_H

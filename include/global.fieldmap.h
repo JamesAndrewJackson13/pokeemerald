@@ -216,7 +216,7 @@ struct ObjectEventGraphicsInfo
     /*0x00*/ u16 tileTag;
     /*0x02*/ u16 paletteTag;
 #ifdef FEATURE_FRLGTEXTCOLOR
-    /*0x04*/ u16 gSpecialVar_TextColor;
+    /*0x04*/ u16 textColor;
 #else
     /*0x04*/ u16 reflectionPaletteTag;
 #endif
