@@ -324,10 +324,14 @@ static void InitLocalLinkPlayer(void)
     gLocalLinkPlayer.version = gGameVersion + 0x4000;
     gLocalLinkPlayer.lp_field_2 = 0x8000;
     gLocalLinkPlayer.progressFlags = IsNationalPokedexEnabled();
+#ifndef FEATURE_DEFAULTFRLGTRADE
     if (FlagGet(FLAG_IS_CHAMPION))
     {
+#endif
         gLocalLinkPlayer.progressFlags |= 0x10;
+#ifndef FEATURE_DEFAULTFRLGTRADE
     }
+#endif
 }
 
 static void VBlankCB_LinkError(void)
@@ -764,7 +768,7 @@ static int AreAnyLinkPlayersUsingVersions(u32 version1, u32 version2)
     nPlayers = GetLinkPlayerCount();
     for (i = 0; i < nPlayers; i++)
     {
-        if ((gLinkPlayers[i].version & 0xFF) == version1 
+        if ((gLinkPlayers[i].version & 0xFF) == version1
          || (gLinkPlayers[i].version & 0xFF) == version2)
             return 1;
     }
@@ -873,7 +877,7 @@ u8 GetLinkPlayerDataExchangeStatusTimed(int minPlayers, int maxPlayers)
                 sPlayerDataExchangeStatus = EXCHANGE_DIFF_SELECTIONS;
                 linkType1 = gLinkPlayers[GetMultiplayerId()].linkType;
                 linkType2 = gLinkPlayers[GetMultiplayerId() ^ 1].linkType;
-                if ((linkType1 == LINKTYPE_BATTLE_TOWER_50 && linkType2 == LINKTYPE_BATTLE_TOWER_OPEN) 
+                if ((linkType1 == LINKTYPE_BATTLE_TOWER_50 && linkType2 == LINKTYPE_BATTLE_TOWER_OPEN)
                  || (linkType1 == LINKTYPE_BATTLE_TOWER_OPEN && linkType2 == LINKTYPE_BATTLE_TOWER_50))
                 {
                     // 3 below indicates partner made different level mode selection
@@ -1350,7 +1354,7 @@ void CheckLinkPlayersMatchSaved(void)
 
     for (i = 0; i < gSavedLinkPlayerCount; i++)
     {
-        if (sSavedLinkPlayers[i].trainerId != gLinkPlayers[i].trainerId 
+        if (sSavedLinkPlayers[i].trainerId != gLinkPlayers[i].trainerId
          || StringCompare(sSavedLinkPlayers[i].name, gLinkPlayers[i].name) != 0)
         {
             gLinkErrorOccurred = TRUE;
@@ -1777,7 +1781,7 @@ void LinkPlayerFromBlock(u32 who)
     *player = block->linkPlayer;
     ConvertLinkPlayerName(player);
 
-    if (strcmp(block->magic1, sASCIIGameFreakInc) != 0 
+    if (strcmp(block->magic1, sASCIIGameFreakInc) != 0
      || strcmp(block->magic2, sASCIIGameFreakInc) != 0)
         SetMainCallback2(CB2_LinkError);
 }

@@ -146,6 +146,10 @@ FEATURE LIST
 * Allows Shuckle to make Berry Juice when they hold a berry
 * https://github.com/pret/pokeemerald/wiki/Shuckle-makes-Berry-Juice
 
+## Allow Trade with FR/LG from Default (FEATURE_DEFAULTFRLGTRADE)
+* Allow for trading with FRLG from the start of the game
+
+
 # MENUS
 ## Remove the Contest Tab (FEATURE_REMOVECONTESTTAB)
 * Removes the contest tab from the Pokemon Summary screens
