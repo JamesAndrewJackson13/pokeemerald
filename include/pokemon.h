@@ -180,6 +180,41 @@ struct BattlePokemon
     /*0x55*/ u32 otId;
 };
 
+
+/**
+
+TOTAL NUMBER OF UNIQUE ITEMS
+============================
+baseHP: 103,
+baseAttack: 123,
+baseDefense: 114,
+baseSpeed: 127,
+baseSpAttack: 119,
+baseSpDefense: 107,
+type1: 18,
+type2: 18,
+catchRate: 34,
+expYield: 194,
+evYield_HP: 4,
+evYield_Attack: 4,
+evYield_Defense: 4,
+evYield_Speed: 4,
+evYield_SpAttack: 4,
+evYield_SpDefense: 4,
+item1: 29,
+item2: 78,
+genderRatio: 8,
+eggCycles: 10,
+friendship: 6,
+growthRate: 6,
+eggGroup1: 15,
+eggGroup2: 15,
+abilities: 1206,
+abilityHidden: 156,
+bodyColor: 10,
+noFlip: 2,
+flags: 4
+ */
 struct BaseStats
 {
  /* 0x00 */ u8 baseHP;
@@ -187,33 +222,32 @@ struct BaseStats
  /* 0x02 */ u8 baseDefense;
  /* 0x03 */ u8 baseSpeed;
  /* 0x04 */ u8 baseSpAttack;
- /* 0x05 */ u8 baseSpDefense;
+ /* 0x05 */ u8 baseSpDefense;  // Combained base attrs 160
  /* 0x06 */ u8 type1;
- /* 0x07 */ u8 type2;
- /* 0x08 */ u8 catchRate;
- /* 0x09 */ u16 expYield;
+ /* 0x07 */ u8 type2;  // Combined types: 192
+ /* 0x08 */ u8 catchRate;  // 34 rates, could be dropped to 32
+ /* 0x09 */ u16 expYield:10;
  /* 0x0A */ u16 evYield_HP:2;
  /* 0x0A */ u16 evYield_Attack:2;
  /* 0x0A */ u16 evYield_Defense:2;
  /* 0x0A */ u16 evYield_Speed:2;
  /* 0x0B */ u16 evYield_SpAttack:2;
- /* 0x0B */ u16 evYield_SpDefense:2;
+ /* 0x0B */ u16 evYield_SpDefense:2; // combined ev types: 13
  /* 0x0C */ u16 item1;
- /* 0x0E */ u16 item2;
+ /* 0x0E */ u16 item2;  // combined items: 98
  /* 0x10 */ u8 genderRatio;
  /* 0x11 */ u8 eggCycles;
  /* 0x12 */ u8 friendship;
- /* 0x13 */ u8 growthRate;
- /* 0x14 */ u8 eggGroup1;
- /* 0x15 */ u8 eggGroup2;
- /* 0x16 */ u16 abilities[2];
+ /* 0x13 */ u8 growthRate : 3;
+ /* 0x14 */ u8 eggGroup1 : 4;
+ /* 0x15 */ u8 eggGroup2 : 4;  // combined eggGroups: 62
+ /* 0x16 */ u16 abilities[2];  // Could be 10 bits, 480 combinations of abilities
 #ifdef POKEMON_EXPANSION
-            u16 abilityHidden;
+            u16 abilityHidden;  // 618 combined w/ abilities array
 #endif
-            u8 safariZoneFleeRate;
-            u8 bodyColor : 7;
+            u8 bodyColor : 5;
             u8 noFlip : 1;
-            u8 flags;
+            u8 flags : 2;
             //u8 abilityHidden;
 }; /* size = 28 */
 
