@@ -342,6 +342,12 @@ void HandleAction_UseItem(void)
     else if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
     {
         gBattlescriptCurrInstr = gBattlescriptsForUsingItem[0];
+#ifdef FEATURE_MAXITEMSINBATTLE
+        if (++gNumItemsUsed >= FEATURE_MAXITEMSINBATTLE)
+        {
+            setflag(FLAG_MAX_BATTLE_ITEMS_USED);
+        }
+#endif
     }
     else
     {

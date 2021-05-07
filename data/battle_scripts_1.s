@@ -7748,6 +7748,12 @@ BattleScript_ActionSelectionItemsCantBeUsed::
 	printselectionstring STRINGID_ITEMSCANTBEUSEDNOW
 	endselectionscript
 
+#ifdef FEATURE_MAXITEMSINBATTLE
+BattleScript_ActionSelectionMaxBattleItemsAlreadyUsed::
+	printselectionstring STRINGID_MAXBATTLEITEMSUSED
+	endselectionscript
+#endif
+
 BattleScript_FlushMessageBox::
 	printstring STRINGID_EMPTYSTRING3
 	return

@@ -161,6 +161,9 @@ EWRAM_DATA s32 gBattleMoveDamage = 0;
 EWRAM_DATA s32 gHpDealt = 0;
 EWRAM_DATA s32 gTakenDmg[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u16 gLastUsedItem = 0;
+#ifdef FEATURE_MAXITEMSINBATTLE
+EWRAM_DATA u16 gNumItemsUsed = 0;
+#endif
 EWRAM_DATA u16 gLastUsedAbility = 0;
 EWRAM_DATA u8 gBattlerAttacker = 0;
 EWRAM_DATA u8 gBattlerTarget = 0;
@@ -884,6 +887,9 @@ static void CB2_HandleStartBattle(void)
     playerMultiplayerId = GetMultiplayerId();
     gBattleScripting.multiplayerId = playerMultiplayerId;
     enemyMultiplayerId = playerMultiplayerId ^ BIT_SIDE;
+#ifdef FEATURE_MAXITEMSINBATTLE
+    gNumItemsUsed = 0;
+#endif
 
     switch (gBattleCommunication[MULTIUSE_STATE])
     {
@@ -3895,11 +3901,11 @@ static void HandleTurnActionSelectionState(void)
                     }
                     break;
                 case B_ACTION_USE_ITEM:
-                    #ifdef FEATURE_DEBUGMENU
+#ifdef FEATURE_DEBUGMENU
                     if (FlagGet(FLAG_SYS_NO_BAG_USE) || gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER_NO_PYRAMID | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_RECORDED_LINK))
-                        #else
+#else
                     if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER_NO_PYRAMID | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_RECORDED_LINK))
-                        #endif
+#endif
                     {
                         RecordedBattle_ClearBattlerAction(gActiveBattler, 1);
                         gSelectionBattleScripts[gActiveBattler] = BattleScript_ActionSelectionItemsCantBeUsed;
@@ -3908,6 +3914,18 @@ static void HandleTurnActionSelectionState(void)
                         *(gBattleStruct->stateIdAfterSelScript + gActiveBattler) = STATE_BEFORE_ACTION_CHOSEN;
                         return;
                     }
+#ifdef FEATURE_MAXITEMSINBATTLE
+                    else if (FlagGet(FLAG_MAX_BATTLE_ITEMS_USED) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+                    {
+                        // Handle case where too many items have already been used
+                        RecordedBattle_ClearBattlerAction(gActiveBattler, 1);
+                        gSelectionBattleScripts[gActiveBattler] = BattleScript_ActionSelectionMaxBattleItemsAlreadyUsed;
+                        gBattleCommunication[gActiveBattler] = STATE_SELECTION_SCRIPT;
+                        *(gBattleStruct->selectionScriptFinished + gActiveBattler) = FALSE;
+                        *(gBattleStruct->stateIdAfterSelScript + gActiveBattler) = STATE_BEFORE_ACTION_CHOSEN;
+                        return;
+                    }
+#endif
                     else
                     {
                         BtlController_EmitChooseItem(0, gBattleStruct->field_60[gActiveBattler]);

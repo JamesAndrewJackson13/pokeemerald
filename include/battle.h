@@ -777,6 +777,9 @@ extern s32 gBattleMoveDamage;
 extern s32 gHpDealt;
 extern s32 gTakenDmg[MAX_BATTLERS_COUNT];
 extern u16 gLastUsedItem;
+#ifdef FEATURE_MAXITEMSINBATTLE
+extern u16 gNumItemsUsed;
+#endif
 extern u16 gLastUsedAbility;
 extern u8 gBattlerAttacker;
 extern u8 gBattlerTarget;

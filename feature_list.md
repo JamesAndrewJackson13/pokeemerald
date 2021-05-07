@@ -152,6 +152,9 @@ FEATURE LIST
 ## Allow Trade with FR/LG from Default (FEATURE_DEFAULTFRLGTRADE)
 * Allow for trading with FRLG from the start of the game
 
+## Max Number of Items Useable in Trainer Battles (FEATURE_MAXITEMSINBATTLE [4])
+* Enforce a max number of items in trainer battles
+
 
 # MENUS
 ## Remove the Contest Tab (FEATURE_REMOVECONTESTTAB)

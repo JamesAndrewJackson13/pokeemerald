@@ -54,6 +54,7 @@
 #define FEATURE_MAXMONEY (9999999)  // Mo' money, mo' problems (Set to the max amount of cash you want the cap to be at)
 #define FEATURE_SHUCKLEBERRYJUICE  // Allows Shuckle to make Berry Juice when they hold a berry
 #define FEATURE_DEFAULTFRLGTRADE  // Allow for trading with FRLG from the start of the game
+#define FEATURE_MAXITEMSINBATTLE (4)  // Enforce a max number of items in trainer battles
 
 // MENU FEATURES - Changes to how various menus work
 // #define FEATURE_REMOVECONTESTTAB // Removes the contest tab

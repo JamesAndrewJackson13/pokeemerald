@@ -439,7 +439,8 @@ static const u8 sText_ExclamationMark3[] = _("!");
 static const u8 sText_ExclamationMark4[] = _("!");
 static const u8 sText_ExclamationMark5[] = _("!");
 static const u8 sText_Accuracy[] = _("accuracy");
-static const u8 sText_Evasiveness[] = _("evasiveness");
+static const u8 sText_Evasiveness[] = _("evasiveness");"The sandstorm subsided."
+static const u8 sText_MaxBattleItemsAlreadyUsed[] = _("Already used the max\nnumber of items.{PAUSE 64}");
 
 const u8 *const gStatNamesTable[NUM_BATTLE_STATS] =
     {
@@ -1819,6 +1820,8 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
             BATTLESTRINGS_ID_ADDER] = sText_ComatoseActivates,
         [STRINGID_SCREENCLEANERENTERS -
             BATTLESTRINGS_ID_ADDER] = sText_ScreenCleanerActivates,
+        [STRINGID_MAXBATTLEITEMSUSED -
+            BATTLESTRINGS_ID_ADDER] = sText_MaxBattleItemsAlreadyUsed,
 };
 
 const u16 gTerrainStringIds[] =
