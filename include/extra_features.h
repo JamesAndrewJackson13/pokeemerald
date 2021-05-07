@@ -103,7 +103,10 @@
 
 // SHINY RELATED - Make shiny pokemon work differently
 #define FEATURE_ALLOWSHINYREROLLS  // The critical feature; this allows for other features to do "shiny" re-rolling. Without this, the other features in this section wont work
+#ifdef FEATURE_ALLOWSHINYREROLLS
 #define FEATURE_CHAINFISHING  // Makes it so that reeling in consecutive pokemon species increases the chance of being shiny
+#define FEATURE_NUMBERBATTLED  // Track the number of pokemon of each species defeated
+#endif
 
 // DEBUG RELATED - HELLO, I AM ERROR
 #define FEATURE_DEBUGMENU  // Enables debug mode

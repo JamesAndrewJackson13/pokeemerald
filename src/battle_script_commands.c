@@ -3243,6 +3243,12 @@ static void Cmd_tryfaintmon(void)
                 if (gBattleResults.opponentFaintCounter < 0xFF)
                     gBattleResults.opponentFaintCounter++;
                 gBattleResults.lastOpponentSpecies = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES, NULL);
+#ifdef FEATURE_NUMBERBATTLED
+                u16 defeatedSpecies = SpeciesToNationalPokedexNum(gBattleResults.lastOpponentSpecies);
+                if (gSaveBlock1Ptr->numTimesDefeated[defeatedSpecies - 1] != 999) {
+                    gSaveBlock1Ptr->numTimesDefeated[defeatedSpecies - 1]++;
+                }
+#endif
             }
             if ((gHitMarker & HITMARKER_DESTINYBOND) && gBattleMons[gBattlerAttacker].hp != 0)
             {
@@ -11894,6 +11900,13 @@ static void Cmd_handleballthrow(void)
                     gBattleMons[gBattlerTarget].hp = gBattleMons[gBattlerTarget].maxHP;
                     SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_HP, &gBattleMons[gBattlerTarget].hp);
                 }
+
+#ifdef FEATURE_NUMBERBATTLED
+                u16 caughtSpecies = SpeciesToNationalPokedexNum(GetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_SPECIES));
+                if (gSaveBlock1Ptr->numTimesDefeated[caughtSpecies - 1] != 999) {
+                    gSaveBlock1Ptr->numTimesDefeated[caughtSpecies - 1]++;
+                }
+#endif
             }
             else // not caught
             {

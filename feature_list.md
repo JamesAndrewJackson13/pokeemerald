@@ -274,12 +274,20 @@ FEATURE LIST
 ## Swap Bike Type via a Button (FEATURE_SWAPBIKEBUTTON)
 * Makes the bike work like G4, letting you swap modes via the menu
 
+
 # SHINY
 ## Allow Shinny Re-Rolls (FEATURE_ALLOWSHINYREROLLS)
 * The critical feature; this allows for other features to do "shiny" re-rolling (Without this, the other features in this section wont work).
 
 ## Chain Fishing (FEATURE_CHAINFISHING)
 * Makes it so that reeling in consecutive pokemon species increases the chance of being shiny
+
+## Track Number Battled (FEATURE_NUMBERBATTLED)
+* Track the number of pokemon of each species defeated
+* Shniny chances increase as number defeated increase (up to 5 extra re-rolls at 500 defeated)
+* Shows up in the Pokedex
+* If disabling this feature, must change `HGSS_tilemap_info_screen.bin` and `HGSS_tileset_menu1.png`back to initial form
+
 
 # DEBUG
 ## Debug Menu (FEATURE_DEBUGMENU)

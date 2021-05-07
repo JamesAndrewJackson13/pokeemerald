@@ -3027,7 +3027,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
         }
         break;
 
-        default:  //Player is the O
+        default:  //Player is the Original Trainer
         {
             value = gSaveBlock2Ptr->playerTrainerId[0]
                 | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
@@ -3048,6 +3048,32 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
                 if (gIsFishingEncounter)
                 {
                     shinyRerolls += 2 * gChainFishingStreak;  // For every chained fishing pokemon, gain two more rolls. Do **NOT** count the base roll, just the re-roll attempts
+                }
+    #endif
+    #ifdef FEATURE_NUMBERBATTLED
+                if (species)
+                {
+                    u16 numDefeated = gSaveBlock1Ptr->numTimesDefeated[SpeciesToNationalPokedexNum(species) - 1];
+                    if (numDefeated >= 500)
+                    {
+                        shinyRerolls += 5;
+                    }
+                    else if (numDefeated >= 300)
+                    {
+                        shinyRerolls += 4;
+                    }
+                    else if (numDefeated >= 200)
+                    {
+                        shinyRerolls += 3;
+                    }
+                    else if (numDefeated >= 100)
+                    {
+                        shinyRerolls += 2;
+                    }
+                    else if (numDefeated >= 50)
+                    {
+                        shinyRerolls += 1;
+                    }
                 }
     #endif
                 while (shinyRerolls > 0 && !IsShinyOtIdPersonality(value, personality))

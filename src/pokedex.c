@@ -373,7 +373,11 @@ static void TryDestroyStatBarsBg(void);
 static void CreateStatBars(struct PokedexListItem *dexMon);
 static void CreateStatBarsBg(void);
 static void SpriteCB_StatBars(struct Sprite *sprite);
-static void SpriteCB_StatBarsBg(struct Sprite *sprite);
+static void SpriteCB_StatBarsBg(struct Sprite* sprite);
+
+#ifdef FEATURE_NUMBERBATTLED
+static void PrintNumBeat(u16 dexNum);
+#endif
 
 //HGSS_UI Forms screen for PokemonExpansion (rhh)
 #ifdef POKEMON_EXPANSION
@@ -1147,9 +1151,9 @@ static const struct WindowTemplate sInfoScreen_WindowTemplates[] =
     {
         .bg = 2,
         .tilemapLeft = 15, //HGSSS_Ui
-        .tilemapTop = 7, //HGSSS_Ui
+        .tilemapTop = 6, //HGSSS_Ui
         .width = 2,
-        .height = 2,
+        .height = 3,
         .paletteNum = 15,
         .baseBlock = 641,
     },
@@ -1214,9 +1218,9 @@ static const struct WindowTemplate sNewEntryInfoScreen_WindowTemplates[] =
     {
         .bg = 2,
         .tilemapLeft = 15, //HGSSS_Ui
-        .tilemapTop = 7, //HGSSS_Ui
+        .tilemapTop = 6, //HGSSS_Ui
         .width = 2,
-        .height = 2,
+        .height = 3,
         .paletteNum = 15,
         .baseBlock = 641,
     },
@@ -3575,6 +3579,7 @@ static void Task_LoadInfoScreen(u8 taskId)
         gMain.state++;
         break;
     case 2:
+        PrintNumBeat(sPokedexListItem->dexNum);
         LoadScreenSelectBarMain(0xD);
         // HighlightScreenSelectBarItem(sPokedexView->selectedScreen, 0xD);
         LoadPokedexBgPalette(sPokedexView->isSearchResults);
@@ -5093,11 +5098,117 @@ static void UnusedPrintDecimalNum(u8 windowId, u16 b, u8 left, u8 top)
     PrintInfoSubMenuText(windowId, str, left, top);
 }
 
+#define SHIFT_UP_BY 16
 static void PrintFootprint(u8 windowId, u16 dexNum)
 {
-    u8 image[32 * 4] = {0};
-    const u8 * r12 = gMonFootprintTable[NationalPokedexNumToSpecies(dexNum)];
-    u32 i, j, r5 = 0;
+    const u8* r12 = gMonFootprintTable[NationalPokedexNumToSpecies(dexNum)];
+#ifdef FEATURE_NUMBERBATTLED
+    u8 upperLeftBuff[32] = {0};
+    u8 upperRightBuff[32] = {0};
+    u8 image[4][32] = {{0}, {0}, {0}, {0}};
+    u8 fullImage[32 * 6] = {0};
+    u8 k, i, j, r5;
+
+    // Get the tiles into the image buffers
+    if (r12 != NULL)
+    {
+        for (k = 0; k < 4; k++)
+        {
+            r5 = 0;
+            for (i = 0; i < 8; i++)
+            {
+                u8 r3 = r12[i + k * 8];
+                for (j = 0; j < 4; j++)
+                {
+                    u8 value = ((r3 >> (2 * j)) & 1 ? 2 : 0);
+                    if ((2 << (2 * j)) & r3)
+                        value |= 0x20;
+                    image[k][r5] = value;
+                    r5++;
+                }
+            }
+        }
+    }
+
+    // Shift the left col of tiles up by 3 types
+    k = 0;
+    for (i = SHIFT_UP_BY; i < 32; i++)
+    {
+        upperLeftBuff[i] = image[0][k++];
+    }
+    i = 0;
+    for (k; k < 32; k++)
+    {
+        image[0][i] = image[0][k];
+        i++;
+    }
+    k = 0;
+    for (i; i < 32; i++)
+    {
+        image[0][i] = image[2][k];
+        k++;
+    }
+    i = 0;
+    for (k; k < 32; k++)
+    {
+        image[2][i] = image[2][k];
+        i++;
+    }
+    for (i; i < 32; i++)
+    {
+        image[2][i] = 0;
+    }
+
+    // Shift the right col of tiles up by 3 types
+    k = 0;
+    for (i = SHIFT_UP_BY; i < 32; i++)
+    {
+        upperRightBuff[i] = image[1][k++];
+    }
+    i = 0;
+    for (k; k < 32; k++)
+    {
+        image[1][i] = image[1][k];
+        i++;
+    }
+    k = 0;
+    for (i; i < 32; i++)
+    {
+        image[1][i] = image[3][k];
+        k++;
+    }
+    i = 0;
+    for (k; k < 32; k++)
+    {
+        image[3][i] = image[3][k];
+        i++;
+    }
+    for (i; i < 32; i++)
+    {
+        image[3][i] = 0;
+    }
+
+    // Put the tiles into the final image buffer
+    k = 0;
+    for (i = 0; i < 32; i++)
+    {
+        fullImage[k++] = upperLeftBuff[i];
+    }
+    for (i = 0; i < 32; i++)
+    {
+        fullImage[k++] = upperRightBuff[i];
+    }
+    for (j = 0; j < 4; j++)
+    {
+        for (i = 0; i < 32; i++)
+        {
+            fullImage[k++] = image[j][i];
+        }
+    }
+    CopyToWindowPixelBuffer(windowId, fullImage, sizeof(fullImage), 0);
+#else
+    u8 image[32 * 4] = { 0 };
+    u8 i, j, r5;
 
     if (r12 != NULL)
     {
@@ -5115,7 +5226,26 @@ static void PrintFootprint(u8 windowId, u16 dexNum)
         }
     }
     CopyToWindowPixelBuffer(windowId, image, sizeof(image), 0);
+#endif
 }
+#undef SHIFT_UP_BY
+
+#ifdef FEATURE_NUMBERBATTLED
+static void PrintNumBeat(u16 dexNum)
+{
+    u8 color[3];
+    color[0] = TEXT_COLOR_TRANSPARENT;
+    color[1] = TEXT_DYNAMIC_COLOR_6;
+    color[2] = TEXT_COLOR_LIGHT_GREY;
+
+    u8 buffer1[3];
+    ConvertIntToDecimalStringN(buffer1, gSaveBlock1Ptr->numTimesDefeated[NationalPokedexNumToSpecies(dexNum) - 1], STR_CONV_MODE_LEADING_ZEROS, 3);
+    PrintInfoScreenTextSmall(buffer1, 121, 78);
+
+    u8 buffer2[5] = _("BEAT");
+    PrintInfoScreenTextSmall(buffer2, 119, 70);
+}
+#endif
 
 // Unused
 void sub_80C0DC0(u16 a, u16 b)

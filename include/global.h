@@ -1099,7 +1099,7 @@ struct SaveBlock1
     /*0x31A8*/ u8 giftRibbons[GIFT_RIBBONS_COUNT];
     /*0x31B3*/ struct ExternalEventData externalEventData;
     /*0x31C7*/ struct ExternalEventFlags externalEventFlags;
-    /*0x31DC*/ struct Roamer roamer;
+    /*0x31DC*/ struct Roamer roamer; // 898
 #ifndef FREE_ENIGMA_BERRY
     /*0x31F8*/ struct EnigmaBerry enigmaBerry;  //52 bytes
 #endif
@@ -1126,6 +1126,9 @@ struct SaveBlock1
     /*0x3???*/ struct WaldaPhrase waldaPhrase;
     u8 dexNavSearchLevels[NUM_SPECIES];
     u8 dexNavChain;
+#ifdef FEATURE_NUMBERBATTLED
+    u16 numTimesDefeated[FORMS_START - 1];
+#endif
 };
 
 extern struct SaveBlock1* gSaveBlock1Ptr;
