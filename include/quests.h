@@ -7,7 +7,7 @@
 
 #define NO_ACTIVE_QUEST             -1
 
-struct SideQuest 
+struct SideQuest
 {
 	/*0x00*/ const u8* name;
 	/*0x04*/ const u8* desc;
@@ -20,7 +20,7 @@ struct SideQuest
 
 extern const struct SideQuest gSideQuests[SIDE_QUEST_COUNT];
 
-enum 
+enum
 {
 	QUEST_DIFFICULTY_EASY,
 	QUEST_DIFFICULTY_MEDIUM,
@@ -43,11 +43,15 @@ void DestroyItemMenuIcon(u8 idx);
 void Task_OpenQuestMenuFromStartMenu(u8);
 s8 GetSetQuestFlag(u8 quest, u8 caseId);
 s8 GetActiveQuestIndex(void);
+bool8 IsActiveQuest(u8 questId);
 void SetActiveQuest(u8 questId);
 void TextWindow_SetStdFrame0_WithPal(u8 windowId, u16 destOffset, u8 palIdx);
 void QuestMenu_Init(u8 a0, MainCallback callback);
 void SetQuestMenuActive(void);
 void ResetActiveQuest(void);
-void CopyQuestName(u8 *dst, u8 questId);
+void CopyQuestName(u8* dst, u8 questId);
+void DrawQuestUnlockedToast(u8 questId);
+void DrawQuestCompleteToast(u8 questId);
+
 
 #endif // GUARD_QUESTS_H
