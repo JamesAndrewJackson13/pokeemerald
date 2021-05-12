@@ -76,15 +76,6 @@ ItemUseFunc ItemId_GetFieldFunc(u16 itemId);
 u8 ItemId_GetBattleUsage(u16 itemId);
 ItemUseFunc ItemId_GetBattleFunc(u16 itemId);
 u8 ItemId_GetSecondaryId(u16 itemId);
-void DrawItemHeaderBox(void);
-void HideItemHeaderBox(void);
-void DrawAutoRunBox(bool8 gettingEnabled);
-void HideAutoRunBox(void);
-
-#ifdef FEATURE_SWAPBIKEBUTTON
-void DrawBikeHeaderBox(void);
-void HideBikeHeaderBox(void);
-#endif
 
 enum ItemObtainFlags
 {

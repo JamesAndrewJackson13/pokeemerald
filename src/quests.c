@@ -26,6 +26,7 @@
 #include "quests.h"
 #include "overworld.h"
 #include "event_data.h"
+#include "toast_notifications.h"
 #include "constants/items.h"
 #include "constants/field_weather.h"
 #include "constants/songs.h"
@@ -71,12 +72,12 @@ struct QuestMenuStaticResources
 };  /* size = 0xC */
 
 // RAM
-EWRAM_DATA static struct QuestMenuResources *sStateDataPtr = NULL;
-EWRAM_DATA static u8 *sBg1TilemapBuffer = NULL;
-EWRAM_DATA static struct ListMenuItem *sListMenuItems = NULL;
-EWRAM_DATA static struct QuestMenuStaticResources sListMenuState = {0};
-EWRAM_DATA static u8 sSubmenuWindowIds[3] = {0};
-EWRAM_DATA static u8 gUnknown_2039878[12] = {0};        // from pokefirered src/item_menu_icons.c
+EWRAM_DATA static struct QuestMenuResources* sStateDataPtr = NULL;
+EWRAM_DATA static u8* sBg1TilemapBuffer = NULL;
+EWRAM_DATA static struct ListMenuItem* sListMenuItems = NULL;
+EWRAM_DATA static struct QuestMenuStaticResources sListMenuState = { 0 };
+EWRAM_DATA static u8 sSubmenuWindowIds[3] = { 0 };
+EWRAM_DATA static u8 gUnknown_2039878[12] = { 0 };        // from pokefirered src/item_menu_icons.c
 
 // This File's Functions
 static void DebugQuestMenu(void);
@@ -88,7 +89,7 @@ static bool8 QuestMenu_InitBgs(void);
 static bool8 QuestMenu_LoadGraphics(void);
 static bool8 QuestMenu_AllocateResourcesForListMenu(void);
 static void QuestMenu_BuildListMenuTemplate(void);
-static void QuestMenu_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu * list);
+static void QuestMenu_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu* list);
 static void QuestMenu_ItemPrintFunc(u8 windowId, s32 itemId, u8 y);
 static void QuestMenu_PrintOrRemoveCursorAt(u8 y, u8 state);
 static void QuestMenu_PrintHeader(void);
@@ -112,12 +113,11 @@ static void Task_QuestMenuCleanUp(u8 taskId);
 static void QuestMenu_WithdrawMultipleInitWindow(u16 slotId);
 static void Task_QuestMenuCancel(u8 taskId);
 static void QuestMenu_InitWindows(void);
-static void QuestMenu_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 * str, u8 x, u8 y, u8 letterSpacing, u8 lineSpacing, u8 speed, u8 colorIdx);
+static void QuestMenu_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8* str, u8 x, u8 y, u8 letterSpacing, u8 lineSpacing, u8 speed, u8 colorIdx);
 static void QuestMenu_SetBorderStyleOnWindow(u8 windowId);
 static u8 QuestMenu_GetOrCreateSubwindow(u8 idx);
 static void QuestMenu_DestroySubwindow(u8 idx);
 static void QuestMenu_SetInitializedFlag(u8 a0);
-static bool8 IsActiveQuest(u8 questId);
 
 // Data
 // graphics
@@ -147,6 +147,41 @@ static const u8 gText_MenuQuest_DisplayDetails[] = _("POC: {STR_VAR_1}\nMap: {ST
 static const u8 gText_MenuQuest_DisplayReward[] = _("Reward:\n{STR_VAR_1}");
 static const u8 gText_MenuQuest_BeginQuest[] = _("Initiating Quest:\n{STR_VAR_1}");
 static const u8 gText_MenuQuest_EndQuest[] = _("Cancelling Quest:\n{STR_VAR_1}");
+
+/**
+ * QUEST LIST
+ *  ========
+ * Q01 -
+ * Q02 -
+ * Q03 -
+ * Q04 -
+ * Q05 -
+ * Q06 -
+ * Q07 -
+ * Q08 -
+ * Q09 -
+ * Q10 -
+ * Q11 -
+ * Q12 -
+ * Q13 -
+ * Q14 -
+ * Q15 - Rotom Quest
+ * Q16 -
+ * Q17 -
+ * Q18 -
+ * Q19 -
+ * Q20 -
+ * Q21 -
+ * Q22 -
+ * Q23 -
+ * Q24 -
+ * Q25 -
+ * Q26 -
+ * Q27 -
+ * Q28 -
+ * Q29 -
+ * Q30 -
+ */
 
 #define side_quest(n, d, p, m, r) {.name = n, .desc = d, .poc = p, .map = m, .reward = r}
 static const struct SideQuest sSideQuests[SIDE_QUEST_COUNT] =
@@ -185,10 +220,10 @@ static const struct SideQuest sSideQuests[SIDE_QUEST_COUNT] =
 
 static const u16 sSideQuestDifficultyItemIds[] =
 {
-	ITEM_POKE_BALL,
-	ITEM_GREAT_BALL,
-	ITEM_ULTRA_BALL,
-	ITEM_MASTER_BALL,
+    ITEM_POKE_BALL,
+    ITEM_GREAT_BALL,
+    ITEM_ULTRA_BALL,
+    ITEM_MASTER_BALL,
 };
 
 static const u8 sSideQuestDifficulties[SIDE_QUEST_COUNT] =
@@ -444,7 +479,7 @@ static void BeginPCScreenEffect(TaskFunc task, u16 a1, u16 a2, u16 priority)
 /// from pc_screen_effect
 static void Task_PCScreenEffect_TurnOn(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
 
     switch (task->tState)
     {
@@ -668,7 +703,7 @@ static bool8 QuestMenu_InitBgs(void)
     SetBgTilemapBuffer(1, sBg1TilemapBuffer);
     ScheduleBgCopyTilemapToVram(1);
     SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_1D_MAP | DISPCNT_OBJ_ON);
-    SetGpuReg(REG_OFFSET_BLDCNT , 0);
+    SetGpuReg(REG_OFFSET_BLDCNT, 0);
     ShowBg(0);
     ShowBg(1);
     return TRUE;
@@ -762,7 +797,7 @@ static void QuestMenu_BuildListMenuTemplate(void)
 
 void CreateItemMenuIcon(u16 itemId, u8 idx)
 {
-    u8 * ptr = &gUnknown_2039878[10];
+    u8* ptr = &gUnknown_2039878[10];
     u8 spriteId;
 
     if (ptr[idx] == 0xFF)
@@ -789,7 +824,7 @@ void ResetItemMenuIconState(void)
 
 void DestroyItemMenuIcon(u8 idx)
 {
-    u8 * ptr = &gUnknown_2039878[10];
+    u8* ptr = &gUnknown_2039878[10];
 
     if (ptr[idx] != 0xFF)
     {
@@ -798,10 +833,10 @@ void DestroyItemMenuIcon(u8 idx)
     }
 }
 
-static void QuestMenu_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu * list)
+static void QuestMenu_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu* list)
 {
     u16 itemId;
-    const u8 * desc;
+    const u8* desc;
 
     if (onInit != TRUE)
         PlaySE(SE_SELECT);
@@ -933,7 +968,7 @@ static void QuestMenu_FreeResources(void)
 // pc_screen_effect
 static void Task_PCScreenEffect_TurnOff(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId];
 
     switch (task->tState)
     {
@@ -1018,7 +1053,7 @@ static bool8 IsPCScreenEffectRunning_TurnOff(void)
 
 static void Task_QuestMenuTurnOff2(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     if (!gPaletteFade.active && !IsPCScreenEffectRunning_TurnOff())
     {
@@ -1080,7 +1115,7 @@ static bool8 IsPCScreenEffectRunning_TurnOn(void)
 
 static void Task_QuestMenuMain(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     u16 scroll;
     u16 row;
     s32 input;
@@ -1144,7 +1179,7 @@ static void QuestMenu_ReturnFromSubmenu(u8 taskId)
 static void sub_8098660(u8 flag)
 {
     u8 i;
-    u8 * ptr = &gUnknown_2039878[1];
+    u8* ptr = &gUnknown_2039878[1];
 
     for (i = 0; i < 9; i++)
     {
@@ -1156,7 +1191,7 @@ static void sub_8098660(u8 flag)
 static void sub_80986A8(s16 x, u16 y)
 {
     u8 i;
-    u8 * ptr = &gUnknown_2039878[1];
+    u8* ptr = &gUnknown_2039878[1];
 
     for (i = 0; i < 9; i++)
     {
@@ -1169,7 +1204,7 @@ static void sub_80986A8(s16 x, u16 y)
 
 static void Task_QuestMenuSubmenuInit(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     u8 windowId;
 
     QuestMenu_SetBorderStyleOnWindow(4);    //for sub menu list items
@@ -1231,7 +1266,7 @@ static void Task_QuestMenuSubmenuRun(u8 taskId)
 
 static void QuestMenuSubmenuSelectionMessage(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     ClearStdWindowAndFrameToTransparent(4, FALSE);
     QuestMenu_DestroySubwindow(0);
@@ -1286,7 +1321,7 @@ static void Task_QuestMenuBeginQuest(u8 taskId)
 
 static void QuestMenu_DisplaySubMenuMessage(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     u8 windowId;
 
     windowId = QuestMenu_GetOrCreateSubwindow(2);
@@ -1305,7 +1340,7 @@ static void Task_QuestMenuRefreshAfterAcknowledgement(u8 taskId)
 
 static void Task_QuestMenuCleanUp(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     QuestMenu_DestroySubwindow(2);
     PutWindowTilemap(1);
@@ -1322,7 +1357,7 @@ static void Task_QuestMenuCleanUp(u8 taskId)
 
 static void Task_QuestMenuCancel(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     ClearStdWindowAndFrameToTransparent(4, FALSE);
     QuestMenu_DestroySubwindow(0);
@@ -1372,7 +1407,7 @@ static void QuestMenu_InitWindows(void)
         sSubmenuWindowIds[i] = 0xFF;
 }
 
-static void QuestMenu_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 * str, u8 x, u8 y, u8 letterSpacing, u8 lineSpacing, u8 speed, u8 colorIdx)
+static void QuestMenu_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8* str, u8 x, u8 y, u8 letterSpacing, u8 lineSpacing, u8 speed, u8 colorIdx)
 {
     AddTextPrinterParameterized4(windowId, fontId, x, y, letterSpacing, lineSpacing, sQuestMenuWindowFontColors[colorIdx], speed, str);
 }
@@ -1404,7 +1439,7 @@ static void QuestMenu_DestroySubwindow(u8 idx)
 // Start Menu Function
 void Task_OpenQuestMenuFromStartMenu(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     if (!gPaletteFade.active)
     {
         CleanupOverworldWindowsAndTilemaps();
@@ -1448,7 +1483,7 @@ s8 GetActiveQuestIndex(void)
         return NO_ACTIVE_QUEST;
 }
 
-static bool8 IsActiveQuest(u8 questId)
+bool8 IsActiveQuest(u8 questId)
 {
     if ((u8)GetActiveQuestIndex() == questId)
         return TRUE;
@@ -1483,10 +1518,89 @@ void SetQuestMenuActive(void)
     FlagSet(FLAG_QUEST_MENU_ACTIVE);
 }
 
-void CopyQuestName(u8 *dst, u8 questId)
+void CopyQuestName(u8* dst, u8 questId)
 {
     StringCopy(dst, sSideQuests[questId].name);
 }
+
+
+#define TOAST_WINDOW_WIDTH   (DISPLAY_TILESET_WIDTH / 3)
+#define TOAST_WINDOW_LEFT    (DISPLAY_TILESET_WIDTH - TOAST_WINDOW_WIDTH)
+#define TOAST_WINDOW_HEIGHT  3
+#define TOAST_WINDOW_TOP     2
+#define TOAST_TIMEOUT        100
+
+#define tQuestId          data[1]
+#define tSoundEffect      data[2]
+#define tTextToShowIndex  data[3]
+
+#define TOAST_TEXT_UNLOCKED  0
+#define TOAST_TEXT_COMPLETED 1
+
+
+static const u8* const questToastText[] = {
+    [TOAST_TEXT_UNLOCKED] =  gText_QuestUnlocked,
+    [TOAST_TEXT_COMPLETED] = gText_QuestComplete
+};
+
+static void Task_DoToast(u8 taskId)
+{
+    struct Task* task = &gTasks[taskId];
+    switch (task->tState)
+    {
+    case 0:
+        //mgba_printf(MGBA_LOG_INFO, "case 0");
+        CopyQuestName(gStringVar1, task->tQuestId);
+        StringExpandPlaceholders(gStringVar4, questToastText[task->tTextToShowIndex]);
+        DrawToastBox(TOAST_WINDOW_LEFT, TOAST_WINDOW_TOP, TOAST_WINDOW_WIDTH, TOAST_WINDOW_HEIGHT);
+        DrawToastBoxText(gStringVar4, 0, 0);
+        break;
+    case 1:
+        //mgba_printf(MGBA_LOG_INFO, "case 1");
+        PlaySE(task->tSoundEffect);
+        break;
+    case TOAST_TIMEOUT:
+        //mgba_printf(MGBA_LOG_INFO, "case TOAST_TIMEOUT");
+        HideToastBox();
+        DestroyTask(taskId);
+        break;
+    }
+    //mgba_printf(MGBA_LOG_INFO, "task->tState: %u", task->tState);
+    task->tState++;
+}
+
+static void drawQuestToast(u8 questId, u8 soundEffect, u8 textToShowIndex)
+{
+    u8 taskId = CreateTask(Task_DoToast, 1);
+    struct Task* task = &gTasks[taskId];
+    task->tState = 0;
+    task->tQuestId = questId;
+    task->tSoundEffect = soundEffect;
+    task->tTextToShowIndex = textToShowIndex;
+}
+
+void DrawQuestUnlockedToast(u8 questId)
+{
+    drawQuestToast(questId, SE_CONTEST_HEART, TOAST_TEXT_UNLOCKED);
+}
+
+void DrawQuestCompleteToast(u8 questId)
+{
+    drawQuestToast(questId, SE_APPLAUSE, TOAST_TEXT_COMPLETED);
+}
+
+
+#undef TOAST_TEXT_UNLOCKED
+#undef TOAST_TEXT_COMPLETED
+
+#undef tQuestId
+#undef tSoundEffect
+#undef tTextToShow
+
+#undef TOAST_WINDOW_WIDTH
+#undef TOAST_WINDOW_LEFT
+#undef TOAST_WINDOW_HEIGHT
+#undef TOAST_WINDOW_TOP
 
 #undef tBldYBak
 #undef tBldCntBak

@@ -34,4 +34,7 @@
 #endif
 #endif
 
+#define DISPLAY_TILESET_WIDTH  30
+#define DISPLAY_TILESET_HEIGHT 20
+
 #endif // GUARD_CONFIG_H

@@ -17,6 +17,7 @@
 #include "menu.h"
 #include "party_menu.h"
 #include "overworld.h"
+#include "toast_notifications.h"
 #include "constants/items.h"
 #include "constants/hold_effects.h"
 #include "constants/tv.h"
@@ -26,14 +27,9 @@ extern u16 gUnknown_0203CF30[];
 // this file's functions
 static bool8 CheckPyramidBagHasItem(u16 itemId, u16 count);
 static bool8 CheckPyramidBagHasSpace(u16 itemId, u16 count);
-static void ShowItemIconSprite(u16 item, bool8 firstTime, bool8 flash);
-static void DestroyItemIconSprite(void);
 
 // EWRAM variables
 EWRAM_DATA struct BagPocket gBagPockets[POCKETS_COUNT] = {0};
-EWRAM_DATA static u8 sHeaderBoxWindowId = 0;
-EWRAM_DATA u8 sItemIconSpriteId = 0;
-EWRAM_DATA u8 sItemIconSpriteId2 = 0;
 
 // rodata
 #include "data/text/item_descriptions.h"
@@ -1044,42 +1040,50 @@ static u8 ReformatItemDescription(u16 item, u8 *dest)
     return numLines;
 }
 
-#define ITEM_ICON_X 26
-#define ITEM_ICON_Y 24
-
-void DrawHeaderBox(u16 itemToShow, u8* dst, bool8 handleFlash, u8 numLinesToDraw)
+void DrawAutoRunBox(bool8 gettingEnabled)
 {
-    u8 textY;
-
-    if (numLinesToDraw == 1)
-        textY = 4;
-    else
-        textY = 0;
-
-    struct WindowTemplate template;
-
-    SetWindowTemplateFields(&template, 0, 1, 1, 28, 3, 15, 8);
-    sHeaderBoxWindowId = AddWindow(&template);
-    FillWindowPixelBuffer(sHeaderBoxWindowId, PIXEL_FILL(0));
-    PutWindowTilemap(sHeaderBoxWindowId);
-    CopyWindowToVram(sHeaderBoxWindowId, 3);
-    DrawStdFrameWithCustomTileAndPalette(sHeaderBoxWindowId, FALSE, 0x214, 14);
-
-    ShowItemIconSprite(itemToShow, TRUE, handleFlash);
-    AddTextPrinterParameterized(sHeaderBoxWindowId, 0, dst, ITEM_ICON_X + 2, textY, 0, NULL);
-}
-
-void HideHeaderBox(bool8 hadItem, bool8 hadMsgBox)
-{
-    if (hadItem == TRUE)
-        DestroyItemIconSprite();
-    if (hadMsgBox == TRUE)
+    u16 toShow;
+    if (gettingEnabled)
     {
-        ClearStdWindowAndFrameToTransparent(sHeaderBoxWindowId, FALSE);
-        CopyWindowToVram(sHeaderBoxWindowId, 3);
-        RemoveWindow(sHeaderBoxWindowId);
+        StringCopy(gStringVar1, gText_AutoRunEnabled);
+        toShow = ITEM_RUNNINGSHOES_RUNNING;
     }
+    else
+    {
+        StringCopy(gStringVar1, gText_AutoRunDisabled);
+        toShow = ITEM_RUNNINGSHOES_WALKING;
+    }
+    DrawHeaderBox(toShow, gStringVar1, EXM_FLASH_ACTIVE, 1);
+
 }
+
+void HideAutoRunBox(void)
+{
+    HideHeaderBox(TRUE, TRUE);
+}
+
+#ifdef FEATURE_SWAPBIKEBUTTON
+void DrawBikeHeaderBox(void)
+{
+    u16 toShow;
+    if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_ACRO_BIKE)
+    {
+        StringCopy(gStringVar1, gText_BikeModeAcro);
+        toShow = ITEM_ACRO_BIKE;
+    }
+    else
+    {
+        StringCopy(gStringVar1, gText_BikeModeMach);
+        toShow = ITEM_MACH_BIKE;
+    }
+    DrawHeaderBox(toShow, gStringVar1, EXM_FLASH_ACTIVE, 1);
+}
+
+void HideBikeHeaderBox(void)
+{
+    HideHeaderBox(TRUE, TRUE);
+}
+#endif
 
 /**
  * gSpecialVar_0x8006: The item just picked up
@@ -1112,122 +1116,4 @@ void HideItemHeaderBox(void)
         GetSetItemObtained(gSpecialVar_0x8006, FLAG_SET_OBTAINED);
 
     HideHeaderBox(TRUE, !haveSeenItemBefore);
-}
-
-static const u8 sAutoRunEnabled[]  = _("Auto-run: Enabled");
-static const u8 sAutoRunDisabled[] = _("Auto-run: Disabled");
-void DrawAutoRunBox(bool8 gettingEnabled)
-{
-    u8* dst;
-    u16 toShow;
-    if (gettingEnabled)
-    {
-        dst = &sAutoRunEnabled;
-        toShow = ITEM_RUNNINGSHOES_RUNNING;
-    }
-    else
-    {
-        dst = &sAutoRunDisabled;
-        toShow = ITEM_RUNNINGSHOES_WALKING;
-    }
-    DrawHeaderBox(toShow, dst, EXM_FLASH_ACTIVE, 1);
-
-}
-
-void HideAutoRunBox(void)
-{
-    HideHeaderBox(TRUE, TRUE);
-}
-
-#ifdef FEATURE_SWAPBIKEBUTTON
-static const u8 sBikeModeAcro[] = _("Bike Mode: Acro");
-static const u8 sBikeModeMach[] = _("Bike Mode: Mach");
-void DrawBikeHeaderBox(void)
-{
-    u8* dst;
-    u16 toShow;
-    if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_ACRO_BIKE)
-    {
-        dst = &sBikeModeAcro;
-        toShow = ITEM_ACRO_BIKE;
-    }
-    else
-    {
-        dst = &sBikeModeMach;
-        toShow = ITEM_MACH_BIKE;
-    }
-    DrawHeaderBox(toShow, dst, EXM_FLASH_ACTIVE, 1);
-}
-
-void HideBikeHeaderBox(void)
-{
-    HideHeaderBox(TRUE, TRUE);
-}
-#endif
-
-#include "gpu_regs.h"
-
-#define ITEM_TAG 0x2722 //same as money label
-static void ShowItemIconSprite(u16 item, bool8 firstTime, bool8 flash)
-{
-	s16 x, y;
-	u8 iconSpriteId;
-    u8 spriteId2 = MAX_SPRITES;
-
-    if (flash)
-    {
-        SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_OBJWIN_ON);
-        SetGpuRegBits(REG_OFFSET_WINOUT, WINOUT_WINOBJ_OBJ);
-    }
-
-    iconSpriteId = AddItemIconSprite(ITEM_TAG, ITEM_TAG, item);
-    if (flash)
-        spriteId2 = AddItemIconSprite(ITEM_TAG, ITEM_TAG, item);
-
-	if (iconSpriteId != MAX_SPRITES)
-	{
-        if (!firstTime)
-        {
-            //show in message box
-			x = 215;
-			y = 140;
-        }
-        else
-        {
-            // show in header box
-			x = ITEM_ICON_X;
-			y = ITEM_ICON_Y;
-        }
-
-		gSprites[iconSpriteId].pos2.x = x;
-		gSprites[iconSpriteId].pos2.y = y;
-		gSprites[iconSpriteId].oam.priority = 0;
-	}
-
-    if (spriteId2 != MAX_SPRITES)
-    {
-        gSprites[spriteId2].pos2.x = x;
-        gSprites[spriteId2].pos2.y = y;
-        gSprites[spriteId2].oam.priority = 0;
-        gSprites[spriteId2].oam.objMode = ST_OAM_OBJ_WINDOW;
-        sItemIconSpriteId2 = spriteId2;
-    }
-
-	sItemIconSpriteId = iconSpriteId;
-}
-
-static void DestroyItemIconSprite(void)
-{
-	FreeSpriteTilesByTag(ITEM_TAG);
-	FreeSpritePaletteByTag(ITEM_TAG);
-	FreeSpriteOamMatrix(&gSprites[sItemIconSpriteId]);
-	DestroySprite(&gSprites[sItemIconSpriteId]);
-
-    if (Overworld_GetFlashLevel() > 1 && sItemIconSpriteId2 != MAX_SPRITES)
-    {
-        //FreeSpriteTilesByTag(ITEM_TAG);
-        //FreeSpritePaletteByTag(ITEM_TAG);
-        FreeSpriteOamMatrix(&gSprites[sItemIconSpriteId2]);
-        DestroySprite(&gSprites[sItemIconSpriteId2]);
-    }
 }
