@@ -3273,6 +3273,18 @@ extern const u8 gText_SideQuestReward_28[];
 extern const u8 gText_SideQuestReward_29[];
 extern const u8 gText_SideQuestReward_30[];
 
+// Auto-run toast notifications
+extern const u8 gText_AutoRunEnabled[];
+extern const u8 gText_AutoRunDisabled[];
+
+// Bike toast notifications
+extern const u8 gText_BikeModeAcro[];
+extern const u8 gText_BikeModeMach[];
+
+// Quest toast notifications
+extern const u8 gText_QuestUnlocked[];
+extern const u8 gText_QuestComplete[];
+
 // Berry Blender
 extern const u8 gText_SavingDontTurnOff2[];
 extern const u8 gText_BlenderMaxSpeedRecord[];
