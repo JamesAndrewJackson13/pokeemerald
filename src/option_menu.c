@@ -17,8 +17,6 @@
 #include "strings.h"
 #include "gba/m4a_internal.h"
 #include "constants/rgb.h"
-#include "mgba.h"
-#include "../gflib/string_util.h"
 
 #define Y_DIFF 16 // Difference in pixels between items.
 

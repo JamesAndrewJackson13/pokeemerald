@@ -11,6 +11,12 @@
 #include "constants/species.h"
 #include "constants/berry.h"
 
+
+#ifdef FEATURE_MGBAPRINT
+#include "mgba.h"
+#include "../gflib/string_util.h"
+#endif
+
 // free saveblock 1 defines
 #define FREE_TRAINER_HILL               //frees up trainer hill data. 28 bytes
 #define FREE_MYSTERY_EVENT_BUFFERS      //frees up mystery event and ramScript. roughly 1880 bytes

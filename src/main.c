@@ -24,9 +24,6 @@
 #include "main.h"
 #include "trainer_hill.h"
 #include "constants/rgb.h"
-#ifdef FEATURE_MGBAPRINT
-#include "mgba.h"
-#endif
 
 static void VBlankIntr(void);
 static void HBlankIntr(void);

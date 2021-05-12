@@ -41,9 +41,6 @@
 #include "constants/moves.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
-#ifdef FEATURE_MGBAPRINT
-#include "mgba.h"
-#endif
 
 struct WallpaperTable
 {

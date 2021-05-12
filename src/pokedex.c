@@ -46,9 +46,6 @@
 #include "constants/party_menu.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
-#ifdef FEATURE_MGBAPRINT
-#include "mgba.h"
-#endif
 
 enum
 {
