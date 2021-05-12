@@ -55,6 +55,7 @@
     STD_FIND_ITEM = 1
     STD_OBTAIN_DECORATION = 7
     STD_REGISTER_MATCH_CALL = 8
+    DEBUG_PRINTF = 11
 
     @ Calls the standard function at index function.
     .macro callstd function:req
@@ -947,7 +948,7 @@
     .macro givemon species:req, level:req, item:req
     .byte 0x79
     .2byte \species
-    .byte \level
+    .2byte \level
     .2byte \item
     .4byte 0x0
     .4byte 0x0
@@ -1671,6 +1672,7 @@
     .byte 0xe9
     .endm
 
+    @ Allows interaction with the quest code
     .macro questmenu case:req, questId:req
     .byte 0xea
     .byte \case
@@ -1680,6 +1682,51 @@
     .macro openquestmenu
     questmenu 0 0
     .endm
+
+    .macro questmenuunlockquest questId:req
+    questmenu 1 \questId
+    .endm
+
+    .macro questmenucompletequest questId:req
+    questmenu 2 \questId
+    .endm
+
+    .macro questmenusetactive questId:req
+    questmenu 3 \questId
+    .endm
+
+    .macro questmenuresetactive questId:req
+    questmenu 4 \questId
+    .endm
+
+    .macro questmenubufferquestname questId:req
+    questmenu 5 \questId
+    .endm
+
+    .macro questmenugetactivequest questId:req
+    questmenu 6 \questId
+    .endm
+
+    .macro questmenucheckunlocked questId:req
+    questmenu 7 \questId
+    .endm
+
+    .macro questmenucheckactive questId:req
+    questmenu 8 \questId
+    .endm
+
+    .macro questmenucheckcomplete questId:req
+    questmenu 9 \questId
+    .endm
+
+    .macro questmenutoastunlockshow questId:req
+    questmenu 10 \questId
+    .endm
+
+    .macro questmenutoastcompleteshow questId:req
+    questmenu 11 \questId
+    .endm
+
 
 #ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
     @ Counts how many of a Pokemon are in the player's party. Result returns to VAR_RESULT
@@ -1717,6 +1764,26 @@
     .byte 0xef
     .endm
 #endif
+
+    @ Allows for String vars 1, 2, and 3 to be stored/restored.
+    @ strindex (u8): The string variable index to work with
+    @ isgetcall (bool8): When true, we get the temp var and store into the strvar. When false, we store whats in the strvar into the temp var
+    .macro getstorestringvar strindex:req isgetcall:req
+    .byte 0xf0
+    .byte \strindex
+    .byte \isgetcall
+    .endm
+
+    @ Print a debug string
+    .macro debug_printf text:req
+    .byte 0xf1
+    .4byte \text
+    .endm
+
+    .macro printf text:req
+    loadword 0, \text
+    callstd DEBUG_PRINTF
+    .endm
 
 @ Supplementary
 

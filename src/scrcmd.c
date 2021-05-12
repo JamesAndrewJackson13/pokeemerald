@@ -1,4 +1,5 @@
 #include "global.h"
+#include "toast_notifications.h"
 #include "frontier_util.h"
 #include "battle_setup.h"
 #include "berry.h"
@@ -51,9 +52,6 @@
 #include "quests.h"
 #include "constants/event_objects.h"
 
-#ifdef FEATURE_MGBAPRINT
-#include "mgba.h"
-#endif
 
 typedef u16(*SpecialFunc)(void);
 typedef void (*NativeFunc)(void);
@@ -1559,6 +1557,7 @@ bool8 ScrCmd_bufferspeciesname(struct ScriptContext *ctx)
     u16 species = VarGet(ScriptReadHalfword(ctx));
 
     StringCopy(sScriptStringVars[stringVarIndex], gSpeciesNames[species]);
+    mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_bufferspeciesname | sScriptStringVars[stringVarIndex]: %s (%u) | gSpeciesNames[species]: %s (%u) ", ConvertToAscii(sScriptStringVars[stringVarIndex]), stringVarIndex, ConvertToAscii(gSpeciesNames[species]), species);
     return FALSE;
 }
 
@@ -1690,7 +1689,7 @@ bool8 ScrCmd_bufferboxname(struct ScriptContext *ctx)
 bool8 ScrCmd_givemon(struct ScriptContext *ctx)
 {
     u16 species = VarGet(ScriptReadHalfword(ctx));
-    u8 level = ScriptReadByte(ctx);
+    u8 level = (u8)VarGet(ScriptReadHalfword(ctx));
     u16 item = VarGet(ScriptReadHalfword(ctx));
     u32 unkParam1 = ScriptReadWord(ctx);
     u32 unkParam2 = ScriptReadWord(ctx);
@@ -2421,11 +2420,23 @@ bool8 ScrCmd_questmenu(struct ScriptContext* ctx)
         else
             gSpecialVar_Result = FALSE;
         break;
+    case QUEST_MENU_CHECK_ACTIVE:
+        if (IsActiveQuest(questId))
+            gSpecialVar_Result = TRUE;
+        else
+            gSpecialVar_Result = FALSE;
+        break;
     case QUEST_MENU_CHECK_COMPLETE:
         if (GetSetQuestFlag(questId, FLAG_GET_COMPLETED))
             gSpecialVar_Result = TRUE;
         else
             gSpecialVar_Result = FALSE;
+        break;
+    case QUEST_MENU_TOAST_UNLOCK_SHOW:
+        DrawQuestUnlockedToast(questId);
+        break;
+    case QUEST_MENU_TOAST_COMPLETE_SHOW:
+        DrawQuestCompleteToast(questId);
         break;
     }
 
@@ -2567,3 +2578,35 @@ bool8 ScrCmd_textcolor(struct ScriptContext* ctx)
     return FALSE;
 }
 #endif
+
+
+// Handle storing string vars
+static u8 gStringVarStore[0x100];
+bool8 ScrCmd_getstorestringvar(struct ScriptContext* ctx)
+{
+    u8 stringVarIndex = ScriptReadByte(ctx);
+    bool8 isGetCall = ScriptReadByte(ctx);
+    // mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_storestringvar (before) || isGetCall: %s | sScriptStringVars[stringVarIndex]: %s (%u) | gStringVarStore: %s ", isGetCall ? "TRUE" : "FALSE", ConvertToAscii(sScriptStringVars[stringVarIndex]), stringVarIndex, ConvertToAscii(gStringVarStore));
+    if(isGetCall)
+    {
+        StringCopy(sScriptStringVars[stringVarIndex], gStringVarStore);
+        mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_storestringvar || STR_VAR_%u <- gStringVarStore (%s)", stringVarIndex, ConvertToAscii(gStringVarStore));
+    }
+    else
+    {
+        StringCopy(gStringVarStore, sScriptStringVars[stringVarIndex]);
+        mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_storestringvar || gStringVarStore <- STR_VAR_%u (%s)", stringVarIndex, ConvertToAscii(gStringVarStore));
+    }
+
+    return FALSE;
+}
+
+bool8 ScrCmd_printf(struct ScriptContext* ctx)
+{
+    const u8* msg = (const u8*)ScriptReadWord(ctx);
+
+    if (msg == NULL)
+        msg = (const u8*)ctx->data[0];
+    mgba_printf(MGBA_LOG_DEBUG, "%s", ConvertToAscii(msg));
+    return FALSE;
+}

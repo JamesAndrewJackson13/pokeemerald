@@ -70,10 +70,6 @@
 #ifdef FEATURE_DEOXYSCHANGEFORM
 #include "constants/metatile_behaviors.h"
 #endif
-#ifdef FEATURE_MGBAPRINT
-#include "mgba.h"
-#include "../gflib/string_util.h"
-#endif
 
 EWRAM_DATA bool8 gBikeCyclingChallenge = FALSE;
 EWRAM_DATA u8 gBikeCollisions = 0;
@@ -4668,3 +4664,32 @@ u8 ContextNpcGetTextColor(void)
 #endif
 
 #endif
+
+void DumpAllScriptVars(void)
+{
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_0x8000: %u", gSpecialVar_0x8000);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_0x8001: %u", gSpecialVar_0x8001);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_0x8002: %u", gSpecialVar_0x8002);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_0x8003: %u", gSpecialVar_0x8003);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_0x8004: %u", gSpecialVar_0x8004);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_0x8005: %u", gSpecialVar_0x8005);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_0x8006: %u", gSpecialVar_0x8006);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_0x8007: %u", gSpecialVar_0x8007);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_0x8008: %u", gSpecialVar_0x8008);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_0x8009: %u", gSpecialVar_0x8009);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_0x800A: %u", gSpecialVar_0x800A);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_0x800B: %u", gSpecialVar_0x800B);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_Result: %u", gSpecialVar_Result);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_LastTalked: %u", gSpecialVar_LastTalked);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_Facing: %u", gSpecialVar_Facing);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_MonBoxId: %u", gSpecialVar_MonBoxId);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_MonBoxPos: %u", gSpecialVar_MonBoxPos);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_Unused_0x8014: %u", gSpecialVar_Unused_0x8014);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_TextColor: %u", gSpecialVar_TextColor);
+        mgba_printf(MGBA_LOG_DEBUG, "gSpecialVar_PrevTextColor: %u", gSpecialVar_PrevTextColor);
+        mgba_printf(MGBA_LOG_DEBUG, "gStringVar1: %s", ConvertToAscii(gStringVar1));
+        mgba_printf(MGBA_LOG_DEBUG, "gStringVar2: %s", ConvertToAscii(gStringVar2));
+        mgba_printf(MGBA_LOG_DEBUG, "gStringVar3: %s", ConvertToAscii(gStringVar3));
+        mgba_printf(MGBA_LOG_DEBUG, "gStringVar4: %s", ConvertToAscii(gStringVar4));
+}
+
