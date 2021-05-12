@@ -153,6 +153,7 @@ SECTIONS {
         src/map_name_popup.o(.text);
         src/item_menu_icons.o(.text);
         src/battle_anim_mon_movement.o(.text);
+        src/toast_notifications.o(.text);
         src/item.o(.text);
         src/contest.o(.text);
         src/shop.o(.text);
@@ -536,6 +537,7 @@ SECTIONS {
         src/map_name_popup.o(.rodata);
         src/item_menu_icons.o(.rodata);
         src/battle_anim_mon_movement.o(.rodata);
+        src/toast_notifications.o(.rodata);
         src/item.o(.rodata);
         src/contest.o(.rodata);
         src/shop.o(.rodata);
