@@ -236,7 +236,7 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
     }
 
 #ifdef FEATURE_DEBUGMENU
-    if (input->input_field_1_2)
+    if (input->input_field_1_3)
     {
         PlaySE(SE_WIN_OPEN);
         Debug_ShowMainMenu();
