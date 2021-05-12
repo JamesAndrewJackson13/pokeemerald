@@ -2131,6 +2131,18 @@ const u8 gText_SideQuestReward_28[] = _("Reward 28");
 const u8 gText_SideQuestReward_29[] = _("Reward 29");
 const u8 gText_SideQuestReward_30[] = _("Reward 30");
 
+// Auto-run toast notifications
+const u8 gText_AutoRunEnabled[] =  _("Auto-run: Enabled");
+const u8 gText_AutoRunDisabled[] = _("Auto-run: Disabled");
+
+// Bike toast notifications
+const u8 gText_BikeModeAcro[] = _("Bike Mode: Acro");
+const u8 gText_BikeModeMach[] = _("Bike Mode: Mach");
+
+// Quest toast notifications
+const u8 gText_QuestUnlocked[] = _("Quest Unlocked!\n{SIZE 0}{STR_VAR_1}");
+const u8 gText_QuestComplete[] = _("Quest Complete!\n{SIZE 0}{STR_VAR_1}");
+
 #ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
 // Rotom form options
 const u8 gText_MicrowaveOven[] = _("Microwave Oven");
