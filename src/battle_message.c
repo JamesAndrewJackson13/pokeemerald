@@ -439,7 +439,7 @@ static const u8 sText_ExclamationMark3[] = _("!");
 static const u8 sText_ExclamationMark4[] = _("!");
 static const u8 sText_ExclamationMark5[] = _("!");
 static const u8 sText_Accuracy[] = _("accuracy");
-static const u8 sText_Evasiveness[] = _("evasiveness");"The sandstorm subsided."
+static const u8 sText_Evasiveness[] = _("evasiveness");
 static const u8 sText_MaxBattleItemsAlreadyUsed[] = _("Already used the max\nnumber of items.{PAUSE 64}");
 
 const u8 *const gStatNamesTable[NUM_BATTLE_STATS] =

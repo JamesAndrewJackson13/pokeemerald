@@ -345,7 +345,7 @@ void HandleAction_UseItem(void)
 #ifdef FEATURE_MAXITEMSINBATTLE
         if (++gNumItemsUsed >= FEATURE_MAXITEMSINBATTLE)
         {
-            setflag(FLAG_MAX_BATTLE_ITEMS_USED);
+            FlagSet(FLAG_MAX_BATTLE_ITEMS_USED);
         }
 #endif
     }
