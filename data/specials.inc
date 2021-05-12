@@ -545,3 +545,5 @@ gSpecials:: @ 81DBA64
 #ifdef FEATURE_DEOXYSCHANGEFORM
 	def_special TryChangeDeoxysForm
 #endif
+	@ DEBUG
+	def_special DumpAllScriptVars

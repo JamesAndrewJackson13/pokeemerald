@@ -1,0 +1,66 @@
+// Call this to do all the boiler plate steps for giving the player a pokemon
+// @var 0x8004: Species
+// @var 0x8005: Level
+// @var 0x8006: Item
+// @Returns: VAR_RESULT: value refering to the result of the action
+//               0: mon was added to team
+//               1: mon was sent to PC
+//               2: mon couldn't be given to player due to no space; this edge case will require extra consideration
+//           STR_VAR_2: by side-effect; this should have the nickname of the gifted mon
+// @Note: This function will clober 0x8004, VAR_TEMP_1, VAR_TEMP_2, VAR_TEMP_3, VAR_TEMP_4, and STR_VAR_1, so store those if you require them later
+script(global) Global_GiftPokemonToPlayer {
+    // Store the arguments in a temp. var.
+    copyvar(VAR_TEMP_1, VAR_0x8004)
+    copyvar(VAR_TEMP_2, VAR_0x8005)
+    copyvar(VAR_TEMP_3, VAR_0x8006)
+
+    // Prep the first string variable
+    bufferspeciesname(0, VAR_0x8004)
+    getstorestringvar(0, FALSE)
+
+    // Give the mon, handle the result
+    givemon(VAR_0x8004, VAR_0x8005, VAR_0x8006)
+    if (var(VAR_RESULT) > 1) {
+        // Show the generic out of space message, then return
+        msgbox(gText_NoMoreRoomForPokemon)
+        return
+    }
+    playfanfare(MUS_OBTAIN_ITEM)
+	msgbox("{PLAYER} received the {STR_VAR_1}!")
+	waitmessage
+	waitfanfare
+    // We do this if statement so we can keep track of where the mon went since the yes/no box well clober VAR_RESULT
+    if(var(VAR_RESULT) == 0) {
+        // Mon added directly to the player's party
+        // printf("Mon added directly to the player's party")
+        msgbox(gText_NicknameThisPokemon, MSGBOX_YESNO)
+        if(var(VAR_RESULT) == YES) {
+            // printf("Nicknaming mon")
+            call(Common_EventScript_GetGiftMonPartySlot)
+            call(Common_EventScript_NameReceivedPartyMon)
+            // copyvar(VAR_TEMP_4, STR_VAR_2)
+            getstorestringvar(1, FALSE)
+        }
+        setvar(VAR_RESULT, 0)
+    } else {
+        // Mon added to the player's PC
+        // printf("Mon added to the player's PC")
+        msgbox(gText_NicknameThisPokemon, MSGBOX_YESNO)
+        if(var(VAR_RESULT) == YES) {
+            // printf("Nicknaming mon")
+            call(Common_EventScript_NameReceivedBoxMon)
+            getstorestringvar(1, FALSE)
+            // special(DumpAllScriptVars)
+            // copyvar(VAR_TEMP_4, STR_VAR_2)
+        }
+        call(Common_EventScript_TransferredToPC)
+        setvar(VAR_RESULT, 1)
+    }
+    // Return the stored variables
+    copyvar(VAR_0x8004, VAR_TEMP_1)
+    copyvar(VAR_0x8005, VAR_TEMP_2)
+    copyvar(VAR_0x8006, VAR_TEMP_3)
+    getstorestringvar(1, TRUE)
+    // copyvar(STR_VAR_2, VAR_TEMP_4)
+    return
+}

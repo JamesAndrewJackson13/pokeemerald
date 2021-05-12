@@ -46,3 +46,7 @@ Common_EventScript_SaveGame:: @ 827134F
 	special SaveGame
 	waitstate
 	return
+
+Std_DebugPrintf:
+	debug_printf 0x0
+	return

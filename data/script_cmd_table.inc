@@ -199,7 +199,11 @@ gScriptCmdTable:: @ 81DB67C
     .4byte ScrCmd_setescapewarp             @ 0xc4
     .4byte ScrCmd_waitmoncry                @ 0xc5
     .4byte ScrCmd_bufferboxname             @ 0xc6
+#ifdef FEATURE_FRLGTEXTCOLOR
+    .4byte ScrCmd_textcolor                 @ 0xc7
+#else
     .4byte ScrCmd_nop1                      @ 0xc7
+#endif
     .4byte ScrCmd_nop1                      @ 0xc8
     .4byte ScrCmd_nop1                      @ 0xc9
     .4byte ScrCmd_nop1                      @ 0xca
@@ -244,9 +248,11 @@ gScriptCmdTable:: @ 81DB67C
 #ifdef FEATURE_ADDLOCKTARGET
     .4byte ScrCmd_locktarget                @ 0xef
 #endif
-#ifdef FEATURE_FRLGTEXTCOLOR
-    .4byte ScrCmd_locktarget                @ 0xf0
-#endif
+    .4byte ScrCmd_getstorestringvar         @ 0xf0
+
+
+    @ Debug
+    .4byte ScrCmd_printf                    @ 0xf1
 
 gScriptCmdTableEnd:: @ 81DBA08
     .4byte ScrCmd_nop

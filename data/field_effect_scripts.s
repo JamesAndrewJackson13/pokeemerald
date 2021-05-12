@@ -24,8 +24,8 @@ gFieldEffectScriptPointers:: @ 82DB9D4
 	.4byte gFieldEffectScript_JumpSmallSplash           @ FLDEFF_JUMP_SMALL_SPLASH
 	.4byte gFieldEffectScript_LongGrass                 @ FLDEFF_LONG_GRASS
 	.4byte gFieldEffectScript_JumpLongGrass             @ FLDEFF_JUMP_LONG_GRASS
-	.4byte gFieldEffectScript_ShakingGrass               @ FLDEFF_SHAKING_GRASS
-	.4byte gFieldEffectScript_ShakingGrass2              @ FLDEFF_SHAKING_LONG_GRASS
+	.4byte gFieldEffectScript_ShakingGrass              @ FLDEFF_SHAKING_GRASS
+	.4byte gFieldEffectScript_ShakingGrass2             @ FLDEFF_SHAKING_LONG_GRASS
 	.4byte gFieldEffectScript_UnusedSand                @ FLDEFF_SAND_HOLE
 	.4byte gFieldEffectScript_WaterSurfacing            @ FLDEFF_WATER_SURFACING
 	.4byte gFieldEffectScript_BerryTreeGrowthSparkle    @ FLDEFF_BERRY_TREE_GROWTH_SPARKLE
@@ -73,7 +73,7 @@ gFieldEffectScriptPointers:: @ 82DB9D4
 	.4byte gFieldEffectScript_DestroyDeoxysRock         @ FLDEFF_DESTROY_DEOXYS_ROCK
 	.4byte gFieldEffectScript_MoveDeoxysRock            @ FLDEFF_MOVE_DEOXYS_ROCK
     .4byte gFieldEffectScript_CaveDust                  @ FLDEFF_CAVE_DUST
-    
+
 gFieldEffectScript_ExclamationMarkIcon1:: @ 82DBAE0
 	field_eff_callnative FldEff_ExclamationMarkIcon
 	field_eff_end
@@ -344,7 +344,7 @@ gFieldEffectScript_DestroyDeoxysRock:: @ 82DBCF9
 gFieldEffectScript_MoveDeoxysRock:: @ 82DBCFF
 	field_eff_callnative FldEff_MoveDeoxysRock
 	field_eff_end
-    
+
 @ NEW
 gFieldEffectScript_CaveDust::
     field_eff_loadfadedpal_callnative gSpritePalette_CaveDust FldEff_CaveDust
