@@ -258,6 +258,7 @@ static const u8 gDebugText_Flags_SwitchTrainerSee[] =     _("TrainerSee ON/OFF")
 static const u8 gDebugText_Flags_SwitchBagUse[] =         _("BagUse ON/OFF");
 static const u8 gDebugText_Flags_SwitchCatching[] =       _("Catching ON/OFF");
 static const u8 gDebugText_Flag[] =                       _("Flag: {STR_VAR_1}   \n{STR_VAR_2}                   \n{STR_VAR_3}");
+// static const u8 gDebugText_Flag[] =                       _("{SIZE 0}{STR_VAR_1}{RESET_SIZE}\n{STR_VAR_2}                   \n{STR_VAR_3}");
 static const u8 gDebugText_FlagHex[] =                    _("{STR_VAR_1}           \n0x{STR_VAR_2}             ");
 static const u8 gDebugText_FlagSet[] =                    _("TRUE");
 static const u8 gDebugText_FlagUnset[] =                  _("FALSE");
@@ -324,6 +325,7 @@ static const s32 sPowersOfTen[] =
      100000000,
     1000000000,
 };
+
 
 // *******************************
 // List Menu Items
@@ -956,7 +958,24 @@ static void DebugAction_Util_Trainer_Id(u8 taskId)
 }
 
 // *******************************
+
+// #include "data/text/debug_strings.h"
 // Actions Flags
+static void DebugAction_Flags_FlagsSetupFlags(u8 taskId)
+{
+    ConvertIntToDecimalStringN(gStringVar1, gTasks[taskId].data[3], STR_CONV_MODE_LEADING_ZEROS, DEBUG_NUMBER_DIGITS_FLAGS);
+    ConvertIntToHexStringN(gStringVar2, gTasks[taskId].data[3], STR_CONV_MODE_LEFT_ALIGN, 3);
+    StringExpandPlaceholders(gStringVar1, gDebugText_FlagHex);
+    // StringCopy(gStringVar1, Flag_Strings[gTasks[taskId].data[3]]);
+    if (FlagGet(gTasks[taskId].data[3]) == TRUE)
+        StringCopyPadded(gStringVar2, gDebugText_FlagSet, CHAR_SPACE, 15);
+    else
+        StringCopyPadded(gStringVar2, gDebugText_FlagUnset, CHAR_SPACE, 15);
+    StringCopy(gStringVar3, gText_DigitIndicator[gTasks[taskId].data[4]]);
+    StringExpandPlaceholders(gStringVar4, gDebugText_Flag);
+    AddTextPrinterParameterized(gTasks[taskId].data[2], 1, gStringVar4, 1, 1, 0, NULL);
+}
+
 static void DebugAction_Flags_Flags(u8 taskId)
 {
     u8 windowId;
@@ -972,26 +991,35 @@ static void DebugAction_Flags_Flags(u8 taskId)
     CopyWindowToVram(windowId, 3);
 
     //Display initial Flag
-    ConvertIntToDecimalStringN(gStringVar1, 0, STR_CONV_MODE_LEADING_ZEROS, DEBUG_NUMBER_DIGITS_FLAGS);
-    ConvertIntToHexStringN(gStringVar2, 0, STR_CONV_MODE_LEFT_ALIGN, 3);
-    StringExpandPlaceholders(gStringVar1, gDebugText_FlagHex);
-    if(FlagGet(0) == TRUE)
-        StringCopyPadded(gStringVar2, gDebugText_FlagSet, CHAR_SPACE, 15);
-    else
-        StringCopyPadded(gStringVar2, gDebugText_FlagUnset, CHAR_SPACE, 15);
-    StringCopy(gStringVar3, gText_DigitIndicator[0]);
-    StringExpandPlaceholders(gStringVar4, gDebugText_Flag);
-    AddTextPrinterParameterized(windowId, 1, gStringVar4, 1, 1, 0, NULL);
+    // ConvertIntToDecimalStringN(gStringVar1, 0, STR_CONV_MODE_LEADING_ZEROS, DEBUG_NUMBER_DIGITS_FLAGS);
+    // ConvertIntToHexStringN(gStringVar2, 0, STR_CONV_MODE_LEFT_ALIGN, 3);
+    // StringExpandPlaceholders(gStringVar1, gDebugText_FlagHex);
+    // // StringCopy(gStringVar1, Flag_Strings[0]);
+    // if(FlagGet(0) == TRUE)
+    //     StringCopyPadded(gStringVar2, gDebugText_FlagSet, CHAR_SPACE, 15);
+    // else
+    //     StringCopyPadded(gStringVar2, gDebugText_FlagUnset, CHAR_SPACE, 15);
+    // StringCopy(gStringVar3, gText_DigitIndicator[0]);
+    // StringExpandPlaceholders(gStringVar4, gDebugText_Flag);
+    // AddTextPrinterParameterized(windowId, 1, gStringVar4, 1, 1, 0, NULL);
 
     gTasks[taskId].func = DebugAction_Flags_FlagsSelect;
     gTasks[taskId].data[2] = windowId;
     gTasks[taskId].data[3] = 0;            //Current Flag
     gTasks[taskId].data[4] = 0;            //Digit Selected
+
+    DebugAction_Flags_FlagsSetupFlags(taskId);
 }
 static void DebugAction_Flags_FlagsSelect(u8 taskId)
 {
     if (gMain.newKeys & A_BUTTON)
+    {
+        if (FlagGet(gTasks[taskId].data[3]))
+            PlaySE(SE_PC_OFF);
+        else
+            PlaySE(SE_PC_LOGIN);
         FlagToggle(gTasks[taskId].data[3]);
+    }
     else if (gMain.newKeys & B_BUTTON)
     {
         PlaySE(SE_SELECT);
@@ -1036,16 +1064,18 @@ static void DebugAction_Flags_FlagsSelect(u8 taskId)
 
     if (gMain.newKeys & DPAD_ANY || gMain.newKeys & A_BUTTON)
     {
-        ConvertIntToDecimalStringN(gStringVar1, gTasks[taskId].data[3], STR_CONV_MODE_LEADING_ZEROS, DEBUG_NUMBER_DIGITS_FLAGS);
-        ConvertIntToHexStringN(gStringVar2, gTasks[taskId].data[3], STR_CONV_MODE_LEFT_ALIGN, 3);
-        StringExpandPlaceholders(gStringVar1, gDebugText_FlagHex);
-        if(FlagGet(gTasks[taskId].data[3]) == TRUE)
-            StringCopyPadded(gStringVar2, gDebugText_FlagSet, CHAR_SPACE, 15);
-        else
-            StringCopyPadded(gStringVar2, gDebugText_FlagUnset, CHAR_SPACE, 15);
-        StringCopy(gStringVar3, gText_DigitIndicator[gTasks[taskId].data[4]]);
-        StringExpandPlaceholders(gStringVar4, gDebugText_Flag);
-        AddTextPrinterParameterized(gTasks[taskId].data[2], 1, gStringVar4, 1, 1, 0, NULL);
+        // ConvertIntToDecimalStringN(gStringVar1, gTasks[taskId].data[3], STR_CONV_MODE_LEADING_ZEROS, DEBUG_NUMBER_DIGITS_FLAGS);
+        // ConvertIntToHexStringN(gStringVar2, gTasks[taskId].data[3], STR_CONV_MODE_LEFT_ALIGN, 3);
+        // StringExpandPlaceholders(gStringVar1, gDebugText_FlagHex);
+        // if(FlagGet(gTasks[taskId].data[3]) == TRUE)
+        //     StringCopyPadded(gStringVar2, gDebugText_FlagSet, CHAR_SPACE, 15);
+        // else
+        //     StringCopyPadded(gStringVar2, gDebugText_FlagUnset, CHAR_SPACE, 15);
+        // StringCopy(gStringVar3, gText_DigitIndicator[gTasks[taskId].data[4]]);
+        // StringExpandPlaceholders(gStringVar4, gDebugText_Flag);
+        // AddTextPrinterParameterized(gTasks[taskId].data[2], 1, gStringVar4, 1, 1, 0, NULL);
+
+        DebugAction_Flags_FlagsSetupFlags(taskId);
     }
 }
 
@@ -2393,4 +2423,3 @@ static void DebugTask_HandleMenuInput(u8 taskId, void (*HandleInput)(u8))
     }
 }
 */
-
