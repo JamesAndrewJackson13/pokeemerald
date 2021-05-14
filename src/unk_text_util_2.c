@@ -107,11 +107,17 @@ u16 Font6Func(struct TextPrinter *textPrinter)
                         case EXT_CTRL_CODE_ESCAPE:
                             char_ = *++textPrinter->printerTemplate.currentChar;
                             break;
-                        case EXT_CTRL_CODE_SHIFT_TEXT:
+                        case EXT_CTRL_CODE_SHIFT_RIGHT_TEXT:
                             textPrinter->printerTemplate.currentX = textPrinter->printerTemplate.x + *textPrinter->printerTemplate.currentChar++;
+                            return 2;
+                        case EXT_CTRL_CODE_SHIFT_LEFT_TEXT:
+                            textPrinter->printerTemplate.currentX = textPrinter->printerTemplate.x - *textPrinter->printerTemplate.currentChar++;
                             return 2;
                         case EXT_CTRL_CODE_SHIFT_DOWN:
                             textPrinter->printerTemplate.currentY = textPrinter->printerTemplate.y + *textPrinter->printerTemplate.currentChar++;
+                            return 2;
+                        case EXT_CTRL_CODE_SHIFT_UP:
+                            textPrinter->printerTemplate.currentY = textPrinter->printerTemplate.y - *textPrinter->printerTemplate.currentChar++;
                             return 2;
                         case EXT_CTRL_CODE_FILL_WINDOW:
                             FillWindowPixelBuffer(textPrinter->printerTemplate.windowId, PIXEL_FILL(textPrinter->printerTemplate.bgColor));

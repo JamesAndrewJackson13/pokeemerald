@@ -1,3 +1,4 @@
+raw `
 .set LOCALID_RICH_BOY, 1
 .set LOCALID_GENTLEMAN, 2
 .set LOCALID_SCIENTIST, 3
@@ -10,198 +11,235 @@
 .set LOCALID_MAXIE, 9
 @ Added scientist for the Rotom quest
 .set LOCALID_QUESTSCIENTIST, 10
+`
 
-MossdeepCity_SpaceCenter_2F_MapScripts::
-	map_script MAP_SCRIPT_ON_TRANSITION, MossdeepCity_SpaceCenter_2F_MapScripts_MAP_SCRIPT_ON_TRANSITION
-	map_script MAP_SCRIPT_ON_FRAME_TABLE, MossdeepCity_SpaceCenter_2F_OnFrame
-	.byte 0
+const ROTOM_QUEST_ID = 14
 
-MossdeepCity_SpaceCenter_2F_MapScripts_MAP_SCRIPT_ON_TRANSITION:
-	compare VAR_MOSSDEEP_CITY_STATE, 2
-	goto_if_eq MossdeepCity_SpaceCenter_2F_MapScripts_MAP_SCRIPT_ON_TRANSITION_2
-MossdeepCity_SpaceCenter_2F_MapScripts_MAP_SCRIPT_ON_TRANSITION_1:
-	compare VAR_MOSSDEEP_SPACE_CENTER_STATE, 2
-	goto_if_eq MossdeepCity_SpaceCenter_2F_MapScripts_MAP_SCRIPT_ON_TRANSITION_5
-MossdeepCity_SpaceCenter_2F_MapScripts_MAP_SCRIPT_ON_TRANSITION_4:
-	goto_if_set FLAG_QUEST_ROTOM_HAVEBEAT, MossdeepCity_SpaceCenter_2F_MapScripts_MAP_SCRIPT_ON_TRANSITION_7
-	return
+mapscripts MossdeepCity_SpaceCenter_2F_MapScripts {
+    MAP_SCRIPT_ON_TRANSITION {
+        if (var(VAR_MOSSDEEP_CITY_STATE) == 2) {
+            call(MossdeepCity_SpaceCenter_2F_EventScript_MoveCivilians)
+        }
+        if(var(VAR_MOSSDEEP_SPACE_CENTER_STATE) == 2) {
+            call(MossdeepCity_SpaceCenter_2F_EventScript_MoveDefeatedGrunts)
+        }
+        if(flag(FLAG_QUEST_ROTOM_HAVEBEAT)) {
+            call(MossdeepCity_SpaceCenter_2F_EventScript_QuestHideRotomMachine)
+        }
+    }
+	MAP_SCRIPT_ON_FRAME_TABLE: MossdeepCity_SpaceCenter_2F_OnFrame
+}
 
-MossdeepCity_SpaceCenter_2F_MapScripts_MAP_SCRIPT_ON_TRANSITION_2:
-	call MossdeepCity_SpaceCenter_2F_EventScript_MoveCivilians
-	goto MossdeepCity_SpaceCenter_2F_MapScripts_MAP_SCRIPT_ON_TRANSITION_1
+script MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock {
+    waitmessage
+    playse(SE_PIN)
+    applymovement(LOCALID_QUESTSCIENTIST, Common_Movement_ExclamationMark)
+    waitmovement(LOCALID_QUESTSCIENTIST)
+    applymovement(LOCALID_QUESTSCIENTIST, Common_Movement_Delay48)
+    waitmovement(LOCALID_QUESTSCIENTIST)
+    faceplayer
+    waitmovement(LOCALID_QUESTSCIENTIST)
+    return
+}
 
-MossdeepCity_SpaceCenter_2F_MapScripts_MAP_SCRIPT_ON_TRANSITION_5:
-	call MossdeepCity_SpaceCenter_2F_EventScript_MoveDefeatedGrunts
-	goto MossdeepCity_SpaceCenter_2F_MapScripts_MAP_SCRIPT_ON_TRANSITION_4
+script MossdeepCity_SpaceCenter_2F_EventScript_QuestHideRotomMachine {
+    setmetatile(2, 1, 0x2B8, TRUE)
+    setmetatile(2, 2, 0x375, FALSE)
+    return
+}
 
-MossdeepCity_SpaceCenter_2F_MapScripts_MAP_SCRIPT_ON_TRANSITION_7:
-	call MossdeepCity_SpaceCenter_2F_EventScript_QuestHideRotomMachine
-	return
+script MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee {
 
+    // Toggle the flag that states the player has beat the Rotom
+    setflag(FLAG_QUEST_ROTOM_HAVEBEAT)
 
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock::
-	waitmessage
-	playse SE_PIN
-	applymovement LOCALID_QUESTSCIENTIST, Common_Movement_ExclamationMark
-	waitmovement LOCALID_QUESTSCIENTIST
-	applymovement LOCALID_QUESTSCIENTIST, Common_Movement_Delay48
-	waitmovement LOCALID_QUESTSCIENTIST
-	faceplayer
-	waitmovement LOCALID_QUESTSCIENTIST
-	return
-
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestHideRotomMachine::
-	setmetatile 2, 1, 0x2B8, TRUE
-	setmetatile 2, 2, 0x375, FALSE
-	return
-
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee::
-	setflag FLAG_QUEST_ROTOM_HAVEBEAT
-	setvar VAR_0x8004, SPECIES_EEVEE
-	setvar VAR_0x8005, 15
-	setvar VAR_0x8006, ITEM_SILK_SCARF
-	call Global_GiftPokemonToPlayer
-	compare VAR_RESULT, 1
-	goto_if_gt MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee_2
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee_Text_1
-	questmenucompletequest 14
-	questmenutoastcompleteshow 14
-MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee_1:
-	return
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee_2:
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee_Text_0
-	goto MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee_1
+    // Attempt to give the Eevee
+    setvar(VAR_0x8004, SPECIES_EEVEE)
+    setvar(VAR_0x8005, 15)
+    setvar(VAR_0x8006, ITEM_SILK_SCARF)
+    call(Global_GiftPokemonToPlayer)
 
 
-MossdeepCity_SpaceCenter_2F_EventScript_QuestStartRotomFight::
-	setfieldeffectargument 0, VAR_0x8004
-	dofieldeffect FLDEFF_FIELD_MOVE_SHOW_MON_INIT
-	playmoncry SPECIES_PLUSLE, 0
-	waitmoncry
-	waitfieldeffect FLDEFF_FIELD_MOVE_SHOW_MON
-	setfieldeffectargument 0, VAR_0x8005
-	dofieldeffect FLDEFF_FIELD_MOVE_SHOW_MON_INIT
-	playmoncry SPECIES_MINUN, 0
-	waitmoncry
-	waitfieldeffect FLDEFF_FIELD_MOVE_SHOW_MON
-	bufferpartymonnick 0, VAR_0x8004
-	bufferpartymonnick 1, VAR_0x8005
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestStartRotomFight_Text_0
-	return
+    // special(DumpAllScriptVars)
+    // Handle the different results
+    if (var(VAR_RESULT) > 1) {
+        // There's no room for the Eevee, the player will need to come back after freeing up room
+        msgbox(format("SCIENTIST: Oh, it seems you don't have room for anymore pokemon.\p"
+                        "Come back when you have freed space in your PC or party."))
+    } else {
+        msgbox(format("SCIENTIST: A Pokémaniac researcher friend gave {STR_VAR_2} to me as a gift.\p"
+                        "But, I don't have the time to take care of them.\p"
+                        "I'm certain they'll be much happier with you."))
+        // Mark the quest as finished, and allow the function to return
+        questmenucompletequest(ROTOM_QUEST_ID)
+        questmenutoastcompleteshow(ROTOM_QUEST_ID)
+    }
+    return
+}
 
+script MossdeepCity_SpaceCenter_2F_EventScript_QuestStartRotomFight {
+    setfieldeffectargument(0, VAR_0x8004)
+    dofieldeffect(FLDEFF_FIELD_MOVE_SHOW_MON_INIT)
+    playmoncry(SPECIES_PLUSLE, 0)
+    waitmoncry
+    waitfieldeffect(FLDEFF_FIELD_MOVE_SHOW_MON)
 
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base::
-	locktarget
-	compare VAR_MOSSDEEP_CITY_STATE, 0
-	goto_if_eq MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_2
-	compare VAR_MOSSDEEP_CITY_STATE, 1
-	goto_if_eq MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_2
-	faceplayer
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_19
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_1:
-	turnobject LOCALID_QUESTSCIENTIST, DIR_NORTH
-	release
-	end
+    setfieldeffectargument(0, VAR_0x8005)
+    dofieldeffect(FLDEFF_FIELD_MOVE_SHOW_MON_INIT)
+    playmoncry(SPECIES_MINUN, 0)
+    waitmoncry
+    waitfieldeffect(FLDEFF_FIELD_MOVE_SHOW_MON)
 
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_2:
-	questmenucheckunlocked 14
-	compare VAR_RESULT, 0
-	goto_if_ne MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_7
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_16
-	call MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_17
-	questmenuunlockquest 14
-	questmenutoastunlockshow 14
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_18
-	goto MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_1
+    // Setup the string vars with the nicknames
+    bufferpartymonnick(0, VAR_0x8004)
+    bufferpartymonnick(1, VAR_0x8005)
 
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_7:
-	questmenucheckcomplete 14
-	compare VAR_RESULT, 0
-	goto_if_ne MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_10
-	goto_if_set FLAG_QUEST_ROTOM_HAVEBEAT, MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_11
-	checkpartymon SPECIES_PLUSLE
-	copyvar VAR_0x8004, VAR_RESULT
-	checkpartymon SPECIES_MINUN
-	compare VAR_RESULT, 0
-	goto_if_ne MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_17
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_16:
-	goto_if_set FLAG_QUEST_ROTOM_HAVETRIED, MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_24
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_14
-	call MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_15
-	goto MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_1
+    msgbox(format("{STR_VAR_1} and {STR_VAR_2} shock the machine!"))
+    return
+}
 
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_10:
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_0
-	call MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_1
-	goto MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_1
+script MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base {
+    locktarget
+    if(var(VAR_MOSSDEEP_CITY_STATE) == 0 || var(VAR_MOSSDEEP_CITY_STATE) == 1) {
+        // The normal script
+        questmenucheckunlocked(ROTOM_QUEST_ID)
+        if(var(VAR_RESULT)) {
+            // The quest has been unlocked, check if it's been finished already
+            questmenucheckcomplete(ROTOM_QUEST_ID)
+            if(var(VAR_RESULT)) {
+                // The quest is finished, say the post-quest lines.
+                msgbox(format("{SIZE 0}...all systems seem to be good.\pEverything is within limits...{RESET_SIZE}"))
+                call(MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock)
+                msgbox(format("Oh! {PLAYER}{KUN}!\n"
+                              "Thanks again for your help.\p"
+                              "I hope you, ROTOM, and EEVEE are all doing well.\p"
+                              "With the computers finally fixed, I have a lot of calculations to catch up on."))
+            } elif (flag(FLAG_QUEST_ROTOM_HAVEBEAT)) {
+                // The player's already finished the quest, just didn't have room for the Eevee. So; jump right back to the capture part of the script
+                faceplayer
+                call(MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee)
+            } else {
+                // The quest hasn't been finished; Check if the criteria have been met.
+                checkpartymon(SPECIES_PLUSLE)
+                copyvar(VAR_0x8004, VAR_RESULT)
+                checkpartymon(SPECIES_MINUN)
+                if(var(VAR_RESULT) && var(VAR_0x8004)) {
+                    // The criteria have been met.
+                    // Store the index of Plusle in VAR_0x8004, Minun in VAR_0x8005
+                    firstinpartymon(SPECIES_PLUSLE)
+                    copyvar(VAR_0x8004, VAR_RESULT)
+                    firstinpartymon(SPECIES_MINUN)
+                    copyvar(VAR_0x8005, VAR_RESULT)
 
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_11:
-	faceplayer
-	call MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee
-	goto MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_1
+                    //Check if this is the first time the player's tried this.
+                    if(flag(FLAG_QUEST_ROTOM_HAVETRIED)) {
+                        // The player's made an attempt before. Set up for a second try.
+                        msgbox(format("SCIENTIST:{SIZE 0}...I sure hope this whole mess doesn't put us too behind schedule...{RESET_SIZE}"))
+                        call(MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock)
+                        msgbox(format("Oh! Back again!\n"
+                                        "Ready to give this another try?\p"
+                                        "Lets try the reset again and flush that Pokemon out in the open..."))
+                        call(MossdeepCity_SpaceCenter_2F_EventScript_QuestStartRotomFight)
+                        msgbox(format("SCIENTIST: Here they come!"))
+                    } else {
+                        setflag(FLAG_QUEST_ROTOM_HAVETRIED)
+                        // This is the first time the player's attempted to capture Rotom.
+                        msgbox(format("SCIENTIST:{SIZE 0}“Random overflow translation on memory error”?\p "
+                                        "What's that supposed to mean...?{RESET_SIZE}"))
+                        call(MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock)
+                        msgbox(format("Oh! It's you!\n"
+                                        "I see you have some Pokémon with you.\p"
+                                        "Lets not waste any time, and give this reset a try..."))
+                        call(MossdeepCity_SpaceCenter_2F_EventScript_QuestStartRotomFight)
+                        msgbox(format("SCIENTIST: Aaah! S-S-Something's coming out of the server!"))
+                    }
+                    // Set up and start a fight with Rotom
+                    setwildbattle(SPECIES_ROTOM, 20, ITEM_MAX_ELIXIR)
+                    playmoncry(SPECIES_ROTOM, 0)
+                    waitmoncry
+                    dowildbattle
 
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_15:
-	firstinpartymon SPECIES_PLUSLE
-	copyvar VAR_0x8004, VAR_RESULT
-	firstinpartymon SPECIES_MINUN
-	copyvar VAR_0x8005, VAR_RESULT
-	goto_if_set FLAG_QUEST_ROTOM_HAVETRIED, MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_21
-	setflag FLAG_QUEST_ROTOM_HAVETRIED
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_5
-	call MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_6
-	call MossdeepCity_SpaceCenter_2F_EventScript_QuestStartRotomFight
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_7
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_20:
-	setwildbattle SPECIES_ROTOM, 20, ITEM_MAX_ELIXIR
-	playmoncry SPECIES_ROTOM, 0
-	waitmoncry
-	dowildbattle
-	specialvar VAR_RESULT, GetBattleOutcome
-	compare VAR_RESULT, B_OUTCOME_CAUGHT
-	goto_if_eq MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_27
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_9
-	goto_if_set FLAG_QUEST_ROTOM_HAVEFAILD, MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_31
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_11
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_30:
-	setflag FLAG_QUEST_ROTOM_HAVEFAILD
-	goto MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_1
+                    // Check what the results of the fight were
+                    specialvar(VAR_RESULT, GetBattleOutcome)
+                    if (var(VAR_RESULT) == B_OUTCOME_CAUGHT) {
+                        // The player captured Rotom. Finish up the quest and give the reward Eevee
+                        call(MossdeepCity_SpaceCenter_2F_EventScript_QuestHideRotomMachine)
+                        msgbox(format("SCIENTIST: Ah, finally, the computers seem to be returning to normal.\p"
+                                        "Thank you so much for helping me out.\p"
+                                        "As promised, I have a special Pokémon to give you as thanks."))
+                        call(MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee)
+                    } else {
+                        msgbox(format("The ROTOM retreated back into the machine."))
+                        if(flag(FLAG_QUEST_ROTOM_HAVEFAILD)) {
+                            msgbox(format("SCIENTIST: Hmmm, retreated again.\p"
+                                            "A Pokémon that can control machines...\p"
+                                            "I have to admit, there's a lot of possibilities there.\p"
+                                            "But, that shouldn't include messing with the center's computer systems!\p"
+                                            "Talk to me whenever you'd like to attempt capturing them again."))
+                        } else {
+                            // The player failed for the first time. Say Rotom flew back into the machine and encourage them to try again
+                            msgbox(format("SCIENTIST: My goodness!\p"
+                                            "So, a Pokémon was causing all these isues?\p"
+                                            "I've never heard of such a thing.\p"
+                                            "Well, it's gone back into hiding.\p"
+                                            "It looks like you'll have to capture them to make sure they can't escape back into the system.\p"
+                                            "Talk to me whenever you'd like to try again."))
+                        }
+                        setflag(FLAG_QUEST_ROTOM_HAVEFAILD)
+                    }
+                } else {
+                    // The player doesn't have the right mon. Check if they've tried this before.
+                    if (flag(FLAG_QUEST_ROTOM_HAVETRIED)) {
+                        // The player has made an attempt before. Say a quick line reminding them what to do
+                        msgbox(format("SCIENTIST: {SIZE 0}...A Pokémon that lives in machines? Facinating...{RESET_SIZE}"))
+                        call(MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock)
+                        msgbox(format("Oh! Welcome back!\n"
+                                        "Are you ready for another try?\p"
+                                        "You'll need to get your PLUSLE and MINUM in your party first.\p"
+                                        "Once you do, come back and speak to me."))
+                    } else {
+                        // The player hasn't made an attempt yet. Say a mainly generic line reminding the player.
+                        msgbox(format("SCIENTIST: {SIZE 0}...It just doesn't make sense...{RESET_SIZE}"))
+                        call(MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock)
+                        msgbox(format("Oh! It's you!\n"
+                                        "Welcome back.\p"
+                                        "Have you had any luck finding Pokémon that can help?\p"
+                                        "Remember, I need one that's positively charged and one that's negatively charged."))
 
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_17:
-	compare VAR_0x8004, 0
-	goto_if_ne MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_15
-	goto MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_16
+                    }
+                }
+            }
+        } else {
+            // if the quest hasn't been unlocked yet, do so.
+            msgbox(format("SCIENTIST: {SIZE 0}...and I've already tried twisting all the knobs.\p"
+                            "If I don't figure this out soon, we'll be back to using abacuses and slide rulers...{RESET_SIZE}"))
+            call(MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock)
+            msgbox(format("Oh! A trainer!\n"
+                            "Perfect timing.\p"
+                            "I could really use some help with something.\p"
+                            "I'm trying to fix an issue with our computer system.\p"
+                            "It just started going haywire today, like it has a mind of its own.\p"
+                            "I really need to trip the manual overload full system reset circuit.\p"
+                            "But we don't have the necessary equipment to induce such a powerful electrical current on site.\p"
+                            "Do you have any Pokémon that could help?\p"
+                            "The equipment here is very sensitive, so it can't just be any electric type.\p"
+                            "They'd need to specifically have a high positive and negative charge."))
+            questmenuunlockquest(ROTOM_QUEST_ID)
+            questmenutoastunlockshow(ROTOM_QUEST_ID)
+            msgbox(format("If you find any Pokémon and bring them here to help, I can reward you with a rare Pokémon!"))
+        }
+    } else {
+        // During the Magma event
+        faceplayer
+        msgbox(format("SCIENTIST: I wish TEAM MAGMA would leave us alone\p"
+                        "They're distracting me from my work!"))
+    }
+    turnobject(LOCALID_QUESTSCIENTIST, DIR_NORTH)
+    release
+    end
+}
 
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_21:
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_2
-	call MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_3
-	call MossdeepCity_SpaceCenter_2F_EventScript_QuestStartRotomFight
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_4
-	goto MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_20
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_24:
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_12
-	call MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_13
-	goto MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_1
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_27:
-	call MossdeepCity_SpaceCenter_2F_EventScript_QuestHideRotomMachine
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_8
-	call MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee
-	goto MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_1
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_31:
-	msgbox MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_10
-	goto MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_30
-
+raw `
 
 @MossdeepCity_SpaceCenter_2F_MapScripts:: @ 8223D58
 @    map_script MAP_SCRIPT_ON_TRANSITION, MossdeepCity_SpaceCenter_2F_OnTransition
@@ -724,157 +762,4 @@ MossdeepCity_SpaceCenter_2F_Text_StevenThankYouComeSeeMeAtHome: @ 8224A4A
     .string "after this.\p"
     .string "Oh, yes, I don't live in RUSTBORO CITY.\n"
     .string "I live right here on this island.$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee_Text_0:
-	.string "SCIENTIST: Oh, it seems you don't have\n"
-	.string "room for anymore pokemon.\p"
-	.string "Come back when you have freed space in\n"
-	.string "your PC or party.$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee_Text_1:
-	.string "SCIENTIST: A Pokémaniac researcher\n"
-	.string "friend gave {STR_VAR_2} to me as a\l"
-	.string "gift.\p"
-	.string "But, I don't have the time to take care\n"
-	.string "of them.\p"
-	.string "I'm certain they'll be much happier with\n"
-	.string "you.$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestStartRotomFight_Text_0:
-	.string "{STR_VAR_1} and {STR_VAR_2}\n"
-	.string "shock the machine!$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_0:
-	.string "{SIZE 0}...all systems seem to be good.\p"
-	.string "Everything is within limits...{RESET_SIZE}$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_1:
-	.string "Oh! {PLAYER}{KUN}!\n"
-	.string "Thanks again for your help.\p"
-	.string "I hope you, ROTOM, and EEVEE are all\n"
-	.string "doing well.\p"
-	.string "With the computers finally fixed, I have\n"
-	.string "a lot of calculations to catch up on.$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_2:
-	.string "SCIENTIST:{SIZE 0}...I sure hope this whole mess\n"
-	.string "doesn't put us too behind schedule...{RESET_SIZE}$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_3:
-	.string "Oh! Back again!\n"
-	.string "Ready to give this another try?\p"
-	.string "Lets try the reset again and flush that\n"
-	.string "Pokemon out in the open...$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_4:
-	.string "SCIENTIST: Here they come!$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_5:
-	.string "SCIENTIST:{SIZE 0}“Random overflow\n"
-	.string "translation on memory error”?\p"
-	.string "What's that supposed to mean...?{RESET_SIZE}$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_6:
-	.string "Oh! It's you!\n"
-	.string "I see you have some Pokémon with you.\p"
-	.string "Lets not waste any time, and give this\n"
-	.string "reset a try...$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_7:
-	.string "SCIENTIST: Aaah! S-S-Something's\n"
-	.string "coming out of the server!$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_8:
-	.string "SCIENTIST: Ah, finally, the computers\n"
-	.string "seem to be returning to normal.\p"
-	.string "Thank you so much for helping me out.\p"
-	.string "As promised, I have a special Pokémon\n"
-	.string "to give you as thanks.$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_9:
-	.string "The ROTOM retreated back into the\n"
-	.string "machine.$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_10:
-	.string "SCIENTIST: Hmmm, retreated again.\p"
-	.string "A Pokémon that can control machines...\p"
-	.string "I have to admit, there's a lot of\n"
-	.string "possibilities there.\p"
-	.string "But, that shouldn't include messing\n"
-	.string "with the center's computer systems!\p"
-	.string "Talk to me whenever you'd like to\n"
-	.string "attempt capturing them again.$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_11:
-	.string "SCIENTIST: My goodness!\p"
-	.string "So, a Pokémon was causing all these\n"
-	.string "isues?\p"
-	.string "I've never heard of such a thing.\p"
-	.string "Well, it's gone back into hiding.\p"
-	.string "It looks like you'll have to capture\n"
-	.string "them to make sure they can't escape\l"
-	.string "back into the system.\p"
-	.string "Talk to me whenever you'd like to try\n"
-	.string "again.$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_12:
-	.string "SCIENTIST: {SIZE 0}...A Pokémon that lives in\n"
-	.string "machines? Facinating...{RESET_SIZE}$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_13:
-	.string "Oh! Welcome back!\n"
-	.string "Are you ready for another try?\p"
-	.string "You'll need to get your PLUSLE and\n"
-	.string "MINUM in your party first.\p"
-	.string "Once you do, come back and speak to me.$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_14:
-	.string "SCIENTIST: {SIZE 0}...It just doesn't make\n"
-	.string "sense...{RESET_SIZE}$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_15:
-	.string "Oh! It's you!\n"
-	.string "Welcome back.\p"
-	.string "Have you had any luck finding Pokémon\n"
-	.string "that can help?\p"
-	.string "Remember, I need one that's positively\n"
-	.string "charged and one that's negatively\l"
-	.string "charged.$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_16:
-	.string "SCIENTIST: {SIZE 0}...and I've already tried\n"
-	.string "twisting all the knobs.\p"
-	.string "If I don't figure this out soon, we'll be\n"
-	.string "back to using abacuses and slide\l"
-	.string "rulers...{RESET_SIZE}$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_17:
-	.string "Oh! A trainer!\n"
-	.string "Perfect timing.\p"
-	.string "I could really use some help with\n"
-	.string "something.\p"
-	.string "I'm trying to fix an issue with our\n"
-	.string "computer system.\p"
-	.string "It just started going haywire today,\n"
-	.string "like it has a mind of its own.\p"
-	.string "I really need to trip the manual\n"
-	.string "overload full system reset circuit.\p"
-	.string "But we don't have the necessary\n"
-	.string "equipment to induce such a powerful\l"
-	.string "electrical current on site.\p"
-	.string "Do you have any Pokémon that could\n"
-	.string "help?\p"
-	.string "The equipment here is very sensitive,\n"
-	.string "so it can't just be any electric type.\p"
-	.string "They'd need to specifically have a high\n"
-	.string "positive and negative charge.$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_18:
-	.string "If you find any Pokémon and bring them\n"
-	.string "here to help, I can reward you with a\l"
-	.string "rare Pokémon!$"
-
-MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_19:
-	.string "SCIENTIST: I wish TEAM MAGMA would\n"
-	.string "leave us alone\p"
-	.string "They're distracting me from my work!$"
+`

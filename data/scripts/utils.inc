@@ -13,7 +13,6 @@ Global_GiftPokemonToPlayer::
 	waitfanfare
 	compare VAR_RESULT, 0
 	goto_if_eq Global_GiftPokemonToPlayer_5
-	printf Global_GiftPokemonToPlayer_Text_3
 	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq Global_GiftPokemonToPlayer_12
@@ -32,7 +31,6 @@ Global_GiftPokemonToPlayer_2:
 	return
 
 Global_GiftPokemonToPlayer_5:
-	printf Global_GiftPokemonToPlayer_Text_1
 	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq Global_GiftPokemonToPlayer_9
@@ -41,28 +39,16 @@ Global_GiftPokemonToPlayer_8:
 	goto Global_GiftPokemonToPlayer_4
 
 Global_GiftPokemonToPlayer_9:
-	printf Global_GiftPokemonToPlayer_Text_2
 	call Common_EventScript_GetGiftMonPartySlot
 	call Common_EventScript_NameReceivedPartyMon
 	getstorestringvar 1, FALSE
 	goto Global_GiftPokemonToPlayer_8
 
 Global_GiftPokemonToPlayer_12:
-	printf Global_GiftPokemonToPlayer_Text_2
 	call Common_EventScript_NameReceivedBoxMon
 	getstorestringvar 1, FALSE
-	special DumpAllScriptVars
 	goto Global_GiftPokemonToPlayer_11
 
 
 Global_GiftPokemonToPlayer_Text_0:
 	.string "{PLAYER} received the {STR_VAR_1}!$"
-
-Global_GiftPokemonToPlayer_Text_1:
-	.string "Mon added directly to the player's party$"
-
-Global_GiftPokemonToPlayer_Text_2:
-	.string "Nicknaming mon$"
-
-Global_GiftPokemonToPlayer_Text_3:
-	.string "Mon added to the player's PC$"

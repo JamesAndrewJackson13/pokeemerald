@@ -218,7 +218,7 @@
 #define EXT_CTRL_CODE_WAIT_SE                0x0A
 #define EXT_CTRL_CODE_PLAY_BGM               0x0B
 #define EXT_CTRL_CODE_ESCAPE                 0x0C
-#define EXT_CTRL_CODE_SHIFT_TEXT             0x0D
+#define EXT_CTRL_CODE_SHIFT_RIGHT_TEXT       0x0D
 #define EXT_CTRL_CODE_SHIFT_DOWN             0x0E
 #define EXT_CTRL_CODE_FILL_WINDOW            0x0F
 #define EXT_CTRL_CODE_PLAY_SE                0x10
@@ -230,6 +230,8 @@
 #define EXT_CTRL_CODE_ENG                    0x16
 #define EXT_CTRL_CODE_PAUSE_MUSIC            0x17
 #define EXT_CTRL_CODE_RESUME_MUSIC           0x18
+#define EXT_CTRL_CODE_SHIFT_LEFT_TEXT        0x19
+#define EXT_CTRL_CODE_SHIFT_UP               0x1A
 
 #define TEXT_COLOR_TRANSPARENT  0x0
 #define TEXT_COLOR_WHITE        0x1

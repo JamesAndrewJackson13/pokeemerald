@@ -140,10 +140,10 @@ static const u8 gText_MenuQuest_Details[] = _("Details");
 static const u8 gText_MenuQuest_Reward[] = _("Reward");
 static const u8 gText_MenuQuest_Unk[] = _("{COLOR}{LIGHT_GREY}?????????");
 static const u8 gText_MenuQuest_Active[] = _("{COLOR}{GREEN}Active");
-static const u8 gText_MenuQuest_Complete[] = _("{COLOR}{BLUE}Done");
+static const u8 gText_MenuQuest_Complete[] = _("{RESET_SIZE}{COLOR}{BLUE}{0xB9}");
 static const u8 gText_MenuQuest_Exit[] = _("Exit the Quest Menu");
 static const u8 gText_MenuQuest_SelectedQuest[] = _("Do what with\nthis quest?");
-static const u8 gText_MenuQuest_DisplayDetails[] = _("POC: {STR_VAR_1}\nMap: {STR_VAR_2}");
+static const u8 gText_MenuQuest_DisplayDetails[] = _("PoC:{SIZE 0} {RESET_SIZE}{STR_VAR_1}\nMap:{SIZE 0} {RESET_SIZE}{STR_VAR_2}");
 static const u8 gText_MenuQuest_DisplayReward[] = _("Reward:\n{STR_VAR_1}");
 static const u8 gText_MenuQuest_BeginQuest[] = _("Initiating Quest:\n{STR_VAR_1}");
 static const u8 gText_MenuQuest_EndQuest[] = _("Cancelling Quest:\n{STR_VAR_1}");
@@ -242,7 +242,7 @@ static const u8 sSideQuestDifficulties[SIDE_QUEST_COUNT] =
     [SIDE_QUEST_12] = QUEST_DIFFICULTY_EASY,
     [SIDE_QUEST_13] = QUEST_DIFFICULTY_EASY,
     [SIDE_QUEST_14] = QUEST_DIFFICULTY_EASY,
-    [SIDE_QUEST_15] = QUEST_DIFFICULTY_EASY,
+    [SIDE_QUEST_15] = QUEST_DIFFICULTY_HARD,
     [SIDE_QUEST_16] = QUEST_DIFFICULTY_EASY,
     [SIDE_QUEST_17] = QUEST_DIFFICULTY_EASY,
     [SIDE_QUEST_18] = QUEST_DIFFICULTY_EASY,
@@ -263,7 +263,7 @@ static const u8 sSideQuestDifficulties[SIDE_QUEST_COUNT] =
 // Selected an incomplete quest
 static const struct MenuAction sQuestSubmenuOptions[] =
 {
-    {gText_MenuQuest_Begin,             {.void_u8 = Task_QuestMenuBeginQuest}},
+    // {gText_MenuQuest_Begin,             {.void_u8 = Task_QuestMenuBeginQuest}},
     {gText_MenuQuest_Details,           {.void_u8 = Task_QuestMenuDetails}},
     {gText_Cancel,                      {.void_u8 = Task_QuestMenuCancel}},
 };
@@ -271,7 +271,7 @@ static const struct MenuAction sQuestSubmenuOptions[] =
 // Selected the active quest
 static const struct MenuAction sActiveQuestSubmenuOptions[] =
 {
-    {gText_MenuQuest_End,               {.void_u8 = Task_QuestMenuEndQuest}},
+    // {gText_MenuQuest_End,               {.void_u8 = Task_QuestMenuEndQuest}},
     {gText_MenuQuest_Details,           {.void_u8 = Task_QuestMenuDetails}},
     {gText_Cancel,                      {.void_u8 = Task_QuestMenuCancel}},
 };
@@ -308,65 +308,108 @@ static const u8 sQuestMenuWindowFontColors[][3] =
     {TEXT_COLOR_TRANSPARENT,  TEXT_DYNAMIC_COLOR_1,  TEXT_COLOR_DARK_GREY}
 };
 
+// #define WINDOW_QUEST_LIST     0
+// #define WINDOW_DESCRIPTION    1
+// #define WINDOW_SIDE_QUEST     2
+// #define WINDOW_SUBMENU        3
+// #define WINDOW_SUBMENU_CURSOR 4
+// #define WINDOW_UNKNOWN        5
+
+#define WINDOW_INIT_BASE_BLOCK         367
+
+#define WINDOW_UNKNOWN                   4
+#define WINDOW_UNKNOWN_WIDTH            26
+#define WINDOW_UNKNOWN_HEIGHT            4
+#define WINDOW_UNKNOWN_BASE_BLOCK        (WINDOW_INIT_BASE_BLOCK)  // 0x016F
+
+#define WINDOW_SUBMENU_CURSOR            3
+#define WINDOW_SUBMENU_CURSOR_WIDTH      7  //+2 for 4 options
+#define WINDOW_SUBMENU_CURSOR_HEIGHT     6  //+2 for 4 options
+#define WINDOW_SUBMENU_CURSOR_BASE_BLOCK (WINDOW_UNKNOWN_WIDTH * WINDOW_UNKNOWN_HEIGHT + WINDOW_UNKNOWN_BASE_BLOCK)  // 0x01d7
+
+#define WINDOW_SUBMENU                   2
+#define WINDOW_SUBMENU_WIDTH             5
+#define WINDOW_SUBMENU_HEIGHT            4
+#define WINDOW_SUBMENU_BASE_BLOCK        (WINDOW_SUBMENU_CURSOR_WIDTH * WINDOW_SUBMENU_CURSOR_HEIGHT + WINDOW_SUBMENU_CURSOR_BASE_BLOCK)  // 0x0201
+
+#define WINDOW_DESCRIPTION               1
+#define WINDOW_DESCRIPTION_WIDTH        25
+#define WINDOW_DESCRIPTION_HEIGHT        6
+#define WINDOW_DESCRIPTION_BASE_BLOCK    (WINDOW_SUBMENU_WIDTH * WINDOW_SUBMENU_HEIGHT + WINDOW_SUBMENU_BASE_BLOCK)  // 0x0215
+
+#define WINDOW_QUEST_LIST                0
+#define WINDOW_QUEST_LIST_WIDTH         22
+#define WINDOW_QUEST_LIST_HEIGHT        12
+#define WINDOW_QUEST_LIST_BASE_BLOCK     (WINDOW_DESCRIPTION_WIDTH * WINDOW_DESCRIPTION_HEIGHT + WINDOW_DESCRIPTION_BASE_BLOCK)  // 0x02AB
+
+#define STD_FRAME_0_PAL                  (WINDOW_QUEST_LIST_WIDTH * WINDOW_QUEST_LIST_HEIGHT + WINDOW_QUEST_LIST_BASE_BLOCK)  // 0x03B3
+#define STD_FRAME_0_RESOURCES            (STD_FRAME_0_PAL + 0x09)  // 0x03BC
+#define USER_WINDOW_BORDER_GFX           (STD_FRAME_0_RESOURCES + 0x14)  // 0x03D0
 static const struct WindowTemplate sQuestMenuHeaderWindowTemplates[] =
 {
-    {
+    // The quest list
+    [WINDOW_QUEST_LIST] = {
         .bg = 0,
-        .tilemapLeft = 0x07,
+        .tilemapLeft = 0x03,
         .tilemapTop = 0x01,
-        .width = 0x13,
-        .height = 0x0c,
+        .width = WINDOW_QUEST_LIST_WIDTH,
+        .height = WINDOW_QUEST_LIST_HEIGHT,
         .paletteNum = 0x0f,
-        .baseBlock = 0x02bf
+        .baseBlock = WINDOW_QUEST_LIST_BASE_BLOCK //0x02bf
     },
-    {
+    // The description text
+    [WINDOW_DESCRIPTION] = {
         .bg = 0,
         .tilemapLeft = 0x05,
         .tilemapTop = 0x0e,
-        .width = 0x19,
-        .height = 0x06,
+        .width = WINDOW_DESCRIPTION_WIDTH,
+        .height = WINDOW_DESCRIPTION_HEIGHT,
         .paletteNum = 0x0d,
-        .baseBlock = 0x0229
+        .baseBlock = WINDOW_DESCRIPTION_BASE_BLOCK //0x0229
     },
-    {
-        .bg = 0,
-        .tilemapLeft = 0x01,
-        .tilemapTop = 0x01,
-        .width = 0x05,
-        .height = 0x04,
-        .paletteNum = 15,
-        .baseBlock = 0x0215
-    },
-    {
+    // The `Side Quest` text in the top left
+    // {
+    //     .bg = 0,
+    //     .tilemapLeft = 0x01,
+    //     .tilemapTop = 0x01,
+    //     .width = 0x05,
+    //     .height = 0x04,
+    //     .paletteNum = 15,
+    //     .baseBlock = 0x0215
+    // },
+    [WINDOW_SUBMENU] = {
         .bg = 0,
         .tilemapLeft = 0x18,
         .tilemapTop = 0x0f,
-        .width = 0x05,
-        .height = 0x04,
+        .width = WINDOW_SUBMENU_WIDTH,
+        .height = WINDOW_SUBMENU_HEIGHT,
         .paletteNum = 15,
-        .baseBlock = 0x0201
+        .baseBlock = WINDOW_SUBMENU_BASE_BLOCK
     },
-    {   // submenu cursor selection window
+    [WINDOW_SUBMENU_CURSOR] = {   // submenu cursor selection window
         .bg = 0,
         .tilemapLeft = 0x16,
-        .tilemapTop = 0xD,  //+2 for 4 options
-        .width = 0x07,
-        .height = 0x06,     //+2 for 4 options
+        .tilemapTop = 0xD,
+        .width = WINDOW_SUBMENU_CURSOR_WIDTH,
+        .height = WINDOW_SUBMENU_CURSOR_HEIGHT,
         .paletteNum = 15,
-        .baseBlock = 0x01d7
+        .baseBlock = WINDOW_SUBMENU_CURSOR_BASE_BLOCK
     },
-    {
+    [WINDOW_UNKNOWN] = {
         .bg = 0,
         .tilemapLeft = 0x02,
         .tilemapTop = 0x0f,
-        .width = 0x1a,
-        .height = 0x04,
+        .width = WINDOW_UNKNOWN_WIDTH,
+        .height = WINDOW_UNKNOWN_HEIGHT,
         .paletteNum = 0x0b,
-        .baseBlock = 0x016f
+        .baseBlock = WINDOW_UNKNOWN_BASE_BLOCK
     },
     DUMMY_WIN_TEMPLATE
 };
 
+#define SUBWINDOW_0 0
+#define SUBWINDOW_1 1
+#define SUBWINDOW_2 2
 static const struct WindowTemplate sQuestMenuSubWindowTemplates[] =
 {
     {
@@ -619,7 +662,7 @@ static bool8 QuestMenu_DoGfxSetup(void)
         gMain.state++;
         break;
     case 13:
-        QuestMenu_PrintHeader();
+        // QuestMenu_PrintHeader();
         gMain.state++;
         break;
     case 14:
@@ -866,8 +909,8 @@ static void QuestMenu_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMen
         }
 
         sStateDataPtr->itemMenuIconSlot ^= 1;
-        FillWindowPixelBuffer(1, 0);
-        QuestMenu_AddTextPrinterParameterized(1, 2, desc, 0, 3, 2, 0, 0, 3);
+        FillWindowPixelBuffer(WINDOW_DESCRIPTION, 0);
+        QuestMenu_AddTextPrinterParameterized(WINDOW_DESCRIPTION, 2, desc, 0, 3, 2, 0, 0, 3);
     }
 }
 
@@ -889,7 +932,7 @@ static void QuestMenu_ItemPrintFunc(u8 windowId, s32 itemId, u8 y)
         else
             StringCopy(gStringVar4, sText_Empty);
 
-        QuestMenu_AddTextPrinterParameterized(windowId, 0, gStringVar4, 110, y, 0, 0, TEXT_SPEED_FF, 1);
+        QuestMenu_AddTextPrinterParameterized(windowId, 0, gStringVar4, 166, y, 0, 0, TEXT_SPEED_FF, 1);
     }
 }
 
@@ -904,17 +947,17 @@ static void QuestMenu_PrintOrRemoveCursorAt(u8 y, u8 colorIdx)
     {
         u8 maxWidth = GetFontAttribute(1, FONTATTR_MAX_LETTER_WIDTH);
         u8 maxHeight = GetFontAttribute(1, FONTATTR_MAX_LETTER_HEIGHT);
-        FillWindowPixelRect(0, 0, 0, y, maxWidth, maxHeight);
+        FillWindowPixelRect(WINDOW_QUEST_LIST, 0, 0, y, maxWidth, maxHeight);
     }
     else
     {
-        QuestMenu_AddTextPrinterParameterized(0, 2, gText_SelectorArrow, 0, y, 0, 0, 0, colorIdx);
+        QuestMenu_AddTextPrinterParameterized(WINDOW_QUEST_LIST, 2, gText_SelectorArrow, 0, y, 0, 0, 0, colorIdx);
     }
 }
 
 static void QuestMenu_PrintHeader(void)
 {
-    QuestMenu_AddTextPrinterParameterized(2, 0, sText_Quests, 0, 1, 0, 1, 0, 0);
+    // QuestMenu_AddTextPrinterParameterized(WINDOW_SIDE_QUEST, 0, sText_Quests, 0, 1, 0, 1, 0, 0);
 }
 
 static void QuestMenu_PlaceTopMenuScrollIndicatorArrows(void)
@@ -1207,27 +1250,27 @@ static void Task_QuestMenuSubmenuInit(u8 taskId)
     s16* data = gTasks[taskId].data;
     u8 windowId;
 
-    QuestMenu_SetBorderStyleOnWindow(4);    //for sub menu list items
-    windowId = QuestMenu_GetOrCreateSubwindow(0);
+    QuestMenu_SetBorderStyleOnWindow(WINDOW_SUBMENU_CURSOR);    //for sub menu list items
+    windowId = QuestMenu_GetOrCreateSubwindow(SUBWINDOW_0);
 
     if (GetSetQuestFlag(data[1], FLAG_GET_COMPLETED))
     {
         // completed
-        PrintTextArray(4, 2, 8, 2, GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) + 2, NELEMS(sCompletedQuestSubmenuOptions), sCompletedQuestSubmenuOptions);
-        sub_81983AC(4, 2, 0, 2, GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) + 2, NELEMS(sCompletedQuestSubmenuOptions), 0);
+        PrintTextArray(WINDOW_SUBMENU_CURSOR, 2, 8, 2, GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) + 2, NELEMS(sCompletedQuestSubmenuOptions), sCompletedQuestSubmenuOptions);
+        sub_81983AC(WINDOW_SUBMENU_CURSOR, 2, 0, 2, GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) + 2, NELEMS(sCompletedQuestSubmenuOptions), 0);
 
     }
     else if (IsActiveQuest(QuestMenu_GetCursorPosition()))
     {
         // active
-        PrintTextArray(4, 2, 8, 2, GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) + 2, NELEMS(sActiveQuestSubmenuOptions), sActiveQuestSubmenuOptions);
-        sub_81983AC(4, 2, 0, 2, GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) + 2, NELEMS(sActiveQuestSubmenuOptions), 0);
+        PrintTextArray(WINDOW_SUBMENU_CURSOR, 2, 8, 2, GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) + 2, NELEMS(sActiveQuestSubmenuOptions), sActiveQuestSubmenuOptions);
+        sub_81983AC(WINDOW_SUBMENU_CURSOR, 2, 0, 2, GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) + 2, NELEMS(sActiveQuestSubmenuOptions), 0);
     }
     else
     {
         // unlocked
-        PrintTextArray(4, 2, 8, 2, GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) + 2, NELEMS(sQuestSubmenuOptions), sQuestSubmenuOptions);
-        sub_81983AC(4, 2, 0, 2, GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) + 2, NELEMS(sQuestSubmenuOptions), 0);
+        PrintTextArray(WINDOW_SUBMENU_CURSOR, 2, 8, 2, GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) + 2, NELEMS(sQuestSubmenuOptions), sQuestSubmenuOptions);
+        sub_81983AC(WINDOW_SUBMENU_CURSOR, 2, 0, 2, GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) + 2, NELEMS(sQuestSubmenuOptions), 0);
     }
     //CopyItemName(QuestMenu_GetItemIdBySlotId(data[1]), gStringVar1);
     //StringExpandPlaceholders(gStringVar4, gText_StrVar1);
@@ -1268,11 +1311,11 @@ static void QuestMenuSubmenuSelectionMessage(u8 taskId)
 {
     s16* data = gTasks[taskId].data;
 
-    ClearStdWindowAndFrameToTransparent(4, FALSE);
-    QuestMenu_DestroySubwindow(0);
-    ClearWindowTilemap(4);
+    ClearStdWindowAndFrameToTransparent(WINDOW_SUBMENU_CURSOR, FALSE);
+    QuestMenu_DestroySubwindow(SUBWINDOW_0);
+    ClearWindowTilemap(WINDOW_SUBMENU_CURSOR);
     data[8] = 1;
-    PutWindowTilemap(0);
+    PutWindowTilemap(WINDOW_QUEST_LIST);
     ScheduleBgCopyTilemapToVram(0);
 }
 
@@ -1324,7 +1367,7 @@ static void QuestMenu_DisplaySubMenuMessage(u8 taskId)
     s16* data = gTasks[taskId].data;
     u8 windowId;
 
-    windowId = QuestMenu_GetOrCreateSubwindow(2);
+    windowId = QuestMenu_GetOrCreateSubwindow(SUBWINDOW_2);
     AddTextPrinterParameterized(windowId, 2, gStringVar4, 0, 2, 0, NULL);
     gTasks[taskId].func = Task_QuestMenuRefreshAfterAcknowledgement;
 }
@@ -1342,8 +1385,8 @@ static void Task_QuestMenuCleanUp(u8 taskId)
 {
     s16* data = gTasks[taskId].data;
 
-    QuestMenu_DestroySubwindow(2);
-    PutWindowTilemap(1);
+    QuestMenu_DestroySubwindow(SUBWINDOW_2);
+    PutWindowTilemap(WINDOW_DESCRIPTION);
     DestroyListMenuTask(data[0], &sListMenuState.scroll, &sListMenuState.row);
 
     QuestMenu_InitItems();
@@ -1359,11 +1402,11 @@ static void Task_QuestMenuCancel(u8 taskId)
 {
     s16* data = gTasks[taskId].data;
 
-    ClearStdWindowAndFrameToTransparent(4, FALSE);
-    QuestMenu_DestroySubwindow(0);
-    ClearWindowTilemap(4);
-    PutWindowTilemap(0);
-    PutWindowTilemap(1);
+    ClearStdWindowAndFrameToTransparent(WINDOW_SUBMENU_CURSOR, FALSE);
+    QuestMenu_DestroySubwindow(SUBWINDOW_0);
+    ClearWindowTilemap(WINDOW_SUBMENU_CURSOR);
+    PutWindowTilemap(WINDOW_QUEST_LIST);
+    PutWindowTilemap(WINDOW_DESCRIPTION);
     QuestMenu_PrintOrRemoveCursor(data[0], 1);
     ScheduleBgCopyTilemapToVram(0);
     QuestMenu_ReturnFromSubmenu(taskId);
@@ -1373,12 +1416,12 @@ static void Task_QuestMenuCancel(u8 taskId)
 void TextWindow_SetStdFrame0_WithPal(u8 windowId, u16 destOffset, u8 palIdx)
 {
     LoadBgTiles(GetWindowAttribute(windowId, WINDOW_BG), sFR_StdFrame0, 0x120, destOffset);
-    LoadPalette(GetTextWindowPalette(3), palIdx, 32);
+    LoadPalette(GetTextWindowPalette(WINDOW_SUBMENU), palIdx, 32);
 }
 void TextWindow_LoadResourcesStdFrame0(u8 windowId, u16 destOffset, u8 palIdx)
 {
     LoadBgTiles(GetWindowAttribute(windowId, WINDOW_BG), sFR_MessageBoxTiles, 0x280, destOffset);
-    LoadPalette(GetTextWindowPalette(0), palIdx, 32);
+    LoadPalette(GetTextWindowPalette(WINDOW_QUEST_LIST), palIdx, 32);
 }
 
 static void QuestMenu_InitWindows(void)
@@ -1387,20 +1430,25 @@ static void QuestMenu_InitWindows(void)
 
     InitWindows(sQuestMenuHeaderWindowTemplates);
     DeactivateAllTextPrinters();
-    LoadUserWindowBorderGfx(0, 0x3C0, 0xE0);
+    LoadUserWindowBorderGfx(WINDOW_QUEST_LIST, USER_WINDOW_BORDER_GFX, 0xE0);
 
-    TextWindow_SetStdFrame0_WithPal(0, 0x3A3, 0xC0);
-    TextWindow_LoadResourcesStdFrame0(0, 0x3AC, 0xB0);
+    TextWindow_SetStdFrame0_WithPal(WINDOW_QUEST_LIST, STD_FRAME_0_PAL, 0xC0);
+    TextWindow_LoadResourcesStdFrame0(WINDOW_QUEST_LIST, STD_FRAME_0_RESOURCES, 0xB0);
     //LoadMessageBoxGfx(0, 0x3A3, 0xC0);
     //LoadMessageBoxGfx(0, 0x3AC, 0xB0);
 
     LoadPalette(GetTextWindowPalette(2), 0xD0, 0x20);
     LoadPalette(sMainWindowPal, 0xF0, 0x20);
-    for (i = 0; i < 3; i++)
-    {
-        FillWindowPixelBuffer(i, 0x00);
-        PutWindowTilemap(i);
-    }
+    // for (i = 0; i < 3; i++)
+    // {
+    //     FillWindowPixelBuffer(i, 0x00);
+    //     PutWindowTilemap(i);
+    // }
+
+    FillWindowPixelBuffer(WINDOW_QUEST_LIST, 0x00);
+    PutWindowTilemap(WINDOW_QUEST_LIST);
+    FillWindowPixelBuffer(WINDOW_DESCRIPTION, 0x00);
+    PutWindowTilemap(WINDOW_DESCRIPTION);
 
     ScheduleBgCopyTilemapToVram(0);
     for (i = 0; i < 3; i++)
@@ -1414,7 +1462,7 @@ static void QuestMenu_AddTextPrinterParameterized(u8 windowId, u8 fontId, const 
 
 static void QuestMenu_SetBorderStyleOnWindow(u8 windowId)
 {
-    DrawStdFrameWithCustomTileAndPalette(windowId, FALSE, 0x3C0, 14);
+    DrawStdFrameWithCustomTileAndPalette(windowId, FALSE, USER_WINDOW_BORDER_GFX, 14);
 }
 
 static u8 QuestMenu_GetOrCreateSubwindow(u8 idx)
@@ -1422,7 +1470,7 @@ static u8 QuestMenu_GetOrCreateSubwindow(u8 idx)
     if (sSubmenuWindowIds[idx] == 0xFF)
     {
         sSubmenuWindowIds[idx] = AddWindow(&sQuestMenuSubWindowTemplates[idx]);
-        DrawStdFrameWithCustomTileAndPalette(sSubmenuWindowIds[idx], TRUE, 0x3A3, 0x0C);
+        DrawStdFrameWithCustomTileAndPalette(sSubmenuWindowIds[idx], TRUE, STD_FRAME_0_PAL, 0x0C);
     }
 
     return sSubmenuWindowIds[idx];
@@ -1524,8 +1572,8 @@ void CopyQuestName(u8* dst, u8 questId)
 }
 
 
-#define TOAST_WINDOW_WIDTH   (DISPLAY_TILESET_WIDTH / 3)
-#define TOAST_WINDOW_LEFT    (DISPLAY_TILESET_WIDTH - TOAST_WINDOW_WIDTH)
+#define TOAST_WINDOW_WIDTH   (2 * DISPLAY_TILESET_WIDTH / 3)
+#define TOAST_WINDOW_LEFT    (DISPLAY_TILESET_WIDTH - TOAST_WINDOW_WIDTH - 1)
 #define TOAST_WINDOW_HEIGHT  3
 #define TOAST_WINDOW_TOP     2
 #define TOAST_TIMEOUT        100
@@ -1539,7 +1587,7 @@ void CopyQuestName(u8* dst, u8 questId)
 
 
 static const u8* const questToastText[] = {
-    [TOAST_TEXT_UNLOCKED] =  gText_QuestUnlocked,
+    [TOAST_TEXT_UNLOCKED] = gText_QuestUnlocked,
     [TOAST_TEXT_COMPLETED] = gText_QuestComplete
 };
 
@@ -1611,3 +1659,31 @@ void DrawQuestCompleteToast(u8 questId)
 #undef tYSpeed
 #undef tXSpeed
 #undef tState
+
+#undef WINDOW_INIT_BASE_BLOCK
+#undef WINDOW_UNKNOWN
+#undef WINDOW_UNKNOWN_WIDTH
+#undef WINDOW_UNKNOWN_HEIGHT
+#undef WINDOW_UNKNOWN_BASE_BLOCK
+#undef WINDOW_SUBMENU_CURSOR
+#undef WINDOW_SUBMENU_CURSOR_WIDTH
+#undef WINDOW_SUBMENU_CURSOR_HEIGHT
+#undef WINDOW_SUBMENU_CURSOR_BASE_BLOCK
+#undef WINDOW_SUBMENU
+#undef WINDOW_SUBMENU_WIDTH
+#undef WINDOW_SUBMENU_HEIGHT
+#undef WINDOW_SUBMENU_BASE_BLOCK
+#undef WINDOW_DESCRIPTION
+#undef WINDOW_DESCRIPTION_WIDTH
+#undef WINDOW_DESCRIPTION_HEIGHT
+#undef WINDOW_DESCRIPTION_BASE_BLOCK
+#undef WINDOW_QUEST_LIST
+#undef WINDOW_QUEST_LIST_WIDTH
+#undef WINDOW_QUEST_LIST_HEIGHT
+#undef WINDOW_QUEST_LIST_BASE_BLOCK
+#undef STD_FRAME_0_PAL
+#undef STD_FRAME_0_RESOURCES
+#undef USER_WINDOW_BORDER_GFX
+#undef SUBWINDOW_0
+#undef SUBWINDOW_1
+#undef SUBWINDOW_2

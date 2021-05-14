@@ -674,10 +674,11 @@
 #define FLAG_HIDDEN_ITEM_ROUTE_128_HEART_SCALE_2             (FLAG_HIDDEN_ITEMS_START + 0x5D)
 #define FLAG_HIDDEN_ITEM_ROUTE_128_HEART_SCALE_3             (FLAG_HIDDEN_ITEMS_START + 0x5E)
 
-#define FLAG_QUEST_MENU_ACTIVE  0x264
-#define FLAG_UNUSED_0x265  0x265 // Unused Flag
-#define FLAG_UNUSED_0x266  0x266 // Unused Flag
-#define FLAG_UNUSED_0x267  0x267 // Unused Flag
+// Quest Flags
+#define FLAG_QUEST_MENU_ACTIVE      0x264
+#define FLAG_QUEST_ROTOM_HAVETRIED  0x265 // Track if the player's made an attempt to capture the rotom
+#define FLAG_QUEST_ROTOM_HAVEFAILD  0x266 // Tracks if the player has already failed at least once at capturing the rotom
+#define FLAG_QUEST_ROTOM_HAVEBEAT   0x267 // Tracks if the player's captured the Rotom
 #define FLAG_UNUSED_0x268  0x268 // Unused Flag
 #define FLAG_UNUSED_0x269  0x269 // Unused Flag
 #define FLAG_UNUSED_0x26A  0x26A // Unused Flag
@@ -1127,7 +1128,7 @@
 #define FLAG_ITEM_PETALBURG_WOODS_GREAT_BALL                        0x420
 #define FLAG_ITEM_ROUTE_104_POKE_BALL                               0x421
 #define FLAG_ITEM_PETALBURG_WOODS_ETHER                             0x422
-#define FLAG_ITEM_MAGMA_HIDEOUT_3F_3R_ESCAPE_ROPE                    0x423
+#define FLAG_ITEM_MAGMA_HIDEOUT_3F_3R_ESCAPE_ROPE                   0x423
 #define FLAG_ITEM_TRICK_HOUSE_PUZZLE_1_ORANGE_MAIL                  0x424
 #define FLAG_ITEM_TRICK_HOUSE_PUZZLE_2_HARBOR_MAIL                  0x425
 #define FLAG_ITEM_TRICK_HOUSE_PUZZLE_2_WAVE_MAIL                    0x426
@@ -1365,13 +1366,13 @@
 
 #define SYSTEM_FLAGS                                   (TRAINER_FLAGS_END + 1) // 0x860
 
-#define FLAG_SYS_POKEMON_GET                         (SYSTEM_FLAGS + 0x0) // FLAG_0x860
-#define FLAG_SYS_POKEDEX_GET                         (SYSTEM_FLAGS + 0x1)
-#define FLAG_SYS_POKENAV_GET                         (SYSTEM_FLAGS + 0x2)
-#define FLAG_SYS_QUEST_MENU_GET                      (SYSTEM_FLAGS + 0x3) // add QUESTS to start menu
-#define FLAG_SYS_GAME_CLEAR                          (SYSTEM_FLAGS + 0x4)
-#define FLAG_SYS_CHAT_USED                           (SYSTEM_FLAGS + 0x5)
-#define FLAG_SYS_HIPSTER_MEET                        (SYSTEM_FLAGS + 0x6)
+#define FLAG_SYS_POKEMON_GET                         (SYSTEM_FLAGS + 0x0) // 0x860
+#define FLAG_SYS_POKEDEX_GET                         (SYSTEM_FLAGS + 0x1) // 0x861
+#define FLAG_SYS_POKENAV_GET                         (SYSTEM_FLAGS + 0x2) // 0x862
+#define FLAG_SYS_QUEST_MENU_GET                      (SYSTEM_FLAGS + 0x3) // 0x863 (add QUESTS to start menu)
+#define FLAG_SYS_GAME_CLEAR                          (SYSTEM_FLAGS + 0x4) // 0x864
+#define FLAG_SYS_CHAT_USED                           (SYSTEM_FLAGS + 0x5) // 0x865
+#define FLAG_SYS_HIPSTER_MEET                        (SYSTEM_FLAGS + 0x6) // 0x866
 
 // Badges
 #define FLAG_BADGE01_GET                             (SYSTEM_FLAGS + 0x7)
@@ -1421,7 +1422,7 @@
 #define FLAG_SYS_CRUISE_MODE                        (SYSTEM_FLAGS + 0x2D)
 
 #define FLAG_SYS_DETECTOR_MODE                      (SYSTEM_FLAGS + 0x2E) // allow player to find hidden mons
-#define FLAG_SYS_DEXNAV_GET                         (SYSTEM_FLAGS + 0x2F) // dexnav shows in start menu
+#define FLAG_SYS_DEXNAV_GET                         (SYSTEM_FLAGS + 0x2F) // 0x88F dexnav shows in start menu
 
 #define FLAG_SYS_TV_HOME                            (SYSTEM_FLAGS + 0x30)
 #define FLAG_SYS_TV_WATCH                           (SYSTEM_FLAGS + 0x31)

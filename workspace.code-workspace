@@ -28,6 +28,9 @@
 		"C_Cpp.vcFormat.newLine.beforeOpenBrace.lambda": "newLine",
 		"files.exclude": {
 			"berry_fix/**": true
+		},
+		"material-icon-theme.files.associations": {
+			"*.pory": "proto"
 		}
 	}
 }

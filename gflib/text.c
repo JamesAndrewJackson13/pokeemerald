@@ -996,13 +996,17 @@ u16 RenderText(struct TextPrinter* textPrinter)
                 textPrinter->printerTemplate.currentChar++;
                 PlaySE(currChar);
                 return 2;
-            case EXT_CTRL_CODE_SHIFT_TEXT:
-                textPrinter->printerTemplate.currentX = textPrinter->printerTemplate.x + *textPrinter->printerTemplate.currentChar;
-                textPrinter->printerTemplate.currentChar++;
+            case EXT_CTRL_CODE_SHIFT_RIGHT_TEXT:
+                textPrinter->printerTemplate.currentX = textPrinter->printerTemplate.x + *textPrinter->printerTemplate.currentChar++;
+                return 2;
+            case EXT_CTRL_CODE_SHIFT_LEFT_TEXT:
+                textPrinter->printerTemplate.currentX = textPrinter->printerTemplate.x - *textPrinter->printerTemplate.currentChar++;
                 return 2;
             case EXT_CTRL_CODE_SHIFT_DOWN:
-                textPrinter->printerTemplate.currentY = textPrinter->printerTemplate.y + *textPrinter->printerTemplate.currentChar;
-                textPrinter->printerTemplate.currentChar++;
+                textPrinter->printerTemplate.currentY = textPrinter->printerTemplate.y + *textPrinter->printerTemplate.currentChar++;
+                return 2;
+            case EXT_CTRL_CODE_SHIFT_UP:
+                textPrinter->printerTemplate.currentY = textPrinter->printerTemplate.y - *textPrinter->printerTemplate.currentChar++;
                 return 2;
             case EXT_CTRL_CODE_FILL_WINDOW:
                 FillWindowPixelBuffer(textPrinter->printerTemplate.windowId, PIXEL_FILL(textPrinter->printerTemplate.bgColor));
@@ -1226,7 +1230,9 @@ u32 GetStringWidthFixedWidthFont(const u8* str, u8 fontId, u8 letterSpacing)
             case EXT_CTRL_CODE_SIZE:
             case EXT_CTRL_CODE_PAUSE:
             case EXT_CTRL_CODE_ESCAPE:
-            case EXT_CTRL_CODE_SHIFT_TEXT:
+            case EXT_CTRL_CODE_SHIFT_RIGHT_TEXT:
+            case EXT_CTRL_CODE_SHIFT_LEFT_TEXT:
+            case EXT_CTRL_CODE_SHIFT_UP:
             case EXT_CTRL_CODE_SHIFT_DOWN:
             case EXT_CTRL_CODE_CLEAR:
             case EXT_CTRL_CODE_SKIP:
@@ -1368,7 +1374,9 @@ s32 GetStringWidth(u8 fontId, const u8* str, s16 letterSpacing)
             case EXT_CTRL_CODE_PALETTE:
             case EXT_CTRL_CODE_PAUSE:
             case EXT_CTRL_CODE_ESCAPE:
-            case EXT_CTRL_CODE_SHIFT_TEXT:
+            case EXT_CTRL_CODE_SHIFT_RIGHT_TEXT:
+            case EXT_CTRL_CODE_SHIFT_LEFT_TEXT:
+            case EXT_CTRL_CODE_SHIFT_UP:
             case EXT_CTRL_CODE_SHIFT_DOWN:
                 ++str;
                 break;
@@ -1518,7 +1526,9 @@ u8 RenderTextFont9(u8* pixels, u8 fontId, u8* str)
             case EXT_CTRL_CODE_PALETTE:
             case EXT_CTRL_CODE_PAUSE:
             case EXT_CTRL_CODE_ESCAPE:
-            case EXT_CTRL_CODE_SHIFT_TEXT:
+            case EXT_CTRL_CODE_SHIFT_RIGHT_TEXT:
+            case EXT_CTRL_CODE_SHIFT_LEFT_TEXT:
+            case EXT_CTRL_CODE_SHIFT_UP:
             case EXT_CTRL_CODE_SHIFT_DOWN:
             case EXT_CTRL_CODE_CLEAR:
             case EXT_CTRL_CODE_SKIP:

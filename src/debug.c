@@ -71,6 +71,8 @@ enum { // Util
 enum { // Flags
     DEBUG_FLAG_MENU_ITEM_FLAGS,
     DEBUG_FLAG_MENU_ITEM_POKEDEXFLAGS,
+    DEBUG_FLAG_MENU_ITEM_QUESTSONOFF,
+    DEBUG_FLAG_MENU_ITEM_DEXNAVONOFF,
     DEBUG_FLAG_MENU_ITEM_POKEDEXONOFF,
     DEBUG_FLAG_MENU_ITEM_NATDEXONOFF,
     DEBUG_FLAG_MENU_ITEM_POKENAVONOFF,
@@ -174,6 +176,8 @@ static void DebugAction_Flags_Flags(u8 taskId);
 static void DebugAction_Flags_FlagsSelect(u8 taskId);
 
 static void DebugAction_Flags_SetPokedexFlags(u8);
+static void DebugAction_Flags_SwitchQuests(u8);
+static void DebugAction_Flags_SwitchDexNav(u8);
 static void DebugAction_Flags_SwitchDex(u8);
 static void DebugAction_Flags_SwitchNatDex(u8);
 static void DebugAction_Flags_SwitchPokeNav(u8);
@@ -247,6 +251,8 @@ static const u8 gDebugText_Util_Trainer_Id[] =              _("New Trainer Id");
 // Flags Menu
 static const u8 gDebugText_Flags_Flags[] =                _("Set Flag XXXX");
 static const u8 gDebugText_Flags_SetPokedexFlags[] =      _("All Pokédex Flags");
+static const u8 gDebugText_Flags_SwitchQuests[] =         _("Quests ON/OFF");
+static const u8 gDebugText_Flags_SwitchDexNav[] =         _("DexNav ON/OFF");
 static const u8 gDebugText_Flags_SwitchDex[] =            _("Pokédex ON/OFF");
 static const u8 gDebugText_Flags_SwitchNationalDex[] =    _("NatDex ON/OFF");
 static const u8 gDebugText_Flags_SwitchPokeNav[] =        _("PokéNav ON/OFF");
@@ -355,6 +361,8 @@ static const struct ListMenuItem sDebugMenu_Items_Flags[] =
 {
     [DEBUG_FLAG_MENU_ITEM_FLAGS]            = {gDebugText_Flags_Flags,               DEBUG_FLAG_MENU_ITEM_FLAGS},
     [DEBUG_FLAG_MENU_ITEM_POKEDEXFLAGS]     = {gDebugText_Flags_SetPokedexFlags,     DEBUG_FLAG_MENU_ITEM_POKEDEXFLAGS},
+    [DEBUG_FLAG_MENU_ITEM_QUESTSONOFF]      = {gDebugText_Flags_SwitchQuests,        DEBUG_FLAG_MENU_ITEM_QUESTSONOFF},
+    [DEBUG_FLAG_MENU_ITEM_DEXNAVONOFF]      = {gDebugText_Flags_SwitchDexNav,        DEBUG_FLAG_MENU_ITEM_DEXNAVONOFF},
     [DEBUG_FLAG_MENU_ITEM_POKEDEXONOFF]     = {gDebugText_Flags_SwitchDex,           DEBUG_FLAG_MENU_ITEM_POKEDEXONOFF},
     [DEBUG_FLAG_MENU_ITEM_NATDEXONOFF]      = {gDebugText_Flags_SwitchNationalDex,   DEBUG_FLAG_MENU_ITEM_NATDEXONOFF},
     [DEBUG_FLAG_MENU_ITEM_POKENAVONOFF]     = {gDebugText_Flags_SwitchPokeNav,       DEBUG_FLAG_MENU_ITEM_POKENAVONOFF},
@@ -408,6 +416,8 @@ static void (*const sDebugMenu_Actions_Flags[])(u8) =
 {
     [DEBUG_FLAG_MENU_ITEM_FLAGS]            = DebugAction_Flags_Flags,
     [DEBUG_FLAG_MENU_ITEM_POKEDEXFLAGS]     = DebugAction_Flags_SetPokedexFlags,
+    [DEBUG_FLAG_MENU_ITEM_QUESTSONOFF]      = DebugAction_Flags_SwitchQuests,
+    [DEBUG_FLAG_MENU_ITEM_DEXNAVONOFF]      = DebugAction_Flags_SwitchDexNav,
     [DEBUG_FLAG_MENU_ITEM_POKEDEXONOFF]     = DebugAction_Flags_SwitchDex,
     [DEBUG_FLAG_MENU_ITEM_NATDEXONOFF]      = DebugAction_Flags_SwitchNatDex,
     [DEBUG_FLAG_MENU_ITEM_POKENAVONOFF]     = DebugAction_Flags_SwitchPokeNav,
@@ -1090,16 +1100,30 @@ static void DebugAction_Flags_SetPokedexFlags(u8 taskId)
     Debug_DestroyMenu(taskId);
     EnableBothScriptContexts();
 }
-static void DebugAction_Flags_SwitchDex(u8 taskId)
+static void DebugAction_Flags_SwitchFlag(u16 flagId)
 {
-    if(FlagGet(FLAG_SYS_POKEDEX_GET))
+    if (FlagGet(flagId))
     {
-        FlagClear(FLAG_SYS_POKEDEX_GET);
+        FlagClear(flagId);
         PlaySE(SE_PC_OFF);
-    }else{
-        FlagSet(FLAG_SYS_POKEDEX_GET);
+    }
+    else
+    {
+        FlagSet(flagId);
         PlaySE(SE_PC_LOGIN);
     }
+}
+static void DebugAction_Flags_SwitchQuests(u8 taskId)
+{
+    DebugAction_Flags_SwitchFlag(FLAG_SYS_QUEST_MENU_GET);
+}
+static void DebugAction_Flags_SwitchDexNav(u8 taskId)
+{
+    DebugAction_Flags_SwitchFlag(FLAG_SYS_DEXNAV_GET);
+}
+static void DebugAction_Flags_SwitchDex(u8 taskId)
+{
+    DebugAction_Flags_SwitchFlag(FLAG_SYS_POKEDEX_GET);
 }
 static void DebugAction_Flags_SwitchNatDex(u8 taskId)
 {
@@ -1114,14 +1138,7 @@ static void DebugAction_Flags_SwitchNatDex(u8 taskId)
 }
 static void DebugAction_Flags_SwitchPokeNav(u8 taskId)
 {
-    if(FlagGet(FLAG_SYS_POKENAV_GET))
-    {
-        FlagClear(FLAG_SYS_POKENAV_GET);
-        PlaySE(SE_PC_OFF);
-    }else{
-        FlagSet(FLAG_SYS_POKENAV_GET);
-        PlaySE(SE_PC_LOGIN);
-    }
+    DebugAction_Flags_SwitchFlag(FLAG_SYS_POKENAV_GET);
 }
 static void DebugAction_Flags_ToggleFlyFlags(u8 taskId)
 {
@@ -1167,58 +1184,23 @@ static void DebugAction_Flags_ToggleBadgeFlags(u8 taskId)
 }
 static void DebugAction_Flags_CollisionOnOff(u8 taskId)
 {
-    if(FlagGet(FLAG_SYS_NO_COLLISION))
-    {
-        FlagClear(FLAG_SYS_NO_COLLISION);
-        PlaySE(SE_PC_OFF);
-    }else{
-        FlagSet(FLAG_SYS_NO_COLLISION);
-        PlaySE(SE_PC_LOGIN);
-    }
+    DebugAction_Flags_SwitchFlag(FLAG_SYS_NO_COLLISION);
 }
 static void DebugAction_Flags_EncounterOnOff(u8 taskId)
 {
-    if(FlagGet(FLAG_SYS_NO_ENCOUNTER))
-    {
-        FlagClear(FLAG_SYS_NO_ENCOUNTER);
-        PlaySE(SE_PC_OFF);
-    }else{
-        FlagSet(FLAG_SYS_NO_ENCOUNTER);
-        PlaySE(SE_PC_LOGIN);
-    }
+    DebugAction_Flags_SwitchFlag(FLAG_SYS_NO_ENCOUNTER);
 }
 static void DebugAction_Flags_TrainerSeeOnOff(u8 taskId)
 {
-    if(FlagGet(FLAG_SYS_NO_TRAINER_SEE))
-    {
-        FlagClear(FLAG_SYS_NO_TRAINER_SEE);
-        PlaySE(SE_PC_OFF);
-    }else{
-        FlagSet(FLAG_SYS_NO_TRAINER_SEE);
-        PlaySE(SE_PC_LOGIN);
-    }
+    DebugAction_Flags_SwitchFlag(FLAG_SYS_NO_TRAINER_SEE);
 }
 static void DebugAction_Flags_BagUseOnOff(u8 taskId)
 {
-    if(FlagGet(FLAG_SYS_NO_BAG_USE))
-    {
-        FlagClear(FLAG_SYS_NO_BAG_USE);
-        PlaySE(SE_PC_OFF);
-    }else{
-        FlagSet(FLAG_SYS_NO_BAG_USE);
-        PlaySE(SE_PC_LOGIN);
-    }
+    DebugAction_Flags_SwitchFlag(FLAG_SYS_NO_BAG_USE);
 }
 static void DebugAction_Flags_CatchingOnOff(u8 taskId)
 {
-    if(FlagGet(FLAG_SYS_NO_CATCHING))
-    {
-        FlagClear(FLAG_SYS_NO_CATCHING);
-        PlaySE(SE_PC_OFF);
-    }else{
-        FlagSet(FLAG_SYS_NO_CATCHING);
-        PlaySE(SE_PC_LOGIN);
-    }
+    DebugAction_Flags_SwitchFlag(FLAG_SYS_NO_CATCHING);
 }
 
 // *******************************
