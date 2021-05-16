@@ -1974,7 +1974,7 @@ const u8 gText_FORMS_NONE[]                          = _("No alternate forms for
 
 /* side quest data */
 //menu
-const u8 gText_MenuQuest[] = _("QUESTS");
+const u8 gText_MenuQuest[] = _("Quests");
 //names
 const u8 gText_SideQuestName_1[] = _("Side Quest 1");
 const u8 gText_SideQuestName_2[] = _("Side Quest 2");
