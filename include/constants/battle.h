@@ -371,4 +371,9 @@
 #define MOVE_TARGET_OPPONENTS_FIELD     0x40
 #define MOVE_TARGET_ALLY                0x80
 
+// Wait Times
+#define B_WAIT_TIME_LONG  64
+#define B_WAIT_TIME_MED   48
+#define B_WAIT_TIME_SHORT 32
+
 #endif // GUARD_CONSTANTS_BATTLE_H

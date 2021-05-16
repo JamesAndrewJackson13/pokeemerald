@@ -30,8 +30,8 @@
 unsigned char gFontPalette[][3] =
 {
     {0xFF, 0xFF, 0xFF}, // bg (white)
-    {0x38, 0x38, 0x38}, // fg (dark grey)
-    {0xD8, 0xD8, 0xD8}, // shadow (light grey)
+    {0x38, 0x38, 0x38}, // fg (dark gray)
+    {0xD8, 0xD8, 0xD8}, // shadow (light gray)
 };
 
 void ConvertFromTiles1Bpp(unsigned char *src, unsigned char *dest, int numGlyphs, int layout)

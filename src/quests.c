@@ -138,7 +138,7 @@ static const u8 gText_MenuQuest_Begin[] = _("Begin");
 static const u8 gText_MenuQuest_End[] = _("End");
 static const u8 gText_MenuQuest_Details[] = _("Details");
 static const u8 gText_MenuQuest_Reward[] = _("Reward");
-static const u8 gText_MenuQuest_Unk[] = _("{COLOR}{LIGHT_GREY}?????????");
+static const u8 gText_MenuQuest_Unk[] = _("{COLOR}{LIGHT_GRAY}?????????");
 static const u8 gText_MenuQuest_Active[] = _("{COLOR}{GREEN}Active");
 static const u8 gText_MenuQuest_Complete[] = _("{RESET_SIZE}{COLOR}{BLUE}{0xB9}");
 static const u8 gText_MenuQuest_Exit[] = _("Exit the Quest Menu");
@@ -302,10 +302,10 @@ static const struct BgTemplate sQuestMenuBgTemplates[2] =
 
 static const u8 sQuestMenuWindowFontColors[][3] =
 {
-    {TEXT_COLOR_TRANSPARENT,  TEXT_COLOR_WHITE,      TEXT_COLOR_DARK_GREY},
-    {TEXT_COLOR_TRANSPARENT,  TEXT_COLOR_DARK_GREY,  TEXT_COLOR_LIGHT_GREY},
-    {TEXT_COLOR_TRANSPARENT,  TEXT_COLOR_LIGHT_GREY, TEXT_COLOR_DARK_GREY},
-    {TEXT_COLOR_TRANSPARENT,  TEXT_DYNAMIC_COLOR_1,  TEXT_COLOR_DARK_GREY}
+    {TEXT_COLOR_TRANSPARENT,  TEXT_COLOR_WHITE,      TEXT_COLOR_DARK_GRAY},
+    {TEXT_COLOR_TRANSPARENT,  TEXT_COLOR_DARK_GRAY,  TEXT_COLOR_LIGHT_GRAY},
+    {TEXT_COLOR_TRANSPARENT,  TEXT_COLOR_LIGHT_GRAY, TEXT_COLOR_DARK_GRAY},
+    {TEXT_COLOR_TRANSPARENT,  TEXT_DYNAMIC_COLOR_1,  TEXT_COLOR_DARK_GRAY}
 };
 
 // #define WINDOW_QUEST_LIST     0
@@ -773,11 +773,11 @@ static bool8 QuestMenu_LoadGraphics(void)
         sStateDataPtr->data[0]++;
         break;
     case 3:
-        LoadCompressedSpriteSheet(&gBagSwapSpriteSheet);
+        LoadCompressedSpriteSheet(&gSpriteSheet_SwapLine);
         sStateDataPtr->data[0]++;
         break;
     default:
-        LoadCompressedSpritePalette(&gBagSwapSpritePalette);
+        LoadCompressedSpritePalette(&gSpritePalette_SwapLine);
         sStateDataPtr->data[0] = 0;
         return TRUE;
     }

@@ -317,11 +317,11 @@ const u8 gText_StatSharply[] = _("sharply ");
 const u8 gText_StatRose[] = _("rose!");
 static const u8 sText_StatHarshly[] = _("harshly ");
 static const u8 sText_StatFell[] = _("fell!");
-static const u8 sText_PkmnsStatChanged[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
-const u8 gText_PkmnsStatChanged2[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
-static const u8 sText_UsingXTheYOfZN[] = _("Using {B_LAST_ITEM}, the {B_BUFF1}\nof {B_SCR_ACTIVE_NAME_WITH_PREFIX} {B_BUFF2}");
-static const u8 sText_PkmnsStatChanged3[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
-static const u8 sText_PkmnsStatChanged4[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
+const u8 gText_AttackersStatRose[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
+const u8 gText_DefendersStatRose[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
+static const u8 sText_UsingItemTheStatOfPkmnRose[] = _("Using {B_LAST_ITEM}, the {B_BUFF1}\nof {B_SCR_ACTIVE_NAME_WITH_PREFIX} {B_BUFF2}");
+const u8 gText_AttackersStatFell[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
+const u8 gText_DefendersStatFell[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
 static const u8 sText_StatsWontIncrease2[] = _("{B_ATK_NAME_WITH_PREFIX}'s stats won't\ngo any higher!");
 static const u8 sText_StatsWontDecrease2[] = _("{B_DEF_NAME_WITH_PREFIX}'s stats won't\ngo any lower!");
 static const u8 sText_CriticalHit[] = _("A critical hit!");
@@ -1188,14 +1188,14 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
             BATTLESTRINGS_ID_ADDER] = sText_StatHarshly,
         [STRINGID_STATFELL -
             BATTLESTRINGS_ID_ADDER] = sText_StatFell,
-        [STRINGID_PKMNSSTATCHANGED -
-            BATTLESTRINGS_ID_ADDER] = sText_PkmnsStatChanged,
-        [STRINGID_PKMNSSTATCHANGED2 -
-            BATTLESTRINGS_ID_ADDER] = gText_PkmnsStatChanged2,
-        [STRINGID_PKMNSSTATCHANGED3 -
-            BATTLESTRINGS_ID_ADDER] = sText_PkmnsStatChanged3,
-        [STRINGID_PKMNSSTATCHANGED4 -
-            BATTLESTRINGS_ID_ADDER] = sText_PkmnsStatChanged4,
+        [STRINGID_ATTACKERSSTATROSE -
+            BATTLESTRINGS_ID_ADDER] = gText_AttackersStatRose,
+        [STRINGID_DEFENDERSSTATROSE -
+            BATTLESTRINGS_ID_ADDER] = gText_DefendersStatRose,
+        [STRINGID_ATTACKERSSTATFELL -
+            BATTLESTRINGS_ID_ADDER] = gText_AttackersStatFell,
+        [STRINGID_DEFENDERSSTATFELL -
+            BATTLESTRINGS_ID_ADDER] = gText_DefendersStatFell,
         [STRINGID_CRITICALHIT -
             BATTLESTRINGS_ID_ADDER] = sText_CriticalHit,
         [STRINGID_ONEHITKO -
@@ -1412,8 +1412,8 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
             BATTLESTRINGS_ID_ADDER] = sText_ItemsCantBeUsedNow,
         [STRINGID_FORXCOMMAYZ -
             BATTLESTRINGS_ID_ADDER] = sText_ForXCommaYZ,
-        [STRINGID_USINGXTHEYOFZN -
-            BATTLESTRINGS_ID_ADDER] = sText_UsingXTheYOfZN,
+        [STRINGID_USINGITEMTEHSTATOFPKMNROSE -
+            BATTLESTRINGS_ID_ADDER] = sText_UsingItemTheStatOfPkmnRose,
         [STRINGID_PKMNUSEDXTOGETPUMPED -
             BATTLESTRINGS_ID_ADDER] = sText_PkmnUsedXToGetPumped,
         [STRINGID_PKMNSXMADEYUSELESS -
@@ -1945,12 +1945,12 @@ const u16 gUproarAwakeStringIds[] =
 
 const u16 gStatUpStringIds[] =
     {
-        STRINGID_PKMNSSTATCHANGED, STRINGID_PKMNSSTATCHANGED2, STRINGID_STATSWONTINCREASE,
-        STRINGID_EMPTYSTRING3, STRINGID_USINGXTHEYOFZN, STRINGID_PKMNUSEDXTOGETPUMPED};
+        STRINGID_ATTACKERSSTATROSE, STRINGID_DEFENDERSSTATROSE, STRINGID_STATSWONTINCREASE,
+        STRINGID_EMPTYSTRING3, STRINGID_USINGITEMTEHSTATOFPKMNROSE, STRINGID_PKMNUSEDXTOGETPUMPED};
 
 const u16 gStatDownStringIds[] =
     {
-        STRINGID_PKMNSSTATCHANGED3, STRINGID_PKMNSSTATCHANGED4, STRINGID_STATSWONTDECREASE, STRINGID_EMPTYSTRING3};
+        STRINGID_ATTACKERSSTATFELL, STRINGID_DEFENDERSSTATFELL, STRINGID_STATSWONTDECREASE, STRINGID_EMPTYSTRING3 };
 
 // Index read from sTWOTURN_STRINGID
 const u16 gFirstTurnOfTwoStringIds[] =
@@ -2168,9 +2168,9 @@ const u8 *const gStatNamesTable2[] =
         gText_HP3, gText_SpAtk, gText_Attack,
         gText_SpDef, gText_Defense, gText_Speed};
 
-const u8 gText_SafariBalls[] = _("{HIGHLIGHT DARK_GREY}SAFARI BALLS");
-const u8 gText_SafariBallLeft[] = _("{HIGHLIGHT DARK_GREY}Left: $"
-                                    "{HIGHLIGHT DARK_GREY}");
+const u8 gText_SafariBalls[] = _("{HIGHLIGHT DARK_GRAY}SAFARI BALLS");
+const u8 gText_SafariBallLeft[] = _("{HIGHLIGHT DARK_GRAY}Left: $"
+                                    "{HIGHLIGHT DARK_GRAY}");
 const u8 gText_Sleep[] = _("sleep");
 const u8 gText_Poison[] = _("poison");
 const u8 gText_Burn[] = _("burn");
@@ -2254,36 +2254,37 @@ static const u8 sText_PkmnBeganGrowlingDeeply[] = _("{B_SCR_ACTIVE_NAME_WITH_PRE
 static const u8 sText_PkmnEagerForMore[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is eager for more!");
 
 const u16 gBattlePalaceFlavorTextTable[] =
-    {
-        STRINGID_GLINTAPPEARSINEYE,
-        STRINGID_PKMNGETTINGINTOPOSITION,
-        STRINGID_PKMNBEGANGROWLINGDEEPLY,
-        STRINGID_PKMNEAGERFORMORE};
+{
+    [B_MSG_GLINT_IN_EYE]   = STRINGID_GLINTAPPEARSINEYE,
+    [B_MSG_GETTING_IN_POS] = STRINGID_PKMNGETTINGINTOPOSITION,
+    [B_MSG_GROWL_DEEPLY]   = STRINGID_PKMNBEGANGROWLINGDEEPLY,
+    [B_MSG_EAGER_FOR_MORE] = STRINGID_PKMNEAGERFORMORE,
+};
 
 static const u8 sText_RefIfNothingIsDecided[] = _("REFEREE: If nothing is decided in\n3 turns, we will go to judging!");
 static const u8 sText_RefThatsIt[] = _("REFEREE: That's it! We will now go to\njudging to determine the winner!");
 static const u8 sText_RefJudgeMind[] = _("REFEREE: Judging category 1, Mind!\nThe POKéMON showing the most guts!\p");
 static const u8 sText_RefJudgeSkill[] = _("REFEREE: Judging category 2, Skill!\nThe POKéMON using moves the best!\p");
 static const u8 sText_RefJudgeBody[] = _("REFEREE: Judging category 3, Body!\nThe POKéMON with the most vitality!\p");
-static const u8 sText_RefJudgement1[] = _("REFEREE: Judgment: {B_BUFF1} to {B_BUFF2}!\nThe winner is {B_PLAYER_NAME}'s {B_PLAYER_MON1_NAME}!\p");
-static const u8 sText_RefJudgement2[] = _("REFEREE: Judgment: {B_BUFF1} to {B_BUFF2}!\nThe winner is {B_TRAINER1_NAME}'s {B_OPPONENT_MON1_NAME}!\p");
-static const u8 sText_RefJudgement3[] = _("REFEREE: Judgment: 3 to 3!\nWe have a draw!\p");
+static const u8 sText_RefPlayerWon[] = _("REFEREE: Judgment: {B_BUFF1} to {B_BUFF2}!\nThe winner is {B_PLAYER_NAME}'s {B_PLAYER_MON1_NAME}!\p");
+static const u8 sText_RefOpponentWon[] = _("REFEREE: Judgment: {B_BUFF1} to {B_BUFF2}!\nThe winner is {B_TRAINER1_NAME}'s {B_OPPONENT_MON1_NAME}!\p");
+static const u8 sText_RefDraw[] = _("REFEREE: Judgment: 3 to 3!\nWe have a draw!\p");
 static const u8 sText_DefeatedOpponentByReferee[] = _("{B_PLAYER_MON1_NAME} defeated the opponent\n{B_OPPONENT_MON1_NAME} in a REFEREE's decision!");
 static const u8 sText_LostToOpponentByReferee[] = _("{B_PLAYER_MON1_NAME} lost to the opponent\n{B_OPPONENT_MON1_NAME} in a REFEREE's decision!");
 static const u8 sText_TiedOpponentByReferee[] = _("{B_PLAYER_MON1_NAME} tied the opponent\n{B_OPPONENT_MON1_NAME} in a REFEREE's decision!");
 static const u8 sText_RefCommenceBattle[] = _("REFEREE: {B_PLAYER_MON1_NAME} VS {B_OPPONENT_MON1_NAME}!\nCommence battling!");
 
-const u8 *const gRefereeStringsTable[] =
-    {
-        sText_RefIfNothingIsDecided,
-        sText_RefThatsIt,
-        sText_RefJudgeMind,
-        sText_RefJudgeSkill,
-        sText_RefJudgeBody,
-        sText_RefJudgement1,
-        sText_RefJudgement2,
-        sText_RefJudgement3,
-        sText_RefCommenceBattle,
+const u8 * const gRefereeStringsTable[] =
+{
+    [B_MSG_REF_NOTHING_IS_DECIDED] = sText_RefIfNothingIsDecided,
+    [B_MSG_REF_THATS_IT]           = sText_RefThatsIt,
+    [B_MSG_REF_JUDGE_MIND]         = sText_RefJudgeMind,
+    [B_MSG_REF_JUDGE_SKILL]        = sText_RefJudgeSkill,
+    [B_MSG_REF_JUDGE_BODY]         = sText_RefJudgeBody,
+    [B_MSG_REF_PLAYER_WON]         = sText_RefPlayerWon,
+    [B_MSG_REF_OPPONENT_WON]       = sText_RefOpponentWon,
+    [B_MSG_REF_DRAW]               = sText_RefDraw,
+    [B_MSG_REF_COMMENCE_BATTLE]    = sText_RefCommenceBattle,
 };
 
 static const u8 sText_QuestionForfeitMatch[] = _("Would you like to forfeit the match\nand quit now?");

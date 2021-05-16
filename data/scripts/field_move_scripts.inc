@@ -310,7 +310,7 @@ EventScript_DisableAutoRun::
 	goto EventScript_WaitAndHideAutoRun
 
 @ AutoRunDisabled:
-@     .string "Auto Run {COLOR RED}Disabled{COLOR DARK_GREY}.$"
+@     .string "Auto Run {COLOR RED}Disabled{COLOR DARK_GRAY}.$"
 
 EventScript_EnableAutoRun::
 @     msgbox AutoRunEnabled MSGBOX_SIGN
@@ -319,7 +319,7 @@ EventScript_EnableAutoRun::
 	goto EventScript_WaitAndHideAutoRun
 
 @ AutoRunEnabled:
-@     .string "Auto Run {COLOR GREEN}Enabled{COLOR DARK_GREY}.$"
+@     .string "Auto Run {COLOR GREEN}Enabled{COLOR DARK_GRAY}.$"
 
 EventScript_WaitAndHideAutoRun::
 	delay 30  @ Show for 1.5 sec
