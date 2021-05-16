@@ -32,7 +32,7 @@ static u16 sFadeCounter;
 static bool8 sVarsInitialized;
 static u8 sWindowId;
 
-static void ShowContestPainting(void);
+static void showcontestwinner(void);
 static void HoldContestPainting(void);
 static void InitContestPaintingWindow(void);
 static void InitContestPaintingBg(void);
@@ -172,7 +172,7 @@ void SetContestWinnerForPainting(int contestWinnerId)
 
 void CB2_ContestPainting(void)
 {
-    ShowContestPainting();
+    showcontestwinner();
 }
 
 static void CB2_HoldContestPainting(void)
@@ -192,7 +192,7 @@ static void CB2_QuitContestPainting(void)
     FreeMonSpritesGfx();
 }
 
-static void ShowContestPainting(void)
+static void showcontestwinner(void)
 {
     switch (gMain.state)
     {
@@ -597,4 +597,3 @@ static void CreateContestPaintingPicture(u8 contestWinnerId, bool8 isForArtist)
     InitPaintingMonOamData(contestWinnerId);
     LoadContestPaintingFrame(contestWinnerId, isForArtist);
 }
-

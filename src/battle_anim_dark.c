@@ -11,9 +11,6 @@
 
 static void AnimUnusedBagSteal(struct Sprite *);
 static void AnimUnusedBagSteal_Step(struct Sprite *);
-static void AnimBite(struct Sprite *);
-static void AnimTearDrop(struct Sprite *);
-static void AnimClawSlash(struct Sprite *);
 static void AnimTask_AttackerFadeToInvisible_Step(u8);
 static void AnimTask_AttackerFadeFromInvisible_Step(u8);
 static void AnimBite_Step1(struct Sprite *);

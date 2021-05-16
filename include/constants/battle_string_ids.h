@@ -624,7 +624,7 @@
 #define B_MSG_AVOIDED_DMG  3
 #define B_MSG_GROUND_MISS  4
 
-// gAbsorbDrainStringIds
+// gLeechSeedDrainStringIds
 #define B_MSG_ABSORB      0
 #define B_MSG_ABSORB_OOZE 1
 

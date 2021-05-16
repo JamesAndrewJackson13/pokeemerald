@@ -1992,7 +1992,7 @@ const u16 gTransformUsedStringIds[] =
     {
         STRINGID_PKMNTRANSFORMEDINTO, STRINGID_BUTITFAILED};
 
-const u16 gSubsituteUsedStringIds[] =
+const u16 gSubstituteUsedStringIds[] =
     {
         STRINGID_PKMNMADESUBSTITUTE, STRINGID_TOOWEAKFORSUBSTITUTE};
 

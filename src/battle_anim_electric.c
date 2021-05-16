@@ -11,8 +11,6 @@ static void AnimLightning_Step(struct Sprite *);
 static void AnimUnusedSpinningFist(struct Sprite *);
 static void AnimUnusedSpinningFist_Step(struct Sprite *);
 static void AnimUnusedCirclingShock(struct Sprite *);
-static void AnimSparkElectricity(struct Sprite *);
-static void AnimZapCannonSpark(struct Sprite *);
 static void AnimZapCannonSpark_Step(struct Sprite *);
 static void AnimThunderboltOrb(struct Sprite *);
 static void AnimThunderboltOrb_Step(struct Sprite *);

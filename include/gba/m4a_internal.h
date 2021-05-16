@@ -164,9 +164,26 @@ struct SoundChannel
     u16 xpc;
 };
 
-#define MAX_DIRECTSOUND_CHANNELS 12
+#define MAX_DIRECTSOUND_CHANNELS 5  // Max is 12, by default shouldn't be lower then 5
 
-#define PCM_DMA_BUF_SIZE 1584 // size of Direct Sound buffer
+
+/**
+ Change the buffer size based on the sample rate in use.
+    5734Hz: 672
+    7884Hz: 924 (This mode is not aligned to the buffer length and is not supported by the mixer)
+    10512Hz: 1232
+    13379Hz: 1568 (As mentioned, the actual value used by the default mixer adds 16 to this)
+    15768Hz: 1848
+    18157Hz: 2128
+    21024Hz: 2464
+    26758Hz: 3136
+    31536Hz: 3696
+    36314Hz: 4256
+    40137Hz: 4704
+    42048Hz: 4928
+(make sure to also update m4a_constants.inc)
+*/
+#define PCM_DMA_BUF_SIZE 1568 // size of Direct Sound buffer
 
 struct MusicPlayerInfo;
 

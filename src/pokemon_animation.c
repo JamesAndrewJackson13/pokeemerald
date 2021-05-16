@@ -5338,8 +5338,8 @@ static void ShakeGlow_Blend(struct Sprite *sprite)
         [SHAKEGLOW_RED]    = RGB_RED,
         [SHAKEGLOW_GREEN]  = RGB_GREEN,
         [SHAKEGLOW_BLUE]   = RGB_BLUE,
-        [SHAKEGLOW_BLACK]  = RGB_BLACK
-        [SHAKEGLOW_WHITE]  = RGB_WHITE
+        [SHAKEGLOW_BLACK]  = RGB_BLACK,
+        [SHAKEGLOW_WHITE]  = RGB_WHITE,
         [SHAKEGLOW_PURPLE] = RGB_PURPLE
     };
 

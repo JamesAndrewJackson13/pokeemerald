@@ -571,7 +571,6 @@ EWRAM_DATA static u8 sMovingMonOrigBoxPos = 0;
 EWRAM_DATA static bool8 sAutoActionOn = 0;
 
 // Main tasks
-static void EnterPokeStorage(u8);
 static void Task_InitPokeStorage(u8);
 static void Task_PlaceMon(u8);
 static void Task_ChangeScreen(u8);
@@ -778,7 +777,7 @@ static bool8 IsCursorInBox(void);
 // This file's functions.
 static void CreatePCMenu(u8 whichMenu, s16* windowIdPtr);
 #ifndef FEATURE_PORTABLEPC
-static void Cb2_EnterPSS(u8 boxOption);
+static void EnterPokeStorage(u8 boxOption);
 #endif
 // Scroll arrows
 static void CreateBoxScrollArrows(void);
@@ -2028,7 +2027,7 @@ static void CB2_PokeStorage(void)
 }
 
 #ifdef FEATURE_PORTABLEPC
-    void EnterPokeStorage(u8 boxOption)
+void EnterPokeStorage(u8 boxOption)
 #else
 static void EnterPokeStorage(u8 boxOption)
 #endif

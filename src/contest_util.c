@@ -2450,7 +2450,7 @@ static void ExitContestPainting(void)
     SetMainCallback2(CB2_ReturnToFieldContinueScriptPlayMapMusic);
 }
 
-void ShowContestPainting(void)
+void showcontestwinner(void)
 {
     SetMainCallback2(CB2_ContestPainting);
     gMain.savedCallback = ExitContestPainting;

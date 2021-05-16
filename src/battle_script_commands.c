@@ -4501,7 +4501,7 @@ static void Cmd_playstatchangeanimation(void)
         }
     }
 
-    if (flags & STAT_CHANGE_ONLY_MULTIPLE && changeableStatsCount < 2)
+    if (flags & STAT_CHANGE_MULTIPLE_STATS && changeableStatsCount < 2)
     {
         gBattlescriptCurrInstr += 4;
     }
@@ -4509,7 +4509,7 @@ static void Cmd_playstatchangeanimation(void)
     {
         BtlController_EmitBattleAnimation(0, B_ANIM_STATS_CHANGE, statAnimId);
         MarkBattlerForControllerExec(gActiveBattler);
-        if (flags & STAT_CHANGE_ONLY_MULTIPLE && changeableStatsCount > 1)
+        if (flags & STAT_CHANGE_MULTIPLE_STATS && changeableStatsCount > 1)
             gBattleScripting.statAnimPlayed = TRUE;
         gBattlescriptCurrInstr += 4;
     }

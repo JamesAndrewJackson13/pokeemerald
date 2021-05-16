@@ -5,8 +5,8 @@ extern const u8 gCgb3Vol[];
 
 #define BSS_CODE __attribute__((section(".bss.code")))
 
-// Updated the buffer size from 0x800 => 0xC00
-BSS_CODE ALIGNED(4) char SoundMainRAM_Buffer[0xC00] = { 0 };
+// Updated the buffer size from 0x800 => 0xB40
+BSS_CODE ALIGNED(4) char SoundMainRAM_Buffer[0xB40] = { 0 };
 /*
     Possible values for the buffer bellow:
 =================================

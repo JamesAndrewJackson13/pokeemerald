@@ -7712,7 +7712,7 @@ void PokemonSummaryDoMonAnimation(struct Sprite* sprite, u16 species, bool8 oneF
             STORE_PTR_IN_TASK(sprite, taskId, 0);
             gTasks[taskId].data[2] = sMonFrontAnimIdsTable[species - 1];
             gTasks[taskId].data[3] = sMonAnimationDelayTable[species - 1];
-            SummaryScreen_SetUnknownTaskId(taskId);
+            SummaryScreen_SetAnimDelayTaskId(taskId);
             SetSpriteCB_MonAnimDummy(sprite);
         }
         else

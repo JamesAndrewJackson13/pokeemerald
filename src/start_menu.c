@@ -758,7 +758,7 @@ static bool8 StartMenuPCCallback(void)
     {
         PlayRainStoppingSoundEffect();
         RemoveExtraStartMenuWindows();
-        Cb2_EnterPSS(2);
+        EnterPokeStorage(2);
         return TRUE;
     }
 

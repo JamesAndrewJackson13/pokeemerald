@@ -74,7 +74,7 @@ bool32 IsWaldaPhraseEmpty(void);
 u8 CountPartyNonEggMons(void);
 #endif
 #ifdef FEATURE_PORTABLEPC
-void Cb2_EnterPSS(u8 boxOption);
+void EnterPokeStorage(u8 boxOption);
 #endif
 
 #endif // GUARD_POKEMON_STORAGE_SYSTEM_H
