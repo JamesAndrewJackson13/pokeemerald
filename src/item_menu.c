@@ -903,7 +903,7 @@ void BagMenu_MoveCursorCallback(s32 itemIndex, bool8 onInit, struct ListMenu* li
     {
 #ifdef BUGFIX
         HideBagItemIconSprite(gBagMenu->itemIconSlot ^ 1);
-        RemoveBagItemIconSprite(gBagMenu->itemIconSlot);
+        RemoveBagItemIconSprite(gBagMenu->itemIconSlot ^ 1);
 #else
         RemoveBagItemIconSprite(gBagMenu->itemIconSlot ^ 1);
 #endif
