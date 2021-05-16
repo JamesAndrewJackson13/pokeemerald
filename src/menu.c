@@ -2005,7 +2005,8 @@ void AddTextPrinterParameterized5(u8 windowId, u8 fontId, const u8 *str, u8 left
     AddTextPrinter(&printer, speed, callback);
 }
 
-void PrintPlayerNameOnWindow(u8 windowId, const u8 *src, u16 x, u16 y)
+// NOTE: I don't understand what the count while-loop is supposed to do?
+void PrintPlayerNameOnWindow(u8 windowId, const u8* src, u16 x, u16 y)
 {
     int count = 0;
     while (gSaveBlock2Ptr->playerName[count] != EOS)
