@@ -48,6 +48,10 @@
 #include "dexnav.h"
 #include "constants/rgb.h"
 
+#define MENU_ACTION_MAX_NUM_TO_SHOW 8
+#define MENU_ACTION_MAX_LENGTH      14
+#define MENU_SCROLL_TRIGGER_LENGTH  2
+
 // Menu actions
 enum
 {
@@ -81,17 +85,19 @@ enum
 };
 
 // IWRAM common
-bool8 (*gMenuCallback)(void);
+bool8(*gMenuCallback)(void);
 
 // EWRAM
 EWRAM_DATA static u8 sSafariBallsWindowId = 0;
 EWRAM_DATA static u8 sBattlePyramidFloorWindowId = 0;
-EWRAM_DATA static u8 sStartMenuCursorPos = 0;
+EWRAM_DATA static u8 sStartMenuVisualCursorPos = 0;
+EWRAM_DATA static u8 sStartMenuCursorActualPos = 0;
+EWRAM_DATA static u8 sStartMenuFirstShownAction = 0;
 EWRAM_DATA static u8 sNumStartMenuActions = 0;
-EWRAM_DATA static u8 sCurrentStartMenuActions[9] = {0};
-EWRAM_DATA static u8 sInitStartMenuData[2] = {0};
+EWRAM_DATA static u8 sCurrentStartMenuActions[9] = { 0 };
+EWRAM_DATA static u8 sInitStartMenuData[2] = { 0 };
 
-EWRAM_DATA static u8 (*sSaveDialogCallback)(void) = NULL;
+EWRAM_DATA static u8(*sSaveDialogCallback)(void) = NULL;
 EWRAM_DATA static u8 sSaveDialogTimer = 0;
 EWRAM_DATA static bool8 sSavingComplete = FALSE;
 EWRAM_DATA static u8 sSaveInfoWindowId = 0;
@@ -148,7 +154,7 @@ static void Task_SaveAfterLinkBattle(u8 taskId);
 static void Task_WaitForBattleTowerLinkSave(u8 taskId);
 static bool8 FieldCB_ReturnToFieldStartMenu(void);
 
-static const struct WindowTemplate sSafariBallsWindowTemplate = {0, 1, 1, 9, 4, 0xF, 8};
+static const struct WindowTemplate sSafariBallsWindowTemplate = { 0, 1, 1, 9, 4, 0xF, 8 };
 
 static const u8* const sPyramidFloorNames[] =
 {
@@ -162,29 +168,29 @@ static const u8* const sPyramidFloorNames[] =
     gText_Peak
 };
 
-static const struct WindowTemplate sPyramidFloorWindowTemplate_2 = {0, 1, 1, 0xA, 4, 0xF, 8};
-static const struct WindowTemplate sPyramidFloorWindowTemplate_1 = {0, 1, 1, 0xC, 4, 0xF, 8};
+static const struct WindowTemplate sPyramidFloorWindowTemplate_2 = { 0, 1, 1, 0xA, 4, 0xF, 8 };
+static const struct WindowTemplate sPyramidFloorWindowTemplate_1 = { 0, 1, 1, 0xC, 4, 0xF, 8 };
 
 static const struct MenuAction sStartMenuItems[] =
 {
-    [MENU_ACTION_POKEDEX]           = {gText_MenuPokedex, {.u8_void = StartMenuPokedexCallback}},
-    [MENU_ACTION_POKEMON]           = {gText_MenuPokemon, {.u8_void = StartMenuPokemonCallback}},
-    [MENU_ACTION_BAG]               = {gText_MenuBag, {.u8_void = StartMenuBagCallback}},
+    [MENU_ACTION_POKEDEX] = {gText_MenuPokedex, {.u8_void = StartMenuPokedexCallback}},
+    [MENU_ACTION_POKEMON] = {gText_MenuPokemon, {.u8_void = StartMenuPokemonCallback}},
+    [MENU_ACTION_BAG] = {gText_MenuBag, {.u8_void = StartMenuBagCallback}},
 #ifdef FEATURE_PORTABLEPC
-    [MENU_ACTION_PC]                = {gText_MenuPC, {.u8_void = StartMenuPCCallback}},
+    [MENU_ACTION_PC] = {gText_MenuPC, {.u8_void = StartMenuPCCallback}},
 #endif
-    [MENU_ACTION_POKENAV]           = {gText_MenuPokenav, {.u8_void = StartMenuPokeNavCallback}},
-    [MENU_ACTION_PLAYER]            = {gText_MenuPlayer, {.u8_void = StartMenuPlayerNameCallback}},
-    [MENU_ACTION_SAVE]              = {gText_MenuSave, {.u8_void = StartMenuSaveCallback}},
-    [MENU_ACTION_OPTION]            = {gText_MenuOption, {.u8_void = StartMenuOptionCallback}},
-    [MENU_ACTION_EXIT]              = {gText_MenuExit, {.u8_void = StartMenuExitCallback}},
-    [MENU_ACTION_RETIRE_SAFARI]     = {gText_MenuRetire, {.u8_void = StartMenuSafariZoneRetireCallback}},
-    [MENU_ACTION_PLAYER_LINK]       = {gText_MenuPlayer, {.u8_void = StartMenuLinkModePlayerNameCallback}},
-    [MENU_ACTION_REST_FRONTIER]     = {gText_MenuRest, {.u8_void = StartMenuSaveCallback}},
-    [MENU_ACTION_RETIRE_FRONTIER]   = {gText_MenuRetire, {.u8_void = StartMenuBattlePyramidRetireCallback}},
-    [MENU_ACTION_PYRAMID_BAG]       = {gText_MenuBag, {.u8_void = StartMenuBattlePyramidBagCallback}},
-    [MENU_ACTION_DEXNAV]            = {gText_MenuDexNav, {.u8_void = StartMenuDexNavCallback}},
-    [MENU_ACTION_QUEST_MENU]        = {gText_MenuQuest, {.u8_void = QuestMenuCallback}},
+    [MENU_ACTION_POKENAV] = {gText_MenuPokenav, {.u8_void = StartMenuPokeNavCallback}},
+    [MENU_ACTION_PLAYER] = {gText_MenuPlayer, {.u8_void = StartMenuPlayerNameCallback}},
+    [MENU_ACTION_SAVE] = {gText_MenuSave, {.u8_void = StartMenuSaveCallback}},
+    [MENU_ACTION_OPTION] = {gText_MenuOption, {.u8_void = StartMenuOptionCallback}},
+    [MENU_ACTION_EXIT] = {gText_MenuExit, {.u8_void = StartMenuExitCallback}},
+    [MENU_ACTION_RETIRE_SAFARI] = {gText_MenuRetire, {.u8_void = StartMenuSafariZoneRetireCallback}},
+    [MENU_ACTION_PLAYER_LINK] = {gText_MenuPlayer, {.u8_void = StartMenuLinkModePlayerNameCallback}},
+    [MENU_ACTION_REST_FRONTIER] = {gText_MenuRest, {.u8_void = StartMenuSaveCallback}},
+    [MENU_ACTION_RETIRE_FRONTIER] = {gText_MenuRetire, {.u8_void = StartMenuBattlePyramidRetireCallback}},
+    [MENU_ACTION_PYRAMID_BAG] = {gText_MenuBag, {.u8_void = StartMenuBattlePyramidBagCallback}},
+    [MENU_ACTION_DEXNAV] = {gText_MenuDexNav, {.u8_void = StartMenuDexNavCallback}},
+    [MENU_ACTION_QUEST_MENU] = {gText_MenuQuest, {.u8_void = QuestMenuCallback}},
 };
 
 static const struct BgTemplate sBgTemplates_LinkBattleSave[] =
@@ -237,13 +243,13 @@ static void BuildMultiPartnerRoomStartMenu(void);
 static void ShowSafariBallsWindow(void);
 static void ShowPyramidFloorWindow(void);
 static void RemoveExtraStartMenuWindows(void);
-static bool32 PrintStartMenuActions(s8 *pIndex, u32 count);
+static bool32 PrintStartMenuActions(s8* pIndex, u32 count);
 static bool32 InitStartMenuStep(void);
 static void InitStartMenu(void);
 static void CreateStartMenuTask(TaskFunc followupFunc);
 static void InitSave(void);
 static u8 RunSaveCallback(void);
-static void ShowSaveMessage(const u8 *message, u8 (*saveCallback)(void));
+static void ShowSaveMessage(const u8* message, u8(*saveCallback)(void));
 static void HideSaveMessageWindow(void);
 static void HideSaveInfoWindow(void);
 static void SaveStartTimer(void);
@@ -251,7 +257,7 @@ static bool8 SaveSuccesTimer(void);
 static bool8 SaveErrorTimer(void);
 static void InitBattlePyramidRetire(void);
 static void VBlankCB_LinkBattleSave(void);
-static bool32 InitSaveWindowAfterLinkBattle(u8 *par1);
+static bool32 InitSaveWindowAfterLinkBattle(u8* par1);
 static void CB2_SaveAfterLinkBattle(void);
 static void ShowSaveInfoWindow(void);
 static void RemoveSaveInfoWindow(void);
@@ -447,32 +453,38 @@ static void RemoveExtraStartMenuWindows(void)
     }
 }
 
-static bool32 PrintStartMenuActions(s8 *pIndex, u32 count)
+static const u8   upArrowChar[] = { CHAR_EXTRA_SYMBOL, CHAR_UP_ARROW_2 ,   EOS };
+static const u8 downArrowChar[] = { CHAR_EXTRA_SYMBOL, CHAR_DOWN_ARROW_2 , EOS };
+static bool32 PrintStartMenuActions(s8* pIndex, u32 count)
 {
     s8 index = *pIndex;
-
+    struct MenuAction curAction;
     do
     {
-        if (sStartMenuItems[sCurrentStartMenuActions[index]].func.u8_void == StartMenuPlayerNameCallback)
+        if (index == sStartMenuFirstShownAction && sStartMenuFirstShownAction > 0)
         {
-            PrintPlayerNameOnWindow(GetStartMenuWindowId(), sStartMenuItems[sCurrentStartMenuActions[index]].text, 8, (index << 4) + 9);
+            StringCopyAndFillWithSpaces(gStringVar4, upArrowChar, MENU_ACTION_MAX_LENGTH);
+        }
+        else if (index == (MENU_ACTION_MAX_NUM_TO_SHOW - 1 + sStartMenuFirstShownAction) && sStartMenuFirstShownAction < (sNumStartMenuActions - MENU_ACTION_MAX_NUM_TO_SHOW))
+        {
+            StringCopyAndFillWithSpaces(gStringVar4, downArrowChar, MENU_ACTION_MAX_LENGTH);
         }
         else
         {
-            StringExpandPlaceholders(gStringVar4, sStartMenuItems[sCurrentStartMenuActions[index]].text);
-            AddTextPrinterParameterized(GetStartMenuWindowId(), 1, gStringVar4, 8, (index << 4) + 9, 0xFF, NULL);
+            curAction = sStartMenuItems[sCurrentStartMenuActions[index]];
+            StringExpandPlaceholders(gStringVar4, curAction.text);
+            StringCopyPadded(gStringVar4, gStringVar4, CHAR_SPACE, MENU_ACTION_MAX_LENGTH);
         }
-
+        AddTextPrinterParameterized(GetStartMenuWindowId(), 1, gStringVar4, 8, ((index - sStartMenuFirstShownAction) << 4) + 9, 0xFF, NULL);
         index++;
-        if (index >= sNumStartMenuActions)
+        if (index >= (MENU_ACTION_MAX_NUM_TO_SHOW + sStartMenuFirstShownAction))
         {
             *pIndex = index;
             return TRUE;
         }
 
         count--;
-    }
-    while (count != 0);
+    } while (count != 0);
 
     *pIndex = index;
     return FALSE;
@@ -481,6 +493,7 @@ static bool32 PrintStartMenuActions(s8 *pIndex, u32 count)
 static bool32 InitStartMenuStep(void)
 {
     s8 state = sInitStartMenuData[0];
+    u8 numStartMenuActionsToPrint = (MENU_ACTION_MAX_NUM_TO_SHOW < sNumStartMenuActions) ? MENU_ACTION_MAX_NUM_TO_SHOW : sNumStartMenuActions;
 
     switch (state)
     {
@@ -493,7 +506,7 @@ static bool32 InitStartMenuStep(void)
         break;
     case 2:
         LoadMessageBoxAndBorderGfx();
-        DrawStdWindowFrame(sub_81979C4(sNumStartMenuActions), FALSE);
+        DrawStdWindowFrame(sub_81979C4(numStartMenuActionsToPrint), FALSE);
         sInitStartMenuData[1] = 0;
         sInitStartMenuData[0]++;
         break;
@@ -509,7 +522,7 @@ static bool32 InitStartMenuStep(void)
             sInitStartMenuData[0]++;
         break;
     case 5:
-        sStartMenuCursorPos = sub_81983AC(GetStartMenuWindowId(), 1, 0, 9, 16, sNumStartMenuActions, sStartMenuCursorPos);
+        sStartMenuVisualCursorPos = sub_81983AC(GetStartMenuWindowId(), 1, 0, 9, 16, numStartMenuActionsToPrint, sStartMenuVisualCursorPos);
         CopyWindowToVram(GetStartMenuWindowId(), TRUE);
         return TRUE;
     }
@@ -521,6 +534,7 @@ static void InitStartMenu(void)
 {
     sInitStartMenuData[0] = 0;
     sInitStartMenuData[1] = 0;
+    sStartMenuFirstShownAction = sStartMenuCursorActualPos - sStartMenuVisualCursorPos;
     while (!InitStartMenuStep())
         ;
 }
@@ -537,6 +551,7 @@ static void CreateStartMenuTask(TaskFunc followupFunc)
 
     sInitStartMenuData[0] = 0;
     sInitStartMenuData[1] = 0;
+    sStartMenuFirstShownAction = sStartMenuCursorActualPos - sStartMenuVisualCursorPos;
     taskId = CreateTask(StartMenuTask, 0x50);
     SetTaskFuncWithFollowupFunc(taskId, StartMenuTask, followupFunc);
 }
@@ -556,6 +571,7 @@ void ShowReturnToFieldStartMenu(void)
 {
     sInitStartMenuData[0] = 0;
     sInitStartMenuData[1] = 0;
+    sStartMenuFirstShownAction = sStartMenuCursorActualPos - sStartMenuVisualCursorPos;
     gFieldCallback2 = FieldCB_ReturnToFieldStartMenu;
 }
 
@@ -563,7 +579,7 @@ void Task_ShowStartMenu(u8 taskId)
 {
     struct Task* task = &gTasks[taskId];
 
-    switch(task->data[0])
+    switch (task->data[0])
     {
     case 0:
         if (InUnionRoom() == TRUE)
@@ -593,34 +609,86 @@ void ShowStartMenu(void)
 
 static bool8 HandleStartMenuInput(void)
 {
-    if (JOY_NEW(DPAD_UP))
+    u8 maxAction = (sNumStartMenuActions > MENU_ACTION_MAX_NUM_TO_SHOW) ? MENU_ACTION_MAX_NUM_TO_SHOW : sNumStartMenuActions;
+    s8 menuShift = 0;
+    s8 pIndex, oldMenuCursorPos;
+    bool8 flagUpdateMenu = FALSE;
+    if (JOY_REPEAT(DPAD_UP))
+        menuShift = -1;
+    else if (JOY_REPEAT(DPAD_DOWN))
+        menuShift = 1;
+    if (menuShift != 0)
     {
         PlaySE(SE_SELECT);
-        sStartMenuCursorPos = Menu_MoveCursor(-1);
-    }
-
-    if (JOY_NEW(DPAD_DOWN))
-    {
-        PlaySE(SE_SELECT);
-        sStartMenuCursorPos = Menu_MoveCursor(1);
+        if (menuShift == -1 && sStartMenuVisualCursorPos == MENU_SCROLL_TRIGGER_LENGTH && sStartMenuCursorActualPos > MENU_SCROLL_TRIGGER_LENGTH)
+        {
+            // We have hit the upper boundery, so we need to scroll the menu up
+            --sStartMenuCursorActualPos;
+            --sStartMenuFirstShownAction;
+            flagUpdateMenu = TRUE;
+        }
+        else if (menuShift == 1 && sStartMenuVisualCursorPos == MENU_ACTION_MAX_NUM_TO_SHOW - MENU_SCROLL_TRIGGER_LENGTH - 1 && sStartMenuCursorActualPos < sNumStartMenuActions - MENU_SCROLL_TRIGGER_LENGTH - 1)
+        {
+            // We have hit the lower boundery, so we need to scroll the menu down
+            ++sStartMenuCursorActualPos;
+            ++sStartMenuFirstShownAction;
+            flagUpdateMenu = TRUE;
+        }
+        else
+        {
+            // We are just scrolling like normal
+            oldMenuCursorPos = sStartMenuVisualCursorPos;
+            sStartMenuVisualCursorPos = Menu_MoveCursorNoWrapAround(menuShift);
+            if (oldMenuCursorPos == sStartMenuVisualCursorPos)
+            {
+                // handle screen wrapping
+                if (menuShift == -1)
+                {
+                    // from top to bottom
+                    sStartMenuVisualCursorPos = Menu_MoveCursorNoWrapAround(127);  // Force scroll to the very top
+                    sStartMenuCursorActualPos = sNumStartMenuActions - 1;
+                    sStartMenuFirstShownAction = sNumStartMenuActions - maxAction;
+                }
+                else
+                {
+                    // from bottom to top
+                    sStartMenuVisualCursorPos = Menu_MoveCursorNoWrapAround(-127);  // Force scroll to the very bottom
+                    sStartMenuCursorActualPos = 0;
+                    sStartMenuFirstShownAction = 0;
+                }
+                flagUpdateMenu = TRUE;
+            }
+            else
+            {
+                // Standard menu move, so just add the shift to the actual position
+                sStartMenuCursorActualPos += menuShift;
+            }
+        }
+        if (flagUpdateMenu)
+        {
+            pIndex = sStartMenuFirstShownAction;
+            sInitStartMenuData[0] = 4;
+            sInitStartMenuData[1] = pIndex;
+            while (!InitStartMenuStep());
+        }
     }
 
     if (JOY_NEW(A_BUTTON))
     {
         PlaySE(SE_SELECT);
-        if (sStartMenuItems[sCurrentStartMenuActions[sStartMenuCursorPos]].func.u8_void == StartMenuPokedexCallback)
+        if (sStartMenuItems[sCurrentStartMenuActions[sStartMenuCursorActualPos]].func.u8_void == StartMenuPokedexCallback)
         {
             if (GetNationalPokedexCount(FLAG_GET_SEEN) == 0)
                 return FALSE;
         }
-        gMenuCallback = sStartMenuItems[sCurrentStartMenuActions[sStartMenuCursorPos]].func.u8_void;
+        gMenuCallback = sStartMenuItems[sCurrentStartMenuActions[sStartMenuCursorActualPos]].func.u8_void;
 
         if (gMenuCallback != StartMenuSaveCallback
             && gMenuCallback != StartMenuExitCallback
             && gMenuCallback != StartMenuSafariZoneRetireCallback
             && gMenuCallback != StartMenuBattlePyramidRetireCallback)
         {
-           FadeScreen(FADE_TO_BLACK, 0);
+            FadeScreen(FADE_TO_BLACK, 0);
         }
 
         return FALSE;
@@ -915,7 +983,7 @@ void SaveGame(void)
     CreateTask(SaveGameTask, 0x50);
 }
 
-static void ShowSaveMessage(const u8 *message, u8 (*saveCallback)(void))
+static void ShowSaveMessage(const u8* message, u8(*saveCallback)(void))
 {
     StringExpandPlaceholders(gStringVar4, message);
     sub_819786C(0, TRUE);
@@ -1221,7 +1289,7 @@ static void VBlankCB_LinkBattleSave(void)
     TransferPlttBuffer();
 }
 
-static bool32 InitSaveWindowAfterLinkBattle(u8 *state)
+static bool32 InitSaveWindowAfterLinkBattle(u8* state)
 {
     switch (*state)
     {
@@ -1230,7 +1298,7 @@ static bool32 InitSaveWindowAfterLinkBattle(u8 *state)
         SetVBlankCallback(NULL);
         ScanlineEffect_Stop();
         DmaClear16(3, PLTT, PLTT_SIZE);
-        DmaFillLarge16(3, 0, (void *)VRAM, VRAM_SIZE, 0x1000);
+        DmaFillLarge16(3, 0, (void*)VRAM, VRAM_SIZE, 0x1000);
         break;
     case 1:
         ResetSpriteData();
@@ -1276,7 +1344,7 @@ static void CB2_SaveAfterLinkBattle(void)
 
 static void Task_SaveAfterLinkBattle(u8 taskId)
 {
-    s16 *state = gTasks[taskId].data;
+    s16* state = gTasks[taskId].data;
 
     if (!gPaletteFade.active)
     {
@@ -1285,13 +1353,13 @@ static void Task_SaveAfterLinkBattle(u8 taskId)
         case 0:
             FillWindowPixelBuffer(0, PIXEL_FILL(1));
             AddTextPrinterParameterized2(0,
-                                        1,
-                                        gText_SavingDontTurnOffPower,
-                                        TEXT_SPEED_FF,
-                                        NULL,
-                                        TEXT_COLOR_DARK_GREY,
-                                        TEXT_COLOR_WHITE,
-                                        TEXT_COLOR_LIGHT_GREY);
+                1,
+                gText_SavingDontTurnOffPower,
+                TEXT_SPEED_FF,
+                NULL,
+                TEXT_COLOR_DARK_GREY,
+                TEXT_COLOR_WHITE,
+                TEXT_COLOR_LIGHT_GREY);
             DrawTextBorderOuter(0, 8, 14);
             PutWindowTilemap(0);
             CopyWindowToVram(0, 3);
@@ -1453,7 +1521,7 @@ void HideStartMenu(void)
     HideStartMenuWindow();
 }
 
-void AppendToList(u8 *list, u8 *pos, u8 newEntry)
+void AppendToList(u8* list, u8* pos, u8 newEntry)
 {
     list[*pos] = newEntry;
     (*pos)++;

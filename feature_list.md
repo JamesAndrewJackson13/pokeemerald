@@ -157,6 +157,8 @@ FEATURE LIST
 
 
 # MENUS
+## Scrolling Start Menu
+* Allow the start menu to scroll if there's more then 8 items to select
 ## Remove the Contest Tab (FEATURE_REMOVECONTESTTAB)
 * Removes the contest tab from the Pokemon Summary screens
 
