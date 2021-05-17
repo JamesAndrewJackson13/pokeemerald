@@ -94,7 +94,7 @@ EventScript_PkmnCenterNurse_ReturnPkmn:: @ 82719E2
     message gText_WeHopeToSeeYouAgain
     waitmessage
     goto EventScript_PkmnCenterNurse_PlayerTurn
-    return
+    end
 
 EventScript_PkmnCenterNurse_ReturnPkmn2:: @ 8271A03
     message gText_ThankYouForWaiting
@@ -103,7 +103,7 @@ EventScript_PkmnCenterNurse_ReturnPkmn2:: @ 8271A03
     waitmovement 0
     message gText_WeHopeToSeeYouAgain2
     goto EventScript_PkmnCenterNurse_PlayerTurn
-    return
+    end
 
 EventScript_PkmnCenterNurse_PlayerWaitingInUnionRoom:: @ 8271A19
     goto_if_set FLAG_NURSE_UNION_ROOM_REMINDER, EventScript_PkmnCenterNurse_ReturnPkmn
