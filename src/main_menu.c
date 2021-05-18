@@ -234,6 +234,7 @@ void NewGameBirchSpeech_SetDefaultPlayerName(u8);
 #else
 static void NewGameBirchSpeech_SetDefaultPlayerName(u8);
 #endif
+static void NewGameBirchSpeech_SetDefaultRivalName(u8);
 static void Task_NewGameBirchSpeech_CreateNameYesNo(u8);
 static void Task_NewGameBirchSpeech_ProcessNameYesNoMenu(u8);
 void CreateYesNoMenuParameterized(u8, u8, u16, u16, u8, u8);
@@ -1819,12 +1820,8 @@ static void Task_NewGameBirchSpeech_StartKidNamingScreen(u8 taskId)
     {
         FreeAllWindowBuffers();
         FreeAndDestroyMonPicSprite(gTasks[taskId].tLotadSpriteId);
-        NewGameBirchSpeech_SetDefaultPlayerName(Random() % 20);
+        NewGameBirchSpeech_SetDefaultRivalName(Random() % 20);
         DestroyTask(taskId);
-        if (gSaveBlock2Ptr->playerGender == MALE)
-            StringCopy(gSaveBlock2Ptr->rivalName, gFemalePresetNames[Random() % NELEMS(gFemalePresetNames)]); // choose a random name from gFemalePresetNames for a male player's rival
-        else
-            StringCopy(gSaveBlock2Ptr->rivalName, gMalePresetNames[Random() % NELEMS(gMalePresetNames)]); // choose a random name from gMalePresetNames for a female player's rival
         DoNamingScreen(NAMING_SCREEN_RIVAL, gSaveBlock2Ptr->rivalName, 0, 0, 0, CB2_NewGameBirchSpeech_ReturnFromRivalNamingScreen);
     }
 }
@@ -2403,22 +2400,34 @@ static s8 NewGameBirchSpeech_ProcessGenderMenuInput(void)
     return Menu_ProcessInputNoWrap();
 }
 
+static const u8* getDefaultPlayerName(u8 nameId, bool8 isMale)
+{
+    return isMale ? gMalePresetNames[nameId] : gFemalePresetNames[nameId];
+}
+
+static void setDefaultNameGeneric(u8 nameId, bool8 isMale, u8* dest)
+{
+    u8 i;
+    const u8* name;
+
+    name = getDefaultPlayerName(nameId, isMale);
+    for (i = 0; i < PLAYER_NAME_LENGTH; i++)
+        dest[i] = name[i];
+    dest[PLAYER_NAME_LENGTH] = EOS;
+}
+
 #ifdef FEATURE_DEBUGMENU
 void NewGameBirchSpeech_SetDefaultPlayerName(u8 nameId)
 #else
 static void NewGameBirchSpeech_SetDefaultPlayerName(u8 nameId)
 #endif
 {
-    const u8* name;
-    u8 i;
+    setDefaultNameGeneric(nameId, gSaveBlock2Ptr->playerGender == MALE, gSaveBlock2Ptr->playerName);
+}
 
-    if (gSaveBlock2Ptr->playerGender == MALE)
-        name = gMalePresetNames[nameId];
-    else
-        name = gFemalePresetNames[nameId];
-    for (i = 0; i < PLAYER_NAME_LENGTH; i++)
-        gSaveBlock2Ptr->playerName[i] = name[i];
-    gSaveBlock2Ptr->playerName[PLAYER_NAME_LENGTH] = EOS;
+static void NewGameBirchSpeech_SetDefaultRivalName(u8 nameId)
+{
+    setDefaultNameGeneric(nameId, gSaveBlock2Ptr->playerGender != MALE, gSaveBlock2Ptr->rivalName);
 }
 
 static void CreateMainMenuErrorWindow(const u8* str)
