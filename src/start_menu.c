@@ -93,6 +93,7 @@ EWRAM_DATA static u8 sBattlePyramidFloorWindowId = 0;
 EWRAM_DATA static u8 sStartMenuVisualCursorPos = 0;
 EWRAM_DATA static u8 sStartMenuCursorActualPos = 0;
 EWRAM_DATA static u8 sStartMenuFirstShownAction = 0;
+EWRAM_DATA static u8 numStartMenuActionsToPrint = 0;
 EWRAM_DATA static u8 sNumStartMenuActions = 0;
 EWRAM_DATA static u8 sCurrentStartMenuActions[9] = { 0 };
 EWRAM_DATA static u8 sInitStartMenuData[2] = { 0 };
@@ -465,7 +466,7 @@ static bool32 PrintStartMenuActions(s8* pIndex, u32 count)
         {
             StringCopyAndFillWithSpaces(gStringVar4, upArrowChar, MENU_ACTION_MAX_LENGTH);
         }
-        else if (index == (MENU_ACTION_MAX_NUM_TO_SHOW - 1 + sStartMenuFirstShownAction) && sStartMenuFirstShownAction < (sNumStartMenuActions - MENU_ACTION_MAX_NUM_TO_SHOW))
+        else if (index == (numStartMenuActionsToPrint - 1 + sStartMenuFirstShownAction) && sStartMenuFirstShownAction < (sNumStartMenuActions - numStartMenuActionsToPrint))
         {
             StringCopyAndFillWithSpaces(gStringVar4, downArrowChar, MENU_ACTION_MAX_LENGTH);
         }
@@ -475,9 +476,10 @@ static bool32 PrintStartMenuActions(s8* pIndex, u32 count)
             StringExpandPlaceholders(gStringVar4, curAction.text);
             StringCopyPadded(gStringVar4, gStringVar4, CHAR_SPACE, MENU_ACTION_MAX_LENGTH);
         }
+        mgba_printf(MGBA_LOG_DEBUG, "PrintStartMenuActions || index: %i | count: %u | gStringVar4: %s", index, count, ConvertToAscii(gStringVar4));
         AddTextPrinterParameterized(GetStartMenuWindowId(), 1, gStringVar4, 8, ((index - sStartMenuFirstShownAction) << 4) + 9, 0xFF, NULL);
         index++;
-        if (index >= (MENU_ACTION_MAX_NUM_TO_SHOW + sStartMenuFirstShownAction))
+        if (index >= (numStartMenuActionsToPrint + sStartMenuFirstShownAction))
         {
             *pIndex = index;
             return TRUE;
@@ -493,7 +495,8 @@ static bool32 PrintStartMenuActions(s8* pIndex, u32 count)
 static bool32 InitStartMenuStep(void)
 {
     s8 state = sInitStartMenuData[0];
-    u8 numStartMenuActionsToPrint = (MENU_ACTION_MAX_NUM_TO_SHOW < sNumStartMenuActions) ? MENU_ACTION_MAX_NUM_TO_SHOW : sNumStartMenuActions;
+    numStartMenuActionsToPrint = (MENU_ACTION_MAX_NUM_TO_SHOW < sNumStartMenuActions) ? MENU_ACTION_MAX_NUM_TO_SHOW : sNumStartMenuActions;
+    mgba_printf(MGBA_LOG_DEBUG, "InitStartMenuStep || numStartMenuActionsToPrint{%u} | MENU_ACTION_MAX_NUM_TO_SHOW{%u} | sNumStartMenuActions{%u}", numStartMenuActionsToPrint, MENU_ACTION_MAX_NUM_TO_SHOW, sNumStartMenuActions);
 
     switch (state)
     {
@@ -609,7 +612,6 @@ void ShowStartMenu(void)
 
 static bool8 HandleStartMenuInput(void)
 {
-    u8 maxAction = (sNumStartMenuActions > MENU_ACTION_MAX_NUM_TO_SHOW) ? MENU_ACTION_MAX_NUM_TO_SHOW : sNumStartMenuActions;
     s8 menuShift = 0;
     s8 pIndex, oldMenuCursorPos;
     bool8 flagUpdateMenu = FALSE;
@@ -627,7 +629,7 @@ static bool8 HandleStartMenuInput(void)
             --sStartMenuFirstShownAction;
             flagUpdateMenu = TRUE;
         }
-        else if (menuShift == 1 && sStartMenuVisualCursorPos == MENU_ACTION_MAX_NUM_TO_SHOW - MENU_SCROLL_TRIGGER_LENGTH - 1 && sStartMenuCursorActualPos < sNumStartMenuActions - MENU_SCROLL_TRIGGER_LENGTH - 1)
+        else if (menuShift == 1 && sStartMenuVisualCursorPos == numStartMenuActionsToPrint - MENU_SCROLL_TRIGGER_LENGTH - 1 && sStartMenuCursorActualPos < sNumStartMenuActions - MENU_SCROLL_TRIGGER_LENGTH - 1)
         {
             // We have hit the lower boundery, so we need to scroll the menu down
             ++sStartMenuCursorActualPos;
@@ -647,7 +649,7 @@ static bool8 HandleStartMenuInput(void)
                     // from top to bottom
                     sStartMenuVisualCursorPos = Menu_MoveCursorNoWrapAround(127);  // Force scroll to the very top
                     sStartMenuCursorActualPos = sNumStartMenuActions - 1;
-                    sStartMenuFirstShownAction = sNumStartMenuActions - maxAction;
+                    sStartMenuFirstShownAction = sNumStartMenuActions - numStartMenuActionsToPrint;
                 }
                 else
                 {
