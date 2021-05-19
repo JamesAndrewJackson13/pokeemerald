@@ -80,7 +80,7 @@ static const u8 sText_ShedinjaJapaneseName[] = _("ヌケニン");
 // The below table is used by Task_UpdateBgPalette to control the speed at which the bg color updates.
 // The first two values are indexes into sBgAnim_PalIndexes (indirectly, via sBgAnimPal), and are
 // the start and end of the range of colors in sBgAnim_PalIndexes it will move through incrementally
-// before starting over. It will repeat this cycle x number of times, where x = the 3rd value, 
+// before starting over. It will repeat this cycle x number of times, where x = the 3rd value,
 // delaying each increment by y, where y = the 4th value.
 // Once it has cycled x number of times, it will move to the next array in this table.
 static const u8 sBgAnim_PaletteControl[][4] =
@@ -546,7 +546,11 @@ static void CB2_TradeEvolutionSceneUpdate(void)
 static void CreateShedinja(u16 preEvoSpecies, struct Pokemon* mon)
 {
     u32 data = 0;
+#ifdef FEATURE_SHEDNINJA_REQUIRES_FREE_POKEBALL
+    if (gEvolutionTable[preEvoSpecies][0].method == EVO_LEVEL_NINJASK && gPlayerPartyCount < PARTY_SIZE && CheckBagHasItem(ITEM_POKE_BALL, 1))
+#else
     if (gEvolutionTable[preEvoSpecies][0].method == EVO_LEVEL_NINJASK && gPlayerPartyCount < PARTY_SIZE)
+#endif
     {
         s32 i;
         struct Pokemon* shedinja = &gPlayerParty[gPlayerPartyCount];
@@ -582,7 +586,10 @@ static void CreateShedinja(u16 preEvoSpecies, struct Pokemon* mon)
         if (GetMonData(shedinja, MON_DATA_SPECIES) == SPECIES_SHEDINJA
             && GetMonData(shedinja, MON_DATA_LANGUAGE) == LANGUAGE_JAPANESE
             && GetMonData(mon, MON_DATA_SPECIES) == SPECIES_NINJASK)
-                SetMonData(shedinja, MON_DATA_NICKNAME, sText_ShedinjaJapaneseName);
+            SetMonData(shedinja, MON_DATA_NICKNAME, sText_ShedinjaJapaneseName);
+#ifdef FEATURE_SHEDNINJA_REQUIRES_FREE_POKEBALL
+        RemoveBagItem(ITEM_POKE_BALL, 1);
+#endif
     }
 }
 

@@ -155,6 +155,9 @@ FEATURE LIST
 ## Max Number of Items Useable in Trainer Battles (FEATURE_MAXITEMSINBATTLE [4])
 * Enforce a max number of items in trainer battles
 
+## Shedninja Requires a Free PokeBall (FEATURE_SHEDNINJA_REQUIRES_FREE_POKEBALL)
+*  Make getting a Shedninja work like it does post G3, you must have a pokeball in your bag
+
 
 # MENUS
 ## Scrolling Start Menu
