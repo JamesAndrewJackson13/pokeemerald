@@ -7984,4 +7984,16 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_OldCable,
     },
 #endif
+#ifdef FEATURE_HEAVYDUTYBOOTS
+    [ITEM_HEAVY_DUTY_BOOTS] =
+    {
+        .name = _("H.D. Boots"),
+        .itemId = ITEM_HEAVY_DUTY_BOOTS,
+        .price = 4000,
+        .holdEffect = HOLD_EFFECT_HEAVY_DUTY_BOOTS,
+        .description = sHeavyDutyBootsDesc,
+        .pocket = POCKET_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+    },
+#endif
 };

@@ -9531,4 +9531,9 @@ extern const u32 gItemIcon_MysteriousCable[];
 extern const u32 gItemIconPalette_MysteriousCable[];
 #endif
 
+#ifdef FEATURE_HEAVYDUTYBOOTS
+extern const u32 gItemIcon_HeavyDutyBoots[];
+extern const u32 gItemIconPalette_HeavyDutyBoots[];
+#endif
+
 #endif //GUARD_GRAPHICS_H

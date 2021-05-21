@@ -143,6 +143,11 @@
 #define HOLD_EFFECT_PLATE            154
 #define HOLD_EFFECT_Z_CRYSTAL        155
 
+// Gen8 hold effects
+#ifdef FEATURE_HEAVYDUTYBOOTS
+#define HOLD_EFFECT_HEAVY_DUTY_BOOTS 156
+#endif
+
 #define HOLD_EFFECT_CHOICE(holdEffect)((holdEffect == HOLD_EFFECT_CHOICE_BAND || holdEffect == HOLD_EFFECT_CHOICE_SCARF || holdEffect == HOLD_EFFECT_CHOICE_SPECS))
 
 #endif // GUARD_HOLD_EFFECTS_H

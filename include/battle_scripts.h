@@ -368,5 +368,8 @@ extern const u8 BattleScript_MicleBerryActivateEnd2[];
 extern const u8 BattleScript_MicleBerryActivateRet[];
 extern const u8 BattleScript_JabocaRowapBerryActivates[];
 extern const u8 BattleScript_ActionSelectionMaxBattleItemsAlreadyUsed[];
+#ifdef FEATURE_HEAVYDUTYBOOTS
+extern const u8 BattleScript_HeavyDutyBootsActivated[];
+#endif
 
 #endif // GUARD_BATTLE_SCRIPTS_H

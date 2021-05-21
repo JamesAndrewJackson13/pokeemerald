@@ -3125,3 +3125,10 @@ static const u8 sOldCableDesc[] = _(
     "that evolves some\n"
     "Pokémon. Obsolete.\n");
 #endif
+
+#ifdef FEATURE_HEAVYDUTYBOOTS
+static const u8 sHeavyDutyBootsDesc[] = _(
+    "Heavy-Duty Boots.\n"
+    "Blocks field\n"
+    "hazards on switch.");
+#endif

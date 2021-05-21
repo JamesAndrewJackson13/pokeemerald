@@ -78,6 +78,7 @@
 #define FEATURE_EXTRAPREMIERBALLS  // LGPE-style Premier Ball giveaway; buying n*10 balls will get you n free premier balls
 #define FEATURE_CHECKASHCOLLECTED  // Checking how much ash you collected with the Soot Sack
 #define FEATURE_OLDCABLE  // An item to replace all trade based evolutions
+#define FEATURE_HEAVYDUTYBOOTS  // Add the Heavy Duty Boots item from G8
 
 // BATTLE FEATURES - Mods to battles
 #define FEATURE_SNOWCAUSESHAIL  // Allow areas with snow to cause hail

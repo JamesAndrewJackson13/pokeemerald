@@ -34,6 +34,10 @@
 #include "constants/rgb.h"
 #include "constants/items.h"
 
+#ifdef FEATURE_SHEDNINJA_REQUIRES_FREE_POKEBALL
+#include "item.h"
+#endif
+
 struct EvoInfo
 {
     u8 preEvoSpriteId;

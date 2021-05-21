@@ -702,8 +702,11 @@ static const u8 sText_AsOneEnters[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} has two
 static const u8 sText_CuriousMedicineEnters[] = _("{B_EFF_NAME_WITH_PREFIX}'s\nstat changes were reset!");
 static const u8 sText_CanActFaster[] = _("{B_ATK_NAME_WITH_PREFIX} can act faster,\nthanks to {B_LAST_ITEM}!");
 static const u8 sText_MicleBerryActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} boosted the accuracy of its\nnext move using {B_LAST_ITEM}!");
+#ifdef FEATURE_HEAVYDUTYBOOTS
+static const u8 sText_HeavyDutyBootsActivated[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s Heavy-Duty Boots\nprotect them from field-hazards!");
+#endif
 
-const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
+const u8* const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     {
         [STRINGID_MICLEBERRYACTIVATES - BATTLESTRINGS_ID_ADDER] = sText_MicleBerryActivates,
         [STRINGID_CANACTFASTERTHANKSTO -
@@ -1822,6 +1825,8 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
             BATTLESTRINGS_ID_ADDER] = sText_ScreenCleanerActivates,
         [STRINGID_MAXBATTLEITEMSUSED -
             BATTLESTRINGS_ID_ADDER] = sText_MaxBattleItemsAlreadyUsed,
+        [STRINGID_HEAVYDUTYBOOTSACTIVATED -
+            BATTLESTRINGS_ID_ADDER] = sText_HeavyDutyBootsActivated,
 };
 
 const u16 gTerrainStringIds[] =

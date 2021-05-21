@@ -5607,47 +5607,62 @@ static void SetDmgHazardsBattlescript(u8 battlerId, u8 multistringId)
 static void Cmd_switchineffects(void)
 {
     s32 i;
+    u8 battlerSide = GetBattlerSide(gActiveBattler);
 
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
     UpdateSentPokesToOpponentValue(gActiveBattler);
 
     gHitMarker &= ~(HITMARKER_FAINTED(gActiveBattler));
     gSpecialStatuses[gActiveBattler].flag40 = 0;
-
-    if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES_DAMAGED) && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES) && GetBattlerAbility(gActiveBattler) != ABILITY_MAGIC_GUARD && IsBattlerGrounded(gActiveBattler))
+    if (!(gSideStatuses[battlerSide] & SIDE_STATUS_SPIKES_DAMAGED) && (gSideStatuses[battlerSide] & SIDE_STATUS_SPIKES) && GetBattlerAbility(gActiveBattler) != ABILITY_MAGIC_GUARD && IsBattlerGrounded(gActiveBattler))
     {
-        u8 spikesDmg = (5 - gSideTimers[GetBattlerSide(gActiveBattler)].spikesAmount) * 2;
+        gSideStatuses[battlerSide] |= SIDE_STATUS_SPIKES_DAMAGED;
+#ifdef FEATURE_HEAVYDUTYBOOTS
+        // Heavy duty boots protects the switcher
+        if(gBattleMons[gActiveBattler].item == ITEM_HEAVY_DUTY_BOOTS)
+            return;
+#endif
+        u8 spikesDmg = (5 - gSideTimers[battlerSide].spikesAmount) * 2;
         gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / (spikesDmg);
         if (gBattleMoveDamage == 0)
             gBattleMoveDamage = 1;
 
-        gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_SPIKES_DAMAGED;
         SetDmgHazardsBattlescript(gActiveBattler, 0);
     }
-    else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK_DAMAGED) && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK) && GetBattlerAbility(gActiveBattler) != ABILITY_MAGIC_GUARD)
+    else if (!(gSideStatuses[battlerSide] & SIDE_STATUS_STEALTH_ROCK_DAMAGED) && (gSideStatuses[battlerSide] & SIDE_STATUS_STEALTH_ROCK) && GetBattlerAbility(gActiveBattler) != ABILITY_MAGIC_GUARD)
     {
-        gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_STEALTH_ROCK_DAMAGED;
+        gSideStatuses[battlerSide] |= SIDE_STATUS_STEALTH_ROCK_DAMAGED;
+#ifdef FEATURE_HEAVYDUTYBOOTS
+        // Heavy duty boots protects the switcher
+         if(gBattleMons[gActiveBattler].item == ITEM_HEAVY_DUTY_BOOTS)
+            return;
+#endif
         gBattleMoveDamage = GetStealthHazardDamage(gBattleMoves[MOVE_STEALTH_ROCK].type, gActiveBattler);
 
         if (gBattleMoveDamage != 0)
             SetDmgHazardsBattlescript(gActiveBattler, 1);
     }
-    else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_TOXIC_SPIKES_DAMAGED) && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_TOXIC_SPIKES) && IsBattlerGrounded(gActiveBattler))
+    else if (!(gSideStatuses[battlerSide] & SIDE_STATUS_TOXIC_SPIKES_DAMAGED) && (gSideStatuses[battlerSide] & SIDE_STATUS_TOXIC_SPIKES) && IsBattlerGrounded(gActiveBattler))
     {
-        gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_TOXIC_SPIKES_DAMAGED;
+        gSideStatuses[battlerSide] |= SIDE_STATUS_TOXIC_SPIKES_DAMAGED;
         if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_POISON)) // Absorb the toxic spikes.
         {
-            gSideStatuses[GetBattlerSide(gActiveBattler)] &= ~(SIDE_STATUS_TOXIC_SPIKES);
-            gSideTimers[GetBattlerSide(gActiveBattler)].toxicSpikesAmount = 0;
+            gSideStatuses[battlerSide] &= ~(SIDE_STATUS_TOXIC_SPIKES);
+            gSideTimers[battlerSide].toxicSpikesAmount = 0;
             gBattleScripting.battler = gActiveBattler;
             BattleScriptPushCursor();
             gBattlescriptCurrInstr = BattleScript_ToxicSpikesAbsorbed;
         }
         else
         {
-            if (!(gBattleMons[gActiveBattler].status1 & STATUS1_ANY) && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_STEEL) && GetBattlerAbility(gActiveBattler) != ABILITY_IMMUNITY && !(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SAFEGUARD))
+            if (!(gBattleMons[gActiveBattler].status1 & STATUS1_ANY) && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_STEEL) && GetBattlerAbility(gActiveBattler) != ABILITY_IMMUNITY && !(gSideStatuses[battlerSide] & SIDE_STATUS_SAFEGUARD))
             {
-                if (gSideTimers[GetBattlerSide(gActiveBattler)].toxicSpikesAmount >= 2)
+#ifdef FEATURE_HEAVYDUTYBOOTS
+                // Heavy duty boots protects the switcher
+                if(gBattleMons[gActiveBattler].item == ITEM_HEAVY_DUTY_BOOTS)
+                    return;
+#endif
+                if (gSideTimers[battlerSide].toxicSpikesAmount >= 2)
                     gBattleMons[gActiveBattler].status1 |= STATUS1_TOXIC_POISON;
                 else
                     gBattleMons[gActiveBattler].status1 |= STATUS1_POISON;
@@ -5660,14 +5675,31 @@ static void Cmd_switchineffects(void)
             }
         }
     }
-    else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STICKY_WEB_DAMAGED) && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STICKY_WEB) && IsBattlerGrounded(gActiveBattler))
+    else if (!(gSideStatuses[battlerSide] & SIDE_STATUS_STICKY_WEB_DAMAGED) && (gSideStatuses[battlerSide] & SIDE_STATUS_STICKY_WEB) && IsBattlerGrounded(gActiveBattler))
     {
-        gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_STICKY_WEB_DAMAGED;
+        gSideStatuses[battlerSide] |= SIDE_STATUS_STICKY_WEB_DAMAGED;
+#ifdef FEATURE_HEAVYDUTYBOOTS
+        // Heavy duty boots protects the switcher
+        if(gBattleMons[gActiveBattler].item == ITEM_HEAVY_DUTY_BOOTS)
+            return;
+#endif
         gBattleScripting.battler = gActiveBattler;
         SET_STATCHANGER(STAT_SPEED, 1, TRUE);
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_StickyWebOnSwitchIn;
     }
+#ifdef FEATURE_HEAVYDUTYBOOTS
+    else if ((gBattleMons[gActiveBattler].item == ITEM_HEAVY_DUTY_BOOTS) &&
+                !(gSideStatuses[battlerSide] & SIDE_STATUS_HEAVY_DUTY_BOOTS) &&
+                (gSideStatuses[battlerSide] & (SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_TOXIC_SPIKES_DAMAGED | SIDE_STATUS_STEALTH_ROCK_DAMAGED | SIDE_STATUS_STICKY_WEB_DAMAGED))
+            )
+    {
+        gSideStatuses[battlerSide] |= SIDE_STATUS_HEAVY_DUTY_BOOTS;
+        gBattleScripting.battler = gActiveBattler;
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_HeavyDutyBootsActivated;
+    }
+#endif
     else
     {
         // There is a hack here to ensure the truant counter will be 0 when the battler's next turn starts.
@@ -5680,7 +5712,7 @@ static void Cmd_switchineffects(void)
         if (AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, gActiveBattler, 0, 0, 0) || ItemBattleEffects(ITEMEFFECT_ON_SWITCH_IN, gActiveBattler, FALSE) || AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE2, 0, 0, 0, 0) || AbilityBattleEffects(ABILITYEFFECT_TRACE2, 0, 0, 0, 0) || AbilityBattleEffects(ABILITYEFFECT_FORECAST, 0, 0, 0, 0))
             return;
 
-        gSideStatuses[GetBattlerSide(gActiveBattler)] &= ~(SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_TOXIC_SPIKES_DAMAGED | SIDE_STATUS_STEALTH_ROCK_DAMAGED | SIDE_STATUS_STICKY_WEB_DAMAGED);
+        gSideStatuses[battlerSide] &= ~(SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_TOXIC_SPIKES_DAMAGED | SIDE_STATUS_STEALTH_ROCK_DAMAGED | SIDE_STATUS_STICKY_WEB_DAMAGED);
 
         for (i = 0; i < gBattlersCount; i++)
         {

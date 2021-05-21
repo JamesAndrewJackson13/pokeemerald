@@ -221,6 +221,9 @@ FEATURE LIST
 * An item to replace all trade based evolutions
 * Doesn't replace them; just lets you also use this item instead
 
+## Heavy Duty Boots (FEATURE_HEAVYDUTYBOOTS)
+* Add the Heavy Duty Boots item from G8
+
 
 # BATTLE
 ## Make Field Snow Cause Hail (FEATURE_SNOWCAUSESHAIL)

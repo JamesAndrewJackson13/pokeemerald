@@ -7971,3 +7971,8 @@ BattleScript_JabocaRowapBerryActivate_Dmg:
 	call BattleScript_HurtAttacker
 	removeitem BS_TARGET
 	return
+
+BattleScript_HeavyDutyBootsActivated::
+	printstring STRINGID_HEAVYDUTYBOOTSACTIVATED
+	waitmessage B_WAIT_TIME_LONG
+	return

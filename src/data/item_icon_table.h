@@ -653,6 +653,9 @@ const u32 *const gItemIconTable[][2] =
 #ifdef FEATURE_OLDCABLE
     [ITEM_OLD_CABLE] = { gItemIcon_MysteriousCable, gItemIconPalette_MysteriousCable },
 #endif
+#ifdef FEATURE_HEAVYDUTYBOOTS
+    [ITEM_HEAVY_DUTY_BOOTS] = { gItemIcon_HeavyDutyBoots, gItemIconPalette_HeavyDutyBoots },
+#endif
 
     // Icon to represent the running/walking shoes
     [ITEM_RUNNINGSHOES_RUNNING] = { gItemIcon_Runningshoes_Running, gItemIconPalette_Runningshoes_Running },
