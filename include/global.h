@@ -13,8 +13,22 @@
 
 
 #ifdef FEATURE_MGBAPRINT
+
 #include "mgba.h"
 #include "../gflib/string_util.h"
+
+#define logVar(__TO_LOG__, __TYPE__) mgba_printf(MGBA_LOG_DEBUG, "#__TO_LOG__: __TYPE__", toLog)
+#define logUnsigned(__TO_LOG__) logVar(__TO_LOG__, "%u")
+#define logInt(__TO_LOG__) logVar(__TO_LOG__, "%i")
+#define logBool(__TO_LOG__) logVar(__TO_LOG__ ? "TRUE" : "FALSE", "%s")
+#define logU8String(__TO_LOG__) logVar(convertToAscii(__TO_LOG__), "%s")
+#define logString(__TO_LOG__) logVar(__TO_LOG__, "%s")
+#define logDebug(...) mgba_printf(MGBA_LOG_DEBUG, __VA_ARGS__)
+#define logInfo(...) mgba_printf(MGBA_LOG_INFO, __VA_ARGS__)
+#define logWarn(...) mgba_printf(MGBA_LOG_WARN, __VA_ARGS__)
+#define logError(...) mgba_printf(MGBA_LOG_ERROR, __VA_ARGS__)
+#define logFatal(...) mgba_printf(MGBA_LOG_FATAL, __VA_ARGS__)
+
 #endif
 
 // free saveblock 1 defines
