@@ -1557,7 +1557,7 @@ bool8 ScrCmd_bufferspeciesname(struct ScriptContext *ctx)
     u16 species = VarGet(ScriptReadHalfword(ctx));
 
     StringCopy(sScriptStringVars[stringVarIndex], gSpeciesNames[species]);
-    mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_bufferspeciesname | sScriptStringVars[stringVarIndex]: %s (%u) | gSpeciesNames[species]: %s (%u) ", ConvertToAscii(sScriptStringVars[stringVarIndex]), stringVarIndex, ConvertToAscii(gSpeciesNames[species]), species);
+    // mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_bufferspeciesname | sScriptStringVars[stringVarIndex]: %s (%u) | gSpeciesNames[species]: %s (%u) ", ConvertToAscii(sScriptStringVars[stringVarIndex]), stringVarIndex, ConvertToAscii(gSpeciesNames[species]), species);
     return FALSE;
 }
 
@@ -2590,12 +2590,12 @@ bool8 ScrCmd_getstorestringvar(struct ScriptContext* ctx)
     if(isGetCall)
     {
         StringCopy(sScriptStringVars[stringVarIndex], gStringVarStore);
-        mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_storestringvar || STR_VAR_%u <- gStringVarStore (%s)", stringVarIndex, ConvertToAscii(gStringVarStore));
+        // mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_storestringvar || STR_VAR_%u <- gStringVarStore (%s)", stringVarIndex, ConvertToAscii(gStringVarStore));
     }
     else
     {
         StringCopy(gStringVarStore, sScriptStringVars[stringVarIndex]);
-        mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_storestringvar || gStringVarStore <- STR_VAR_%u (%s)", stringVarIndex, ConvertToAscii(gStringVarStore));
+        // mgba_printf(MGBA_LOG_DEBUG, "ScrCmd_storestringvar || gStringVarStore <- STR_VAR_%u (%s)", stringVarIndex, ConvertToAscii(gStringVarStore));
     }
 
     return FALSE;
@@ -2607,6 +2607,6 @@ bool8 ScrCmd_printf(struct ScriptContext* ctx)
 
     if (msg == NULL)
         msg = (const u8*)ctx->data[0];
-    mgba_printf(MGBA_LOG_DEBUG, "%s", ConvertToAscii(msg));
+    // mgba_printf(MGBA_LOG_DEBUG, "%s", ConvertToAscii(msg));
     return FALSE;
 }

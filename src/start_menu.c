@@ -476,7 +476,7 @@ static bool32 PrintStartMenuActions(s8* pIndex, u32 count)
             StringExpandPlaceholders(gStringVar4, curAction.text);
             StringCopyPadded(gStringVar4, gStringVar4, CHAR_SPACE, MENU_ACTION_MAX_LENGTH);
         }
-        mgba_printf(MGBA_LOG_DEBUG, "PrintStartMenuActions || index: %i | count: %u | gStringVar4: %s", index, count, ConvertToAscii(gStringVar4));
+        // mgba_printf(MGBA_LOG_DEBUG, "PrintStartMenuActions || index: %i | count: %u | gStringVar4: %s", index, count, ConvertToAscii(gStringVar4));
         AddTextPrinterParameterized(GetStartMenuWindowId(), 1, gStringVar4, 8, ((index - sStartMenuFirstShownAction) << 4) + 9, 0xFF, NULL);
         index++;
         if (index >= (numStartMenuActionsToPrint + sStartMenuFirstShownAction))
@@ -496,7 +496,7 @@ static bool32 InitStartMenuStep(void)
 {
     s8 state = sInitStartMenuData[0];
     numStartMenuActionsToPrint = (MENU_ACTION_MAX_NUM_TO_SHOW < sNumStartMenuActions) ? MENU_ACTION_MAX_NUM_TO_SHOW : sNumStartMenuActions;
-    mgba_printf(MGBA_LOG_DEBUG, "InitStartMenuStep || numStartMenuActionsToPrint{%u} | MENU_ACTION_MAX_NUM_TO_SHOW{%u} | sNumStartMenuActions{%u}", numStartMenuActionsToPrint, MENU_ACTION_MAX_NUM_TO_SHOW, sNumStartMenuActions);
+    // mgba_printf(MGBA_LOG_DEBUG, "InitStartMenuStep || numStartMenuActionsToPrint{%u} | MENU_ACTION_MAX_NUM_TO_SHOW{%u} | sNumStartMenuActions{%u}", numStartMenuActionsToPrint, MENU_ACTION_MAX_NUM_TO_SHOW, sNumStartMenuActions);
 
     switch (state)
     {
