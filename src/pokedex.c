@@ -5294,7 +5294,7 @@ static u32 GetPokedexMonPersonality(u16 species)
     }
     else
     {
-        return 0xFF; //Changed from 0 to make it so the Pokédex shows the default mon pics instead of the female versions.
+        return 0xFF; //Changed from 0 to make it so the PokéDex shows the default mon pics instead of the female versions.
     }
 }
 

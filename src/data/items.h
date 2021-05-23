@@ -3533,7 +3533,7 @@ const struct Item gItems[] =
 
     [ITEM_ITEMFINDER] =
     {
-        .name = _("Dowsing MCHN"),
+        .name = _("Item Finder"),
         .itemId = ITEM_ITEMFINDER,
         .price = 0,
         .description = sItemfinderDesc,
@@ -3624,7 +3624,7 @@ const struct Item gItems[] =
 
     [ITEM_DEVON_GOODS] =
     {
-        .name = _("Devon Parts"),
+        .name = _("Devon Goods"),
         .itemId = ITEM_DEVON_GOODS,
         .price = 0,
         .description = sDevonGoodsDesc,
@@ -3679,7 +3679,7 @@ const struct Item gItems[] =
 
     [ITEM_POKEBLOCK_CASE] =
     {
-        .name = _("{POKEBLOCK} CASE"),
+        .name = _("{POKEBLOCK} Case"),
         .itemId = ITEM_POKEBLOCK_CASE,
         .price = 0,
         .description = sPokeblockCaseDesc,
@@ -3777,7 +3777,7 @@ const struct Item gItems[] =
 
     [ITEM_ROOM_1_KEY] =
     {
-        .name = _("Key to Room 1"),
+        .name = _("Room 1 Key"),
         .itemId = ITEM_ROOM_1_KEY,
         .price = 0,
         .description = sRoom1KeyDesc,
@@ -3789,7 +3789,7 @@ const struct Item gItems[] =
 
     [ITEM_ROOM_2_KEY] =
     {
-        .name = _("Key to Room 2"),
+        .name = _("Room 2 Key"),
         .itemId = ITEM_ROOM_2_KEY,
         .price = 0,
         .description = sRoom2KeyDesc,
@@ -3801,7 +3801,7 @@ const struct Item gItems[] =
 
     [ITEM_ROOM_4_KEY] =
     {
-        .name = _("Key to Room 4"),
+        .name = _("Room 4 Key"),
         .itemId = ITEM_ROOM_4_KEY,
         .price = 0,
         .description = sRoom4KeyDesc,
@@ -3813,7 +3813,7 @@ const struct Item gItems[] =
 
     [ITEM_ROOM_6_KEY] =
     {
-        .name = _("Key to Room 6"),
+        .name = _("Room 6 Key"),
         .itemId = ITEM_ROOM_6_KEY,
         .price = 0,
         .description = sRoom6KeyDesc,
@@ -4649,7 +4649,7 @@ const struct Item gItems[] =
 
     [ITEM_OAKS_PARCEL] =
     {
-        .name = _("Parcel"),
+        .name = _("Oak's Parcel"),
         .itemId = ITEM_OAKS_PARCEL,
         .price = 0,
         .description = sOaksParcelDesc,

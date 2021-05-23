@@ -47,7 +47,7 @@ EverGrandeCity_SidneysRoom_EventScript_Sidney:: @ 8227F64
 	lock
 	faceplayer
 	goto_if_set FLAG_DEFEATED_ELITE_4_SIDNEY, EverGrandeCity_SidneysRoom_EventScript_PostBattleSpeech
-	playbgm MUS_ENCOUNTER_ELITE_FOUR, 0
+	playbgm MUS_ENCOUNTER_ELITE_FOUR, FALSE
 	msgbox EverGrandeCity_SidneysRoom_Text_IntroSpeech, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_SIDNEY, EverGrandeCity_SidneysRoom_Text_Defeat
 	goto EverGrandeCity_SidneysRoom_EventScript_Defeated
@@ -67,13 +67,13 @@ EverGrandeCity_SidneysRoom_EventScript_Defeated:: @ 8227F95
 
 EverGrandeCity_SidneysRoom_Text_IntroSpeech: @ 8227FA7
 	.string "Welcome, challenger!\n"
-	.string "I'm SIDNEY of the ELITE FOUR.\p"
+	.string "I'm Sidney of the Elite Four.\p"
 	.string "I like that look you're giving me.\n"
 	.string "I guess you'll give me a good match.\l"
 	.string "That's good! Looking real good!\p"
 	.string "All right! You and me, let's enjoy\n"
 	.string "a battle that can only be staged\l"
-	.string "here in the POKéMON LEAGUE!$"
+	.string "here in the Pokémon League!$"
 
 EverGrandeCity_SidneysRoom_Text_Defeat: @ 82280A2
 	.string "Well, how do you like that? I lost!\n"

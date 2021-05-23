@@ -64,10 +64,10 @@ script MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee {
     // Handle the different results
     if (var(VAR_RESULT) > 1) {
         // There's no room for the Eevee, the player will need to come back after freeing up room
-        msgbox(format("SCIENTIST: Oh, it seems you don't have room for anymore pokemon.\p"
+        msgbox(format("Scientist: Oh, it seems you don't have room for anymore pokemon.\p"
                         "Come back when you have freed space in your PC or party."))
     } else {
-        msgbox(format("SCIENTIST: A Pokémaniac researcher friend gave {STR_VAR_2} to me as a gift.\p"
+        msgbox(format("Scientist: A Pokémaniac researcher friend gave {STR_VAR_2} to me as a gift.\p"
                         "But, I don't have the time to take care of them.\p"
                         "I'm certain they'll be much happier with you."))
         // Mark the quest as finished, and allow the function to return
@@ -112,7 +112,7 @@ script MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base {
                 call(MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock)
                 msgbox(format("Oh! {PLAYER}{KUN}!\n"
                               "Thanks again for your help.\p"
-                              "I hope you, ROTOM, and EEVEE are all doing well.\p"
+                              "I hope you, Rotom, and Eevee are all doing well.\p"
                               "With the computers finally fixed, I have a lot of calculations to catch up on."))
             } elif (flag(FLAG_QUEST_ROTOM_HAVEBEAT)) {
                 // The player's already finished the quest, just didn't have room for the Eevee. So; jump right back to the capture part of the script
@@ -134,24 +134,24 @@ script MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base {
                     //Check if this is the first time the player's tried this.
                     if(flag(FLAG_QUEST_ROTOM_HAVETRIED)) {
                         // The player's made an attempt before. Set up for a second try.
-                        msgbox(format("SCIENTIST:{SIZE 0}...I sure hope this whole mess doesn't put us too behind schedule...{RESET_SIZE}"))
+                        msgbox(format("Scientist:{SIZE 0}...I sure hope this whole mess doesn't put us too behind schedule...{RESET_SIZE}"))
                         call(MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock)
                         msgbox(format("Oh! Back again!\n"
                                         "Ready to give this another try?\p"
                                         "Lets try the reset again and flush that Pokemon out in the open..."))
                         call(MossdeepCity_SpaceCenter_2F_EventScript_QuestStartRotomFight)
-                        msgbox(format("SCIENTIST: Here they come!"))
+                        msgbox(format("Scientist: Here they come!"))
                     } else {
                         setflag(FLAG_QUEST_ROTOM_HAVETRIED)
                         // This is the first time the player's attempted to capture Rotom.
-                        msgbox(format("SCIENTIST:{SIZE 0}“Random overflow translation on memory error”?\p "
+                        msgbox(format("Scientist:{SIZE 0}“Random overflow translation on memory error”?\p "
                                         "What's that supposed to mean...?{RESET_SIZE}"))
                         call(MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock)
                         msgbox(format("Oh! It's you!\n"
                                         "I see you have some Pokémon with you.\p"
                                         "Lets not waste any time, and give this reset a try..."))
                         call(MossdeepCity_SpaceCenter_2F_EventScript_QuestStartRotomFight)
-                        msgbox(format("SCIENTIST: Aaah! S-S-Something's coming out of the server!"))
+                        msgbox(format("Scientist: Aaah! S-S-Something's coming out of the server!"))
                     }
                     // Set up and start a fight with Rotom
                     setwildbattle(SPECIES_ROTOM, 20, ITEM_MAX_ELIXIR)
@@ -164,21 +164,21 @@ script MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base {
                     if (var(VAR_RESULT) == B_OUTCOME_CAUGHT) {
                         // The player captured Rotom. Finish up the quest and give the reward Eevee
                         call(MossdeepCity_SpaceCenter_2F_EventScript_QuestHideRotomMachine)
-                        msgbox(format("SCIENTIST: Ah, finally, the computers seem to be returning to normal.\p"
+                        msgbox(format("Scientist: Ah, finally, the computers seem to be returning to normal.\p"
                                         "Thank you so much for helping me out.\p"
                                         "As promised, I have a special Pokémon to give you as thanks."))
                         call(MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee)
                     } else {
-                        msgbox(format("The ROTOM retreated back into the machine."))
+                        msgbox(format("The Rotom retreated back into the machine."))
                         if(flag(FLAG_QUEST_ROTOM_HAVEFAILD)) {
-                            msgbox(format("SCIENTIST: Hmmm, retreated again.\p"
+                            msgbox(format("Scientist: Hmmm, retreated again.\p"
                                             "A Pokémon that can control machines...\p"
                                             "I have to admit, there's a lot of possibilities there.\p"
                                             "But, that shouldn't include messing with the center's computer systems!\p"
                                             "Talk to me whenever you'd like to attempt capturing them again."))
                         } else {
                             // The player failed for the first time. Say Rotom flew back into the machine and encourage them to try again
-                            msgbox(format("SCIENTIST: My goodness!\p"
+                            msgbox(format("Scientist: My goodness!\p"
                                             "So, a Pokémon was causing all these isues?\p"
                                             "I've never heard of such a thing.\p"
                                             "Well, it's gone back into hiding.\p"
@@ -191,15 +191,15 @@ script MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base {
                     // The player doesn't have the right mon. Check if they've tried this before.
                     if (flag(FLAG_QUEST_ROTOM_HAVETRIED)) {
                         // The player has made an attempt before. Say a quick line reminding them what to do
-                        msgbox(format("SCIENTIST: {SIZE 0}...A Pokémon that lives in machines? Facinating...{RESET_SIZE}"))
+                        msgbox(format("Scientist: {SIZE 0}...A Pokémon that lives in machines? Facinating...{RESET_SIZE}"))
                         call(MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock)
                         msgbox(format("Oh! Welcome back!\n"
                                         "Are you ready for another try?\p"
-                                        "You'll need to get your PLUSLE and MINUM in your party first.\p"
+                                        "You'll need to get your Plusle and Minum in your party first.\p"
                                         "Once you do, come back and speak to me."))
                     } else {
                         // The player hasn't made an attempt yet. Say a mainly generic line reminding the player.
-                        msgbox(format("SCIENTIST: {SIZE 0}...It just doesn't make sense...{RESET_SIZE}"))
+                        msgbox(format("Scientist: {SIZE 0}...It just doesn't make sense...{RESET_SIZE}"))
                         call(MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock)
                         msgbox(format("Oh! It's you!\n"
                                         "Welcome back.\p"
@@ -211,7 +211,7 @@ script MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base {
             }
         } else {
             // if the quest hasn't been unlocked yet, do so.
-            msgbox(format("SCIENTIST: {SIZE 0}...and I've already tried twisting all the knobs.\p"
+            msgbox(format("Scientist: {SIZE 0}...and I've already tried twisting all the knobs.\p"
                             "If I don't figure this out soon, we'll be back to using abacuses and slide rulers...{RESET_SIZE}"))
             call(MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Shock)
             msgbox(format("Oh! A trainer!\n"
@@ -231,7 +231,7 @@ script MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base {
     } else {
         // During the Magma event
         faceplayer
-        msgbox(format("SCIENTIST: I wish TEAM MAGMA would leave us alone\p"
+        msgbox(format("Scientist: I wish Team Magma would leave us alone\p"
                         "They're distracting me from my work!"))
     }
     turnobject(LOCALID_QUESTSCIENTIST, DIR_NORTH)
@@ -614,13 +614,13 @@ MossdeepCity_SpaceCenter_2F_EventScript_BrendanRayquazaCall:: @ 822419A
     return
 
 MossdeepCity_SpaceCenter_2F_Text_MossdeepIdealForRockets: @ 82241A1
-    .string "MOSSDEEP has mainly sunny weather,\n"
+    .string "Mossdeep has mainly sunny weather,\n"
     .string "and its winds are stable.\p"
     .string "It's an ideal location for launching\n"
     .string "rockets.$"
 
 MossdeepCity_SpaceCenter_2F_Text_WhyWouldMagmaStealRocketFuel: @ 822420C
-    .string "Why would TEAM MAGMA want to steal\n"
+    .string "Why would Team Magma want to steal\n"
     .string "our rocket fuel in the first place?$"
 
 MossdeepCity_SpaceCenter_2F_Text_WouldveLikedToBeAstronaut: @ 8224253
@@ -630,7 +630,7 @@ MossdeepCity_SpaceCenter_2F_Text_WouldveLikedToBeAstronaut: @ 8224253
     .string "I can and will try!$"
 
 MossdeepCity_SpaceCenter_2F_Text_MagmaCantGetAwayWithThis: @ 82242C5
-    .string "If TEAM MAGMA takes the rocket fuel,\n"
+    .string "If Team Magma takes the rocket fuel,\n"
     .string "I won't be able to go to space!\p"
     .string "They can't be allowed to get away\n"
     .string "with such an outrage!$"
@@ -640,7 +640,7 @@ MossdeepCity_SpaceCenter_2F_Text_WishOrdinaryPeopleCouldGoIntoSpace: @ 8224342
     .string "space one day...$"
 
 MossdeepCity_SpaceCenter_2F_Text_DoesMagmaWantToGoToSpace: @ 8224376
-    .string "TEAM MAGMA...\n"
+    .string "Team Magma...\n"
     .string "Do they want to go to space, too?$"
 
 MossdeepCity_SpaceCenter_2F_Text_YoureOutnumberedTakeUsOn: @ 82243A4
@@ -696,33 +696,33 @@ MossdeepCity_SpaceCenter_2F_Text_WellTakeCareOfYou: @ 82245D9
     .string "we'll take care of you at the same time!$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieDontInterfere: @ 822467B
-    .string "MAXIE: Clear out of the way!\n"
+    .string "Maxie: Clear out of the way!\n"
     .string "Don't you dare interfere!$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenWhyStealRocketFuel: @ 82246B2
-    .string "STEVEN: TEAM MAGMA...\p"
+    .string "Steven: Team Magma...\p"
     .string "What's the point of stealing rocket\n"
     .string "fuel?$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieUseFuelToEruptVolcano: @ 82246F0
-    .string "MAXIE: Fufufu... Since you're so\n"
+    .string "Maxie: Fufufu... Since you're so\n"
     .string "curious, you deserve an explanation.\p"
     .string "We're going to jettison the entire\n"
-    .string "load into MT.\pCHIMNEY!\p"
-    .string "With GROUDON gone, we have no need\n"
+    .string "load into Mt.\pChimney!\p"
+    .string "With Groudon gone, we have no need\n"
     .string "for that slag heap of a mountain!\p"
     .string "So we'll use the fuel's power to make\n"
     .string "the volcano erupt!\p"
     .string "It will be savage!$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenAreYouReadyToBattle: @ 82247FF
-    .string "STEVEN: {PLAYER}{KUN}!\n"
+    .string "Steven: {PLAYER}{KUN}!\n"
     .string "You're going to help me?\p"
     .string "Let's go into battle together!\n"
     .string "Are you ready?$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenHurryGetReadyQuickly: @ 8224854
-    .string "STEVEN: Then, hurry!\n"
+    .string "Steven: Then, hurry!\n"
     .string "Get ready quickly!$"
 
 MossdeepCity_SpaceCenter_2F_Text_JustWantToExpandLand: @ 822487C
@@ -733,33 +733,33 @@ MossdeepCity_SpaceCenter_Text_TabithaDefeat: @ 82248AD
     .string "I'm with our leader...$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieWeFailedIsAquaAlsoMisguided: @ 82248C2
-    .string "MAXIE: We failed to make the volcano\n"
+    .string "Maxie: We failed to make the volcano\n"
     .string "erupt...\p"
-    .string "We failed to control GROUDON after\n"
+    .string "We failed to control Groudon after\n"
     .string "we had awoken it...\p"
     .string "Is our goal to expand the land\n"
     .string "misguided?\p"
     .string "... ... ... ... ... ...\n"
     .string "... ... ... ... ... ...\p"
     .string "If...\n"
-    .string "If we, TEAM MAGMA, are wrong...\l"
+    .string "If we, Team Magma, are wrong...\l"
     .string "... ... ... ... ... ...\p"
-    .string "Then might TEAM AQUA's goal to expand\n"
+    .string "Then might Team Aqua's goal to expand\n"
     .string "the sea also be equally misguided?$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieWeWillGiveUp: @ 82249DC
-    .string "MAXIE: All right...\n"
+    .string "Maxie: All right...\n"
     .string "We will give up on the fuel...\p"
     .string "There appear to be more important\n"
     .string "matters that I must examine...$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenThankYouComeSeeMeAtHome: @ 8224A4A
-    .string "STEVEN: Whew, that was too tense.\n"
+    .string "Steven: Whew, that was too tense.\n"
     .string "{PLAYER}{KUN}, thank you.\p"
     .string "I have something to give you as\n"
     .string "thanks for your support.\p"
     .string "Please come see me at home\n"
     .string "after this.\p"
-    .string "Oh, yes, I don't live in RUSTBORO CITY.\n"
+    .string "Oh, yes, I don't live in Rustboro City.\n"
     .string "I live right here on this island.$"
 `

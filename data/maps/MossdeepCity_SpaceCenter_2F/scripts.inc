@@ -576,13 +576,13 @@ MossdeepCity_SpaceCenter_2F_EventScript_BrendanRayquazaCall:: @ 822419A
     return
 
 MossdeepCity_SpaceCenter_2F_Text_MossdeepIdealForRockets: @ 82241A1
-    .string "MOSSDEEP has mainly sunny weather,\n"
+    .string "Mossdeep has mainly sunny weather,\n"
     .string "and its winds are stable.\p"
     .string "It's an ideal location for launching\n"
     .string "rockets.$"
 
 MossdeepCity_SpaceCenter_2F_Text_WhyWouldMagmaStealRocketFuel: @ 822420C
-    .string "Why would TEAM MAGMA want to steal\n"
+    .string "Why would Team Magma want to steal\n"
     .string "our rocket fuel in the first place?$"
 
 MossdeepCity_SpaceCenter_2F_Text_WouldveLikedToBeAstronaut: @ 8224253
@@ -592,7 +592,7 @@ MossdeepCity_SpaceCenter_2F_Text_WouldveLikedToBeAstronaut: @ 8224253
     .string "I can and will try!$"
 
 MossdeepCity_SpaceCenter_2F_Text_MagmaCantGetAwayWithThis: @ 82242C5
-    .string "If TEAM MAGMA takes the rocket fuel,\n"
+    .string "If Team Magma takes the rocket fuel,\n"
     .string "I won't be able to go to space!\p"
     .string "They can't be allowed to get away\n"
     .string "with such an outrage!$"
@@ -602,7 +602,7 @@ MossdeepCity_SpaceCenter_2F_Text_WishOrdinaryPeopleCouldGoIntoSpace: @ 8224342
     .string "space one day...$"
 
 MossdeepCity_SpaceCenter_2F_Text_DoesMagmaWantToGoToSpace: @ 8224376
-    .string "TEAM MAGMA...\n"
+    .string "Team Magma...\n"
     .string "Do they want to go to space, too?$"
 
 MossdeepCity_SpaceCenter_2F_Text_YoureOutnumberedTakeUsOn: @ 82243A4
@@ -658,33 +658,33 @@ MossdeepCity_SpaceCenter_2F_Text_WellTakeCareOfYou: @ 82245D9
     .string "we'll take care of you at the same time!$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieDontInterfere: @ 822467B
-    .string "MAXIE: Clear out of the way!\n"
+    .string "Maxie: Clear out of the way!\n"
     .string "Don't you dare interfere!$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenWhyStealRocketFuel: @ 82246B2
-    .string "STEVEN: TEAM MAGMA...\p"
+    .string "Steven: Team Magma...\p"
     .string "What's the point of stealing rocket\n"
     .string "fuel?$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieUseFuelToEruptVolcano: @ 82246F0
-    .string "MAXIE: Fufufu... Since you're so\n"
+    .string "Maxie: Fufufu... Since you're so\n"
     .string "curious, you deserve an explanation.\p"
     .string "We're going to jettison the entire\n"
-    .string "load into MT.\pCHIMNEY!\p"
-    .string "With GROUDON gone, we have no need\n"
+    .string "load into Mt.\pChimney!\p"
+    .string "With Groudon gone, we have no need\n"
     .string "for that slag heap of a mountain!\p"
     .string "So we'll use the fuel's power to make\n"
     .string "the volcano erupt!\p"
     .string "It will be savage!$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenAreYouReadyToBattle: @ 82247FF
-    .string "STEVEN: {PLAYER}{KUN}!\n"
+    .string "Steven: {PLAYER}{KUN}!\n"
     .string "You're going to help me?\p"
     .string "Let's go into battle together!\n"
     .string "Are you ready?$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenHurryGetReadyQuickly: @ 8224854
-    .string "STEVEN: Then, hurry!\n"
+    .string "Steven: Then, hurry!\n"
     .string "Get ready quickly!$"
 
 MossdeepCity_SpaceCenter_2F_Text_JustWantToExpandLand: @ 822487C
@@ -695,44 +695,44 @@ MossdeepCity_SpaceCenter_Text_TabithaDefeat: @ 82248AD
     .string "I'm with our leader...$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieWeFailedIsAquaAlsoMisguided: @ 82248C2
-    .string "MAXIE: We failed to make the volcano\n"
+    .string "Maxie: We failed to make the volcano\n"
     .string "erupt...\p"
-    .string "We failed to control GROUDON after\n"
+    .string "We failed to control Groudon after\n"
     .string "we had awoken it...\p"
     .string "Is our goal to expand the land\n"
     .string "misguided?\p"
     .string "... ... ... ... ... ...\n"
     .string "... ... ... ... ... ...\p"
     .string "If...\n"
-    .string "If we, TEAM MAGMA, are wrong...\l"
+    .string "If we, Team Magma, are wrong...\l"
     .string "... ... ... ... ... ...\p"
-    .string "Then might TEAM AQUA's goal to expand\n"
+    .string "Then might Team Aqua's goal to expand\n"
     .string "the sea also be equally misguided?$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieWeWillGiveUp: @ 82249DC
-    .string "MAXIE: All right...\n"
+    .string "Maxie: All right...\n"
     .string "We will give up on the fuel...\p"
     .string "There appear to be more important\n"
     .string "matters that I must examine...$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenThankYouComeSeeMeAtHome: @ 8224A4A
-    .string "STEVEN: Whew, that was too tense.\n"
+    .string "Steven: Whew, that was too tense.\n"
     .string "{PLAYER}{KUN}, thank you.\p"
     .string "I have something to give you as\n"
     .string "thanks for your support.\p"
     .string "Please come see me at home\n"
     .string "after this.\p"
-    .string "Oh, yes, I don't live in RUSTBORO CITY.\n"
+    .string "Oh, yes, I don't live in Rustboro City.\n"
     .string "I live right here on this island.$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee_Text_0:
-	.string "SCIENTIST: Oh, it seems you don't have\n"
+	.string "Scientist: Oh, it seems you don't have\n"
 	.string "room for anymore pokemon.\p"
 	.string "Come back when you have freed space in\n"
 	.string "your PC or party.$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestGiveEevee_Text_1:
-	.string "SCIENTIST: A Pokémaniac researcher\n"
+	.string "Scientist: A Pokémaniac researcher\n"
 	.string "friend gave {STR_VAR_2} to me as a\l"
 	.string "gift.\p"
 	.string "But, I don't have the time to take care\n"
@@ -751,13 +751,13 @@ MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_0:
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_1:
 	.string "Oh! {PLAYER}{KUN}!\n"
 	.string "Thanks again for your help.\p"
-	.string "I hope you, ROTOM, and EEVEE are all\n"
+	.string "I hope you, Rotom, and Eevee are all\n"
 	.string "doing well.\p"
 	.string "With the computers finally fixed, I have\n"
 	.string "a lot of calculations to catch up on.$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_2:
-	.string "SCIENTIST:{SIZE 0}...I sure hope this whole mess\n"
+	.string "Scientist:{SIZE 0}...I sure hope this whole mess\n"
 	.string "doesn't put us too behind schedule...{RESET_SIZE}$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_3:
@@ -767,11 +767,11 @@ MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_3:
 	.string "Pokemon out in the open...$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_4:
-	.string "SCIENTIST: Here they come!$"
+	.string "Scientist: Here they come!$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_5:
-	.string "SCIENTIST:{SIZE 0}“Random overflow\n"
-	.string "translation on memory error”?\p"
+	.string "Scientist:{SIZE 0}“Random overflow translation\n"
+	.string "on memory error”?\p"
 	.string "What's that supposed to mean...?{RESET_SIZE}$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_6:
@@ -781,22 +781,22 @@ MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_6:
 	.string "reset a try...$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_7:
-	.string "SCIENTIST: Aaah! S-S-Something's\n"
+	.string "Scientist: Aaah! S-S-Something's\n"
 	.string "coming out of the server!$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_8:
-	.string "SCIENTIST: Ah, finally, the computers\n"
+	.string "Scientist: Ah, finally, the computers\n"
 	.string "seem to be returning to normal.\p"
 	.string "Thank you so much for helping me out.\p"
 	.string "As promised, I have a special Pokémon\n"
 	.string "to give you as thanks.$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_9:
-	.string "The ROTOM retreated back into the\n"
+	.string "The Rotom retreated back into the\n"
 	.string "machine.$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_10:
-	.string "SCIENTIST: Hmmm, retreated again.\p"
+	.string "Scientist: Hmmm, retreated again.\p"
 	.string "A Pokémon that can control machines...\p"
 	.string "I have to admit, there's a lot of\n"
 	.string "possibilities there.\p"
@@ -806,7 +806,7 @@ MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_10:
 	.string "attempt capturing them again.$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_11:
-	.string "SCIENTIST: My goodness!\p"
+	.string "Scientist: My goodness!\p"
 	.string "So, a Pokémon was causing all these\n"
 	.string "isues?\p"
 	.string "I've never heard of such a thing.\p"
@@ -818,18 +818,18 @@ MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_11:
 	.string "again.$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_12:
-	.string "SCIENTIST: {SIZE 0}...A Pokémon that lives in\n"
+	.string "Scientist: {SIZE 0}...A Pokémon that lives in\n"
 	.string "machines? Facinating...{RESET_SIZE}$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_13:
 	.string "Oh! Welcome back!\n"
 	.string "Are you ready for another try?\p"
-	.string "You'll need to get your PLUSLE and\n"
-	.string "MINUM in your party first.\p"
+	.string "You'll need to get your Plusle and Minum\n"
+	.string "in your party first.\p"
 	.string "Once you do, come back and speak to me.$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_14:
-	.string "SCIENTIST: {SIZE 0}...It just doesn't make\n"
+	.string "Scientist: {SIZE 0}...It just doesn't make\n"
 	.string "sense...{RESET_SIZE}$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_15:
@@ -842,7 +842,7 @@ MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_15:
 	.string "charged.$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_16:
-	.string "SCIENTIST: {SIZE 0}...and I've already tried\n"
+	.string "Scientist: {SIZE 0}...and I've already tried\n"
 	.string "twisting all the knobs.\p"
 	.string "If I don't figure this out soon, we'll be\n"
 	.string "back to using abacuses and slide\l"
@@ -875,6 +875,6 @@ MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_18:
 	.string "rare Pokémon!$"
 
 MossdeepCity_SpaceCenter_2F_EventScript_QuestScientist_Base_Text_19:
-	.string "SCIENTIST: I wish TEAM MAGMA would\n"
+	.string "Scientist: I wish Team Magma would\n"
 	.string "leave us alone\p"
 	.string "They're distracting me from my work!$"

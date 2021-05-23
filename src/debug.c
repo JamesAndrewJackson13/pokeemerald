@@ -250,10 +250,10 @@ static const u8 gDebugText_Util_Trainer_Gender[] =          _("Toggle T. Gender"
 static const u8 gDebugText_Util_Trainer_Id[] =              _("New Trainer Id");
 // Flags Menu
 static const u8 gDebugText_Flags_Flags[] =                _("Set Flag XXXX");
-static const u8 gDebugText_Flags_SetPokedexFlags[] =      _("All Pokédex Flags");
+static const u8 gDebugText_Flags_SetPokedexFlags[] =      _("All PokéDex Flags");
 static const u8 gDebugText_Flags_SwitchQuests[] =         _("Quests ON/OFF");
 static const u8 gDebugText_Flags_SwitchDexNav[] =         _("DexNav ON/OFF");
-static const u8 gDebugText_Flags_SwitchDex[] =            _("Pokédex ON/OFF");
+static const u8 gDebugText_Flags_SwitchDex[] =            _("PokéDex ON/OFF");
 static const u8 gDebugText_Flags_SwitchNationalDex[] =    _("NatDex ON/OFF");
 static const u8 gDebugText_Flags_SwitchPokeNav[] =        _("PokéNav ON/OFF");
 static const u8 gDebugText_Flags_ToggleFlyFlags[] =       _("Fly Flags ON/OFF");

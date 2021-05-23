@@ -34,7 +34,7 @@ script FallarborTown_CozmosHouse_EventScript_ProfCozmo {
     lock
     faceplayer
     if(flag(FLAG_RECEIVED_TM27)) {
-        msgbox("PROF. COZMO: Oh, I can't believe it.\n"
+        msgbox("Prof. Cozmo: Oh, I can't believe it.\n"
                "This is really, really great!\p"
                "This is really going to help my research!")
     } else {
@@ -50,16 +50,16 @@ script FallarborTown_CozmosHouse_EventScript_ProfCozmo {
 }
 
 script FallarborTown_CozmosHouse_Text_MeteoriteWillNeverBeMineNow {
-    msgbox("PROF. COZMO: Oh…\n"
+    msgbox("Prof. Cozmo: Oh…\n"
            "I never should have let myself be\l"
-           "conned into telling TEAM MAGMA where\l"
-           "you can find METEORITES…\p"
-           "That METEORITE from METEOR FALLS…\n"
+           "conned into telling Team Magma where\l"
+           "you can find MeteoriteS…\p"
+           "That Meteorite from Meteor Falls…\n"
            "It's never going to be mine now…")
 }
 
 script FallarborTown_CozmosHouse_Text_ReallyGoingToHelpMyResearch {
-    msgbox("PROF. COZMO: Oh, I can't believe it.\n"
+    msgbox("Prof. Cozmo: Oh, I can't believe it.\n"
 	       "This is really, really great!\p"
 	       "This is really going to help my research!")
 }
@@ -67,8 +67,8 @@ script FallarborTown_CozmosHouse_Text_ReallyGoingToHelpMyResearch {
 
 script FallarborTown_CozmosHouse_EventScript_PlayerHasMeteorite {
     if(flag(FLAG_TEMP_2)) {
-        msgbox("PROF. COZMO: Please, may I have that\n"
-               "METEORITE?\p"
+        msgbox("Prof. Cozmo: Please, may I have that\n"
+               "Meteorite?\p"
                "I'm not asking for it for free.\n"
                "How about in exchange for this TM?", MSGBOX_YESNO)
     } else {
@@ -77,14 +77,14 @@ script FallarborTown_CozmosHouse_EventScript_PlayerHasMeteorite {
                "Hah?\p"
                "That item…\p"
                "Could it be?\p"
-               "Is it the METEORITE that TEAM MAGMA\n"
-               "took from METEOR FALLS?\p"
+               "Is it the Meteorite that Team Magma\n"
+               "took from Meteor Falls?\p"
                "Please, may I have it?\p"
                "I'm not asking for it for free.\n"
                "How about in exchange for this TM?", MSGBOX_YESNO)
     }
     if(var(VAR_RESULT)) {
-        msgbox("PROF. COZMO: This TM, it represents\n"
+        msgbox("Prof. Cozmo: This TM, it represents\n"
                "my feeling of gratitude.\l"
                "Please use it!")
         giveitem(ITEM_TM27)
@@ -97,7 +97,7 @@ script FallarborTown_CozmosHouse_EventScript_PlayerHasMeteorite {
         goto(FallarborTown_CozmosHouse_Text_ReallyGoingToHelpMyResearch)
     } else {
         setflag(FLAG_TEMP_2)
-        msgbox("PROF. COZMO: Oh, but…\n"
+        msgbox("Prof. Cozmo: Oh, but…\n"
                "I'm crushed with disappointment…")
     }
 
@@ -107,15 +107,15 @@ script FallarborTown_CozmosHouse_EventScript_CozmosWife {
     lock
     faceplayer
     if (flag(FLAG_RECEIVED_TM27)) {
-        msgbox("Look at PROF. COZMO…\n"
+        msgbox("Look at Prof. Cozmo…\n"
                "He's so happy! I think it's cute.")
     } elif (flag(FLAG_DEFEATED_EVIL_TEAM_MT_CHIMNEY)) {
-        msgbox("Poor PROF. COZMO…\n"
+        msgbox("Poor Prof. Cozmo…\n"
                "He's so depressed… I feel sorry for him")
     } else {
-        msgbox("PROF. COZMO went off to METEOR FALLS\n"
-               "on ROUTE 114 with some people from\l"
-               "TEAM MAGMA.")
+        msgbox("Prof. Cozmo went off to Meteor Falls\n"
+               "on Route 114 with some people from\l"
+               "Team Magma.")
     }
     release
     end
