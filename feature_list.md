@@ -47,6 +47,9 @@ FEATURE LIST
 ## Triple Layer Metatiles
 * Allows for use of all three layers at the same time
 
+## Decapitalization
+* Tweaks the game text to REMOVE all the CAPITAL WORDS so the text isn't so ANNOYING to read.
+
 
 # CORE GAME
 ## Cleaned Up the Save Ram
