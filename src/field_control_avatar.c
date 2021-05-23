@@ -1139,6 +1139,7 @@ static bool8 SwapBikeType(void)
         PlaySE(SE_BIKE_BELL);
     }
     ScriptContext1_SetupScript(EventScript_ShowBikeBox);
+    IncrementGameStat(GAME_STAT_TRADED_BIKES);
     return TRUE;
 
 }
