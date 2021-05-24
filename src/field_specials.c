@@ -16,6 +16,7 @@
 #include "field_screen_effect.h"
 #include "field_specials.h"
 #include "field_weather.h"
+#include "field_control_avatar.h"
 #include "graphics.h"
 #include "international_string_util.h"
 #include "item_icon.h"
@@ -160,6 +161,7 @@ void ResetCyclingRoadChallengeData(void)
 void Special_BeginCyclingRoadChallenge(void)
 {
     gBikeCyclingChallenge = TRUE;
+    SwapBikeType(PLAYER_AVATAR_FLAG_MACH_BIKE); // Force the bike into mach mode
     gBikeCollisions = 0;
     sBikeCyclingTimer = gMain.vblankCounter1;
 }
@@ -175,6 +177,7 @@ u16 GetPlayerAvatarBike(void)
 
 static void DetermineCyclingRoadResults(u32 numFrames, u8 numBikeCollisions)
 {
+    const u32 seconds = numFrames / 60;
     u8 result;
 
     if (numBikeCollisions < 100)
@@ -189,7 +192,7 @@ static void DetermineCyclingRoadResults(u32 numFrames, u8 numBikeCollisions)
 
     if (numFrames < 3600)
     {
-        ConvertIntToDecimalStringN(gStringVar2, numFrames / 60, STR_CONV_MODE_RIGHT_ALIGN, 2);
+        ConvertIntToDecimalStringN(gStringVar2, seconds / 60, STR_CONV_MODE_RIGHT_ALIGN, 2);
         gStringVar2[2] = CHAR_PERIOD;
         ConvertIntToDecimalStringN(&gStringVar2[3], ((numFrames % 60) * 100) / 60, STR_CONV_MODE_LEADING_ZEROS, 2);
         StringAppend(gStringVar2, gText_SpaceSeconds);
@@ -221,23 +224,23 @@ static void DetermineCyclingRoadResults(u32 numFrames, u8 numBikeCollisions)
         result = 1;
     }
 
-    if (numFrames / 60 <= 10)
+    if (seconds <= 10)
     {
         result += 5;
     }
-    else if (numFrames / 60 <= 15)
+    else if (seconds <= 15)
     {
         result += 4;
     }
-    else if (numFrames / 60 <= 20)
+    else if (seconds <= 20)
     {
         result += 3;
     }
-    else if (numFrames / 60 <= 40)
+    else if (seconds <= 40)
     {
         result += 2;
     }
-    else if (numFrames / 60 < 60)
+    else if (seconds < 60)
     {
         result += 1;
     }

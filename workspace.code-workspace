@@ -18,7 +18,10 @@
 			"xutility": "c",
 			"xiosbase": "c",
 			"system_error": "c",
-			"xlocale": "c"
+			"xlocale": "c",
+			"array": "c",
+			"vector": "c",
+			"xstring": "c"
 		},
 		"C_Cpp.formatting": "vcFormat",
 		"C_Cpp.vcFormat.newLine.beforeOpenBrace.type": "newLine",

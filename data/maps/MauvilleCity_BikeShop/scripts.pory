@@ -1,107 +1,92 @@
-MauvilleCity_BikeShop_MapScripts::
-	.byte 0
+mapscripts MauvilleCity_BikeShop_MapScripts {}
 
-
-MauvilleCity_BikeShop_EventScript_Rydel::
+script MauvilleCity_BikeShop_EventScript_Rydel {
 	locktarget
 	faceplayer
-	goto_if_set FLAG_RECEIVED_BIKE, MauvilleCity_BikeShop_EventScript_Rydel_2
-	goto_if_unset FLAG_DECLINED_BIKE, MauvilleCity_BikeShop_EventScript_Rydel_6
-MauvilleCity_BikeShop_EventScript_Rydel_5:
-	msgbox MauvilleCity_BikeShop_Text_DidYouComeFromFarAway, MSGBOX_YESNO
-	compare VAR_RESULT, YES
-	goto_if_eq MauvilleCity_BikeShop_EventScript_Rydel_8
-	setflag FLAG_DECLINED_BIKE
-	msgbox MauvilleCity_BikeShop_Text_GuessYouDontNeedBike, MSGBOX_DEFAULT
-MauvilleCity_BikeShop_EventScript_Rydel_1:
+    if(flag(FLAG_RECEIVED_BIKE)) {
+        // Player already have a bike
+        msgbox(MauvilleCity_BikeShop_Text_HappyYouLikeIt)
+    } else {
+        // Player doesn't have a bike yet
+        if(!flag(FLAG_DECLINED_BIKE)) {
+            // The player hasn't declined a bike before; do the full intro
+            msgbox(MauvilleCity_BikeShop_Text_RydelGreeting, MSGBOX_DEFAULT)
+        }
+        msgbox(MauvilleCity_BikeShop_Text_DidYouComeFromFarAway, MSGBOX_YESNO)
+        if(var(VAR_RESULT) == YES) {
+            // Give the player a combo bike
+            setflag(FLAG_RECEIVED_BIKE)
+            message(MauvilleCity_BikeShop_Text_ExplainBikesChooseWhichOne)
+            waitmessage
+            msgbox(MauvilleCity_BikeShop_Text_ChoseComboBike, MSGBOX_DEFAULT)
+            giveitem(ITEM_ACRO_BIKE)  // The Acro bike works as the combo bike in-game
+            msgbox(MauvilleCity_BikeShop_Text_EndGivingBike)
+        } else {
+            // Flag that the player declined the bike, so Rydel's intro gets skipped next time
+            setflag(FLAG_DECLINED_BIKE)
+            msgbox(MauvilleCity_BikeShop_Text_GuessYouDontNeedBike, MSGBOX_DEFAULT)
+        }
+    }
+    release
+	end
+}
+
+script MauvilleCity_BikeShop_EventScript_Assistant {
+    msgbox(MauvilleCity_BikeShop_Text_HandbooksAreInBack, MSGBOX_NPC)
+}
+
+script MauvilleCity_BikeShop_EventScript_MachBikeHandbook {
+	message(MauvilleCity_BikeShop_Text_MachHandbookWhichPage)
+	waitmessage
+	// goto MauvilleCity_BikeShop_EventScript_ChooseMachHandbookPage
+    do {
+        multichoice(0, 0, MULTI_MACH_BIKE_INFO, FALSE)
+        switch(var(VAR_RESULT)) {
+            case 0:
+                // MauvilleCity_BikeShop_EventScript_HowToRide
+                message(MauvilleCity_BikeShop_Text_HowToRideMachBike)
+                waitmessage
+            case 1:
+                // MauvilleCity_BikeShop_EventScript_HowToTurn
+                message(MauvilleCity_BikeShop_Text_HowToTurnMachBike)
+                waitmessage
+            case 2:
+                // MauvilleCity_BikeShop_EventScript_SandySlopes
+                message(MauvilleCity_BikeShop_Text_SandySlopes)
+                waitmessage
+        }
+    } while(var(VAR_RESULT) < 3)
 	release
 	end
+}
 
-MauvilleCity_BikeShop_EventScript_Rydel_2:
-	msgbox MauvilleCity_BikeShop_Text_HappyYouLikeIt
-	goto MauvilleCity_BikeShop_EventScript_Rydel_1
-
-MauvilleCity_BikeShop_EventScript_Rydel_6:
-	msgbox MauvilleCity_BikeShop_Text_RydelGreeting, MSGBOX_DEFAULT
-	goto MauvilleCity_BikeShop_EventScript_Rydel_5
-
-MauvilleCity_BikeShop_EventScript_Rydel_8:
-	setflag FLAG_RECEIVED_BIKE
-	message MauvilleCity_BikeShop_Text_ExplainBikesChooseWhichOne
+script MauvilleCity_BikeShop_EventScript_AcroBikeHandbook {
+	message(MauvilleCity_BikeShop_Text_AcroHandbookWhichPage)
 	waitmessage
-	msgbox MauvilleCity_BikeShop_Text_ChoseComboBike, MSGBOX_DEFAULT
-	giveitem ITEM_ACRO_BIKE
-	msgbox MauvilleCity_BikeShop_Text_EndGivingBike
-	goto MauvilleCity_BikeShop_EventScript_Rydel_1
-
-
-MauvilleCity_BikeShop_EventScript_Assistant::
-	msgbox MauvilleCity_BikeShop_Text_HandbooksAreInBack, MSGBOX_NPC
-	return
-
-
-MauvilleCity_BikeShop_EventScript_MachBikeHandbook::
-	message MauvilleCity_BikeShop_Text_MachHandbookWhichPage
-	waitmessage
-MauvilleCity_BikeShop_EventScript_MachBikeHandbook_3:
-	multichoice 0, 0, MULTI_MACH_BIKE_INFO, FALSE
-	switch VAR_RESULT
-	case 0, MauvilleCity_BikeShop_EventScript_MachBikeHandbook_6
-	case 1, MauvilleCity_BikeShop_EventScript_MachBikeHandbook_7
-	case 2, MauvilleCity_BikeShop_EventScript_MachBikeHandbook_8
-MauvilleCity_BikeShop_EventScript_MachBikeHandbook_2:
-	compare VAR_RESULT, 3
-	goto_if_lt MauvilleCity_BikeShop_EventScript_MachBikeHandbook_3
+	// goto MauvilleCity_BikeShop_EventScript_ChooseMachHandbookPage
+    do {
+        multichoice(0, 0, MULTI_ACRO_BIKE_INFO, FALSE)
+        switch(var(VAR_RESULT)) {
+            case 0:
+                // MauvilleCity_BikeShop_EventScript_Wheelies
+                message(MauvilleCity_BikeShop_Text_Wheelies)
+                waitmessage
+            case 1:
+                // MauvilleCity_BikeShop_EventScript_BunnyHops
+                message(MauvilleCity_BikeShop_Text_BunnyHops)
+                waitmessage
+            case 2:
+                // MauvilleCity_BikeShop_EventScript_Jumps
+                message(MauvilleCity_BikeShop_Text_Jumps)
+                waitmessage
+        }
+    } while(var(VAR_RESULT) < 3)
 	release
 	end
-
-MauvilleCity_BikeShop_EventScript_MachBikeHandbook_6:
-	message MauvilleCity_BikeShop_Text_HowToRideMachBike
-	waitmessage
-	goto MauvilleCity_BikeShop_EventScript_MachBikeHandbook_2
-
-MauvilleCity_BikeShop_EventScript_MachBikeHandbook_7:
-	message MauvilleCity_BikeShop_Text_HowToTurnMachBike
-	waitmessage
-	goto MauvilleCity_BikeShop_EventScript_MachBikeHandbook_2
-
-MauvilleCity_BikeShop_EventScript_MachBikeHandbook_8:
-	message MauvilleCity_BikeShop_Text_SandySlopes
-	waitmessage
-	goto MauvilleCity_BikeShop_EventScript_MachBikeHandbook_2
+}
 
 
-MauvilleCity_BikeShop_EventScript_AcroBikeHandbook::
-	message MauvilleCity_BikeShop_Text_AcroHandbookWhichPage
-	waitmessage
-MauvilleCity_BikeShop_EventScript_AcroBikeHandbook_3:
-	multichoice 0, 0, MULTI_ACRO_BIKE_INFO, FALSE
-	switch VAR_RESULT
-	case 0, MauvilleCity_BikeShop_EventScript_AcroBikeHandbook_6
-	case 1, MauvilleCity_BikeShop_EventScript_AcroBikeHandbook_7
-	case 2, MauvilleCity_BikeShop_EventScript_AcroBikeHandbook_8
-MauvilleCity_BikeShop_EventScript_AcroBikeHandbook_2:
-	compare VAR_RESULT, 3
-	goto_if_lt MauvilleCity_BikeShop_EventScript_AcroBikeHandbook_3
-	release
-	end
-
-MauvilleCity_BikeShop_EventScript_AcroBikeHandbook_6:
-	message MauvilleCity_BikeShop_Text_Wheelies
-	waitmessage
-	goto MauvilleCity_BikeShop_EventScript_AcroBikeHandbook_2
-
-MauvilleCity_BikeShop_EventScript_AcroBikeHandbook_7:
-	message MauvilleCity_BikeShop_Text_BunnyHops
-	waitmessage
-	goto MauvilleCity_BikeShop_EventScript_AcroBikeHandbook_2
-
-MauvilleCity_BikeShop_EventScript_AcroBikeHandbook_8:
-	message MauvilleCity_BikeShop_Text_Jumps
-	waitmessage
-	goto MauvilleCity_BikeShop_EventScript_AcroBikeHandbook_2
-
-
+raw `
 MauvilleCity_BikeShop_Text_RydelGreeting: @ 820EE22
 	.string "Well, well, what have we here?\n"
 	.string "A most energetic customer!\p"
@@ -217,3 +202,4 @@ MauvilleCity_BikeShop_Text_Jumps: @ 820F898
 	.string "Press it backwards to make the BIKE\n"
 	.string "change directions while jumping.\p"
 	.string "Want to read a different page?$"
+`

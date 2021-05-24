@@ -3281,6 +3281,8 @@ extern const u8 gText_AutoRunDisabled[];
 // Bike toast notifications
 extern const u8 gText_BikeModeAcro[];
 extern const u8 gText_BikeModeMach[];
+extern const u8 gText_BikeModeForcedAcro[];
+extern const u8 gText_BikeModeForcedMach[];
 
 // Quest toast notifications
 extern const u8 gText_QuestUnlocked[];
