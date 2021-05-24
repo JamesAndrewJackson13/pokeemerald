@@ -233,26 +233,21 @@ gScriptCmdTable:: @ 81DB67C
     .4byte ScrCmd_bufferitemnameplural      @ 0xe2
     .4byte ScrCmd_showitemdesc              @ 0xe3
     .4byte ScrCmd_hideitemdesc              @ 0xe4
-    .4byte ScrCmd_showenableautorunbox      @ 0xe5
-    .4byte ScrCmd_showdisableautorunbox     @ 0xe6
-    .4byte ScrCmd_hideautorunbox            @ 0xe7
-    .4byte ScrCmd_showbiketypebox           @ 0xe8
-    .4byte ScrCmd_hidebiketypebox           @ 0xe9
-    .4byte ScrCmd_questmenu                 @ 0xea
+    .4byte ScrCmd_questmenu                 @ 0xe5
 #ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
-    .4byte ScrCmd_countpartymon             @ 0xeb
-    .4byte ScrCmd_checkpartymon             @ 0xec
-    .4byte ScrCmd_firstinpartymon           @ 0xed
-    .4byte ScrCmd_ispartymonatindexoftype   @ 0xee
+    .4byte ScrCmd_countpartymon             @ 0xe6
+    .4byte ScrCmd_checkpartymon             @ 0xe7
+    .4byte ScrCmd_firstinpartymon           @ 0xe8
+    .4byte ScrCmd_ispartymonatindexoftype   @ 0xe9
 #endif
 #ifdef FEATURE_ADDLOCKTARGET
-    .4byte ScrCmd_locktarget                @ 0xef
+    .4byte ScrCmd_locktarget                @ 0xea
 #endif
-    .4byte ScrCmd_getstorestringvar         @ 0xf0
+    .4byte ScrCmd_getstorestringvar         @ 0xeb
 
 
     @ Debug
-    .4byte ScrCmd_printf                    @ 0xf1
+    .4byte ScrCmd_printf                    @ 0xfe
 
 gScriptCmdTableEnd:: @ 81DBA08
     .4byte ScrCmd_nop

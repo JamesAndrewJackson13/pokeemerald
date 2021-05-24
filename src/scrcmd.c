@@ -2350,38 +2350,6 @@ bool8 ScrCmd_hideitemdesc(struct ScriptContext *ctx)
     return FALSE;
 }
 
-bool8 ScrCmd_showenableautorunbox(struct ScriptContext* ctx)
-{
-    DrawAutoRunBox(TRUE);
-    return FALSE;
-}
-
-bool8 ScrCmd_showdisableautorunbox(struct ScriptContext* ctx)
-{
-    DrawAutoRunBox(FALSE);
-    return FALSE;
-}
-
-bool8 ScrCmd_hideautorunbox(struct ScriptContext* ctx)
-{
-    HideAutoRunBox();
-    return FALSE;
-}
-
-#ifdef FEATURE_SWAPBIKEBUTTON
-bool8 ScrCmd_showbiketypebox(struct ScriptContext* ctx)
-{
-    DrawBikeHeaderBox();
-    return FALSE;
-}
-
-bool8 ScrCmd_hidebiketypebox(struct ScriptContext* ctx)
-{
-    HideBikeHeaderBox();
-    return FALSE;
-}
-#endif
-
 bool8 ScrCmd_questmenu(struct ScriptContext* ctx)
 {
     u8 caseId = ScriptReadByte(ctx);

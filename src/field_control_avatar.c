@@ -31,6 +31,7 @@
 #include "trainer_see.h"
 #include "trainer_hill.h"
 #include "wild_encounter.h"
+#include "toast_notifications.h"
 #include "constants/event_bg.h"
 #include "constants/event_objects.h"
 #include "constants/field_poison.h"
@@ -72,10 +73,7 @@ static bool8 TryStartMiscWalkingScripts(u16);
 static bool8 TryStartStepCountScript(u16);
 static void UpdateFriendshipStepCounter(void);
 static bool8 UpdatePoisonStepCounter(void);
-static bool8 EnableAutoRun(void);
-#ifdef FEATURE_SWAPBIKEBUTTON
-static bool8 SwapBikeType(void);
-#endif
+static bool8 ToggleAutoRun(void);
 
 void FieldClearPlayerInput(struct FieldInput *input)
 {
@@ -216,6 +214,7 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
         return TRUE;
     if (input->pressedStartButton)
     {
+        FlagSet(FLAG_EARLY_CLOSE_TOAST);
         PlaySE(SE_WIN_OPEN);
         ShowStartMenu();
         return TRUE;
@@ -227,11 +226,11 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
     {
 #ifdef FEATURE_SWAPBIKEBUTTON
         if (EXM_PLAYER_ON_BIKE)
-            return SwapBikeType();
+            return SwapBikeType(0);
         else
-            return EnableAutoRun();
+            return ToggleAutoRun();
 #else
-        return EnableAutoRun();
+        return ToggleAutoRun();
 #endif
     }
 
@@ -243,7 +242,6 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
         return TRUE;
     }
 #endif
-
     return FALSE;
 }
 
@@ -1100,47 +1098,89 @@ int SetCableClubWarp(void)
     return 0;
 }
 
-extern const u8 EventScript_DisableAutoRun[];
-extern const u8 EventScript_EnableAutoRun[];
-static bool8 EnableAutoRun(void)
+static bool8 ToggleAutoRun(void)
 {
     if (!FlagGet(FLAG_SYS_B_DASH))
-        return FALSE;   //auto run unusable until you get running shoes
+        return FALSE;  // auto run unusable until you get running shoes
 
-    if (gSaveBlock2Ptr->autoRun)
-    {
-        gSaveBlock2Ptr->autoRun = FALSE;
-        ScriptContext1_SetupScript(EventScript_DisableAutoRun);
-    }
-    else
-    {
-        gSaveBlock2Ptr->autoRun = TRUE;
-        ScriptContext1_SetupScript(EventScript_EnableAutoRun);
-    }
-    return TRUE;
+    if (FlagGet(FLAG_AUTO_RUN_SWAP))
+        return FALSE;  // To avoid graphical issues, only one toggle at a time
+
+    // Toggle autoRun and draw toast
+    gSaveBlock2Ptr->autoRun = !gSaveBlock2Ptr->autoRun;
+    DrawAutoRunBox(gSaveBlock2Ptr->autoRun);
+    // logInfo("ToggleAutoRun FINISHED");
+    return FALSE;
 }
 
 #ifdef FEATURE_SWAPBIKEBUTTON
-extern const u8 EventScript_ShowBikeBox[];
-static bool8 SwapBikeType(void)
+
+#define FORCING_BIKE_MODE TRUE
+#define TOGGLING_BIKE_MODE FALSE
+
+/**
+ * Swaps the mode of the bike between Mach and Acro.
+ *   Can also force one of the two modes if the param is set to one of the modes.
+ *
+ * @param forceToMode: If equal to either PLAYER_AVATAR_FLAG_MACH_BIKE or PLAYER_AVATAR_FLAG_ACRO_BIKE, will force the bike into that mode. Any other value will simply toggle the mode of the bike.
+ * @return TRUE
+ */
+bool8 SwapBikeType(u8 forceToMode)
 {
-    if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_MACH_BIKE)
+    if (gBikeCyclingChallenge)
+        return FALSE;  // No changing the bike mode when doing the cycling challenge
+
+    if (FlagGet(FLAG_BIKE_MODE_SWAP))
+        return FALSE;  // To avoid graphical glitches, only allow one bike swap at a time
+
+    // Flags we need to swap modes, and which mode to swap to.
+    u8 swapTo = 0;
+    if (forceToMode == PLAYER_AVATAR_FLAG_ACRO_BIKE)
     {
-        gPlayerAvatar.flags -= PLAYER_AVATAR_FLAG_MACH_BIKE;
-        gPlayerAvatar.flags += PLAYER_AVATAR_FLAG_ACRO_BIKE;
-        SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_ACRO_BIKE);
-        PlaySE(SE_BIKE_HOP);
+        // Force the bike mode to Acro
+        if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_MACH_BIKE)
+        {
+            // If we're not already in acro mode, ensure the change will be done
+            swapTo = PLAYER_AVATAR_FLAG_ACRO_BIKE;
+        }
+        DrawBikeHeaderBox(FORCING_BIKE_MODE);
+    }
+    else if (forceToMode == PLAYER_AVATAR_FLAG_MACH_BIKE)
+    {
+        // Force the bike mode to Mach
+        if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_ACRO_BIKE)
+        {
+            // If we're not already in mach mode, ensure the change will be done
+            swapTo = PLAYER_AVATAR_FLAG_MACH_BIKE;
+        }
+        DrawBikeHeaderBox(FORCING_BIKE_MODE);
     }
     else
     {
-        gPlayerAvatar.flags -= PLAYER_AVATAR_FLAG_ACRO_BIKE;
-        gPlayerAvatar.flags += PLAYER_AVATAR_FLAG_MACH_BIKE;
-        SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_MACH_BIKE);
-        PlaySE(SE_BIKE_BELL);
+        // Toggle the bike mode
+        swapTo = (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_MACH_BIKE)
+            ? PLAYER_AVATAR_FLAG_ACRO_BIKE
+            : PLAYER_AVATAR_FLAG_MACH_BIKE;
+        DrawBikeHeaderBox(TOGGLING_BIKE_MODE);
     }
-    ScriptContext1_SetupScript(EventScript_ShowBikeBox);
-    IncrementGameStat(GAME_STAT_TRADED_BIKES);
-    return TRUE;
-
+    if (swapTo == PLAYER_AVATAR_FLAG_ACRO_BIKE)
+    {
+        gPlayerAvatar.flags += PLAYER_AVATAR_FLAG_ACRO_BIKE;
+        gPlayerAvatar.flags -= PLAYER_AVATAR_FLAG_MACH_BIKE;
+        SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_ACRO_BIKE);
+        IncrementGameStat(GAME_STAT_TRADED_BIKES);
+    }
+    else if (swapTo == PLAYER_AVATAR_FLAG_MACH_BIKE)
+    {
+        gPlayerAvatar.flags += PLAYER_AVATAR_FLAG_MACH_BIKE;
+        gPlayerAvatar.flags -= PLAYER_AVATAR_FLAG_ACRO_BIKE;
+        SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_MACH_BIKE);
+        IncrementGameStat(GAME_STAT_TRADED_BIKES);
+    }
+    return FALSE;
 }
+
+#undef FORCING_BIKE_MODE
+#undef TOGGLING_BIKE_MODE
+
 #endif

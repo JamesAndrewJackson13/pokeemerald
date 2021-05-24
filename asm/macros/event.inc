@@ -1652,29 +1652,9 @@
     .byte 0xe4
     .endm
 
-    .macro showenableautorunbox
-    .byte 0xe5
-    .endm
-
-    .macro showdisableautorunbox
-    .byte 0xe6
-    .endm
-
-    .macro hideautorunbox
-    .byte 0xe7
-    .endm
-
-    .macro showbiketypebox
-    .byte 0xe8
-    .endm
-
-    .macro hidebiketypebox
-    .byte 0xe9
-    .endm
-
     @ Allows interaction with the quest code
     .macro questmenu case:req, questId:req
-    .byte 0xea
+    .byte 0xe5
     .byte \case
     .byte \questId
     .endm
@@ -1731,28 +1711,28 @@
 #ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
     @ Counts how many of a Pokemon are in the player's party. Result returns to VAR_RESULT
     .macro countpartymon species:req normalizeForms=FALSE
-    .byte 0xeb
+    .byte 0xe6
     .2byte \species
     .byte \normalizeForms
     .endm
 
     @ Checks to see if the player has a Pokemon in their party. Result returns to VAR_RESULT
     .macro checkpartymon species:req normalizeForms=FALSE
-    .byte 0xec
+    .byte 0xe7
     .2byte \species
     .byte \normalizeForms
     .endm
 
     @ Finds the first index of a pokemon in the player's party, or returns the PARTY_SIZE. Result returns to VAR_RESULT
     .macro firstinpartymon species:req normalizeForms=FALSE
-    .byte 0xed
+    .byte 0xe8
     .2byte \species
     .byte \normalizeForms
     .endm
 
     @ Finds the first index of a pokemon in the player's party, or returns the PARTY_SIZE. Result returns to VAR_RESULT
     .macro ispartymonatindexoftype partyIndex:req species:req normalizeForms=FALSE
-    .byte 0xee
+    .byte 0xe9
     .2byte \partyIndex
     .2byte \species
     .byte \normalizeForms
@@ -1761,7 +1741,7 @@
 #ifdef FEATURE_ADDLOCKTARGET
     @ Ceases movement for the event obj. the Player is currently interacting with and that one alone.
     .macro locktarget
-    .byte 0xef
+    .byte 0xea
     .endm
 #endif
 
@@ -1769,14 +1749,14 @@
     @ strindex (u8): The string variable index to work with
     @ isgetcall (bool8): When true, we get the temp var and store into the strvar. When false, we store whats in the strvar into the temp var
     .macro getstorestringvar strindex:req isgetcall:req
-    .byte 0xf0
+    .byte 0xeb
     .byte \strindex
     .byte \isgetcall
     .endm
 
     @ Print a debug string
     .macro debug_printf text:req
-    .byte 0xf1
+    .byte 0xfe
     .4byte \text
     .endm
 

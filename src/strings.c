@@ -2141,8 +2141,10 @@ const u8 gText_AutoRunEnabled[] =  _("Auto-run: Enabled");
 const u8 gText_AutoRunDisabled[] = _("Auto-run: Disabled");
 
 // Bike toast notifications
-const u8 gText_BikeModeAcro[] = _("Bike Mode: Acro");
-const u8 gText_BikeModeMach[] = _("Bike Mode: Mach");
+const u8 gText_BikeModeAcro[] = _("Bike swapped to Acro Mode");
+const u8 gText_BikeModeMach[] = _("Bike swapped to Mach Mode");
+const u8 gText_BikeModeForcedAcro[] = _("Bike forced to Acro Mode");
+const u8 gText_BikeModeForcedMach[] = _("Bike forced to Mach Mode");
 
 // Quest toast notifications
 const u8 gText_QuestUnlocked[] = _("Quest Unlocked!\n{SIZE 0}{STR_VAR_1}");

@@ -9,6 +9,8 @@
 #include "item_icon.h"
 #include "overworld.h"
 #include "gpu_regs.h"
+#include "sound.h"
+#include "constants/songs.h"
 
 // EWRAM variables
 EWRAM_DATA static u8 sHeaderBoxWindowId = 0;
@@ -125,3 +127,185 @@ void HideHeaderBox(bool8 hadItem, bool8 hadMsgBox)
     if (hadMsgBox == TRUE)
         HideToastBox();
 }
+
+
+
+// START: AUTO-RUN TOAST CODE
+#define tState            data[0]
+#define tSoundEffect      data[1]
+#define tTextToShowIndex  data[2]
+#define tToShow           data[3]
+
+#define TOAST_TIMEOUT        100
+
+#define AUTO_RUN_TOAST_TEXT_ENABLED  0
+#define AUTO_RUN_TOAST_TEXT_DISABLED 1
+
+
+static const u8* const autoRunToastText[] = {
+    [AUTO_RUN_TOAST_TEXT_ENABLED] = gText_AutoRunEnabled,
+    [AUTO_RUN_TOAST_TEXT_DISABLED] = gText_AutoRunDisabled,
+};
+
+static void Task_DoAutoRunToast(u8 taskId)
+{
+    struct Task* task = &gTasks[taskId];
+    if (FlagGet(FLAG_EARLY_CLOSE_TOAST))
+    {
+        task->tState = TOAST_TIMEOUT;
+        FlagClear(FLAG_EARLY_CLOSE_TOAST);
+    }
+    switch (task->tState)
+    {
+    case 0:
+        StringCopy(gStringVar1, autoRunToastText[task->tTextToShowIndex]);
+        DrawHeaderBox(task->tToShow, gStringVar1, EXM_FLASH_ACTIVE, 1);
+        break;
+    case 1:
+        PlaySE(task->tSoundEffect);
+        break;
+    case TOAST_TIMEOUT:
+        HideHeaderBox(TRUE, TRUE);
+        FlagClear(FLAG_AUTO_RUN_SWAP);
+        FlagClear(FLAG_HIDE_MAP_NAME_POPUP);
+        DestroyTask(taskId);
+        break;
+    }
+    task->tState++;
+}
+
+static void DrawAutoRunToast(u8 soundEffect, u8 textToShowIndex, u16 toShow)
+{
+    u8 taskId = CreateTask(Task_DoAutoRunToast, 1);
+    struct Task* task = &gTasks[taskId];
+    task->tState = 0;
+    task->tSoundEffect = soundEffect;
+    task->tTextToShowIndex = textToShowIndex;
+    task->tToShow = toShow;
+}
+
+void DrawAutoRunBox(bool8 gettingEnabled)
+{
+    u16 toShow;
+    u16 se;
+    u8 textIndex;
+    if (gettingEnabled)
+    {
+        toShow = ITEM_RUNNINGSHOES_RUNNING;
+        se = SE_RG_HELP_OPEN;
+        textIndex = AUTO_RUN_TOAST_TEXT_ENABLED;
+    }
+    else
+    {
+        toShow = ITEM_RUNNINGSHOES_WALKING;
+        se = SE_RG_HELP_CLOSE;
+        textIndex = AUTO_RUN_TOAST_TEXT_DISABLED;
+    }
+    FlagSet(FLAG_AUTO_RUN_SWAP);
+    FlagSet(FLAG_HIDE_MAP_NAME_POPUP);
+    DrawAutoRunToast(se, textIndex, toShow);
+}
+
+#undef tState
+#undef tSoundEffect
+#undef tTextToShowIndex
+#undef tToShow
+
+#undef TOAST_TIMEOUT
+
+#undef AUTO_RUN_TOAST_TEXT_ENABLED
+#undef AUTO_RUN_TOAST_TEXT_DISABLED
+// END: AUTO-RUN TOAST CODE
+
+// START: BIKE SWAP TOAST CODE
+#ifdef FEATURE_SWAPBIKEBUTTON
+#define tState            data[0]
+#define tSoundEffect      data[1]
+#define tTextToShowIndex  data[2]
+#define tBikeToShow       data[3]
+
+#define TOAST_TIMEOUT        100
+
+#define BIKE_TOAST_TEXT_SWAP_ACRO  0
+#define BIKE_TOAST_TEXT_SWAP_MACH 1
+#define BIKE_TOAST_TEXT_FORCE_ACRO 2
+#define BIKE_TOAST_TEXT_FORCE_MACH 3
+
+
+static const u8* const bikeToastText[] = {
+    [BIKE_TOAST_TEXT_SWAP_ACRO] = gText_BikeModeAcro,
+    [BIKE_TOAST_TEXT_SWAP_MACH] = gText_BikeModeMach,
+    [BIKE_TOAST_TEXT_FORCE_ACRO] = gText_BikeModeForcedAcro,
+    [BIKE_TOAST_TEXT_FORCE_MACH] = gText_BikeModeForcedMach
+};
+
+static void Task_DoBikeToast(u8 taskId)
+{
+    struct Task* task = &gTasks[taskId];
+    if (FlagGet(FLAG_EARLY_CLOSE_TOAST))
+    {
+        task->tState = TOAST_TIMEOUT;
+        FlagClear(FLAG_EARLY_CLOSE_TOAST);
+    }
+    switch (task->tState)
+    {
+    case 0:
+        StringCopy(gStringVar1, bikeToastText[task->tTextToShowIndex]);
+        DrawHeaderBox(task->tBikeToShow, gStringVar1, EXM_FLASH_ACTIVE, 1);
+        break;
+    case 1:
+        PlaySE(task->tSoundEffect);
+        break;
+    case TOAST_TIMEOUT:
+        HideHeaderBox(TRUE, TRUE);
+        FlagClear(FLAG_BIKE_MODE_SWAP);
+        FlagClear(FLAG_HIDE_MAP_NAME_POPUP);
+        DestroyTask(taskId);
+        break;
+    }
+    task->tState++;
+}
+
+static void DrawBikeModeToast(u16 soundEffect, u8 textToShowIndex, u16 toShow)
+{
+    u8 taskId = CreateTask(Task_DoBikeToast, 1);
+    struct Task* task = &gTasks[taskId];
+    task->tState = 0;
+    task->tSoundEffect = soundEffect;
+    task->tTextToShowIndex = textToShowIndex;
+    task->tBikeToShow = toShow;
+}
+
+void DrawBikeHeaderBox(bool8 forced)
+{
+    u16 toShow;
+    u16 se;
+    u8 textIndex = forced ? 2 : 0;  // Forced text starts at index 2
+    if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_ACRO_BIKE)
+    {
+        toShow = ITEM_ACRO_BIKE;
+        se = SE_BIKE_HOP;
+    }
+    else
+    {
+        toShow = ITEM_MACH_BIKE;
+        se = SE_BIKE_BELL;
+        textIndex += 1;  // Mach mode text is on the odd indices
+    }
+    FlagSet(FLAG_HIDE_MAP_NAME_POPUP);
+    FlagSet(FLAG_BIKE_MODE_SWAP);
+    DrawBikeModeToast(se, textIndex, toShow);
+}
+#undef tState
+#undef tSoundEffect
+#undef tTextToShowIndex
+#undef tBikeToShow
+
+#undef TOAST_TIMEOUT
+
+#undef BIKE_TOAST_TEXT_SWAP_ACRO
+#undef BIKE_TOAST_TEXT_SWAP_MACH
+#undef BIKE_TOAST_TEXT_FORCE_ACRO
+#undef BIKE_TOAST_TEXT_FORCE_MACH
+#endif
+// END: BIKE SWAP TOAST CODE

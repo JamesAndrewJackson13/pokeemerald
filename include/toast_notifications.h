@@ -17,11 +17,9 @@ void DrawItemHeaderBox(void);
 void HideItemHeaderBox(void);
 
 void DrawAutoRunBox(bool8);
-void HideAutoRunBox(void);
 
 #ifdef FEATURE_SWAPBIKEBUTTON
-void DrawBikeHeaderBox(void);
-void HideBikeHeaderBox(void);
+void DrawBikeHeaderBox(bool8);
 #endif
 
 #endif  // TOAST_NOTIFICATIONS_H

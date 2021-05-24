@@ -41,4 +41,8 @@ const u8 *GetInteractedLinkPlayerScript(struct MapPosition *position, u8 metatil
 u8 *GetCoordEventScriptAtMapPosition(struct MapPosition *position);
 void ClearPoisonStepCounter(void);
 
+#ifdef FEATURE_SWAPBIKEBUTTON
+bool8 SwapBikeType(u8 forceToMode);
+#endif
+
 #endif // GUARD_FIELDCONTROLAVATAR_H

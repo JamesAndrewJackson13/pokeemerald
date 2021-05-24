@@ -1033,51 +1033,6 @@ static u8 ReformatItemDescription(u16 item, u8 *dest)
     return numLines;
 }
 
-void DrawAutoRunBox(bool8 gettingEnabled)
-{
-    u16 toShow;
-    if (gettingEnabled)
-    {
-        StringCopy(gStringVar1, gText_AutoRunEnabled);
-        toShow = ITEM_RUNNINGSHOES_RUNNING;
-    }
-    else
-    {
-        StringCopy(gStringVar1, gText_AutoRunDisabled);
-        toShow = ITEM_RUNNINGSHOES_WALKING;
-    }
-    DrawHeaderBox(toShow, gStringVar1, EXM_FLASH_ACTIVE, 1);
-
-}
-
-void HideAutoRunBox(void)
-{
-    HideHeaderBox(TRUE, TRUE);
-}
-
-#ifdef FEATURE_SWAPBIKEBUTTON
-void DrawBikeHeaderBox(void)
-{
-    u16 toShow;
-    if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_ACRO_BIKE)
-    {
-        StringCopy(gStringVar1, gText_BikeModeAcro);
-        toShow = ITEM_ACRO_BIKE;
-    }
-    else
-    {
-        StringCopy(gStringVar1, gText_BikeModeMach);
-        toShow = ITEM_MACH_BIKE;
-    }
-    DrawHeaderBox(toShow, gStringVar1, EXM_FLASH_ACTIVE, 1);
-}
-
-void HideBikeHeaderBox(void)
-{
-    HideHeaderBox(TRUE, TRUE);
-}
-#endif
-
 /**
  * gSpecialVar_0x8006: The item just picked up
  * gSpecialVar_0x8009: The header type (will decide which gStringVar gets used)
