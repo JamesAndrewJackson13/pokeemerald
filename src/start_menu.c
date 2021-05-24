@@ -1512,6 +1512,7 @@ void SaveForBattleTowerLink(void)
 static void HideStartMenuWindow(void)
 {
     ClearStdWindowAndFrame(GetStartMenuWindowId(), TRUE);
+    FlagClear(FLAG_EARLY_CLOSE_TOAST);  // Clear the flag that early closes the toast
     RemoveStartMenuWindow();
     ScriptUnfreezeObjectEvents();
     ScriptContext2_Disable();

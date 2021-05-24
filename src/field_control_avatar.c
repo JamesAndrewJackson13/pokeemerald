@@ -1103,8 +1103,8 @@ static bool8 ToggleAutoRun(void)
     if (!FlagGet(FLAG_SYS_B_DASH))
         return FALSE;  // auto run unusable until you get running shoes
 
-    if (FlagGet(FLAG_AUTO_RUN_SWAP))
-        return FALSE;  // To avoid graphical issues, only one toggle at a time
+    if (FlagGet(FLAG_AUTO_RUN_SWAP) || FlagGet(FLAG_BIKE_MODE_SWAP))
+        return FALSE;  // To avoid graphical glitches, only allow one toast at a time
 
     // Toggle autoRun and draw toast
     gSaveBlock2Ptr->autoRun = !gSaveBlock2Ptr->autoRun;
@@ -1130,8 +1130,8 @@ bool8 SwapBikeType(u8 forceToMode)
     if (gBikeCyclingChallenge)
         return FALSE;  // No changing the bike mode when doing the cycling challenge
 
-    if (FlagGet(FLAG_BIKE_MODE_SWAP))
-        return FALSE;  // To avoid graphical glitches, only allow one bike swap at a time
+    if (FlagGet(FLAG_AUTO_RUN_SWAP) || FlagGet(FLAG_BIKE_MODE_SWAP))
+        return FALSE;  // To avoid graphical glitches, only allow one toast at a time
 
     // Flags we need to swap modes, and which mode to swap to.
     u8 swapTo = 0;
