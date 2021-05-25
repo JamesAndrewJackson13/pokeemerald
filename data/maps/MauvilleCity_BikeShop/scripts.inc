@@ -36,9 +36,8 @@ MauvilleCity_BikeShop_EventScript_Rydel_8:
 
 
 MauvilleCity_BikeShop_EventScript_Assistant::
-	msgbox MauvilleCity_BikeShop_Text_HandbooksAreInBack, MSGBOX_NPC
-	return
-
+	msgbox MauvilleCity_BikeShop_EventScript_Assistant_text, MSGBOX_NPC
+	end
 
 MauvilleCity_BikeShop_EventScript_MachBikeHandbook::
 	message MauvilleCity_BikeShop_Text_MachHandbookWhichPage
@@ -153,12 +152,12 @@ MauvilleCity_BikeShop_Text_HappyYouLikeIt: @ 820F2C4
 	.string "Rydel: Good to see you again!\n"
 	.string "I hope you're happy with your bike!$"
 
-MauvilleCity_BikeShop_Text_HandbooksAreInBack: @ 820F3C3
-	.string "I'm learning about Bikes while\n"
-	.string "I work here.\p"
-	.string "If you need advice on how to ride your\n"
-	.string "Bike, there're a couple handbooks in\l"
-	.string "the back.$"
+//MauvilleCity_BikeShop_Text_HandbooksAreInBack: @ 820F3C3
+//	.string "I'm learning about Bikes while\n"
+//	.string "I work here.\p"
+//	.string "If you need advice on how to ride your\n"
+//	.string "Bike, there're a couple handbooks in\l"
+//	.string "the back.$"
 
 MauvilleCity_BikeShop_Text_MachHandbookWhichPage: @ 820F445
 	.string "It's a handbook on the Mach Bike.\p"
@@ -217,3 +216,10 @@ MauvilleCity_BikeShop_Text_Jumps: @ 820F898
 	.string "Press it backwards to make the BIKE\n"
 	.string "change directions while jumping.\p"
 	.string "Want to read a different page?$"
+
+MauvilleCity_BikeShop_EventScript_Assistant_text:
+	.string "I'm learning about Bikes while\n"
+	.string "I work here.\p"
+	.string "If you need advice on how to ride your\n"
+	.string "Bike, there're a couple handbooks in\l"
+	.string "the back.$"
