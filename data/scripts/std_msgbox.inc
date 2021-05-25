@@ -1,5 +1,5 @@
 Std_MsgboxNPC: @ 8271315
-	lock
+	locktarget
 	faceplayer
 	message 0x0
 	waitmessage
