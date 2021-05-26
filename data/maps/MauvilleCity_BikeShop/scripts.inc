@@ -152,12 +152,12 @@ MauvilleCity_BikeShop_Text_HappyYouLikeIt: @ 820F2C4
 	.string "Rydel: Good to see you again!\n"
 	.string "I hope you're happy with your bike!$"
 
-//MauvilleCity_BikeShop_Text_HandbooksAreInBack: @ 820F3C3
-//	.string "I'm learning about Bikes while\n"
-//	.string "I work here.\p"
-//	.string "If you need advice on how to ride your\n"
-//	.string "Bike, there're a couple handbooks in\l"
-//	.string "the back.$"
+@MauvilleCity_BikeShop_Text_HandbooksAreInBack: @ 820F3C3
+@	.string "I'm learning about Bikes while\n"
+@	.string "I work here.\p"
+@	.string "If you need advice on how to ride your\n"
+@	.string "Bike, there're a couple handbooks in\l"
+@	.string "the back.$"
 
 MauvilleCity_BikeShop_Text_MachHandbookWhichPage: @ 820F445
 	.string "It's a handbook on the Mach Bike.\p"
