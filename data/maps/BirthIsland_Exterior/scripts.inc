@@ -92,7 +92,8 @@ BirthIsland_Exterior_EventScript_Deoxys:: @ 8267FC1
 	clearflag FLAG_SYS_CTRL_OBJ_DELETE
 	specialvar VAR_RESULT, GetBattleOutcome
 	compare VAR_RESULT, B_OUTCOME_WON
-	goto_if_eq BirthIsland_Exterior_EventScript_DefeatedDeoxys
+	@goto_if_eq BirthIsland_Exterior_EventScript_DefeatedDeoxys
+	goto_if_eq BirthIsland_Exterior_EventScript_RanFromDeoxys
 	compare VAR_RESULT, B_OUTCOME_RAN
 	goto_if_eq BirthIsland_Exterior_EventScript_RanFromDeoxys
 	compare VAR_RESULT, B_OUTCOME_PLAYER_TELEPORTED

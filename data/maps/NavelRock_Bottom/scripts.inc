@@ -64,7 +64,8 @@ NavelRock_Bottom_EventScript_Lugia:: @ 82692A2
 	clearflag FLAG_SYS_CTRL_OBJ_DELETE
 	specialvar VAR_RESULT, GetBattleOutcome
 	compare VAR_RESULT, B_OUTCOME_WON
-	goto_if_eq NavelRock_Bottom_EventScript_DefeatedLugia
+	@goto_if_eq NavelRock_Bottom_EventScript_DefeatedLugia
+	goto_if_eq NavelRock_Bottom_EventScript_RanFromLugia
 	compare VAR_RESULT, B_OUTCOME_RAN
 	goto_if_eq NavelRock_Bottom_EventScript_RanFromLugia
 	compare VAR_RESULT, B_OUTCOME_PLAYER_TELEPORTED

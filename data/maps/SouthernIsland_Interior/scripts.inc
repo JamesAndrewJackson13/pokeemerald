@@ -89,7 +89,8 @@ SouthernIsland_Interior_EventScript_Lati:: @ 8242AD0
 	clearflag FLAG_SYS_CTRL_OBJ_DELETE
 	specialvar VAR_RESULT, GetBattleOutcome
 	compare VAR_RESULT, B_OUTCOME_WON
-	goto_if_eq SouthernIsland_Interior_EventScript_LatiDefeated
+	@goto_if_eq SouthernIsland_Interior_EventScript_LatiDefeated
+	goto_if_eq SouthernIsland_Interior_EventScript_RanFromLati
 	compare VAR_RESULT, B_OUTCOME_RAN
 	goto_if_eq SouthernIsland_Interior_EventScript_RanFromLati
 	compare VAR_RESULT, B_OUTCOME_PLAYER_TELEPORTED

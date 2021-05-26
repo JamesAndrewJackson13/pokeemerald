@@ -148,7 +148,8 @@ FarawayIsland_Interior_EventScript_Mew:: @ 8267DF2
 	clearflag FLAG_SYS_CTRL_OBJ_DELETE
 	specialvar VAR_RESULT, GetBattleOutcome
 	compare VAR_RESULT, B_OUTCOME_WON
-	goto_if_eq FarawayIsland_Interior_EventScript_MewDefeated
+	@goto_if_eq FarawayIsland_Interior_EventScript_MewDefeated
+	goto_if_eq FarawayIsland_Interior_EventScript_PlayerOrMewRan
 	compare VAR_RESULT, B_OUTCOME_RAN
 	goto_if_eq FarawayIsland_Interior_EventScript_PlayerOrMewRan
 	compare VAR_RESULT, B_OUTCOME_PLAYER_TELEPORTED

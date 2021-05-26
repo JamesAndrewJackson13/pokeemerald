@@ -69,7 +69,8 @@ NavelRock_Top_EventScript_HoOh:: @ 826916F
 	setvar VAR_LAST_TALKED, LOCALID_HO_OH
 	specialvar VAR_RESULT, GetBattleOutcome
 	compare VAR_RESULT, B_OUTCOME_WON
-	goto_if_eq NavelRock_Top_EventScript_DefeatedHoOh
+	@goto_if_eq NavelRock_Top_EventScript_DefeatedHoOh
+	goto_if_eq NavelRock_Top_EventScript_RanFromHoOh
 	compare VAR_RESULT, B_OUTCOME_RAN
 	goto_if_eq NavelRock_Top_EventScript_RanFromHoOh
 	compare VAR_RESULT, B_OUTCOME_PLAYER_TELEPORTED
