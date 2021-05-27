@@ -1223,18 +1223,28 @@ static void HallOfFame_PrintPlayerInfo(u8 unused1, u8 unused2)
     AddTextPrinterParameterized3(1, 1, width, 0x11, sPlayerInfoTextColors, -1, text);
 
     AddTextPrinterParameterized3(1, 1, 0, 0x21, sPlayerInfoTextColors, -1, gText_Time);
-    text[0] = (gSaveBlock2Ptr->playTimeHours / 100) + CHAR_0;
-    text[1] = (gSaveBlock2Ptr->playTimeHours % 100) / 10 + CHAR_0;
-    text[2] = (gSaveBlock2Ptr->playTimeHours % 10) + CHAR_0;
-
-    if (text[0] == CHAR_0)
-        text[0] = CHAR_SPACE;
-    if (text[0] == CHAR_SPACE && text[1] == CHAR_0)
-        text[8] = CHAR_SPACE;
+    if (gPlayTime.Maxed == 1)
+    {
+        text[0] = CHAR_9;
+        text[1] = CHAR_9;
+        text[2] = CHAR_9;
+        text[4] = CHAR_9;
+        text[5] = CHAR_9;
+    }
+    else
+    {
+        text[0] = (gPlayTime.Hours / 100) + CHAR_0;
+        text[1] = (gPlayTime.Hours % 100) / 10 + CHAR_0;
+        text[2] = (gPlayTime.Hours % 10) + CHAR_0;
+        if (text[0] == CHAR_0)
+            text[0] = CHAR_SPACE;
+        if (text[0] == CHAR_SPACE && text[1] == CHAR_0)
+            text[8] = CHAR_SPACE;
+        text[4] = (gPlayTime.Minutes % 100) / 10 + CHAR_0;
+        text[5] = (gPlayTime.Minutes % 10) + CHAR_0;
+    }
 
     text[3] = CHAR_COLON;
-    text[4] = (gSaveBlock2Ptr->playTimeMinutes % 100) / 10 + CHAR_0;
-    text[5] = (gSaveBlock2Ptr->playTimeMinutes % 10) + CHAR_0;
     text[6] = EOS;
 
     width = GetStringRightAlignXOffset(1, text, 0x70);

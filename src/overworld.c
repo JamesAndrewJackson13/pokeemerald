@@ -822,6 +822,7 @@ void LoadMapFromCameraTransition(u8 mapGroup, u8 mapNum)
         ApplyWeatherGammaShiftToPal(paletteIndex);
 
     InitSecondaryTilesetAnimation();
+    CheckIfRoamerRevived();
     UpdateLocationHistoryForRoamer();
     RoamerMove();
     DoCurrentWeather();
@@ -1733,6 +1734,7 @@ void CB2_ContinueSavedGame(void)
     else
         InitMapFromSavedGame();
 
+    PlayTimeCounter_PullFromMemory();
     PlayTimeCounter_Start();
     ScriptContext1_Init();
     ScriptContext2_Disable();
@@ -2131,6 +2133,7 @@ static void InitOverworldGraphicsRegisters(void)
 
 static void ResumeMap(bool32 a1)
 {
+    logDebug("ResetTasks - ResumeMap");
     ResetTasks();
     ResetSpriteData();
     ResetPaletteFade();

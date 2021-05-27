@@ -1,6 +1,8 @@
 #include "global.h"
 #include "play_time.h"
 
+#define MAX_TIME 0xCDFE5FF  // for 999h, 59m, 59s, 59vb
+
 enum
 {
     STOPPED,
@@ -9,22 +11,42 @@ enum
 };
 
 static u8 sPlayTimeCounterState;
+struct PlayTime gPlayTime;
+
+
+void PlayTimeCounter_PullFromMemory(void)
+{
+    sPlayTimeCounterState = STOPPED;
+    if (gSaveBlock2Ptr->playTime > MAX_TIME)
+    {
+        PlayTimeCounter_SetToMax();
+    }
+    else
+    {
+        gPlayTime.Maxed   = FALSE;
+        gPlayTime.Hours   = gSaveBlock2Ptr->playTime / 216000;
+        gPlayTime.Minutes = (gSaveBlock2Ptr->playTime / 3600) % 60;
+        gPlayTime.Seconds = (gSaveBlock2Ptr->playTime / 60) % 60;
+        gPlayTime.VBlanks = gSaveBlock2Ptr->playTime % 60;
+    }
+}
 
 void PlayTimeCounter_Reset(void)
 {
     sPlayTimeCounterState = STOPPED;
 
-    gSaveBlock2Ptr->playTimeHours = 0;
-    gSaveBlock2Ptr->playTimeMinutes = 0;
-    gSaveBlock2Ptr->playTimeSeconds = 0;
-    gSaveBlock2Ptr->playTimeVBlanks = 0;
+    gSaveBlock2Ptr->playTime = 0;
+    gPlayTime.Hours = 0;
+    gPlayTime.Minutes = 0;
+    gPlayTime.Seconds = 0;
+    gPlayTime.VBlanks = 0;
 }
 
 void PlayTimeCounter_Start(void)
 {
     sPlayTimeCounterState = RUNNING;
 
-    if (gSaveBlock2Ptr->playTimeHours > 999)
+    if (gPlayTime.Hours > 999)
         PlayTimeCounter_SetToMax();
 }
 
@@ -35,30 +57,31 @@ void PlayTimeCounter_Stop(void)
 
 void PlayTimeCounter_Update(void)
 {
+    gSaveBlock2Ptr->playTime++;
     if (sPlayTimeCounterState != RUNNING)
         return;
 
-    gSaveBlock2Ptr->playTimeVBlanks++;
+    gPlayTime.VBlanks++;
 
-    if (gSaveBlock2Ptr->playTimeVBlanks < 60)
+    if (gPlayTime.VBlanks < 60)
         return;
 
-    gSaveBlock2Ptr->playTimeVBlanks = 0;
-    gSaveBlock2Ptr->playTimeSeconds++;
+    gPlayTime.VBlanks = 0;
+    gPlayTime.Seconds++;
 
-    if (gSaveBlock2Ptr->playTimeSeconds < 60)
+    if (gPlayTime.Seconds < 60)
         return;
 
-    gSaveBlock2Ptr->playTimeSeconds = 0;
-    gSaveBlock2Ptr->playTimeMinutes++;
+    gPlayTime.Seconds = 0;
+    gPlayTime.Minutes++;
 
-    if (gSaveBlock2Ptr->playTimeMinutes < 60)
+    if (gPlayTime.Minutes < 60)
         return;
 
-    gSaveBlock2Ptr->playTimeMinutes = 0;
-    gSaveBlock2Ptr->playTimeHours++;
+    gPlayTime.Minutes = 0;
+    gPlayTime.Hours++;
 
-    if (gSaveBlock2Ptr->playTimeHours > 999)
+    if (gPlayTime.Hours > 999)
         PlayTimeCounter_SetToMax();
 }
 
@@ -66,8 +89,9 @@ void PlayTimeCounter_SetToMax(void)
 {
     sPlayTimeCounterState = MAXED_OUT;
 
-    gSaveBlock2Ptr->playTimeHours = 999;
-    gSaveBlock2Ptr->playTimeMinutes = 59;
-    gSaveBlock2Ptr->playTimeSeconds = 59;
-    gSaveBlock2Ptr->playTimeVBlanks = 59;
+    gPlayTime.Maxed = TRUE;
+    gPlayTime.Hours = 999;
+    gPlayTime.Minutes = 59;
+    gPlayTime.Seconds = 59;
+    gPlayTime.VBlanks = 59;
 }

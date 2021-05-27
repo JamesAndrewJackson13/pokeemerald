@@ -2159,9 +2159,21 @@ void BufferSaveMenuText(u8 textId, u8 *dest, u8 color)
             *string = EOS;
             break;
         case SAVE_MENU_PLAY_TIME:
-            string = ConvertIntToDecimalStringN(string, gSaveBlock2Ptr->playTimeHours, STR_CONV_MODE_LEFT_ALIGN, 3);
-            *(string++) = CHAR_COLON;
-            ConvertIntToDecimalStringN(string, gSaveBlock2Ptr->playTimeMinutes, STR_CONV_MODE_LEADING_ZEROS, 2);
+            if(gPlayTime.Maxed == 1)
+            {
+                string = CHAR_9;
+                *(string++) = CHAR_9;
+                *(string++) = CHAR_9;
+                *(string++) = CHAR_COLON;
+                *(string++) = CHAR_9;
+                *(string++) = CHAR_9;
+            }
+            else
+            {
+                string = ConvertIntToDecimalStringN(string, gPlayTime.Hours, STR_CONV_MODE_LEFT_ALIGN, 3);
+                *(string++) = CHAR_COLON;
+                ConvertIntToDecimalStringN(string, gPlayTime.Minutes, STR_CONV_MODE_LEADING_ZEROS, 2);
+            }
             break;
         case SAVE_MENU_LOCATION:
             GetMapNameGeneric(string, gMapHeader.regionMapSectionId);

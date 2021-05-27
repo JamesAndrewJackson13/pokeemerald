@@ -691,8 +691,16 @@ static void SetPlayerCardData(struct TrainerCard *trainerCard, u8 cardType)
     u8 i;
 
     trainerCard->gender = gSaveBlock2Ptr->playerGender;
-    trainerCard->playTimeHours = gSaveBlock2Ptr->playTimeHours;
-    trainerCard->playTimeMinutes = gSaveBlock2Ptr->playTimeMinutes;
+    if(gPlayTime.Maxed == 1)
+    {
+        trainerCard->playTimeHours = 999;
+        trainerCard->playTimeMinutes = 59;
+    }
+    else
+    {
+        trainerCard->playTimeHours = gPlayTime.Hours;
+        trainerCard->playTimeMinutes = gPlayTime.Minutes;
+    }
 
     playTime = GetGameStat(GAME_STAT_FIRST_HOF_PLAY_TIME);
     if (!GetGameStat(GAME_STAT_ENTERED_HOF))
@@ -1111,8 +1119,16 @@ static void PrintTimeOnCard(void)
     }
     else
     {
-        hours = gSaveBlock2Ptr->playTimeHours;
-        minutes = gSaveBlock2Ptr->playTimeMinutes;
+        if(gPlayTime.Maxed == 1)
+        {
+            hours = 999;
+            minutes = 59;
+        }
+        else
+        {
+            hours = gPlayTime.Hours;
+            minutes = gPlayTime.Minutes;
+        }
     }
 
     if (hours > 999)
@@ -1826,7 +1842,7 @@ static void InitTrainerCardData(void)
     u8 i;
 
     sData->mainState = 0;
-    sData->timeColonBlinkTimer = gSaveBlock2Ptr->playTimeVBlanks;
+    sData->timeColonBlinkTimer = gPlayTime.VBlanks;
     sData->timeColonInvisible = FALSE;
     sData->onBack = FALSE;
     sData->flipBlendY = 0;

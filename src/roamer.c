@@ -2,7 +2,9 @@
 #include "event_data.h"
 #include "pokemon.h"
 #include "random.h"
+#include "task.h"
 #include "roamer.h"
+#include "play_time.h"
 #include "constants/maps.h"
 
 enum
@@ -216,3 +218,40 @@ void GetRoamerLocation(u8 *mapGroup, u8 *mapNum)
     *mapGroup = sRoamerLocation[MAP_GRP];
     *mapNum = sRoamerLocation[MAP_NUM];
 }
+
+#ifdef FEATURE_ROAMERSNEVERDIE
+
+void CheckIfRoamerRevived(void)
+{
+    bool8 isLatios;
+    struct Roamer* roamer = &gSaveBlock1Ptr->roamer;
+    if (roamer->KOed && ((FEATURE_ROAMERSNEVERDIE * 3600) < PlayTimeCounter_GetCounterDelta(roamer->KOedTime)))
+    {
+        isLatios = roamer->species == SPECIES_LATIOS;
+        ClearRoamerData();
+        ClearRoamerLocationData();
+        CreateInitialRoamerMon(isLatios);
+    }
+}
+
+void HandleRoamerKO(void)
+{
+    struct Roamer* roamer = &gSaveBlock1Ptr->roamer;
+    roamer->active = FALSE;
+    roamer->KOed = TRUE;
+    roamer->KOedTime = gSaveBlock2Ptr->playTime;
+}
+
+void DEBUG_InitRoamer(bool16 createLatios)
+{
+    ClearRoamerData();
+    ClearRoamerLocationData();
+    CreateInitialRoamerMon(createLatios);
+}
+
+u8* DEBUG_RoamerLocation(void)
+{
+    return sRoamerLocation;
+}
+
+#endif

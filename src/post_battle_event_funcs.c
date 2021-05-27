@@ -31,7 +31,10 @@ int GameClear(void)
     }
 
     if (GetGameStat(GAME_STAT_FIRST_HOF_PLAY_TIME) == 0)
-        SetGameStat(GAME_STAT_FIRST_HOF_PLAY_TIME, (gSaveBlock2Ptr->playTimeHours << 16) | (gSaveBlock2Ptr->playTimeMinutes << 8) | gSaveBlock2Ptr->playTimeSeconds);
+        if (gPlayTime.Maxed)
+            SetGameStat(GAME_STAT_FIRST_HOF_PLAY_TIME, 0x3E73B3B);  // 0x3E76363 is a magic number, equates to (999 << 16) | (59 << 8) | 59
+        else
+            SetGameStat(GAME_STAT_FIRST_HOF_PLAY_TIME, (gPlayTime.Hours << 16) | (gPlayTime.Minutes << 8) | gPlayTime.Seconds);
 
     SetContinueGameWarpStatus();
 
@@ -64,7 +67,7 @@ int GameClear(void)
     {
         IncrementGameStat(GAME_STAT_RECEIVED_RIBBONS);
         FlagSet(FLAG_SYS_RIBBON_GET);
-        
+
         for (i = 1; i < 6; i++)
         {
             if (ribbonCounts[i].count > ribbonCounts[0].count)

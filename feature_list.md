@@ -161,6 +161,9 @@ FEATURE LIST
 ## Shedninja Requires a Free PokeBall (FEATURE_SHEDNINJA_REQUIRES_FREE_POKEBALL)
 *  Make getting a Shedninja work like it does post G3, you must have a pokeball in your bag
 
+## Roamers Never Die! (FEATURE_ROAMERSNEVERDIE [5])
+* Beating a roamer doesn't make them lost until beating the e4, just makes you wait n minutes
+
 
 # MENUS
 ## Scrolling Start Menu

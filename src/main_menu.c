@@ -2463,9 +2463,22 @@ static void MainMenu_FormatSavegameTime(void)
 
     StringExpandPlaceholders(gStringVar4, gText_ContinueMenuTime);
     AddTextPrinterParameterized3(2, 1, 0x6C, 17, sTextColor_MenuInfo, -1, gStringVar4);
-    ptr = ConvertIntToDecimalStringN(str, gSaveBlock2Ptr->playTimeHours, STR_CONV_MODE_LEFT_ALIGN, 3);
-    *ptr = 0xF0;
-    ConvertIntToDecimalStringN(ptr + 1, gSaveBlock2Ptr->playTimeMinutes, STR_CONV_MODE_LEADING_ZEROS, 2);
+    PlayTimeCounter_PullFromMemory();
+    if (gPlayTime.Maxed == 1)
+    {
+        ptr = CHAR_9;
+        *(ptr++) = CHAR_9;
+        *(ptr++) = CHAR_9;
+        *(ptr++) = CHAR_COLON;
+        *(ptr++) = CHAR_9;
+        *(ptr++) = CHAR_9;
+    }
+    else
+    {
+        ptr = ConvertIntToDecimalStringN(str, gPlayTime.Hours, STR_CONV_MODE_LEFT_ALIGN, 3);
+        *ptr = CHAR_COLON;
+        ConvertIntToDecimalStringN(ptr + 1, gPlayTime.Minutes, STR_CONV_MODE_LEADING_ZEROS, 2);
+    }
     AddTextPrinterParameterized3(2, 1, GetStringRightAlignXOffset(1, str, 0xD0), 17, sTextColor_MenuInfo, -1, str);
 }
 

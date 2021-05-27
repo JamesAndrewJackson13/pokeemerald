@@ -515,10 +515,8 @@ struct SaveBlock2
     /*0x08*/ u8 playerGender; // MALE, FEMALE
     /*0x09*/ u8 specialSaveWarpFlags;
     /*0x0A*/ u8 playerTrainerId[TRAINER_ID_LENGTH];
-    /*0x0E*/ u16 playTimeHours;
-    /*0x10*/ u8 playTimeMinutes;
-    /*0x11*/ u8 playTimeSeconds;
-    /*0x12*/ u8 playTimeVBlanks;
+    /*0x0E*/ u32 playTime;  // In VBlank cycles
+    /*0x12*/ u8 filler_12;
     /*0x13*/ u8 optionsButtonMode;  // OPTIONS_BUTTON_MODE_[NORMAL/LR/L_EQUALS_A]
     /*0x14*/ u16 optionsTextSpeed:3; // OPTIONS_TEXT_SPEED_[SLOW/MID/FAST]
     /*0x14*/ u16 optionsWindowFrameType : 5; // Specifies one of the 20 decorative borders for text boxes
@@ -654,7 +652,9 @@ struct Roamer
     /*0x11*/ u8 smart;
     /*0x12*/ u8 tough;
     /*0x13*/ bool8 active;
-    /*0x14*/ u8 filler[0x8];
+    /*0x14*/ bool8 KOed;
+    /*0x15*/ u32 KOedTime;
+    /*0x19*/ u8 filler[0x3];
 };
 
 struct RamScriptData
@@ -1159,5 +1159,16 @@ struct MapPosition
     s16 y;
     s8 height;
 };
+
+struct PlayTime
+{
+    bool8 Maxed;
+    u16 Hours;
+    u8  Minutes;
+    u8  Seconds;
+    u8  VBlanks;
+};
+
+extern struct PlayTime gPlayTime;
 
 #endif // GUARD_GLOBAL_H

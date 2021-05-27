@@ -4090,7 +4090,7 @@ void TryLoseFansFromPlayTimeAfterLinkBattle(void)
     if (DidPlayerGetFirstFans())
     {
         TryLoseFansFromPlayTime();
-        gSaveBlock1Ptr->vars[VAR_FANCLUB_LOSE_FAN_TIMER - VARS_START] = gSaveBlock2Ptr->playTimeHours;
+        gSaveBlock1Ptr->vars[VAR_FANCLUB_LOSE_FAN_TIMER - VARS_START] = (gPlayTime.Maxed == 1 ? 999 : gPlayTime.Hours);
     }
 }
 
@@ -4100,7 +4100,7 @@ void UpdateTrainerFanClubGameClear(void)
     {
         SetPlayerGotFirstFans();
         SetInitialFansOfPlayer();
-        gSaveBlock1Ptr->vars[VAR_FANCLUB_LOSE_FAN_TIMER - VARS_START] = gSaveBlock2Ptr->playTimeHours;
+        gSaveBlock1Ptr->vars[VAR_FANCLUB_LOSE_FAN_TIMER - VARS_START] = (gPlayTime.Maxed == 1 ? 999 : gPlayTime.Hours);
         FlagClear(FLAG_HIDE_FANCLUB_OLD_LADY);
         FlagClear(FLAG_HIDE_FANCLUB_BOY);
         FlagClear(FLAG_HIDE_FANCLUB_LITTLE_BOY);
@@ -4244,33 +4244,34 @@ u16 GetNumFansOfPlayerInTrainerFanClub(void)
     return numFans;
 }
 
+#define TO_HOURS 216000
+#define fanclubLoseFanTimer vars[VAR_FANCLUB_LOSE_FAN_TIMER - VARS_START]
 // If the player has > 5 fans in the Trainer Fan Club, then lose 1 fan for every 12 hours since the last fan loss / timer reset
 void TryLoseFansFromPlayTime(void)
 {
-    u8 i = 0;
-    if (gSaveBlock2Ptr->playTimeHours < 999)
+    u8 numFans = GetNumFansOfPlayerInTrainerFanClub();  // Although this returns a u16, it actually can only be a u8
+    u16 curHour = (gSaveBlock2Ptr->playTime / TO_HOURS);
+
+    if (curHour < gSaveBlock1Ptr->fanclubLoseFanTimer)
     {
-        while (TRUE)
-        {
-            if (GetNumFansOfPlayerInTrainerFanClub() < 5)
-            {
-                gSaveBlock1Ptr->vars[VAR_FANCLUB_LOSE_FAN_TIMER - VARS_START] = gSaveBlock2Ptr->playTimeHours;
-                break;
-            }
-            else if (i == NUM_TRAINER_FAN_CLUB_MEMBERS)
-            {
-                break;
-            }
-            else if (gSaveBlock2Ptr->playTimeHours - gSaveBlock1Ptr->vars[VAR_FANCLUB_LOSE_FAN_TIMER - VARS_START] < 12)
-            {
-                return;
-            }
-            PlayerLoseRandomTrainerFan();
-            gSaveBlock1Ptr->vars[VAR_FANCLUB_LOSE_FAN_TIMER - VARS_START] += 12;
-            i++;
-        }
+        // In the rare chance that the timer rolls over, just update the timer and skip this instance
+        gSaveBlock1Ptr->fanclubLoseFanTimer = curHour;
+        return;
+    }
+
+    while (numFans >= 5 && (curHour - gSaveBlock1Ptr->fanclubLoseFanTimer) >= 12)
+    {
+        PlayerLoseRandomTrainerFan();
+        --numFans;
+        gSaveBlock1Ptr->fanclubLoseFanTimer += 12;
+    }
+    if (numFans < 5)
+    {
+        gSaveBlock1Ptr->fanclubLoseFanTimer = curHour;
     }
 }
+#undef fanclubLoseFanTimer
+#undef TO_HOURS
 
 bool8 IsFanClubMemberFanOfPlayer(void)
 {

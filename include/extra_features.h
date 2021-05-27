@@ -56,6 +56,7 @@
 #define FEATURE_DEFAULTFRLGTRADE  // Allow for trading with FRLG from the start of the game
 #define FEATURE_MAXITEMSINBATTLE (4)  // Enforce a max number of items in trainer battles
 #define FEATURE_SHEDNINJA_REQUIRES_FREE_POKEBALL  // Make getting a Shedninja work like it does post G3 (you need a free pokeball)
+#define FEATURE_ROAMERSNEVERDIE (5)  // Beating a roamer doesn't make them lost until beating the e4, just makes you wait n minutes
 
 // MENU FEATURES - Changes to how various menus work
 // #define FEATURE_REMOVECONTESTTAB // Removes the contest tab

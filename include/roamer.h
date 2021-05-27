@@ -12,6 +12,14 @@ void CreateRoamerMonInstance(void);
 u8 TryStartRoamerEncounter(void);
 void UpdateRoamerHPStatus(struct Pokemon *mon);
 void SetRoamerInactive(void);
-void GetRoamerLocation(u8 *mapGroup, u8 *mapNum);
+void GetRoamerLocation(u8* mapGroup, u8* mapNum);
+#ifdef FEATURE_ROAMERSNEVERDIE
+void CheckIfRoamerRevived(void);
+
+void HandleRoamerKO(void);
+
+void DEBUG_InitRoamer(bool16 createLatios);
+u8* DEBUG_RoamerLocation(void);
+#endif
 
 #endif // GUARD_ROAMER_H
