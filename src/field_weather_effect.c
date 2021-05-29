@@ -51,10 +51,10 @@ static void UpdateCloudSprite(struct Sprite *);
 // The clouds are positioned on the map's grid.
 // These coordinates are for the lower half of Route 120.
 static const struct Coords16 sCloudSpriteMapCoords[] =
-    {
-        {0, 66},
-        {5, 73},
-        {10, 78},
+{
+    { 0, 66},
+    { 5, 73},
+    {10, 78},
 };
 
 static const struct SpriteSheet sCloudSpriteSheet =
@@ -65,46 +65,46 @@ static const struct SpriteSheet sCloudSpriteSheet =
 };
 
 static const struct OamData sCloudSpriteOamData =
-    {
-        .y = 0,
-        .affineMode = ST_OAM_AFFINE_OFF,
-        .objMode = ST_OAM_OBJ_BLEND,
-        .mosaic = 0,
-        .bpp = ST_OAM_4BPP,
-        .shape = SPRITE_SHAPE(64x64),
-        .x = 0,
-        .matrixNum = 0,
-        .size = SPRITE_SIZE(64x64),
-        .tileNum = 0,
-        .priority = 3,
-        .paletteNum = 0,
-        .affineParam = 0,
+{
+    .y = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_BLEND,
+    .mosaic = 0,
+    .bpp = ST_OAM_4BPP,
+    .shape = SPRITE_SHAPE(64x64),
+    .x = 0,
+    .matrixNum = 0,
+    .size = SPRITE_SIZE(64x64),
+    .tileNum = 0,
+    .priority = 3,
+    .paletteNum = 0,
+    .affineParam = 0,
 };
 
 static const union AnimCmd sCloudSpriteAnimCmd[] =
-    {
-        ANIMCMD_FRAME(0, 16),
-        ANIMCMD_END,
+{
+    ANIMCMD_FRAME(0, 16),
+    ANIMCMD_END,
 };
 
 static const union AnimCmd *const sCloudSpriteAnimCmds[] =
-    {
-        sCloudSpriteAnimCmd,
+{
+    sCloudSpriteAnimCmd,
 };
 
 static const struct SpriteTemplate sCloudSpriteTemplate =
-    {
-        .tileTag = GFXTAG_CLOUD,
+{
+    .tileTag = GFXTAG_CLOUD,
 #ifdef FEATURE_DYNAMICOVERWORLDPALETTES
-        .paletteTag = SPRITE_PALETTE_TAG_WEATHER,
+    .paletteTag = SPRITE_PALETTE_TAG_WEATHER,
 #else
-        .paletteTag = PALTAG_WEATHER_2,
+    .paletteTag = PALTAG_WEATHER_2,
 #endif
-        .oam = &sCloudSpriteOamData,
-        .anims = sCloudSpriteAnimCmds,
-        .images = NULL,
-        .affineAnims = gDummySpriteAffineAnimTable,
-        .callback = UpdateCloudSprite,
+    .oam = &sCloudSpriteOamData,
+    .anims = sCloudSpriteAnimCmds,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = UpdateCloudSprite,
 };
 
 void Clouds_InitVars(void)

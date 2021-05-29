@@ -2133,7 +2133,6 @@ static void InitOverworldGraphicsRegisters(void)
 
 static void ResumeMap(bool32 a1)
 {
-    logDebug("ResetTasks - ResumeMap");
     ResetTasks();
     ResetSpriteData();
     ResetPaletteFade();

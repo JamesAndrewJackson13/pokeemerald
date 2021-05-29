@@ -1550,6 +1550,10 @@ void ply_xwave(struct MusicPlayerInfo* mplayInfo, struct MusicPlayerTrack* track
 {
     u32 wav;
 
+#ifdef UBFIX
+    wav = 0;
+#endif
+
     READ_XCMD_BYTE(wav, 0) // UB: uninitialized variable
         READ_XCMD_BYTE(wav, 1)
         READ_XCMD_BYTE(wav, 2)
@@ -1617,6 +1621,10 @@ void ply_xcmd_0C(struct MusicPlayerInfo* mplayInfo, struct MusicPlayerTrack* tra
 {
     u32 unk;
 
+#ifdef UBFIX
+    unk = 0;
+#endif
+
     READ_XCMD_BYTE(unk, 0) // UB: uninitialized variable
         READ_XCMD_BYTE(unk, 1)
 
@@ -1636,6 +1644,7 @@ void ply_xcmd_0C(struct MusicPlayerInfo* mplayInfo, struct MusicPlayerTrack* tra
 void ply_xcmd_0D(struct MusicPlayerInfo* mplayInfo, struct MusicPlayerTrack* track)
 {
     u32 unk;
+
 #ifdef UBFIX
     unk = 0;
 #endif

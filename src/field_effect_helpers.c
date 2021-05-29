@@ -32,7 +32,7 @@ static void UpdateAshFieldEffect_Wait(struct Sprite *);
 static void UpdateAshFieldEffect_Show(struct Sprite *);
 static void UpdateAshFieldEffect_End(struct Sprite *);
 static void SynchroniseSurfAnim(struct ObjectEvent *, struct Sprite *);
-    static void SynchroniseSurfPosition(struct ObjectEvent*, struct Sprite*);
+static void SynchroniseSurfPosition(struct ObjectEvent*, struct Sprite*);
 static void UpdateBobbingEffect(struct ObjectEvent*, struct Sprite*, struct Sprite*);
 static void SpriteCB_UnderwaterSurfBlob(struct Sprite*);
 #ifdef FEATURE_DYNAMICOVERWORLDPALETTES
@@ -288,6 +288,9 @@ u32 FldEff_Shadow(void)
 
     objectEventId = GetObjectEventIdByLocalIdAndMap(gFieldEffectArguments[0], gFieldEffectArguments[1], gFieldEffectArguments[2]);
     graphicsInfo = GetObjectEventGraphicsInfo(gObjectEvents[objectEventId].graphicsId);
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    LoadFieldEffectPalette_(sShadowEffectTemplateIds[graphicsInfo->shadowSize], FALSE);
+#endif
     spriteId = CreateSpriteAtEnd(gFieldEffectObjectTemplatePointers[sShadowEffectTemplateIds[graphicsInfo->shadowSize]], 0, 0, 0x94);
     if (spriteId != MAX_SPRITES)
     {
@@ -541,6 +544,7 @@ u32 FldEff_JumpLongGrass(void)
 
     SetSpritePosToOffsetMapCoords((s16*)&gFieldEffectArguments[0], (s16*)&gFieldEffectArguments[1], 8, 8);
 #ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    LoadFieldEffectPalette(FLDEFFOBJ_SURF_BLOB);
     spriteId = CreateSpriteAtEnd(gFieldEffectObjectTemplatePointers[FLDEFFOBJ_JUMP_LONG_GRASS], gFieldEffectArguments[0], gFieldEffectArguments[1], 0);
 #endif
     if (spriteId != MAX_SPRITES)
@@ -1128,7 +1132,7 @@ void UpdateSurfBlobFieldEffect(struct Sprite *sprite)
     sprite->oam.priority = playerSprite->oam.priority;
 }
 
-static void SynchroniseSurfAnim(struct ObjectEvent *playerObj, struct Sprite *sprite)
+void SynchroniseSurfAnim(struct ObjectEvent *playerObj, struct Sprite *sprite)
 {
     // Indexes into sAnimTable_SurfBlob
     u8 surfBlobDirectionAnims[] = {
@@ -1171,7 +1175,7 @@ void SynchroniseSurfPosition(struct ObjectEvent *playerObj, struct Sprite *sprit
     }
 }
 
-static void UpdateBobbingEffect(struct ObjectEvent *playerObj, struct Sprite *playerSprite, struct Sprite *sprite)
+void UpdateBobbingEffect(struct ObjectEvent *playerObj, struct Sprite *playerSprite, struct Sprite *sprite)
 {
     u16 intervals[] = {3, 7};
     u8 bobState = GetSurfBlob_BobState(sprite);
@@ -1373,37 +1377,33 @@ u32 FldEff_BerryTreeGrowthSparkle(void)
 #define sMapGroup   data[4]
 #define sReadyToEnd data[7]
 
+
+u32 ShowTreeDisguiseFieldEffect(void)
+{
 #ifdef FEATURE_DYNAMICOVERWORLDPALETTES
-u32 ShowTreeDisguiseFieldEffect(void)
-{
     return ShowDisguiseFieldEffect(FLDEFF_TREE_DISGUISE, FLDEFFOBJ_TREE_DISGUISE);
-}
-
-u32 ShowMountainDisguiseFieldEffect(void)
-{
-    return ShowDisguiseFieldEffect(FLDEFF_MOUNTAIN_DISGUISE, FLDEFFOBJ_MOUNTAIN_DISGUISE);
-}
-
-u32 ShowSandDisguiseFieldEffect(void)
-{
-    return ShowDisguiseFieldEffect(FLDEFF_SAND_DISGUISE, FLDEFFOBJ_SAND_DISGUISE);
-}
 #else
-u32 ShowTreeDisguiseFieldEffect(void)
-{
     return ShowDisguiseFieldEffect(FLDEFF_TREE_DISGUISE, FLDEFFOBJ_TREE_DISGUISE, 4);
+#endif
 }
 
 u32 ShowMountainDisguiseFieldEffect(void)
 {
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    return ShowDisguiseFieldEffect(FLDEFF_MOUNTAIN_DISGUISE, FLDEFFOBJ_MOUNTAIN_DISGUISE);
+#else
     return ShowDisguiseFieldEffect(FLDEFF_MOUNTAIN_DISGUISE, FLDEFFOBJ_MOUNTAIN_DISGUISE, 3);
+#endif
 }
 
 u32 ShowSandDisguiseFieldEffect(void)
 {
+#ifdef FEATURE_DYNAMICOVERWORLDPALETTES
+    return ShowDisguiseFieldEffect(FLDEFF_SAND_DISGUISE, FLDEFFOBJ_SAND_DISGUISE);
+#else
     return ShowDisguiseFieldEffect(FLDEFF_SAND_DISGUISE, FLDEFFOBJ_SAND_DISGUISE, 2);
-}
 #endif
+}
 
 #ifdef FEATURE_DYNAMICOVERWORLDPALETTES
 static u32 ShowDisguiseFieldEffect(u8 fldEff, u8 templateIdx)
