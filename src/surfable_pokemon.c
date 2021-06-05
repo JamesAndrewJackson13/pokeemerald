@@ -15,8 +15,8 @@ extern const struct OamData gObjectEventBaseOam_32x32;
 extern const struct OamData gObjectEventBaseOam_64x64;
 extern const struct SpriteTemplate *const gFieldEffectObjectTemplatePointers[];
 
-extern void SynchroniseSurfAnim(struct ObjectEvent *playerObj, struct Sprite *sprite);
-extern void SynchroniseSurfPosition(struct ObjectEvent *playerObj, struct Sprite *sprite);
+// extern void SynchroniseSurfAnim(struct ObjectEvent *playerObj, struct Sprite *sprite);
+// extern void SynchroniseSurfPosition(struct ObjectEvent *playerObj, struct Sprite *sprite);
 
 static void CreateOverlaySprite(void);
 static void UpdateSurfMonOverlay(struct Sprite *sprite);
@@ -152,4 +152,3 @@ static void UpdateSurfMonOverlay(struct Sprite *sprite)
     if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_SURFING))
         DestroySprite(sprite);
 }
-

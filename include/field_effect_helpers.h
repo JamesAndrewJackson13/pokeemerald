@@ -44,5 +44,7 @@ void ShowWarpArrowSprite(u8 spriteId, u8 direction, s16 x, s16 y);
 #ifdef FEATURE_DYNAMICOVERWORLDPALETTES
 void LoadFieldEffectPalette(u8 fieldEffect);
 #endif
+void SynchroniseSurfAnim(struct ObjectEvent *playerObj, struct Sprite *sprite);
+void SynchroniseSurfPosition(struct ObjectEvent *playerObj, struct Sprite *sprite);
 
 #endif //GUARD_FIELD_EFFECT_HELPERS_H

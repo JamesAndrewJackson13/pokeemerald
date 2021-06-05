@@ -1,4 +1,4 @@
-enum 
+enum
 {
     PAL_TAG_SQUIRTLE_SURF = 0x3001,
     PAL_TAG_WARTORTLE_SURF,
@@ -107,6 +107,9 @@ enum
     PAL_TAG_LATIOS_SURF,
     PAL_TAG_KYOGRE_SURF,
     PAL_TAG_RAYQUAZA_SURF,
+#ifdef POKEMON_EXPANSION
+    PAL_TAG_KYOGRE_PRIMAL_SURF
+#endif
 };
 
 const struct SpritePalette sSurfablePokemonPalettes[] = {
