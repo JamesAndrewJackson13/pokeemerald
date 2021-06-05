@@ -36,6 +36,7 @@
 #include "title_screen.h"
 #include "window.h"
 #include "mystery_gift.h"
+#include "play_time.h"
 #ifdef FEATURE_DEBUGMENU
 #include "main_menu.h"
 #endif
@@ -2466,7 +2467,7 @@ static void MainMenu_FormatSavegameTime(void)
     PlayTimeCounter_PullFromMemory();
     if (gPlayTime.Maxed == 1)
     {
-        ptr = CHAR_9;
+        *ptr = CHAR_9;
         *(ptr++) = CHAR_9;
         *(ptr++) = CHAR_9;
         *(ptr++) = CHAR_COLON;

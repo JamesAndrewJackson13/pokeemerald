@@ -31,8 +31,8 @@ static void UpdateFeetInFlowingWaterFieldEffect(struct Sprite *);
 static void UpdateAshFieldEffect_Wait(struct Sprite *);
 static void UpdateAshFieldEffect_Show(struct Sprite *);
 static void UpdateAshFieldEffect_End(struct Sprite *);
-static void SynchroniseSurfAnim(struct ObjectEvent *, struct Sprite *);
-static void SynchroniseSurfPosition(struct ObjectEvent*, struct Sprite*);
+// static void SynchroniseSurfAnim(struct ObjectEvent *, struct Sprite *);
+// static void SynchroniseSurfPosition(struct ObjectEvent*, struct Sprite*);
 static void UpdateBobbingEffect(struct ObjectEvent*, struct Sprite*, struct Sprite*);
 static void SpriteCB_UnderwaterSurfBlob(struct Sprite*);
 #ifdef FEATURE_DYNAMICOVERWORLDPALETTES

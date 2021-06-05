@@ -2161,7 +2161,7 @@ void BufferSaveMenuText(u8 textId, u8 *dest, u8 color)
         case SAVE_MENU_PLAY_TIME:
             if(gPlayTime.Maxed == 1)
             {
-                string = CHAR_9;
+                *string = CHAR_9;
                 *(string++) = CHAR_9;
                 *(string++) = CHAR_9;
                 *(string++) = CHAR_COLON;

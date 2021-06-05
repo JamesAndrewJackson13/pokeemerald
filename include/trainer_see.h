@@ -27,4 +27,7 @@ u8 GetCurrentApproachingTrainerObjectEventId(void);
 u8 GetChosenApproachingTrainerObjectEventId(u8 arrayId);
 void PlayerFaceTrainerAfterBattle(void);
 
+u16 GetObjectEventTrainerSightFlagByObjectEventId(u8 objEventId);
+
+
 #endif // GUARD_TRAINER_SEE_H

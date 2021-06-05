@@ -800,7 +800,7 @@ bool8 LoadBagMenu_Graphics(void)
             LoadCompressedSpriteSheet(&gBagFemaleSpriteSheet);
         gBagMenu->graphicsLoadState++;
         break;
-case 4:
+    case 4:
         LoadCompressedSpritePalette(&gBagPaletteTable);
         gBagMenu->graphicsLoadState++;
         break;
