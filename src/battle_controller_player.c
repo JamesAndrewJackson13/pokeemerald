@@ -43,6 +43,7 @@
 #include "constants/battle_move_effects.h"
 #include "event_data.h"
 #include "battle_util.h"
+#include "battle_info.h"
 
 #define NORMAL_EFFECTIVE   10
 #define SUPER_EFFECTIVE    24
@@ -111,6 +112,7 @@ static void PlayerHandleLinkStandbyMsg(void);
 static void PlayerHandleResetActionMoveSelection(void);
 static void PlayerHandleEndLinkBattle(void);
 static void PlayerHandleBattleDebug(void);
+static void PlayerHandleShowBattleInfo(void);
 static void PlayerCmdEnd(void);
 
 static void PlayerBufferRunCommand(void);
@@ -202,6 +204,7 @@ static void (*const sPlayerBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
     [CONTROLLER_RESETACTIONMOVESELECTION] = PlayerHandleResetActionMoveSelection,
     [CONTROLLER_ENDLINKBATTLE]            = PlayerHandleEndLinkBattle,
     [CONTROLLER_DEBUGMENU]                = PlayerHandleBattleDebug,
+    [CONTROLLER_SHOWBATTLEINFO]           = PlayerHandleShowBattleInfo,
     [CONTROLLER_TERMINATOR_NOP]           = PlayerCmdEnd
 };
 
@@ -352,6 +355,12 @@ static void HandleInputChooseAction(void)
     else if (B_ENABLE_DEBUG && gMain.newKeys & SELECT_BUTTON)
     {
         BtlController_EmitTwoReturnValues(1, B_ACTION_DEBUG, 0);
+        PlayerBufferExecCompleted();
+    }
+    else if (JOY_NEW(R_BUTTON))
+    {
+        PlaySE(SE_SELECT);
+        BtlController_EmitTwoReturnValues(1, B_ACTION_SHOW_BATTLE_INFO, 0);
         PlayerBufferExecCompleted();
     }
 }
@@ -1472,6 +1481,7 @@ static void OpenPartyMenuToChooseMon(void)
         caseId = gTasks[gBattleControllerData[gActiveBattler]].data[0];
         DestroyTask(gBattleControllerData[gActiveBattler]);
         FreeAllWindowBuffers();
+        DestroyBattleInfoIcon();
         OpenPartyMenuInBattle(caseId);
     }
 }
@@ -1499,6 +1509,7 @@ static void OpenBagAndChooseItem(void)
         gBattlerControllerFuncs[gActiveBattler] = CompleteWhenChoseItem;
         ReshowBattleScreenDummy();
         FreeAllWindowBuffers();
+        DestroyBattleInfoIcon();
         CB2_BagMenuFromBattle();
     }
 }
@@ -1722,7 +1733,7 @@ static void MoveSelectionDisplayMoveType(void)
 #else
     StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
 #endif
-    
+
 #ifdef FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE
     BattlePutTextOnWindow(gDisplayedStringBattle, TypeEffectiveness(moveInfo, 1));
 #else
@@ -3387,7 +3398,19 @@ static void WaitForDebug(void)
 static void PlayerHandleBattleDebug(void)
 {
     BeginNormalPaletteFade(-1, 0, 0, 0x10, 0);
+    DestroyBattleInfoIcon();
     SetMainCallback2(CB2_BattleDebugMenu);
+    gBattlerControllerFuncs[gActiveBattler] = WaitForDebug;
+}
+
+static void PlayerHandleShowBattleInfo(void)
+{
+    logDebug("PlayerHandleShowBattleInfo");
+    logDebug("    palette fade: %s", BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK) ? "TRUE" : "FALSE");
+    FreeAllWindowBuffers();
+    DestroyBattleInfoIcon();
+    SetMainCallback2(CB2_OpenBattleInfo);
+    CreateTask(Task_OpenBattleInfo, 0);
     gBattlerControllerFuncs[gActiveBattler] = WaitForDebug;
 }
 

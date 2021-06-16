@@ -153,6 +153,7 @@
 	.include "src/toast_notifications.o"
 	.include "src/quests.o"
 	.include "src/mugshot.o"
+	.include "src/battle_info.o"
 
 gSoundInfo:
     .space 0xFB0

@@ -156,6 +156,9 @@ static void CB2_ReshowBattleScreenAfterMenu(void)
             }
         }
         break;
+    case 20:
+        BattleInfoIconStartTurn();
+        break;
     default:
         SetVBlankCallback(VBlankCB_Battle);
         sub_80A95F4();
