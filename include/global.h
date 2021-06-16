@@ -17,12 +17,12 @@
 #include "mgba.h"
 #include "../gflib/string_util.h"
 
-#define logVar(__TO_LOG__, __TYPE__) mgba_printf(MGBA_LOG_DEBUG, "#__TO_LOG__: __TYPE__", toLog)
-#define logUnsigned(__TO_LOG__) logVar(__TO_LOG__, "%u")
-#define logInt(__TO_LOG__) logVar(__TO_LOG__, "%i")
-#define logBool(__TO_LOG__) logVar(__TO_LOG__ ? "TRUE" : "FALSE", "%s")
-#define logU8String(__TO_LOG__) logVar(convertToAscii(__TO_LOG__), "%s")
-#define logString(__TO_LOG__) logVar(__TO_LOG__, "%s")
+#define logVar(__NAME__, __VAL__, __TYPE__) mgba_printf(MGBA_LOG_DEBUG, "    %s: "__TYPE__, __NAME__,  __VAL__)
+#define logUnsigned(__TO_LOG__) logVar(#__TO_LOG__, __TO_LOG__, "%u")
+#define logInt(__TO_LOG__) logVar(#__TO_LOG__, __TO_LOG__, "%i")
+#define logBool(__TO_LOG__) logVar(#__TO_LOG__, __TO_LOG__ ? "TRUE" : "FALSE", "%s")
+#define logU8String(__TO_LOG__) logVar(#__TO_LOG__, convertToAscii(__TO_LOG__), "%s")
+#define logString(__TO_LOG__) logVar(#__TO_LOG__, __TO_LOG__, "%s")
 #define logDebug(...) mgba_printf(MGBA_LOG_DEBUG, __VA_ARGS__)
 #define logInfo(...) mgba_printf(MGBA_LOG_INFO, __VA_ARGS__)
 #define logWarn(...) mgba_printf(MGBA_LOG_WARN, __VA_ARGS__)
