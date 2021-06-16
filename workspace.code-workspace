@@ -21,7 +21,8 @@
 			"xlocale": "c",
 			"array": "c",
 			"vector": "c",
-			"xstring": "c"
+			"xstring": "c",
+			"memory": "c"
 		},
 		"C_Cpp.formatting": "vcFormat",
 		"C_Cpp.vcFormat.newLine.beforeOpenBrace.type": "newLine",
