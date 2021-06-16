@@ -1177,6 +1177,7 @@ struct WindowTemplate CreateWindowTemplate(u8 bg, u8 left, u8 top, u8 width, u8 
     return template;
 }
 
+// Seems to be a create window function?
 u16 sub_8198AA4(u8 bg, u8 left, u8 top, u8 width, u8 height, u8 paletteNum, u16 baseBlock)
 {
     struct WindowTemplate template;
