@@ -3320,6 +3320,9 @@ extern const u8 gText_PkmnForSwap[];
 extern const u8 gText_SamePkmnInPartyAlready[];
 extern const u8 gText_Cancel3[];
 
+// Battle Info
+extern const u8 gText_BattleInfoHeader[];
+
 #ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
 // Rotom change form
 extern const u8 gText_MicrowaveOven[];

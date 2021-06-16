@@ -2150,6 +2150,9 @@ const u8 gText_BikeModeForcedMach[] = _("Bike forced to Mach Mode");
 const u8 gText_QuestUnlocked[] = _("Quest Unlocked!\n{SIZE 0}{STR_VAR_1}");
 const u8 gText_QuestComplete[] = _("Quest Complete!\n{SIZE 0}{STR_VAR_1}");
 
+// Battle Info
+const u8 gText_BattleInfoHeader[] = _("Battlefield Info");
+
 #ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
 // Rotom form options
 const u8 gText_MicrowaveOven[] = _("Microwave Oven");
