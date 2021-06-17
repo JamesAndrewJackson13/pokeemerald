@@ -72,6 +72,8 @@ static void Task_PlayMapChosenOrBattleBGM(u8 taskId);
 static u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
 static bool8 ShouldSkipFriendshipChange(void);
 
+//extern struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON];
+
 // EWRAM vars
 EWRAM_DATA static u8 sLearningMoveTableID = 0;
 EWRAM_DATA u8 gPlayerPartyCount = 0;

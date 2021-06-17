@@ -24,6 +24,8 @@
 #include "constants/moves.h"
 #include "constants/region_map_sections.h"
 
+//extern const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON];
+
 // this file's functions
 static void ClearDaycareMonMail(struct DaycareMail *mail);
 static void SetInitialEggData(struct Pokemon *mon, u16 species, struct DayCare *daycare);
