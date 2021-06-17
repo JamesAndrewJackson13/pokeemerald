@@ -37,7 +37,7 @@
 #ifdef FEATURE_SHEDNINJA_REQUIRES_FREE_POKEBALL
 #include "item.h"
 #endif
-extern struct Evolution gEvolutionTable[][EVOS_PER_MON];
+//extern struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON];
 
 struct EvoInfo
 {

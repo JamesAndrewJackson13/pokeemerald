@@ -126,6 +126,8 @@ enum
 #define POKEBALL_ROTATION_TOP    64
 #define POKEBALL_ROTATION_BOTTOM (POKEBALL_ROTATION_TOP - 16)
 
+//extern struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON];
+
 // EWRAM
 static EWRAM_DATA struct PokedexView *sPokedexView = NULL;
 static EWRAM_DATA u16 sLastSelectedPokemon = 0;
