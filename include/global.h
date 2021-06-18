@@ -542,8 +542,7 @@ struct SaveBlock2
 #else
     /*0x17*/ u16 filler_17_0 : 1;
 #endif
-    /*0x17*/ u16 filler_17_0 : 1;
-    /*0x17*/ u16 filler_17_1 : 1;
+    /*0x17*/ u16 optionsBattleInfo : 2;
     /*0x17*/ u16 filler_17_2 : 1;
     /*0x17*/ u16 filler_17_3 : 1;
     /*0x17*/ u16 filler_17_4 : 1;

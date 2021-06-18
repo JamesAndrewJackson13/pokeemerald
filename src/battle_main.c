@@ -3628,7 +3628,8 @@ static void TryDoEventsBeforeFirstTurn(void)
     *(&gBattleStruct->field_91) = gAbsentBattlerFlags;
     BattlePutTextOnWindow(gText_EmptyString3, 0);
     gBattleMainFunc = HandleTurnActionSelectionState;
-    BattleInfoIconStartTurn();
+    if (gSaveBlock2Ptr->optionsBattleInfo < 2)
+        BattleInfoIconStartTurn();
     ResetSentPokesToOpponentValue();
 
     for (i = 0; i < BATTLE_COMMUNICATION_ENTRIES_COUNT; i++)
@@ -3737,7 +3738,8 @@ void BattleTurnPassed(void)
     BattlePutTextOnWindow(gText_EmptyString3, 0);
     gBattleMainFunc = HandleTurnActionSelectionState;
     gRandomTurnNumber = Random();
-    BattleInfoIconStartTurn();
+    if (gSaveBlock2Ptr->optionsBattleInfo < 2)
+        BattleInfoIconStartTurn();
 
     if (gBattleTypeFlags & BATTLE_TYPE_PALACE)
         BattleScriptExecute(BattleScript_PalacePrintFlavorText);
@@ -4271,7 +4273,8 @@ static void HandleTurnActionSelectionState(void)
     // Check if everyone chose actions.
     if (gBattleCommunication[ACTIONS_CONFIRMED_COUNT] == gBattlersCount)
     {
-        BattleInfoIconEndTurn();
+        if (gSaveBlock2Ptr->optionsBattleInfo < 2)
+            BattleInfoIconEndTurn();
         sub_818603C(1);
         gBattleMainFunc = SetActionsAndBattlersTurnOrder;
 

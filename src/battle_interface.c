@@ -29,8 +29,10 @@
 #include "pokemon_summary_screen.h"
 
 // Macros
-#define BATTLE_INFO_ICON_POS_X 228
-#define BATTLE_INFO_ICON_POS_Y  13
+#define BATTLE_INFO_ICON_TOP_POS_X 228
+#define BATTLE_INFO_ICON_TOP_POS_Y  13
+#define BATTLE_INFO_ICON_BOTTOM_POS_X 233
+#define BATTLE_INFO_ICON_BOTTOM_POS_Y 120
 
 enum
 {   // Corresponds to gHealthboxElementsGfxTable (and the tables after it) in graphics.c
@@ -3400,18 +3402,34 @@ void BattleInfoIconEndTurn(void)
 
 static void CreateBattleInfoIcon(void)
 {
+    u8 x, y;
     if (GetSpriteTileStartByTag(TAG_BATTLE_INFO_ICON_TAG) == 0xFFFF)
     {
         LoadSpritePalette(&sSpritePalette_BattleInfoIcon);
         LoadSpriteSheet(&sSpriteSheet_BattleInfoIcon);
     }
-    gBattleStruct->battleInfoIconSpriteId = CreateSprite(&sSpriteTemplate_BattleInfoIcon, BATTLE_INFO_ICON_POS_X, BATTLE_INFO_ICON_POS_Y, 0);
+    switch (gSaveBlock2Ptr->optionsBattleInfo)
+    {
+        case 0:
+            x = BATTLE_INFO_ICON_TOP_POS_X;
+            y = BATTLE_INFO_ICON_TOP_POS_Y;
+            break;
+        case 1:
+            x = BATTLE_INFO_ICON_BOTTOM_POS_X;
+            y = BATTLE_INFO_ICON_BOTTOM_POS_Y;
+            break;
+        default:
+            x = 250;
+            y = 180;
+    }
+    gBattleStruct->battleInfoIconSpriteId = CreateSprite(&sSpriteTemplate_BattleInfoIcon, x, y, 0);
     // CreateTask(Task_DEBUG_MoveBattleInfoIcon, 0);
 }
 
 void DestroyBattleInfoIcon(void)
 {
-    DestroySprite(&gSprites[gBattleStruct->battleInfoIconSpriteId]);
+    if (gBattleStruct->battleInfoIconSpriteId != 0xFF)
+        DestroySprite(&gSprites[gBattleStruct->battleInfoIconSpriteId]);
     FreeSpriteTilesByTag(TAG_BATTLE_INFO_ICON_TAG);
     FreeSpritePaletteByTag(TAG_BATTLE_INFO_ICON_TAG);
     gBattleStruct->battleInfoIconSpriteId = 0xFF;
