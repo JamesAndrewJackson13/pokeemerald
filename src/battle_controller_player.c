@@ -8,6 +8,7 @@
 #include "battle_message.h"
 #include "battle_setup.h"
 #include "battle_tv.h"
+#include "battle_move_info.h"
 #include "bg.h"
 #include "data.h"
 #include "item.h"
@@ -391,6 +392,7 @@ static void HandleInputChooseTarget(void)
             BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
         EndBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX);
         HideMegaTriggerSprite();
+        BattleMoveInfo_Hide();
         PlayerBufferExecCompleted();
     }
     else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
@@ -537,6 +539,7 @@ static void HandleInputShowTargets(void)
         else
             BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
         HideMegaTriggerSprite();
+        BattleMoveInfo_Hide();
         PlayerBufferExecCompleted();
     }
     else if (gMain.newKeys & B_BUTTON || gPlayerDpadHoldFrames > 59)
@@ -629,6 +632,7 @@ static void HandleInputChooseMove(void)
             else
                 BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
             HideMegaTriggerSprite();
+            BattleMoveInfo_Hide();
             PlayerBufferExecCompleted();
         }
         else if (canSelectTarget == 1)
@@ -655,6 +659,7 @@ static void HandleInputChooseMove(void)
         gBattleStruct->mega.playerSelect = FALSE;
         BtlController_EmitTwoReturnValues(1, 10, 0xFFFF);
         HideMegaTriggerSprite();
+        BattleMoveInfo_Hide();
         PlayerBufferExecCompleted();
     }
     else if (JOY_NEW(DPAD_LEFT))
@@ -664,6 +669,7 @@ static void HandleInputChooseMove(void)
             MoveSelectionDestroyCursorAt(gMoveSelectionCursor[gActiveBattler]);
             gMoveSelectionCursor[gActiveBattler] ^= 1;
             PlaySE(SE_SELECT);
+            BattleMoveInfo_UpdateMove(moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
             MoveSelectionDisplayPpNumber();
             MoveSelectionDisplayMoveType();
@@ -677,6 +683,7 @@ static void HandleInputChooseMove(void)
             MoveSelectionDestroyCursorAt(gMoveSelectionCursor[gActiveBattler]);
             gMoveSelectionCursor[gActiveBattler] ^= 1;
             PlaySE(SE_SELECT);
+            BattleMoveInfo_UpdateMove(moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
             MoveSelectionDisplayPpNumber();
             MoveSelectionDisplayMoveType();
@@ -689,6 +696,7 @@ static void HandleInputChooseMove(void)
             MoveSelectionDestroyCursorAt(gMoveSelectionCursor[gActiveBattler]);
             gMoveSelectionCursor[gActiveBattler] ^= 2;
             PlaySE(SE_SELECT);
+            BattleMoveInfo_UpdateMove(moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
             MoveSelectionDisplayPpNumber();
             MoveSelectionDisplayMoveType();
@@ -702,6 +710,7 @@ static void HandleInputChooseMove(void)
             MoveSelectionDestroyCursorAt(gMoveSelectionCursor[gActiveBattler]);
             gMoveSelectionCursor[gActiveBattler] ^= 2;
             PlaySE(SE_SELECT);
+            BattleMoveInfo_UpdateMove(moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
             MoveSelectionDisplayPpNumber();
             MoveSelectionDisplayMoveType();
@@ -724,6 +733,11 @@ static void HandleInputChooseMove(void)
         }
     }
     else if (gMain.newKeys & START_BUTTON)
+    {
+        PlaySE(SE_SELECT);
+        BattleMoveInfo_ToggleSlider();
+    }
+    else if (JOY_NEW(R_BUTTON))
     {
         if (CanMegaEvolve(gActiveBattler))
         {
@@ -978,6 +992,7 @@ static void SetLinkBattleEndCallbacks(void)
             gMain.inBattle = 0;
             gMain.callback1 = gPreBattleCallback1;
             SetMainCallback2(CB2_InitEndLinkBattle);
+            BattleMoveInfo_Clean();
             if (gBattleOutcome == B_OUTCOME_WON)
                 TryPutLinkBattleTvShowOnAir();
             FreeAllWindowBuffers();
@@ -991,6 +1006,7 @@ static void SetLinkBattleEndCallbacks(void)
             gMain.inBattle = 0;
             gMain.callback1 = gPreBattleCallback1;
             SetMainCallback2(CB2_InitEndLinkBattle);
+            BattleMoveInfo_Clean();
             if (gBattleOutcome == B_OUTCOME_WON)
                 TryPutLinkBattleTvShowOnAir();
             FreeAllWindowBuffers();
@@ -1471,6 +1487,7 @@ static void OpenPartyMenuToChooseMon(void)
         gBattlerControllerFuncs[gActiveBattler] = WaitForMonSelection;
         caseId = gTasks[gBattleControllerData[gActiveBattler]].data[0];
         DestroyTask(gBattleControllerData[gActiveBattler]);
+        BattleMoveInfo_Clean();
         FreeAllWindowBuffers();
         OpenPartyMenuInBattle(caseId);
     }
@@ -1499,6 +1516,7 @@ static void OpenBagAndChooseItem(void)
         gBattlerControllerFuncs[gActiveBattler] = CompleteWhenChoseItem;
         ReshowBattleScreenDummy();
         FreeAllWindowBuffers();
+        BattleMoveInfo_Clean();
         CB2_BagMenuFromBattle();
     }
 }
@@ -1722,7 +1740,7 @@ static void MoveSelectionDisplayMoveType(void)
 #else
     StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
 #endif
-    
+
 #ifdef FEATURE_SHOWTYPEEFFECTIVENESSINBATTLE
     BattlePutTextOnWindow(gDisplayedStringBattle, TypeEffectiveness(moveInfo, 1));
 #else
@@ -2870,6 +2888,16 @@ static void PlayerHandleChooseMove(void)
             gBattleStruct->mega.triggerSpriteId = 0xFF;
         if (CanMegaEvolve(gActiveBattler))
             CreateMegaTriggerSprite(gActiveBattler, 0);
+        // Handle dealing with the BattleMoveInfo setup
+        if (BattleMoveInfo_NeedsInit())
+            BattleMoveInfo_Init();
+        if (!BattleMoveInfo_isLoaded())
+        {
+            BattleMoveInfo_LoadAndPrep();
+            // Note: If possible, find a better way to get the move
+            BattleMoveInfo_UpdateMove(((struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]))->moves[gMoveSelectionCursor[gActiveBattler]]);
+        }
+        BattleMoveInfo_Show();
         gBattlerControllerFuncs[gActiveBattler] = HandleChooseMoveAfterDma3;
     }
 }
@@ -3387,6 +3415,7 @@ static void WaitForDebug(void)
 static void PlayerHandleBattleDebug(void)
 {
     BeginNormalPaletteFade(-1, 0, 0, 0x10, 0);
+    BattleMoveInfo_Clean();
     SetMainCallback2(CB2_BattleDebugMenu);
     gBattlerControllerFuncs[gActiveBattler] = WaitForDebug;
 }

@@ -11,6 +11,7 @@
 #include "battle_scripts.h"
 #include "battle_setup.h"
 #include "battle_tower.h"
+#include "battle_move_info.h"
 #include "battle_util.h"
 #include "berry.h"
 #include "bg.h"
@@ -4898,6 +4899,7 @@ static void HandleEndTurn_FinishBattle(void)
 {
     u32 i;
 
+    BattleMoveInfo_Clean();
     if (gCurrentActionFuncId == B_ACTION_TRY_FINISH || gCurrentActionFuncId == B_ACTION_FINISHED)
     {
         if (!(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK | BATTLE_TYPE_FIRST_BATTLE | BATTLE_TYPE_SAFARI | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_WALLY_TUTORIAL | BATTLE_TYPE_FRONTIER)))
