@@ -20,6 +20,7 @@ endif
 
 PREFIX := arm-none-eabi-
 OBJCOPY := $(PREFIX)objcopy
+OBJDUMP := $(PREFIX)objdump
 AS := $(PREFIX)as
 
 LD := $(PREFIX)ld
@@ -75,6 +76,7 @@ SHELL := /bin/bash -o pipefail
 
 ELF = $(ROM:.gba=.elf)
 MAP = $(ROM:.gba=.map)
+SYM = $(ROM:.gba=.sym)
 
 C_SUBDIR = src
 GFLIB_SUBDIR = gflib
@@ -129,6 +131,7 @@ FIX := tools/gbafix/gbafix$(EXE)
 MAPJSON := tools/mapjson/mapjson$(EXE)
 JSONPROC := tools/jsonproc/jsonproc$(EXE)
 SCRIPT := tools/poryscript/poryscript$(EXE)
+PERL := perl
 
 TOOLDIRS := $(filter-out tools/agbcc tools/binutils tools/poryscript,$(wildcard tools/*))
 TOOLBASE = $(TOOLDIRS:tools/%=%)
@@ -154,7 +157,7 @@ infoshell = $(foreach line, $(shell $1 | sed "s/ /__SPACE__/g"), $(info $(subst 
 # Disable dependency scanning for clean/tidy/tools
 # Use a separate minimal makefile for speed
 # Since we don't need to reload most of this makefile
-ifeq (,$(filter-out all rom compare modern berry_fix libagbsyscall,$(MAKECMDGOALS)))
+ifeq (,$(filter-out all rom compare modern berry_fix libagbsyscall syms,$(MAKECMDGOALS)))
 $(call infoshell, $(MAKE) -f make_tools.mk)
 else
 NODEP ?= 1
@@ -212,6 +215,8 @@ all: rom
 
 tools: $(TOOLDIRS)
 
+syms: $(SYM)
+
 $(TOOLDIRS):
 	@$(MAKE) -C $@
 
@@ -250,7 +255,7 @@ tidynonmodern:
 tidymodern:
 	rm -f $(MODERN_ROM_NAME) $(MODERN_ELF_NAME) $(MODERN_MAP_NAME)
 	rm -rf $(MODERN_OBJ_DIR_NAME)
-	
+
 ifneq ($(MODERN),0)
 $(C_BUILDDIR)/berry_crush.o: override CFLAGS += -Wno-address-of-packed-member
 endif
@@ -434,3 +439,10 @@ berry_fix:
 
 libagbsyscall:
 	@$(MAKE) -C libagbsyscall TOOLCHAIN=$(TOOLCHAIN) MODERN=$(MODERN)
+
+###################
+### Symbol file ###
+###################
+
+$(SYM): $(ELF)
+	$(OBJDUMP) -t $< | sort -u | grep -E "^0[2389]" | $(PERL) -p -e 's/^(\w{8}) (\w).{6} \S+\t(\w{8}) (\S+)$$/\1 \2 \3 \4/g' > $@
