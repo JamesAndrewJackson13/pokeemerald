@@ -4207,8 +4207,9 @@ static void PrintMoveDetails(u16 move)
     {
         if (sMonSummaryScreen->currPageIndex == SUMMARY_MODE_BOX)
         {
-            if (B_SHOW_SPLIT_ICON == TRUE)
+#if B_SHOW_SPLIT_ICON
                 ShowSplitIcon(GetBattleMoveSplit(move));
+#endif
             PrintMovePowerAndAccuracy(move);
             PrintTextOnWindow(windowId, gMoveDescriptionPointers[move - 1], 6, 1, 0, 0);
         }
