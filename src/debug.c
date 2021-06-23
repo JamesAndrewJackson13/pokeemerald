@@ -108,13 +108,13 @@ enum
 };
 enum
 { // Other
+    DEBUG_OTHER_MENU_SINGLE_BATTLE,
+    DEBUG_OTHER_MENU_DOUBLE_BATTLE,
     DEBUG_OTHER_MENU_START_ROAMER,
     DEBUG_OTHER_MENU_WARP_TO_ROAMER,
     DEBUG_OTHER_MENU_IS_ROAMER_HERE,
     DEBUG_OTHER_MENU_FORCE_ROAMER_ENCOUNTER,
     DEBUG_OTHER_MENU_SHOW_BATTLE_INFO,
-    DEBUG_OTHER_MENU_SINGLE_BATTLE,
-    DEBUG_OTHER_MENU_DOUBLE_BATTLE,
 };
 
 
@@ -439,13 +439,13 @@ static const struct ListMenuItem sDebugMenu_Items_Give[] =
 };
 static const struct ListMenuItem sDebugMenu_Items_Other[] =
 {
+    makeListItem(DEBUG_OTHER_MENU_SINGLE_BATTLE, gDebugText_Other_SingleBattle),
+    makeListItem(DEBUG_OTHER_MENU_DOUBLE_BATTLE, gDebugText_Other_DoubleBattle),
     makeListItem(DEBUG_OTHER_MENU_START_ROAMER, gDebugText_Other_CreateRoamer),
     makeListItem(DEBUG_OTHER_MENU_WARP_TO_ROAMER, gDebugText_Other_WarpToRoamer),
     makeListItem(DEBUG_OTHER_MENU_IS_ROAMER_HERE, gDebugText_Other_IsRoamerHere),
     makeListItem(DEBUG_OTHER_MENU_FORCE_ROAMER_ENCOUNTER, gDebugText_Other_ForceRoamerEncounter),
     makeListItem(DEBUG_OTHER_MENU_SHOW_BATTLE_INFO, gDebugText_Other_ShowBattleInfo),
-    makeListItem(DEBUG_OTHER_MENU_SINGLE_BATTLE, gDebugText_Other_SingleBattle),
-    makeListItem(DEBUG_OTHER_MENU_DOUBLE_BATTLE, gDebugText_Other_DoubleBattle),
 };
 
 // *******************************
