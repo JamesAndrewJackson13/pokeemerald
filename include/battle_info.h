@@ -1,72 +1,12 @@
-#ifndef GUARD_battle_info_H
-#define GUARD_battle_info_H
+#ifndef GUARD_BATTLE_INFO_H
+#define GUARD_BATTLE_INFO_H
 
 #include "graphics.h"
 
-#define TEXT_COLOR_BG     0
-#define TEXT_COLOR_FG     1
-#define TEXT_COLOR_SHADOW 2
 
-#define TEXT_COLOR_DEFAULT                        \
-{                                                 \
-    [TEXT_COLOR_BG]     = TEXT_COLOR_TRANSPARENT, \
-    [TEXT_COLOR_FG]     = TEXT_COLOR_LIGHT_GRAY,  \
-    [TEXT_COLOR_SHADOW] = TEXT_COLOR_DARK_GRAY,   \
-}
-
-#define TEXT_COLOR_UNUSED_1                       \
-{                                                 \
-    [TEXT_COLOR_BG]     = TEXT_COLOR_TRANSPARENT, \
-    [TEXT_COLOR_FG]     = TEXT_COLOR_WHITE,       \
-    [TEXT_COLOR_SHADOW] = TEXT_COLOR_GREEN,       \
-}
-
-#define TEXT_COLOR_GENDER_SYMBOL                  \
-{                                                 \
-    [TEXT_COLOR_BG]     = TEXT_COLOR_TRANSPARENT, \
-    [TEXT_COLOR_FG]     = TEXT_DYNAMIC_COLOR_2,   \
-    [TEXT_COLOR_SHADOW] = TEXT_DYNAMIC_COLOR_3,   \
-}
-
-#define TEXT_COLOR_SELECTION_ACTIONS              \
-{                                                 \
-    [TEXT_COLOR_BG]     = TEXT_COLOR_WHITE,       \
-    [TEXT_COLOR_FG]     = TEXT_COLOR_DARK_GRAY,   \
-    [TEXT_COLOR_SHADOW] = TEXT_COLOR_LIGHT_GRAY,  \
-}
-
-#define TEXT_COLOR_FIELD_MOVES                    \
-{                                                 \
-    [TEXT_COLOR_BG]     = TEXT_COLOR_WHITE,       \
-    [TEXT_COLOR_FG]     = TEXT_COLOR_BLUE,        \
-    [TEXT_COLOR_SHADOW] = TEXT_COLOR_LIGHT_BLUE,  \
-}
-
-#define TEXT_COLOR_UNUSED_2                       \
-{                                                 \
-    [TEXT_COLOR_BG]     = TEXT_COLOR_TRANSPARENT, \
-    [TEXT_COLOR_FG]     = TEXT_COLOR_WHITE,       \
-    [TEXT_COLOR_SHADOW] = TEXT_COLOR_DARK_GRAY,   \
-}
-
-#define TEXT_COLOR_HEADER                         \
-{                                                 \
-    [TEXT_COLOR_BG]     = TEXT_COLOR_TRANSPARENT, \
-    [TEXT_COLOR_FG]     = TEXT_COLOR_DARK_GRAY,   \
-    [TEXT_COLOR_SHADOW] = TEXT_COLOR_LIGHT_GRAY,  \
-}
-
-// Text colors for BG, FG, and Shadow in that order
-static const u8 sFontColorTable[][3] =
-{
-    TEXT_COLOR_DEFAULT,
-    TEXT_COLOR_UNUSED_1,
-    TEXT_COLOR_GENDER_SYMBOL,
-    TEXT_COLOR_SELECTION_ACTIONS,
-    TEXT_COLOR_FIELD_MOVES,
-    TEXT_COLOR_UNUSED_2,
-    TEXT_COLOR_HEADER,
-};
+// Mon window's height/width
+#define SELECTION_MON_WINDOW_HEIGHT          3
+#define SELECTION_MON_WINDOW_WIDTH          10
 
 #define TITLE_BAR      \
 {                      \
@@ -79,48 +19,48 @@ static const u8 sFontColorTable[][3] =
     .baseBlock = 0xDB, \
 }
 
-#define PLAYER_MON_1   \
-{                      \
-    .bg = 0,           \
-    .tilemapLeft = 1,  \
-    .tilemapTop = 5,   \
-    .width = 10,       \
-    .height = 3,       \
-    .paletteNum = 4,   \
-    .baseBlock = 0x63, \
+#define PLAYER_MON_1                             \
+{                                                \
+    .bg = 0,                                     \
+    .tilemapLeft = 1,                            \
+    .tilemapTop = 5,                             \
+    .width = SELECTION_MON_WINDOW_WIDTH,         \
+    .height = SELECTION_MON_WINDOW_HEIGHT,       \
+    .paletteNum = 4,                             \
+    .baseBlock = 0x63,                           \
 }
 
-#define PLAYER_MON_2   \
-{                      \
-    .bg = 0,           \
-    .tilemapLeft = 2,  \
-    .tilemapTop = 9,   \
-    .width = 10,       \
-    .height = 3,       \
-    .paletteNum = 6,   \
-    .baseBlock = 0x9F, \
+#define PLAYER_MON_2                             \
+{                                                \
+    .bg = 0,                                     \
+    .tilemapLeft = 2,                            \
+    .tilemapTop = 9,                             \
+    .width = SELECTION_MON_WINDOW_WIDTH,         \
+    .height = SELECTION_MON_WINDOW_HEIGHT,       \
+    .paletteNum = 6,                             \
+    .baseBlock = 0x9F,                           \
 }
 
-#define OPPONENT_MON_1 \
-{                      \
-    .bg = 0,           \
-    .tilemapLeft = 18, \
-    .tilemapTop = 12,  \
-    .width = 10,       \
-    .height = 3,       \
-    .paletteNum = 5,   \
-    .baseBlock = 0x81, \
+#define OPPONENT_MON_1                           \
+{                                                \
+    .bg = 0,                                     \
+    .tilemapLeft = 18,                           \
+    .tilemapTop = 12,                            \
+    .width = SELECTION_MON_WINDOW_WIDTH,         \
+    .height = SELECTION_MON_WINDOW_HEIGHT,       \
+    .paletteNum = 5,                             \
+    .baseBlock = 0x81,                           \
 }
 
-#define OPPONENT_MON_2 \
-{                      \
-    .bg = 0,           \
-    .tilemapLeft = 19, \
-    .tilemapTop = 8,   \
-    .width = 10,       \
-    .height = 3,       \
-    .paletteNum = 7,   \
-    .baseBlock = 0xBD, \
+#define OPPONENT_MON_2                           \
+{                                                \
+    .bg = 0,                                     \
+    .tilemapLeft = 19,                           \
+    .tilemapTop = 8,                             \
+    .width = SELECTION_MON_WINDOW_WIDTH,         \
+    .height = SELECTION_MON_WINDOW_HEIGHT,       \
+    .paletteNum = 7,                             \
+    .baseBlock = 0xBD,                           \
 }
 
 static const struct WindowTemplate sSinglesBattleWindowTemplate[] =
@@ -425,15 +365,6 @@ static const struct SpriteTemplate sSpriteTemplate_StatusIcons =
     .callback = SpriteCallbackDummy,
 };
 
-// Tile nums
-static const u8 sMainSlotTileNums[] = { 43, 44, 44, 44, 44, 44, 44, 44, 44, 45,
-                                        49, 33, 33, 33, 33, 33, 33, 33, 33, 50,
-                                        55, 56, 56, 56, 56, 56, 56, 56, 56, 57 };
-
-static const u8 sEmptySlotTileNums[] = { 21, 22, 22, 22, 22, 22, 22, 22, 22, 23,
-                                         30,  0,  0,  0,  0,  0,  0,  0,  0, 31,
-                                         37, 38, 38, 38, 38, 38, 38, 38, 38, 39 };
-
 // Palette offsets
 static const u8 sGenderPalOffsets[] = { 11, 12 };
 static const u8 sHPBarPalOffsets[] = { 9, 10 };
@@ -478,7 +409,7 @@ static const struct BgTemplate sBgTemplates_BattleInfo[] =
 };
 
 #define PLAYER_MON_1_POKEBALL 16, 57
-#define PLAYER_MON_1_POKEMON  16, 48
+#define PLAYER_MON_1_POKEMON  16, 52
 #define PLAYER_MON_1_HELDITEM 22, 60
 #define PLAYER_MON_1_STATUS   48, 58
 
@@ -538,18 +469,7 @@ static const u8 sBattleInfoSelect_SpriteCoords_Double[4][4 * 2] =
 #undef OPPONENT_MON_1
 #undef OPPONENT_MON_2
 
-#undef TEXT_COLOR_BG
-#undef TEXT_COLOR_FG
-#undef TEXT_COLOR_SHADOW
-#undef TEXT_COLOR_DEFAULT
-#undef TEXT_COLOR_UNUSED_1
-#undef TEXT_COLOR_GENDER_SYMBOL
-#undef TEXT_COLOR_SELECTION_ACTIONS
-#undef TEXT_COLOR_FIELD_MOVES
-#undef TEXT_COLOR_UNUSED_2
-#undef TEXT_COLOR_HEADER
-
 void Task_OpenBattleInfo(u8 taskId);
 void CB2_OpenBattleInfo(void);
 
-#endif //GUARD_battle_info_H
+#endif //GUARD_BATTLE_INFO_H
