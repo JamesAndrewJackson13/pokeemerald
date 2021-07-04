@@ -22,7 +22,8 @@
 			"array": "c",
 			"vector": "c",
 			"xstring": "c",
-			"memory": "c"
+			"memory": "c",
+			"cstdint": "c"
 		},
 		"C_Cpp.formatting": "vcFormat",
 		"C_Cpp.vcFormat.newLine.beforeOpenBrace.type": "newLine",

@@ -40,7 +40,7 @@
 #include "pokemon_summary_screen.h"
 #include "battle_setup.h"
 #include "roamer.h"
-// #include "battle_info.h"
+#include "battle_info_data.h"
 #include "field_weather.h"
 #include "wild_encounter.h"
 #include "constants/abilities.h"
@@ -239,7 +239,7 @@ static void DebugAction_Other_Roamer(u8 taskId);
 static void DebugAction_Other_WarpToRoamer(u8 taskId);
 static void DebugAction_Other_IsRoamerHere(u8 taskId);
 static void DebugAction_Other_ForceRoamerEncounter(u8 taskId);
-//static void DebugAction_Other_ShowBattleInfo(u8 taskId);
+static void DebugAction_Other_ShowBattleInfo(u8 taskId);
 static void DebugAction_Other_SingleBattle_Pokemon(u8 taskId);
 static void DebugAction_Other_DoubleBattle_Pokemon(u8 taskId);
 static void DebugAction_Other_Battle_Pokemon(u8 taskId);
@@ -512,7 +512,7 @@ static TaskFunction sDebugMenu_Actions_Other[] =
     [DEBUG_OTHER_MENU_WARP_TO_ROAMER] = DebugAction_Other_WarpToRoamer,
     [DEBUG_OTHER_MENU_IS_ROAMER_HERE] = DebugAction_Other_IsRoamerHere,
     [DEBUG_OTHER_MENU_FORCE_ROAMER_ENCOUNTER] = DebugAction_Other_ForceRoamerEncounter,
-    //[DEBUG_OTHER_MENU_SHOW_BATTLE_INFO] = DebugAction_Other_ShowBattleInfo,
+    [DEBUG_OTHER_MENU_SHOW_BATTLE_INFO] = DebugAction_Other_ShowBattleInfo,
     [DEBUG_OTHER_MENU_SINGLE_BATTLE] = DebugAction_Other_SingleBattle_Pokemon,
     [DEBUG_OTHER_MENU_DOUBLE_BATTLE] = DebugAction_Other_DoubleBattle_Pokemon,
 };
@@ -2541,16 +2541,16 @@ static void DebugAction_Other_ForceRoamerEncounter(u8 taskId)
     BattleSetup_StartRoamerBattle();
 }
 
-// static void DebugAction_Other_ShowBattleInfo(u8 taskId)
-// {
-//     logDebug("DebugAction_Other_ShowBattleInfo");
-//     Debug_DestroyMenu(taskId);
-//     PlayRainStoppingSoundEffect();
-//     CleanupOverworldWindowsAndTilemaps();
-//     PlaySE(SE_PC_ON);
-//     FadeScreen(FADE_TO_BLACK, 0);
-//     CreateTask(Task_OpenBattleInfo, 0);
-// }
+static void DebugAction_Other_ShowBattleInfo(u8 taskId)
+{
+    logDebug("DebugAction_Other_ShowBattleInfo");
+    Debug_DestroyMenu(taskId);
+    PlayRainStoppingSoundEffect();
+    CleanupOverworldWindowsAndTilemaps();
+    PlaySE(SE_PC_ON);
+    FadeScreen(FADE_TO_BLACK, 0);
+    CreateTask(Task_OpenBattleInfoDataDebug, 0);
+}
 
 static void Battle_Pokemon_Shared(u8 taskId)
 {
