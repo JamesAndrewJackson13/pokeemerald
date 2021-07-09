@@ -41,16 +41,20 @@ static const struct BgTemplate sBgTemplates_BattleInfoData[4] =
 };
 
 // Mon window's height/width
-#define DATA_MON_WINDOW_HEIGHT          3
-#define DATA_MON_WINDOW_WIDTH          13
+#define DATA_MON_WINDOW_HEIGHT             3
+#define DATA_MON_WINDOW_WIDTH             13
 // Stage state window's height/width
 #define STAGE_STATE_WINDOW_HEIGHT          2
 #define STAGE_STATE_WINDOW_WIDTH          13
+// Terrain description window
+#define TERRAIN_WINDOW_HEIGHT             15
+#define TERRAIN_WINDOW_WIDTH              16
 
-#define MON_WINDOW_BG        0
-#define HP_LVL_WINDOW_BG     0
-#define STATS_WINDOW_BG      2
-#define CUR_STATE_WINDOW_BG  1
+#define MON_WINDOW_BG         0
+#define HP_LVL_WINDOW_BG      0
+#define STATS_WINDOW_BG       2
+#define CUR_STATE_WINDOW_BG   2
+#define DESCRIPTION_WINDOW_BG 1
 
 static const struct WindowTemplate sBattleInfoDataWindows[] =
 {
@@ -71,7 +75,7 @@ static const struct WindowTemplate sBattleInfoDataWindows[] =
         .tilemapLeft = 20,
         .width = 7,
         .height = 4,
-        .paletteNum = 0x4,
+        .paletteNum = 0xF,
         .baseBlock = 0xE7,
     },
     // Stat Numbers
@@ -81,7 +85,7 @@ static const struct WindowTemplate sBattleInfoDataWindows[] =
         .tilemapLeft = 27,
         .width = 2,
         .height = 15,
-        .paletteNum = 0x4,
+        .paletteNum = 0xF,
         .baseBlock = 0xCB,
     },
     // Current State 1
@@ -91,7 +95,7 @@ static const struct WindowTemplate sBattleInfoDataWindows[] =
         .tilemapLeft = 1,
         .width = STAGE_STATE_WINDOW_WIDTH,
         .height = STAGE_STATE_WINDOW_HEIGHT,
-        .paletteNum = 0x0,
+        .paletteNum = 0x6,
         .baseBlock = 0xB1,
     },
     // Current State 2
@@ -101,7 +105,7 @@ static const struct WindowTemplate sBattleInfoDataWindows[] =
         .tilemapLeft = 1,
         .width = STAGE_STATE_WINDOW_WIDTH,
         .height = STAGE_STATE_WINDOW_HEIGHT,
-        .paletteNum = 0x0,
+        .paletteNum = 0x7,
         .baseBlock = 0x97,
     },
     // Current State 3
@@ -111,7 +115,7 @@ static const struct WindowTemplate sBattleInfoDataWindows[] =
         .tilemapLeft = 1,
         .width = STAGE_STATE_WINDOW_WIDTH,
         .height = STAGE_STATE_WINDOW_HEIGHT,
-        .paletteNum = 0x0,
+        .paletteNum = 0x8,
         .baseBlock = 0x7D,
     },
     // Current State 4
@@ -121,8 +125,28 @@ static const struct WindowTemplate sBattleInfoDataWindows[] =
         .tilemapLeft = 1,
         .width = STAGE_STATE_WINDOW_WIDTH,
         .height = STAGE_STATE_WINDOW_HEIGHT,
-        .paletteNum = 0x0,
+        .paletteNum = 0x9,
         .baseBlock = 0x63,
+    },
+    // Description Window
+    {
+        .bg = DESCRIPTION_WINDOW_BG,
+        .tilemapTop = 5,
+        .tilemapLeft = 15,
+        .width = TERRAIN_WINDOW_WIDTH,
+        .height = TERRAIN_WINDOW_HEIGHT,
+        .paletteNum = 0x0,
+        .baseBlock = 0x134,
+    },
+    // Button Info
+    {
+        .bg = HP_LVL_WINDOW_BG,
+        .tilemapTop = 18,
+        .tilemapLeft = 1,
+        .width = 5,
+        .height = 2,
+        .paletteNum = 0xF,
+        .baseBlock = 0x12A,
     },
     DUMMY_WIN_TEMPLATE
 };
@@ -140,6 +164,11 @@ static const struct WindowTemplate sBattleInfoDataWindows[] =
 static const u8 sBattleInfoData_SpriteCoords[4 * 2] = {
     MON_POKEMON, MON_HELDITEM, MON_STATUS, MON_POKEBALL
 };
+
+// Tile nums
+static const u8 sTerrainEffectFilledTileNums[] =  {  8,  9, 10,
+                                                    18, 19, 20,
+                                                    28, 29, 30 };
 
 void Task_OpenBattleInfoDataDebug(u8 taskId);
 void Task_OpenBattleInfoData(u8 taskId);

@@ -11,6 +11,7 @@
 #include "palette.h"
 #include "main.h"
 #include "menu.h"
+#include "terrain_effects.h"
 #include "battle.h"
 #include "battle_controllers.h"
 #include "battle_main.h"
@@ -35,18 +36,63 @@
 #include "pokemon_icon.h"
 #include "sound.h"
 #include "sprite.h"
+#include "pokemon_summary_screen.h"
+#include "custom_utils.h"
 #include "constants/pokemon.h"
 #include "constants/songs.h"
 #include "constants/rgb.h"
 
 // MACROS
+// How many windows are in use
+#define NUMBER_OF_WINDOWS (9)
+
+// Pallets for the type icons
+#define TYPE_ICON_PAL_NUM_0     (13)
+#define TYPE_ICON_PAL_NUM_1     (14)
+#define TYPE_ICON_PAL_NUM_2     (15)
+
+// x and y pos for the type sprites
+#define TYPE_SPRITE_1_X (174)
+#define TYPE_SPRITE_2_X (214)
+#define TYPE_SPRITES_Y  (34)
+
+// The u16 palette colors for the terrain info windows
+#define BODY_HIGHLIGHT_COLOR   (0x73BD)
+#define BODY_NORMAL_COLOR      (0x6359)
+#define BORDER_HIGHLIGHT_COLOR (0x19DF)
+#define BORDER_NORMAL_COLOR    (0x254A)
+
+// Data used for the terrain tile
+#define TERRAIN_TILE_TEXT_FONT_ID (0)
+#define TERRAIN_TILE_TEXT_POS_X (7)
+#define TERRAIN_TILE_TEXT_POS_Y (1)
+
+// data used for the description window
+#define DESCRIPTION_WINDOW_ID (7)
+#define DESCRIPTION_WINDOW_TEXT_FONT_ID (7)
+#define DESCRIPTION_WINDOW_TEXT_POS_X (7)
+#define DESCRIPTION_WINDOW_TEXT_POS_Y (5)
+#define DESCRIPTION_WINDOW_WIDTH (90 - DESCRIPTION_WINDOW_TEXT_POS_X)
+#define DESCRIPTION_WINDOW_ANIMATION_LENGNTH (12)
+#define DESCRIPTION_WINDOW_ANIMATION_OPEN (1)
+#define DESCRIPTION_WINDOW_ANIMATION_CLOSE (0)
+
+// Which font to use for the HP section
+#define LEVEL_HP_FONT (0)
+
+// How many stats need to get drawn
+#define NUM_STATS_TO_DRAW (7)
+
+// The tilemap number for the up/down chevrons
+#define BASE_STATS_UP_ARROW    (0x34)
+#define EXTRA_STATS_UP_ARROW   (0x5C)
+
 
 // Graphics Consts
 static const u32 sBattleInfoData_Tiles[] = INCBIN_U32("graphics/battle_info/battle_info_data_tiles.4bpp.lz");
 static const u32 sBattleInfoData_Pal[] = INCBIN_U32("graphics/battle_info/battle_info_data_palette.gbapal.lz");
 static const u32 sBattleInfoData_TileMap[] = INCBIN_U32("graphics/battle_info/battle_info_data_tilemap.bin.lz");
 static const u16 palBuffer[BG_PLTT_SIZE / sizeof(u16)];
-
 
 // Declarations
 static void VBlankCB_BattleInfoData(void);
@@ -58,38 +104,87 @@ static bool8 AllocBattleInfoBgGfx(void);
 static bool8 BattleInfoData_InitBGs(void);
 static void BattleInfoData_OpenInit(u8 monIndex, MainCallback callback);
 static bool8 LoadBattleInfoData_Graphics(void);
+static void UpdateTerrainPaletteHighlight(void);
 static void InitBattleMonDataWindows(void);
 static u16 SetupAndCreateMonIcon(u8 whichMon);
 static void Task_BattleInfoData_Main(u8 taskId);
 static void BattleInfoData_FadeAndExit(void);
 static void InitBattleInfoBox(void);
 static void RenderWindow_LevelAndHP(void);
+static void RenderWindow_ButtonInfo(void);
 static void RenderWindow_StatNumbers(void);
 static void DrawStatStageIcons(void);
 static void RenderWindow_PutAndCopy(void);
-
+static void RenderWindow_DoTerrainInfoTiles(void);
+static void PlayMonCry(void);
+static void BattleInfoData_SetupSprites(void);
+static void RenderWindow_TerrainDescription(void);
+static void Task_DescriptionWindowAnimation(u8 taskId);
 
 
 // EWRAM Data
+static EWRAM_DATA u8* sBattleInfoDataTileGfx = NULL;
 static EWRAM_DATA u8* sBg1TilemapBuffer = NULL;
 static EWRAM_DATA u8* sMonWindowBgTilemapBuffer = NULL;
 static EWRAM_DATA struct BattleInfoBox* sBattleInfoBox = NULL;
 static EWRAM_DATA struct BattleInfoDataGUI_Struct
 {
     MainCallback savedCallback;
-    u8 state;
-    u8 cursorSpriteId;
     u8 graphicsLoadState;
     u8 windowsBackgroundLoadState;
-    u8 pokemonIconLoadState;
     u8 cursorIndex;
     u8 curMon;
+    u8 terrainEffects[4];
+    u8 pokemonTypeSpriteIds[2];
+    u8 showDescriptionAnimationTask;
+    u8 numberOfTerrainTiles;
+    bool8 showDescription;
 }  *sBattleInfoDataGUI = NULL;
 
 // String Templates
 static const u8 sLevelAndHPTemplate[] = _("{STR_VAR_1}/{STR_VAR_2}\n{STR_VAR_3}");
 static const u8 sBlank[] = _("");
 static const u8 sNL[] = _("\n");
+static const u8 sButtonInfo[] = {
+    CHAR_KEYPAD_ICON, CHAR_A_BUTTON, CHAR_SPACE, CHAR_T, CHAR_O, CHAR_G, CHAR_G, CHAR_L, CHAR_E, EOS
+};
+
+// The hard coded slide animation values
+static const u8 sDescriptionSlideAnimation[2][DESCRIPTION_WINDOW_ANIMATION_LENGNTH] =
+{
+    // Ease in out
+    [DESCRIPTION_WINDOW_ANIMATION_CLOSE] = {
+        // 0
+        -2,
+        -5,
+        -10,
+        -18,
+        -33,
+        -60,
+        -87,
+        -102,
+        -110,
+        -115,
+        -118,
+        -120,
+    },
+    // Ease Out
+    [DESCRIPTION_WINDOW_ANIMATION_OPEN] = {
+        // -120
+        -80,
+        -60,
+        -36,
+        -24,
+        -16,
+        -11,
+        -7,
+        -5,
+        -3,
+        -2,
+        -1,
+        0
+    },
+};
 
 // Code
 static void VBlankCB_BattleInfoData(void)
@@ -97,6 +192,10 @@ static void VBlankCB_BattleInfoData(void)
     LoadOam();
     ProcessSpriteCopyRequests();
     TransferPlttBuffer();
+    SetGpuReg(REG_OFFSET_BG1HOFS, gBattle_BG1_X);
+    SetGpuReg(REG_OFFSET_BG1VOFS, gBattle_BG1_Y);
+    SetGpuReg(REG_OFFSET_WIN0H, gBattle_WIN0H);
+    SetGpuReg(REG_OFFSET_WIN0V, gBattle_WIN0V);
 }
 
 static void CB2_BattleInfoDataRun(void)
@@ -130,6 +229,7 @@ static bool8 BattleInfoData_SetupGfx(void)
         ScanlineEffect_Stop();
         break;
     case 2:
+        FillPalette(0, 0, 512);
         FreeAllSpritePalettes();
         break;
     case 3:
@@ -181,22 +281,39 @@ static bool8 BattleInfoData_SetupGfx(void)
         break;
     case 13:
         RenderMonWindow(sBattleInfoBox, FALSE);
-        RenderWindow_LevelAndHP();
-        RenderWindow_StatNumbers();
-        RenderWindow_PutAndCopy();
-        DrawStatStageIcons();
         break;
     case 14:
-        CreateTask(Task_BattleInfoData_WaitFadeIn, 0);
+        RenderWindow_LevelAndHP();
+        RenderWindow_ButtonInfo();
         break;
     case 15:
-        BlendPalettes(PALETTES_ALL, 16, RGB_BLACK);
+        RenderWindow_StatNumbers();
         break;
     case 16:
+        RenderWindow_DoTerrainInfoTiles();
+        RenderWindow_TerrainDescription();
+        break;
+    case 17:
+        RenderWindow_PutAndCopy();
+        break;
+    case 18:
+        DrawStatStageIcons();
+        break;
+    case 19:
+        BattleInfoData_SetupSprites();
+        break;
+    case 20:
+        CreateTask(Task_BattleInfoData_WaitFadeIn, 0);
+        break;
+    case 21:
+        BlendPalettes(PALETTES_ALL, 16, RGB_BLACK);
+        break;
+    case 22:
         BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
         gPaletteFade.bufferTransferDisabled = FALSE;
         break;
-    case 17:
+    case 23:
+        PlayMonCry();
         SetVBlankCallback(VBlankCB_BattleInfoData);
         SetMainCallback2(CB2_BattleInfoDataRun);
         return TRUE;
@@ -220,7 +337,7 @@ static bool8 AllocBattleInfoBgGfx(void)
     {
     case 0:
     case 1:
-        AllocMonWindowBgGfx(sBattleInfoDataGUI->windowsBackgroundLoadState);
+        AllocMonWindowBgGfx(sBattleInfoDataGUI->windowsBackgroundLoadState, 0x90);
         break;
     case 2:
         PartyPaletteBufferCopy(sBattleInfoBox->pallet);
@@ -230,9 +347,38 @@ static bool8 AllocBattleInfoBgGfx(void)
     return FALSE;
 }
 
+
+
+// Taken from dexnav
+static const u8 sMoveTypeToOamPaletteNum[NUMBER_OF_MON_TYPES] =
+{
+    [TYPE_NORMAL] = TYPE_ICON_PAL_NUM_0,
+    [TYPE_FIGHTING] = TYPE_ICON_PAL_NUM_0,
+    [TYPE_FLYING] = TYPE_ICON_PAL_NUM_1,
+    [TYPE_POISON] = TYPE_ICON_PAL_NUM_1,
+    [TYPE_GROUND] = TYPE_ICON_PAL_NUM_0,
+    [TYPE_ROCK] = TYPE_ICON_PAL_NUM_0,
+    [TYPE_BUG] = TYPE_ICON_PAL_NUM_2,
+    [TYPE_GHOST] = TYPE_ICON_PAL_NUM_1,
+    [TYPE_STEEL] = TYPE_ICON_PAL_NUM_0,
+    [TYPE_MYSTERY] = TYPE_ICON_PAL_NUM_2,
+    [TYPE_FIRE] = TYPE_ICON_PAL_NUM_0,
+    [TYPE_WATER] = TYPE_ICON_PAL_NUM_1,
+    [TYPE_GRASS] = TYPE_ICON_PAL_NUM_2,
+    [TYPE_ELECTRIC] = TYPE_ICON_PAL_NUM_0,
+    [TYPE_PSYCHIC] = TYPE_ICON_PAL_NUM_1,
+    [TYPE_ICE] = TYPE_ICON_PAL_NUM_1,
+    [TYPE_DRAGON] = TYPE_ICON_PAL_NUM_2,
+    [TYPE_DARK] = TYPE_ICON_PAL_NUM_0,
+    #ifdef TYPE_FAIRY
+    [TYPE_FAIRY] = TYPE_ICON_PAL_NUM_1, //based on battle_engine
+    #endif
+};
+
 static bool8 BattleInfoData_InitBGs(void)
 {
     logDebug("BattleInfoData_InitBGs");
+    u8 i;
     ResetVramOamAndBgCntRegs();
     ResetAllBgsCoordinates();
 
@@ -246,26 +392,66 @@ static bool8 BattleInfoData_InitBGs(void)
     ResetBgsAndClearDma3BusyFlags(0);
     InitBgsFromTemplates(0, sBgTemplates_BattleInfoData, NELEMS(sBgTemplates_BattleInfoData));
     SetBgTilemapBuffer(3, sBg1TilemapBuffer);
-    ScheduleBgCopyTilemapToVram(0);
-    ScheduleBgCopyTilemapToVram(1);
-    ScheduleBgCopyTilemapToVram(2);
-    ScheduleBgCopyTilemapToVram(3);
-    SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_1D_MAP | DISPCNT_OBJ_ON);
+
+    gBattle_WIN0H = WIN_RANGE(120, DISPLAY_WIDTH);
+    gBattle_WIN0V = WIN_RANGE(40, DISPLAY_HEIGHT);
+    gBattle_BG1_X = -120;
+    SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_ALL);
+    SetGpuReg(REG_OFFSET_WINOUT, WINOUT_WIN01_BG0 | WINOUT_WIN01_BG2 | WINOUT_WIN01_BG3 | WINOUT_WIN01_OBJ | WINOUT_WIN01_CLR);
+
+    SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_1D_MAP | DISPCNT_OBJ_ON | DISPCNT_WIN0_ON);
     SetGpuReg(REG_OFFSET_BLDCNT, 0);
-    ShowBg(0);
-    ShowBg(1);
-    ShowBg(2);
-    ShowBg(3);
-    FillWindowPixelBuffer(0, PIXEL_FILL(0));
-    FillWindowPixelBuffer(1, PIXEL_FILL(0));
-    FillWindowPixelBuffer(2, PIXEL_FILL(0));
-    FillWindowPixelBuffer(3, PIXEL_FILL(0));
-    FillWindowPixelBuffer(4, PIXEL_FILL(0));
-    FillWindowPixelBuffer(5, PIXEL_FILL(0));
-    FillWindowPixelBuffer(6, PIXEL_FILL(0));
+
+    // Set up the backgrounds
+    for (i = 0; i < 4; i++)
+    {
+        ScheduleBgCopyTilemapToVram(i);
+        ShowBg(i);
+    }
+
+    // Default all windows to transparent
+    for (i = 0; i < NUMBER_OF_WINDOWS; i++)
+    {
+        FillWindowPixelBuffer(i, PIXEL_FILL(0));
+    }
+
     logDebug("    TRUE");
     return TRUE;
 }
+
+static void PlayMonCry(void)
+{
+    if (ShouldPlayNormalMonCry(GetPokemonAtSlot(sBattleInfoDataGUI->curMon)) == TRUE)
+        PlayCry3(gBattleMons[sBattleInfoDataGUI->curMon].species, 0, 0);
+    else
+        PlayCry3(gBattleMons[sBattleInfoDataGUI->curMon].species, 0, 11);
+}
+
+#define setupSprite(__WHICH__) \
+{ \
+    sBattleInfoDataGUI->pokemonTypeSpriteIds[__WHICH__ - 1] = CreateSprite(&sSpriteTemplate_MoveTypes, TYPE_SPRITE_##__WHICH__##_X, TYPE_SPRITES_Y, 2); \
+    sprite = &gSprites[sBattleInfoDataGUI->pokemonTypeSpriteIds[__WHICH__ - 1]]; \
+    StartSpriteAnim(sprite, mon->type##__WHICH__); \
+    sprite->oam.paletteNum = sMoveTypeToOamPaletteNum[mon->type##__WHICH__]; \
+    sprite->invisible = FALSE; \
+} \
+
+static void BattleInfoData_SetupSprites(void)
+{
+
+    // Set up the type sprites
+    LoadCompressedSpriteSheet(&sSpriteSheet_MoveTypes);
+    LoadCompressedPalette(gMoveTypes_Pal, 0x1D0, 0x60);
+    struct Sprite* sprite;
+    struct BattlePokemon* mon = &gBattleMons[sBattleInfoDataGUI->curMon];
+    setupSprite(1);
+
+    if (mon->type1 != mon->type2)
+    {
+        setupSprite(2);
+    }
+}
+#undef setupSprite
 
 static void BattleInfoData_OpenInit(u8 monIndex, MainCallback callback)
 {
@@ -282,20 +468,25 @@ static void BattleInfoData_OpenInit(u8 monIndex, MainCallback callback)
     sBattleInfoDataGUI->graphicsLoadState = 0;
     sBattleInfoDataGUI->windowsBackgroundLoadState = 0;
     sBattleInfoDataGUI->savedCallback = callback;
-    sBattleInfoDataGUI->cursorIndex = 0;
+    sBattleInfoDataGUI->cursorIndex = 255;
     sBattleInfoDataGUI->curMon = monIndex;
+    sBattleInfoDataGUI->showDescription = FALSE;
+    sBattleInfoDataGUI->showDescriptionAnimationTask = 0xFF;
     SetMainCallback2(CB2_BattleInfoData_RunSetup);
 }
 
 static bool8 LoadBattleInfoData_Graphics(void)
 {
+    u32 sizeout;
     logDebug("LoadBattleInfoData_Graphics");
     logDebug("    sBattleInfoDataGUI->graphicsLoadState: %u", sBattleInfoDataGUI->graphicsLoadState);
     switch (sBattleInfoDataGUI->graphicsLoadState)
     {
     case 0:
         ResetTempTileDataBuffers();
-        DecompressAndCopyTileDataToVram(1, sBattleInfoData_Tiles, 0, 0, 0);
+        sBattleInfoDataTileGfx = malloc_and_decompress(sBattleInfoData_Tiles, &sizeout);
+        LoadBgTiles(1, sBattleInfoDataTileGfx, sizeout, 0);
+        // DecompressAndCopyTileDataToVram(1, sBattleInfoData_Tiles, 0, 0, 0);
         sBattleInfoDataGUI->graphicsLoadState++;
         break;
     case 1:
@@ -307,6 +498,14 @@ static bool8 LoadBattleInfoData_Graphics(void)
         break;
     case 2:
         LoadCompressedPalette(sBattleInfoData_Pal, 0, 32);
+        // We need 4 copies of the palette data for the four terrain boxes (reusing sizeout)
+        for (sizeout = 0; sizeout < 4; sizeout++)
+        {
+            // Putting into 6, 7, 8, and 9
+            CpuCopy16(gPlttBufferUnfaded, gPlttBufferUnfaded + 0x60 + 0x10 * sizeout, 32);
+            CpuCopy16(gPlttBufferFaded, gPlttBufferFaded + 0x60 + 0x10 * sizeout, 32);
+        }
+        UpdateTerrainPaletteHighlight();
         sBattleInfoDataGUI->graphicsLoadState++;
         break;
     default:
@@ -316,6 +515,20 @@ static bool8 LoadBattleInfoData_Graphics(void)
     }
     logDebug("    FALSE");
     return FALSE;
+}
+
+
+static void UpdateTerrainPaletteHighlight(void)
+{
+    u8 i;
+    u16 toSet;
+    for (i = 0; i < 4; i++)
+    {
+        toSet = sBattleInfoDataGUI->cursorIndex == i ? BODY_HIGHLIGHT_COLOR : BODY_NORMAL_COLOR;
+        FillPalette(toSet, 0x6C + 0x10 * i, 2);
+        toSet = sBattleInfoDataGUI->cursorIndex == i ? BORDER_HIGHLIGHT_COLOR : BORDER_NORMAL_COLOR;
+        FillPalette(toSet, 0x6D + 0x10 * i, 2);
+    }
 }
 
 
@@ -330,19 +543,7 @@ static void InitBattleMonDataWindows(void)
     LoadUserWindowBorderGfx(0, 0x4F, 0xD0);
     LoadPalette(GetOverworldTextboxPalettePtr(), 0xE0, 0x20);
     LoadPalette(gUnknown_0860F074, 0xF0, 0x20);
-
-    // ClearWindowTilemap(gBattlersCount);
-    // AddTextPrinterParameterized3(gBattlersCount, 0, 4, 2, sFontColorTable[BATTLE_MON_TEXT_COLOR_DEFAULT], 0, StringCopyPadded(gStringVar4, gText_BattleInfoHeader, CHAR_SPACE, 2));
-    // PutWindowTilemap(gBattlersCount);
-    // CopyWindowToVram(gBattlersCount, 2);
 }
-
-// static u16 SetupAndCreateMonIcon(u8 whichMon)
-// {
-//     FreeMonIconPalettes(); //Free space for new pallete
-//     LoadMonIconPalette(gBattleMons[whichMon].species); //Loads pallete for current mon
-//     return CreateMonIcon(gBattleMons[whichMon].species, SpriteCB_MonIcon, sPokemonIconPositions[whichMon].x, sPokemonIconPositions[whichMon].y, 4, 0); //Create pokemon sprite
-// }
 
 static void BattleInfoData_FreeResources(void)
 {
@@ -354,6 +555,8 @@ static void BattleInfoData_FreeResources(void)
         Free(sMonWindowBgTilemapBuffer);
     if (sBattleInfoBox)
         Free(sBattleInfoBox);
+    if (sBattleInfoDataTileGfx)
+        Free(sBattleInfoDataTileGfx);
     FreeMonWindowData();
     FreeAllWindowBuffers();
 }
@@ -378,7 +581,6 @@ static void InitBattleInfoBox(void)
 
 
 #define getN(num) (num < 100 ? (num < 10 ? 1 : 2) : 3)
-#define LEVEL_HP_FONT 0
 static void RenderWindow_LevelAndHP(void)
 {
     logDebug("RenderWindow_LevelAndHP");
@@ -388,15 +590,14 @@ static void RenderWindow_LevelAndHP(void)
     StringExpandPlaceholders(gStringVar4, sLevelAndHPTemplate);
     AddTextPrinterParameterized4(1, LEVEL_HP_FONT, 1, 0, 0, 1, GetFontColor(BATTLE_MON_TEXT_COLOR_HEADER), 0, gStringVar4);
 }
-#undef LEVEL_HP_FONT
 #undef getN
 
-#define appendStatToString(__STAT__) \
-ConvertIntToDecimalStringN(gStringVar1, (sBattleInfoBox->battleMon->statStages[__STAT__] - 6), STR_CONV_MODE_RIGHT_ALIGN, 2); \
-StringAppend(gStringVar4, gStringVar1); \
-StringAppend(gStringVar4, sNL) \
+static void RenderWindow_ButtonInfo(void)
+{
+    logDebug("RenderWindow_ButtonInfo");
+    AddTextPrinterParameterized4(8, 0, 0, 0, -1, -1, GetFontColor(BATTLE_MON_TEXT_COLOR_HEADER), 0, sButtonInfo);
+}
 
-#define NUM_STATS_TO_DRAW 7
 static const u8 sStatDrawOrder[] = {
     STAT_ATK,
     STAT_DEF,
@@ -448,13 +649,9 @@ static const u16 sStatStageTileStarts[] = {
     [STAT_EVASION] = 0x04A8,
 };
 
-#define BASE_STATS_UP_ARROW    0x34
-#define EXTRA_STATS_UP_ARROW   0x5C
-
 static void DrawStatStageIcons(void)
 {
     logDebug("DrawStatStageIcons");
-    // CpuCopy16(src, (void *)(sGpuBgConfigs2[bg].tilemap + (destOffset * 2)), mode);
     u8* tilemap = sBg1TilemapBuffer;
     u8* cursor;
     u8 i, j, tile, numToDraw;
@@ -479,102 +676,132 @@ static void DrawStatStageIcons(void)
             cursor++;
         }
     }
-
 }
-#undef NUM_STATS_TO_DRAW
 
 static void RenderWindow_PutAndCopy(void)
 {
-    PutWindowTilemap(1);
-    CopyWindowToVram(1, 2);
-
-    PutWindowTilemap(2);
-    CopyWindowToVram(2, 2);
-
-    PutWindowTilemap(3);
-    CopyWindowToVram(3, 2);
-
-    PutWindowTilemap(4);
-    CopyWindowToVram(4, 2);
-
-    PutWindowTilemap(5);
-    CopyWindowToVram(5, 2);
-
-    PutWindowTilemap(6);
-    CopyWindowToVram(6, 2);
+    u8 i;
+    for (i = 1; i < NUMBER_OF_WINDOWS; i++)
+    {
+        PutWindowTilemap(i);
+        CopyWindowToVram(i, 2);
+    }
 }
+
+static void RenderWindow_DoTerrainInfoTiles(void)
+{
+    logDebug("RenderWindow_DoTerrainInfoTiles");
+    u8 windowId, i = 0;
+    GetTerrainEffectDescriptions(sBattleInfoDataGUI->curMon, sBattleInfoDataGUI->terrainEffects);
+    while (i < 4 && sBattleInfoDataGUI->terrainEffects[i] < NUM_TERRAIN_EFFECT_DESCRIPTIONS)
+    {
+        windowId = i + 3;
+        BlitBitmapToMonWindow(sBattleInfoDataTileGfx, windowId, sTerrainEffectFilledTileNums, 10, STAGE_STATE_WINDOW_WIDTH, STAGE_STATE_WINDOW_HEIGHT);
+        AddTextPrinterParameterized3(windowId, TERRAIN_TILE_TEXT_FONT_ID, TERRAIN_TILE_TEXT_POS_X, TERRAIN_TILE_TEXT_POS_Y, GetFontColor(BATTLE_MON_TEXT_COLOR_TERRAIN), 0, GetTerrainEffect(sBattleInfoDataGUI->terrainEffects[i]).title);
+        ++i;
+    }
+    sBattleInfoDataGUI->numberOfTerrainTiles = i;
+    if (sBattleInfoDataGUI->terrainEffects[0] != 255)
+    {
+        sBattleInfoDataGUI->cursorIndex = 0;
+        UpdateTerrainPaletteHighlight();
+    }
+}
+
+static void RenderWindow_TerrainDescription(void)
+{
+    logDebug("RenderWindow_TerrainDescription");
+    logBool(sBattleInfoDataGUI->showDescription);
+    BlitBitmapToMonWindow(
+        sBattleInfoDataTileGfx,
+        DESCRIPTION_WINDOW_ID,
+        sTerrainEffectFilledTileNums,
+        10,
+        TERRAIN_WINDOW_WIDTH,
+        TERRAIN_WINDOW_HEIGHT
+    );
+    AddTextPrinterParameterized4(
+        DESCRIPTION_WINDOW_ID,
+        DESCRIPTION_WINDOW_TEXT_FONT_ID,
+        DESCRIPTION_WINDOW_TEXT_POS_X,
+        DESCRIPTION_WINDOW_TEXT_POS_Y,
+        -1,
+        -1,
+        GetFontColor(BATTLE_MON_TEXT_COLOR_TERRAIN),
+        0,
+        sBattleInfoDataGUI->cursorIndex == 255
+            ? sBlank
+            : SplitTextOnWordsWithNewLines(
+                DESCRIPTION_WINDOW_TEXT_FONT_ID,
+                GetTerrainEffect(sBattleInfoDataGUI->terrainEffects[sBattleInfoDataGUI->cursorIndex]).description,
+                -1,
+                DESCRIPTION_WINDOW_WIDTH
+            )
+    );
+}
+
+// To make the code a little more readable
+#define frame data[1]
+#define animation sDescriptionSlideAnimation[sBattleInfoDataGUI->showDescription]
+static void Task_DescriptionWindowAnimation(u8 taskId)
+{
+    logDebug("Task_ShowDescriptionAnimation");
+    if (gTasks[taskId].frame == DESCRIPTION_WINDOW_ANIMATION_LENGNTH)
+    {
+        DestroyTask(taskId);
+        sBattleInfoDataGUI->showDescriptionAnimationTask = 0xFF;
+    }
+    else
+    {
+        gBattle_BG1_X = animation[gTasks[taskId].frame];
+        gTasks[taskId].frame++;
+    }
+}
+
+#define toggleDescriptionMode() \
+if (sBattleInfoDataGUI->showDescriptionAnimationTask == 0xFF && sBattleInfoDataGUI->numberOfTerrainTiles > 0) \
+{ \
+    PlaySE(SE_SELECT); \
+    sBattleInfoDataGUI->showDescription = !sBattleInfoDataGUI->showDescription; \
+    sBattleInfoDataGUI->showDescriptionAnimationTask = CreateTask(Task_DescriptionWindowAnimation, 0); \
+    gTasks[sBattleInfoDataGUI->showDescriptionAnimationTask].frame = 0; \
+} \
 
 static void Task_BattleInfoData_Main(u8 taskId)
 {
+    u8 cursorMoveBy;
     if (JOY_REPEAT(A_BUTTON) || JOY_REPEAT(START_BUTTON))
     {
-        PlaySE(SE_SELECT);
-        // DestroyTask(taskId);
-        // BattleInfoSelect_GoToDataPlan();
-
+        toggleDescriptionMode();
     }
     else if (JOY_REPEAT(B_BUTTON))
     {
-        PlaySE(SE_SELECT);
-        DestroyTask(taskId);
-        BattleInfoData_FadeAndExit();
+        if (sBattleInfoDataGUI->showDescription)
+        {
+            toggleDescriptionMode();
+        }
+        else
+        {
+            PlaySE(SE_SELECT);
+            DestroyTask(taskId);
+            BattleInfoData_FadeAndExit();
+        }
     }
-    // else if (IsDoubleBattle())
-    // {
-    //     if (JOY_REPEAT(DPAD_UP))
-    //     {
-    //         if (sBattleInfoSelectionGUI->cursorIndex == 0)
-    //             sBattleInfoSelectionGUI->cursorIndex = 1;
-    //         else if (sBattleInfoSelectionGUI->cursorIndex == 1)
-    //             sBattleInfoSelectionGUI->cursorIndex = 3;
-    //         else if (sBattleInfoSelectionGUI->cursorIndex == 2)
-    //             sBattleInfoSelectionGUI->cursorIndex = 0;
-    //         else
-    //             sBattleInfoSelectionGUI->cursorIndex = 2;
-    //     }
-    //     else if (JOY_REPEAT(DPAD_RIGHT))
-    //     {
-    //         if (sBattleInfoSelectionGUI->cursorIndex == 0)
-    //             sBattleInfoSelectionGUI->cursorIndex = 3;
-    //         else
-    //             --sBattleInfoSelectionGUI->cursorIndex;
-    //     }
-    //     else if (JOY_REPEAT(DPAD_DOWN))
-    //     {
-    //         if (sBattleInfoSelectionGUI->cursorIndex == 0)
-    //             sBattleInfoSelectionGUI->cursorIndex = 2;
-    //         else if (sBattleInfoSelectionGUI->cursorIndex == 1)
-    //             sBattleInfoSelectionGUI->cursorIndex = 0;
-    //         else if (sBattleInfoSelectionGUI->cursorIndex == 2)
-    //             sBattleInfoSelectionGUI->cursorIndex = 3;
-    //         else
-    //             sBattleInfoSelectionGUI->cursorIndex = 1;
-    //     }
-    //     else if (JOY_REPEAT(DPAD_LEFT))
-    //     {
-    //         if (sBattleInfoSelectionGUI->cursorIndex == 3)
-    //             sBattleInfoSelectionGUI->cursorIndex = 0;
-    //         else
-    //             ++sBattleInfoSelectionGUI->cursorIndex;
-    //     }
-    //     if (JOY_REPEAT(DPAD_UP) || JOY_REPEAT(DPAD_RIGHT) || JOY_REPEAT(DPAD_LEFT) || JOY_REPEAT(DPAD_DOWN))
-    //     {
-    //         AnimateBattleInfoSlot(0 == sBattleInfoSelectionGUI->cursorIndex, &sBattleInfoBoxes[0]);
-    //         AnimateBattleInfoSlot(1 == sBattleInfoSelectionGUI->cursorIndex, &sBattleInfoBoxes[1]);
-    //         AnimateBattleInfoSlot(2 == sBattleInfoSelectionGUI->cursorIndex, &sBattleInfoBoxes[2]);
-    //         AnimateBattleInfoSlot(3 == sBattleInfoSelectionGUI->cursorIndex, &sBattleInfoBoxes[3]);
-    //     }
-    // }
-    // else
-    // {
-    //     if (JOY_REPEAT(DPAD_UP) || JOY_REPEAT(DPAD_RIGHT) || JOY_REPEAT(DPAD_LEFT) || JOY_REPEAT(DPAD_DOWN))
-    //     {
-    //         sBattleInfoSelectionGUI->cursorIndex = sBattleInfoSelectionGUI->cursorIndex == 0;
-    //         AnimateBattleInfoSlot(0 == sBattleInfoSelectionGUI->cursorIndex, &sBattleInfoBoxes[0]);
-    //         AnimateBattleInfoSlot(1 == sBattleInfoSelectionGUI->cursorIndex, &sBattleInfoBoxes[1]);
-    //     }
-    // }
+    else if (JOY_REPEAT(DPAD_ANY))
+    {
+        PlaySE(SE_SELECT);
+        if (JOY_REPEAT(DPAD_DOWN) || JOY_REPEAT(DPAD_RIGHT))
+            cursorMoveBy = 1;
+        else
+            cursorMoveBy = sBattleInfoDataGUI->numberOfTerrainTiles - 1;
+        sBattleInfoDataGUI->cursorIndex = (sBattleInfoDataGUI->cursorIndex + cursorMoveBy) % sBattleInfoDataGUI->numberOfTerrainTiles;
+        RenderWindow_TerrainDescription();
+        UpdateTerrainPaletteHighlight();
+    }
 }
+#undef toggleDescriptionMode
+#undef frame
+#undef animation
 
 static void CB2_ReturnToBattleInfo(void)
 {
@@ -613,6 +840,7 @@ static void Task_BattleInfoData_FadeAndExit(u8 taskId)
 {
     if (!gPaletteFade.active)
     {
+        gBattle_BG1_X = 0;
         SetMainCallback2(sBattleInfoDataGUI->savedCallback);
         BattleInfoData_FreeResources();
         DestroyTask(taskId);
@@ -629,6 +857,30 @@ static void BattleInfoData_FadeAndExit(void)
     SetMainCallback2(CB2_BattleInfoDataRun);
 }
 
-
-#undef MON_WINDOW_HEIGHT
-#undef MON_WINDOW_WIDTH
+// Undefs
+#undef NUMBER_OF_WINDOWS
+#undef TYPE_ICON_PAL_NUM_0
+#undef TYPE_ICON_PAL_NUM_1
+#undef TYPE_ICON_PAL_NUM_2
+#undef TYPE_SPRITE_0_X
+#undef TYPE_SPRITE_1_X
+#undef TYPE_SPRITES_Y
+#undef BODY_HIGHLIGHT_COLOR
+#undef BODY_NORMAL_COLOR
+#undef BORDER_HIGHLIGHT_COLOR
+#undef BORDER_NORMAL_COLOR
+#undef TERRAIN_TILE_TEXT_FONT_ID
+#undef TERRAIN_TILE_TEXT_POS_X
+#undef TERRAIN_TILE_TEXT_POS_Y
+#undef DESCRIPTION_WINDOW_ID
+#undef DESCRIPTION_WINDOW_TEXT_FONT_ID
+#undef DESCRIPTION_WINDOW_TEXT_POS_X
+#undef DESCRIPTION_WINDOW_TEXT_POS_Y
+#undef DESCRIPTION_WINDOW_WIDTH
+#undef DESCRIPTION_WINDOW_ANIMATION_LENGNTH
+#undef DESCRIPTION_WINDOW_ANIMATION_OPEN
+#undef DESCRIPTION_WINDOW_ANIMATION_CLOSE
+#undef LEVEL_HP_FONT
+#undef NUM_STATS_TO_DRAW
+#undef BASE_STATS_UP_ARROW
+#undef EXTRA_STATS_UP_ARROW
