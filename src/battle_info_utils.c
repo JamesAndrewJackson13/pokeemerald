@@ -1,10 +1,9 @@
 #include "global.h"
+#include "malloc.h"
 #include "text.h"
 #include "battle.h"
 #include "battle_info_utils.h"
-#include "battle_move_effects.h"
-#include "terrain_effects.h"
-#include "constants/moves.h"
+#include "window.h"
 
 #define TEXT_COLOR_BG     0
 #define TEXT_COLOR_FG     1
@@ -59,6 +58,13 @@
     [TEXT_COLOR_SHADOW] = TEXT_COLOR_LIGHT_GRAY,      \
 }
 
+#define BATTLE_MON_TEXT_COLOR_ARRAY_TERRAIN           \
+{                                                     \
+    [TEXT_COLOR_BG]     = TEXT_COLOR_TRANSPARENT,     \
+    [TEXT_COLOR_FG]     = 8,                          \
+    [TEXT_COLOR_SHADOW] = 3,                          \
+}
+
 // Text colors for BG, FG, and Shadow in that order
 static const u8 sFontColorTable[][3] =
 {
@@ -69,9 +75,10 @@ static const u8 sFontColorTable[][3] =
     BATTLE_MON_TEXT_COLOR_ARRAY_FIELD_MOVES,
     BATTLE_MON_TEXT_COLOR_ARRAY_UNUSED_2,
     BATTLE_MON_TEXT_COLOR_ARRAY_HEADER,
+    BATTLE_MON_TEXT_COLOR_ARRAY_TERRAIN,
 };
 
-u8* GetFontColor(u8 which)
+const u8* GetFontColor(u8 which)
 {
     return sFontColorTable[which];
 }
@@ -90,208 +97,54 @@ struct Pokemon* GetPokemonAtSlot(u8 slot)
 
 
 static const u16 palBuffer[BG_PLTT_SIZE / sizeof(u16)];
-u16* GetPalBuffer(void)
+const u16* GetPalBuffer(void)
 {
     return palBuffer;
 }
 
-
-#define howManyTerrainEffects 4
-#define setTerrainEffect(__WHICH_EFFECT__) \
-    curTerrainEffects[curIndex] = gTerrainEffects[__WHICH_EFFECT__]; \
-    if(++curIndex == howManyTerrainEffects) \
-        return curTerrainEffects; \
-
-#define handleFieldStatus(__WHICH__) \
-if (gFieldStatuses & STATUS_FIELD_##__WHICH__) \
-{ \
-    setTerrainEffect(DESCRIPTION_##__WHICH__); \
-} \
-
-#define handleMonStatus1(__WHICH__, __STATUS__) \
-if (gBattleMons[monIndex].status1 & STATUS1_##__STATUS__) \
-{ \
-    setTerrainEffect(DESCRIPTION_##__WHICH__); \
-} \
-
-#define handleMonStatus2(__WHICH__, __STATUS__) \
-if (gBattleMons[monIndex].status2 & STATUS2_##__STATUS__) \
-{ \
-    setTerrainEffect(DESCRIPTION_##__WHICH__); \
-} \
-
-#define handleMonStatus3(__WHICH__, __STATUS__) \
-if (gStatuses3[monIndex] & STATUS3_##__STATUS__) \
-{ \
-    setTerrainEffect(DESCRIPTION_##__WHICH__); \
-} \
-
-#define handleDisableStruct(__WHICH__, __STRUCT_ATTR__) \
-if (gDisableStructs[monIndex].##__STRUCT_ATTR__## != 0) \
-{ \
-    setTerrainEffect(DESCRIPTION_##__WHICH__); \
-} \
-
-#define handleSideStatus(__WHICH__) \
-if (sideStatus & SIDE_STATUS_##__WHICH__) \
-{ \
-    setTerrainEffect(DESCRIPTION_##__WHICH__); \
-} \
-
-#define handleSideTimers(__WHICH__, __TIMER__) \
-if (gSideTimers[sideStatus].##__TIMER__) \
-{ \
-    setTerrainEffect(DESCRIPTION_##__WHICH__); \
-} \
-
-u8** GetTerrainEffectDescriptions(u8 monIndex)
+// what the hell is 'c'?
+void BlitBitmapToMonWindow(u8* bgGfxTilemap, u8 windowId, const u8* b, u8 c, u8 w, u8 h)
 {
-    u8 curIndex = 0;
-    struct terrain_effect curTerrainEffects[howManyTerrainEffects] = { NULL, NULL, NULL, NULL };
-    u32 sideStatus = gSideStatuses[GET_BATTLER_SIDE(monIndex)];
+    logDebug("BlitBitmapToMonWindow");
+    u8* pixels = AllocZeroed(h * w * 32);
+    u8 i, j;
 
-    // First, check the weather states
-    if (gBattleWeather & WEATHER_ANY)
+    if (pixels != NULL)
     {
-        if (gBattleWeather & WEATHER_SUN_ANY)
+        // TOP ROW
+        // Top left
+        CpuCopy16(&bgGfxTilemap[(b[0] << 5)], &pixels[0], 32);
+        // Top middle
+        for (j = 1; j < w - 1; j++)
+            CpuCopy16(&bgGfxTilemap[(b[1] << 5)], &pixels[j * 32], 32);
+        // Top right
+        CpuCopy16(&bgGfxTilemap[(b[2] << 5)], &pixels[(w - 1) * 32], 32);
+
+        // MIDDLE ROWS
+        for (i = 1; i < h - 1; i++)
         {
-            curTerrainEffects[curIndex] = gTerrainEffects[DESCRIPTION_HARSH_SUNLIGHT];
+            // Middle left
+            CpuCopy16(&bgGfxTilemap[(b[3] << 5)], &pixels[w * i * 32], 32);
+            // Middle middle
+            for (j = 1; j < w - 1; j++)
+                CpuCopy16(&bgGfxTilemap[(b[4] << 5)], &pixels[(w * i + j) * 32], 32);
+            // Middle right
+            CpuCopy16(&bgGfxTilemap[(b[5] << 5)], &pixels[(w * i + w - 1) * 32], 32);
         }
-        else if (gBattleWeather & WEATHER_RAIN_ANY)
-        {
-            curTerrainEffects[curIndex] = gTerrainEffects[DESCRIPTION_RAIN];
-        }
-        else if (gBattleWeather & WEATHER_SANDSTORM_ANY)
-        {
-            curTerrainEffects[curIndex] = gTerrainEffects[DESCRIPTION_SANDSTORM];
-        }
-        else if (gBattleWeather & WEATHER_HAIL_ANY)
-        {
-            curTerrainEffects[curIndex] = gTerrainEffects[DESCRIPTION_HAIL];
-        }
-        ++curIndex;
+
+        // BOTTOM ROW
+        // Top left
+        CpuCopy16(&bgGfxTilemap[(b[6] << 5)], &pixels[((h - 1) * w) * 32], 32);
+        // Top middle
+        for (j = 1; j < w - 1; j++)
+            CpuCopy16(&bgGfxTilemap[(b[7] << 5)], &pixels[((h - 1) * w + j) * 32], 32);
+        // Top right
+        CpuCopy16(&bgGfxTilemap[(b[8] << 5)], &pixels[(h * w - 1) * 32], 32);
+
+        BlitBitmapToWindow(windowId, pixels, 0, 0, w * 8, h * 8);
+        Free(pixels);
     }
-    // Next, check if there's any flags set in gFieldStatuses
-    if (gFieldStatuses)
-    {
-        if (gFieldStatuses & STATUS_TERRAIN_ANY)
-        {
-            if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN)
-            {
-                curTerrainEffects[curIndex] = gTerrainEffects[DESCRIPTION_GRASSY_TERRAIN];
-            }
-            else if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN)
-            {
-                curTerrainEffects[curIndex] = gTerrainEffects[DESCRIPTION_ELECTRIC_TERRAIN];
-            }
-            else if (gFieldStatuses & EFFECT_ELECTRIC_TERRAIN)
-            {
-                curTerrainEffects[curIndex] = gTerrainEffects[DESCRIPTION_MISTY_TERRAIN];
-            }
-            else if (gFieldStatuses & EFFECT_PSYCHIC_TERRAIN)
-            {
-                curTerrainEffects[curIndex] = gTerrainEffects[DESCRIPTION_PSYCHIC_TERRAIN];
-            }
-            ++curIndex;
-        }
-        handleFieldStatus(MAGIC_ROOM);
-        handleFieldStatus(TRICK_ROOM);
-        handleFieldStatus(WONDER_ROOM);
-        handleFieldStatus(MUDSPORT);
-        handleFieldStatus(WATERSPORT);
-        handleFieldStatus(GRAVITY);
-        handleFieldStatus(FAIRY_LOCK);
-    }
-
-    handleMonStatus1(BADLY_POISONED, TOXIC_POISON);
-
-    if (gBattleMons[monIndex].status2)
-    {
-        // For whatever reason, there's a different description for each type of rampage. So we need to check for the locked move
-        if (gBattleMons[gEffectBattler].status2 & STATUS2_MULTIPLETURNS && gBattleMons[gEffectBattler].status2 & STATUS2_LOCK_CONFUSE)
-        {
-            switch (gLockedMoves[gEffectBattler])
-            {
-            case MOVE_OUTRAGE:
-                curTerrainEffects[curIndex] = gTerrainEffects[DESCRIPTION_OUTRAGE];
-                break;
-            case MOVE_THRASH:
-                curTerrainEffects[curIndex] = gTerrainEffects[DESCRIPTION_RAMPAGING];
-                break;
-            case MOVE_PETAL_DANCE:
-                curTerrainEffects[curIndex] = gTerrainEffects[DESCRIPTION_PETAL_DANCE];
-                break;
-            }
-            if (++curIndex == howManyTerrainEffects)
-                return curTerrainEffects;
-        }
-        handleMonStatus2(CRITICAL_HIT_BOOST, FOCUS_ENERGY);
-        handleMonStatus2(IDENTIFIED, FORESIGHT);
-        handleMonStatus2(CANT_ESCAPE, ESCAPE_PREVENTION);
-        handleMonStatus2(CONFUSION, CONFUSION);
-        handleMonStatus2(INFATUATION, INFATUATION);
-        handleMonStatus2(NIGHTMARE, NIGHTMARE);
-        handleMonStatus2(TORMENT, TORMENT);
-        handleMonStatus2(CURSE, CURSED);
-        handleMonStatus2(DESTINY_BOND, DESTINY_BOND);
-        handleMonStatus2(BOUND, WRAPPED);
-        handleMonStatus2(BIDE, BIDE);
-        handleMonStatus2(UPROAR, UPROAR);
-    }
-
-    if (gStatuses3[monIndex])
-    {
-        handleMonStatus3(DROWSY, YAWN);
-        handleMonStatus3(NO_ABILITY, GASTRO_ACID);
-        handleMonStatus3(LOCK_ON, ALWAYS_HITS);
-        handleMonStatus3(CHARGE, CHARGED_UP);
-        handleMonStatus3(INGRAIN, ROOTED);
-        handleMonStatus3(GRUDGE, GRUDGE);
-        handleMonStatus3(HEAL_BLOCK, HEAL_BLOCK);
-        handleMonStatus3(EMBARGO, EMBARGO);
-        handleMonStatus3(TELEKINESIS, TELEKINESIS);
-        handleMonStatus3(MAGNET_RISE, MAGNET_RISE);
-        handleMonStatus3(IMPRISON, IMPRISONED_OTHERS);
-        handleMonStatus3(LEECHSEED, LEECHSEED);
-        handleMonStatus3(AQUA_RING, AQUA_RING);
-        handleMonStatus3(SMACK_DOWN, SMACKED_DOWN);
-        handleMonStatus3(LASER_FOCUS, LASER_FOCUS);
-    }
-
-    if (sideStatus)
-    {
-        handleSideStatus(TAILWIND);
-        handleSideStatus(LUCKY_CHANT);
-        handleSideStatus(SAFEGUARD);
-        handleSideStatus(STEALTH_ROCK);
-        handleSideStatus(TOXIC_SPIKES);
-        handleSideStatus(STICKY_WEB);
-        handleSideStatus(LIGHTSCREEN);
-        handleSideStatus(REFLECT);
-        handleSideStatus(SPIKES);
-        handleSideStatus(FUTUREATTACK);
-        handleSideStatus(AURORA_VEIL);
-    }
-
-    handleSideTimers(MIST, mistTimer);
-
-    handleDisableStruct(ENCORE, encoredMove);
-    handleDisableStruct(MOVE_DISABLED, disabledMove);
-    handleDisableStruct(STOCKPILE, stockpileCounter);
-    handleDisableStruct(TAUNT, tauntTimer);
-    handleDisableStruct(COUNTING_DOWN, perishSongTimer);
-    handleDisableStruct(AUTOTOMIZE, autotomizeCount);
-    handleDisableStruct(THROAT_CHOP, throatChopTimer);
-
-    if (gWishFutureKnock.wishCounter[gBattlerAttacker] != 0)
-    {
-        setTerrainEffect(DESCRIPTION_WISH);
-    }
-
-
-    return curTerrainEffects;
 }
-#undef setTerrainEffect
 
 #undef BATTLE_MON_TEXT_COLOR_ARRAY_DEFAULT
 #undef BATTLE_MON_TEXT_COLOR_ARRAY_UNUSED_1

@@ -11,10 +11,11 @@
 #define BATTLE_MON_TEXT_COLOR_FIELD_MOVES       4
 #define BATTLE_MON_TEXT_COLOR_UNUSED_2          5
 #define BATTLE_MON_TEXT_COLOR_HEADER            6
+#define BATTLE_MON_TEXT_COLOR_TERRAIN           7
 
-u8* GetFontColor(u8 which);
+const u8* GetFontColor(u8 which);
 struct Pokemon* GetPokemonAtSlot(u8 slot);
-u16* GetPalBuffer(void);
-u8** GetTerrainEffectDescriptions(u8 monIndex);
+const u16* GetPalBuffer(void);
+void BlitBitmapToMonWindow(u8* bgGfxTilemap, u8 windowId, const u8* b, u8 c, u8 w, u8 h);
 
 #endif //GUARD_BATTLE_INFO_UTILS_H
