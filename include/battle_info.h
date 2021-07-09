@@ -8,6 +8,17 @@
 #define SELECTION_MON_WINDOW_HEIGHT          3
 #define SELECTION_MON_WINDOW_WIDTH          10
 
+#define BUTTONS_BAR                              \
+{                                                \
+    .bg = 0,                                     \
+    .tilemapLeft = 1,                            \
+    .tilemapTop = 16,                            \
+    .width = 6,                                 \
+    .height = 4,                                 \
+    .paletteNum = 0xF,                           \
+    .baseBlock = 0x102,                          \
+}
+
 #define TITLE_BAR      \
 {                      \
     .bg = 0,           \
@@ -68,6 +79,7 @@ static const struct WindowTemplate sSinglesBattleWindowTemplate[] =
     PLAYER_MON_1,
     OPPONENT_MON_1,
     TITLE_BAR,
+    BUTTONS_BAR,
     DUMMY_WIN_TEMPLATE
 };
 
@@ -79,6 +91,7 @@ static const struct WindowTemplate sDoublesBattleWindowTemplate[] =
     PLAYER_MON_2,
     OPPONENT_MON_2,
     TITLE_BAR,
+    BUTTONS_BAR,
     DUMMY_WIN_TEMPLATE
 };
 

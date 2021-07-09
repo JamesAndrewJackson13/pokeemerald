@@ -93,6 +93,13 @@
 #define hBar_HealthBoxSpriteId      data[5]
 #define hBar_Data6                  data[6]
 
+
+// Strings
+static const u8 sButtonInfo[] = {
+    CHAR_KEYPAD_ICON, CHAR_A_BUTTON, CHAR_SPACE, CHAR_S, CHAR_E, CHAR_L, CHAR_E, CHAR_C, CHAR_T, CHAR_NEWLINE,
+    CHAR_KEYPAD_ICON, CHAR_B_BUTTON, CHAR_SPACE, CHAR_B, CHAR_A, CHAR_C, CHAR_K, EOS,
+};
+
 static void BattleInfoSelect_OpenInit(u8 cursorMonStart, MainCallback callback);
 static void CB2_BattleInfoSelect_RunSetup(void);
 static bool8 BattleInfoSelect_SetupGfx(void);
@@ -115,6 +122,7 @@ static bool8 AllocBattleInfoBgGfx(void);
 static void LoadPartyBoxPalette(u8 windowId, u8 palFlags);
 static void RenderMonWindows(void);
 static void RenderHeaderWindow(void);
+static void RenderButtonWindow(void);
 static bool8 CreateBattleMonSpritesLoop(void);
 static bool8 RenderBattleMonBoxes(void);
 static void InitBattleInfoBoxes();
@@ -273,6 +281,7 @@ static bool8 BattleInfoSelect_SetupGfx(void)
     case 13:
         RenderMonWindows();
         RenderHeaderWindow();
+        RenderButtonWindow();
         ScheduleBgCopyTilemapToVram(0);
         break;
     case 14:
@@ -506,7 +515,22 @@ static void RenderHeaderWindow(void)
         gStringVar4);                                     // str
     PutWindowTilemap(gBattlersCount);
     CopyWindowToVram(gBattlersCount, 2);
+}
 
+static void RenderButtonWindow(void)
+{
+    // Set up drawing the header
+    ClearWindowTilemap(gBattlersCount+1);
+    AddTextPrinterParameterized3(
+        gBattlersCount + 1,                               // windowId
+        0,                                                // fontId
+        0,                                                // left
+        0,                                                // top
+        GetFontColor(BATTLE_MON_TEXT_COLOR_HEADER),       // color (as an array of [bg, fg, shadow])
+        0,                                                // speed
+        sButtonInfo);                                     // str
+    PutWindowTilemap(gBattlersCount + 1);
+    CopyWindowToVram(gBattlersCount + 1, 2);
 }
 
 static bool8 CreateBattleMonSpritesLoop(void)
@@ -626,7 +650,7 @@ static bool8 AllocBattleInfoBgGfx(void)
     {
         case 0:
         case 1:
-            AllocMonWindowBgGfx(sBattleInfoSelectionGUI->windowsBackgroundLoadState);
+            AllocMonWindowBgGfx(sBattleInfoSelectionGUI->windowsBackgroundLoadState, 0x160);
             break;
         default:
             PartyPaletteBufferCopy(sBattleInfoBoxes[sBattleInfoSelectionGUI->windowsBackgroundLoadState - 2].pallet);
