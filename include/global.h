@@ -21,7 +21,7 @@
 #define logUnsigned(__TO_LOG__) logVar(#__TO_LOG__, __TO_LOG__, "%u")
 #define logInt(__TO_LOG__) logVar(#__TO_LOG__, __TO_LOG__, "%i")
 #define logBool(__TO_LOG__) logVar(#__TO_LOG__, __TO_LOG__ ? "TRUE" : "FALSE", "%s")
-#define logU8String(__TO_LOG__) logVar(#__TO_LOG__, convertToAscii(__TO_LOG__), "%s")
+#define logU8String(__TO_LOG__) logVar(#__TO_LOG__, ConvertToAscii(__TO_LOG__), "%s")
 #define logString(__TO_LOG__) logVar(#__TO_LOG__, __TO_LOG__, "%s")
 #define logDebug(...) mgba_printf(MGBA_LOG_DEBUG, __VA_ARGS__)
 #define logInfo(...) mgba_printf(MGBA_LOG_INFO, __VA_ARGS__)
