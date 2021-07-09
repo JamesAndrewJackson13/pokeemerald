@@ -1696,7 +1696,7 @@ static void MoveSelectionDisplayMoveTypeDoubles(u8 targetId)
 #ifdef FEATUER_HIDDENPOWERTYPEINBATTLESCREEN
     if (moveInfo->moves[gMoveSelectionCursor[gActiveBattler]] == MOVE_HIDDEN_POWER)
     {
-        u8 type = getHiddenPowerType(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]]);
+        u8 type = GetHiddenPowerType(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]]);
         StringCopy(txtPtr, gTypeNames[type & 0x3F]);
     }
     else
@@ -1723,7 +1723,7 @@ static void MoveSelectionDisplayMoveType(void)
 #ifdef FEATUER_HIDDENPOWERTYPEINBATTLESCREEN
     if (moveInfo->moves[gMoveSelectionCursor[gActiveBattler]] == MOVE_HIDDEN_POWER)
     {
-        u8 type = getHiddenPowerType(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]]);
+        u8 type = GetHiddenPowerType(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]]);
         StringCopy(txtPtr, gTypeNames[type & 0x3F]);
     }
     else
