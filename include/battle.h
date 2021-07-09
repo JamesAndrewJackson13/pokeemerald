@@ -5,6 +5,7 @@
 #include "constants/battle.h"
 #include "battle_main.h"
 #include "battle_message.h"
+#include "battle_anim.h"
 #include "battle_util.h"
 #include "battle_script_commands.h"
 #include "battle_ai_switch_items.h"
