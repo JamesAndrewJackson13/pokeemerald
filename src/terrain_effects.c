@@ -1,104 +1,7 @@
-#ifndef TERRAIN_EFFECTS_H
-#define TERRAIN_EFFECTS_H
-
 #include "global.h"
-
-#define DESCRIPTION_HARSH_SUNLIGHT   0
-#define DESCRIPTION_RAIN             1
-#define DESCRIPTION_SANDSTORM        2
-#define DESCRIPTION_HAIL             3
-#define DESCRIPTION_ELECTRIC_TERRAIN 4
-
-
-#define DESCRIPTION_HARSH_SUNLIGHT            0
-#define DESCRIPTION_RAIN                      1
-#define DESCRIPTION_SANDSTORM                 2
-#define DESCRIPTION_HAIL                      3
-#define DESCRIPTION_ELECTRIC_TERRAIN          4
-#define DESCRIPTION_GRASSY_TERRAIN            5
-#define DESCRIPTION_MISTY_TERRAIN             6
-#define DESCRIPTION_TRICK_ROOM                7
-#define DESCRIPTION_MAGIC_ROOM                8
-#define DESCRIPTION_WONDER_ROOM               9
-#define DESCRIPTION_CRITICAL_HIT_BOOST       10
-#define DESCRIPTION_CONFUSION                11
-#define DESCRIPTION_INFATUATION              12
-#define DESCRIPTION_NIGHTMARE                13
-#define DESCRIPTION_DROWSY                   14
-#define DESCRIPTION_ENCORE                   15
-#define DESCRIPTION_NO_ABILITY               16
-#define DESCRIPTION_TORMENT                  17
-#define DESCRIPTION_TAILWIND                 18
-#define DESCRIPTION_LUCKY_CHANT              19
-#define DESCRIPTION_GRUDGE                   20
-#define DESCRIPTION_HEAL_BLOCK               21
-#define DESCRIPTION_IDENTIFIED               22
-#define DESCRIPTION_MOVE_DISABLED            23
-#define DESCRIPTION_CANT_ESCAPE              24
-#define DESCRIPTION_LOCK_ON                  25
-#define DESCRIPTION_EMBARGO                  26
-#define DESCRIPTION_CHARGE                   27
-#define DESCRIPTION_GRAVITY                  28
-#define DESCRIPTION_MIST                     29
-#define DESCRIPTION_SAFEGUARD                30
-#define DESCRIPTION_STEALTH_ROCK             31
-#define DESCRIPTION_STOCKPILE                32
-#define DESCRIPTION_TAUNT                    33
-#define DESCRIPTION_TELEKINESIS              34
-#define DESCRIPTION_MAGNET_RISE              35
-#define DESCRIPTION_TOXIC_SPIKES             36
-#define DESCRIPTION_MUDSPORT                 37
-#define DESCRIPTION_WISH                     38
-#define DESCRIPTION_STICKY_WEB               39
-#define DESCRIPTION_INGRAIN                  40
-#define DESCRIPTION_CURSE                    41
-#define DESCRIPTION_TRICK_OR_TREAT           42
-#define DESCRIPTION_LIGHTSCREEN              43
-#define DESCRIPTION_REFLECT                  44
-#define DESCRIPTION_IMPRISON                 45
-#define DESCRIPTION_COUNTING_DOWN            46
-#define DESCRIPTION_SPIKES                   47
-#define DESCRIPTION_WATERSPORT               48
-#define DESCRIPTION_DESTINY_BOND             49
-#define DESCRIPTION_FORESTS_CURSE            50
-#define DESCRIPTION_LEECHSEED                51
-#define DESCRIPTION_LOCK_ON                  52
-#define DESCRIPTION_BOUND                    53
-#define DESCRIPTION_BIDE                     54
-#define DESCRIPTION_OUTRAGE                  55
-#define DESCRIPTION_RAMPAGING                56
-#define DESCRIPTION_PETAL_DANCE              57
-#define DESCRIPTION_BADLY_POISONED           58
-#define DESCRIPTION_FUTUREATTACK             59
-#define DESCRIPTION_UPROAR                   60
-#define DESCRIPTION_AQUA_RING                61
-#define DESCRIPTION_AUTOTOMIZE               62
-#define DESCRIPTION_SMACK_DOWN               63
-#define DESCRIPTION_FAIRY_LOCK               64
-#define DESCRIPTION_RAINBOW                  65
-#define DESCRIPTION_SWAMP                    66
-#define DESCRIPTION_SEAOF_FIRE               67
-#define DESCRIPTION_EXTREMELY_HARSH_SUNLIGHT 68
-#define DESCRIPTION_HEAVY_RAIN               69
-#define DESCRIPTION_STRONG_WINDS             70
-#define DESCRIPTION_PSYCHIC_TERRAIN          71
-#define DESCRIPTION_THROAT_CHOP              72
-#define DESCRIPTION_AURORA_VEIL              73
-#define DESCRIPTION_LASER_FOCUS              74
-#define DESCRIPTION_TAR_SHOT                 75
-#define DESCRIPTION_OCTOLOCK                 76
-#define DESCRIPTION_G_MAX_WILDFIRE           77
-#define DESCRIPTION_G_MAX_VOLCALITH          78
-#define DESCRIPTION_G_MAX_STEELSURGE         79
-#define DESCRIPTION_G_MAX_VINE_LASH          80
-#define DESCRIPTION_G_MAX_CANNONADE          81
-#define NUM_TERRAIN_EFFECT_DESCRIPTIONS      82
-
-struct terrain_effect
-{
-    u8* title;
-    u8* description;
-};
+#include "battle.h"
+#include "terrain_effects.h"
+#include "constants/moves.h"
 
 
 // Titles
@@ -126,7 +29,7 @@ static const u8 title_grudge[] = _("Grudge");
 static const u8 title_healBlock[] = _("Heal Block");
 static const u8 title_identified[] = _("Identified");
 static const u8 title_moveDisabled[] = _("Move Disabled");
-static const u8 title_cantEscape[] = _("Can’t Escape");
+static const u8 title_cantEscape[] = _("Can't Escape");
 static const u8 title_lockOn[] = _("Lock-On");
 static const u8 title_embargo[] = _("Embargo");
 static const u8 title_charge[] = _("Charge");
@@ -152,9 +55,9 @@ static const u8 title_countingDown[] = _("Counting Down");
 static const u8 title_spikes[] = _("Spikes");
 static const u8 title_watersport[] = _("Water Sport");
 static const u8 title_destinyBond[] = _("Destiny Bond");
-static const u8 title_forestsCurse[] = _("Forest’s Curse");
+static const u8 title_forestsCurse[] = _("Forest's Curse");
 static const u8 title_leechseed[] = _("Leech Seed");
-// static const u8 title_lockOn[] = _("Lock-On");
+static const u8 title_lockedOn[] = _("Locked-On");
 static const u8 title_bound[] = _("Bound");
 static const u8 title_bide[] = _("Bide");
 static const u8 title_outrage[] = _("Outrage");
@@ -201,7 +104,7 @@ static const u8 description_confusion[] = _("The Pokémon may hurt itself in its
 static const u8 description_infatuation[] = _("The Pokémon is less likely to unleash an attack on Pokémon of the opposite gender.");
 static const u8 description_nightmare[] = _("The Pokémon will lose HP each turn as long as it is sleeping.");
 static const u8 description_drowsy[] = _("The Pokémon will fall asleep at the end of the turn if it remains on the battlefield.");
-static const u8 description_encore[] = _("Due to Encore, the Pokémon can use only {STRVAR1} for three turns.");
+static const u8 description_encore[] = _("Due to Encore, the Pokémon can use only {STR_VAR_1} for three turns.");
 static const u8 description_noAbility[] = _("The Pokémon's Ability loses its effect.");
 static const u8 description_torment[] = _("The Pokémon can't use the same move twice in a row.");
 static const u8 description_tailwind[] = _("The Speed stats of a Pokémon and its allies are doubled for four turns.");
@@ -209,7 +112,7 @@ static const u8 description_luckyChant[] = _("The opponent's moves won't result 
 static const u8 description_grudge[] = _("If the Pokémon faints by an opponent's move, the PP of that move will be reduced to 0.");
 static const u8 description_healBlock[] = _("For five turns, the Pokémon is unable to recover HP through its moves, ability, or held item.");
 static const u8 description_identified[] = _("The Pokémon will be hit by certain moves that usually wouldn't affect it. If the Pokémon's evasiveness has been boosted, the benefits will be ignored when it is attacked.");
-static const u8 description_moveDisabled[] = _("For four turns, the Pokémon will be unable to use {STRVAR2}.");
+static const u8 description_moveDisabled[] = _("For four turns, the Pokémon will be unable to use {STR_VAR_2}.");
 static const u8 description_cantEscape[] = _("The Pokémon can't flee or be switched out.");
 static const u8 description_lockOn[] = _("The next move used by the Pokémon will be sure to hit the target that was locked on to.");
 static const u8 description_embargo[] = _("For five turns, the Pokémon cannot use its held item and no items can be used on it.");
@@ -238,7 +141,7 @@ static const u8 description_watersport[] = _("The power of fire-type moves will 
 static const u8 description_destinyBond[] = _("If the Pokémon is knocked out by an opponent, that opponent will also faint.");
 static const u8 description_forestsCurse[] = _("The Pokémon gains the grass type.");
 static const u8 description_leechseed[] = _("Leech Seed steals some of the Pokémon's HP at the end of each turn and gives it to the opponent.");
-// static const u8 description_lockOn[] = _("Any move used against a locked-on target will be sure to hit.");
+static const u8 description_lockedOn[] = _("Any move used against a locked-on target will be sure to hit.");
 static const u8 description_bound[] = _("The Pokémon is bound and takes damage every turn.");
 static const u8 description_bide[] = _("The Pokémon endures attacks for two turns, then strikes back to inflict double the damage it has taken.");
 static const u8 description_outrage[] = _("The Pokémon rampages and attacks for two to three turns. It then becomes confused.");
@@ -252,7 +155,7 @@ static const u8 description_autotomize[] = _("The Pokémon's weight is reduced, 
 static const u8 description_smackDown[] = _("The Pokémon has been knocked out of the skyand has fallen to the ground.");
 static const u8 description_fairyLock[] = _("No Pokémon can flee the turn after Fairy Lock is used.");
 static const u8 description_rainbow[] = _("The additional effects of moves are more likely to occur.");
-static const u8 description_swamp[] = _("Speed is reduced by 75\% in swampy conditions.");
+static const u8 description_swamp[] = _("Speed is reduced by 75% in swampy conditions.");
 static const u8 description_seaofFire[] = _("Pokémon that are not fire types will take damage every turn.");
 static const u8 description_extremelyHarshSunlight[] = _("The extremely harsh sunlight weather condition. It boosts the power of fire-type moves and protects Pokémon from water-type moves.");
 static const u8 description_heavyRain[] = _("The heavy rain weather condition. It boosts the power of water-type moves and protects Pokémon from fire-type moves.");
@@ -271,91 +174,338 @@ static const u8 description_gMaxCannonade[] = _("Pokémon that are not water typ
 
 
 
-#define terrainEffect(__WHICH__) {.title=title_##__WHICH__##, .description=description_##__WHICH__##}
-const struct terrain_effect const gTerrainEffects[NUM_TERRAIN_EFFECT_DESCRIPTIONS] =
+#define terrainEffect(__WHICH__) {.title=title_ ## __WHICH__, .description=description_ ## __WHICH__}
+static const struct terrain_effect const sTerrainEffects[NUM_TERRAIN_EFFECT_DESCRIPTIONS] =
 {
-    [DESCRIPTION_EXTREMELY_HARSH_SUNLIGHT] = terrainEffect(extremelyHarshSunlight),  // Not in the game yet
-    [DESCRIPTION_HEAVY_RAIN] = terrainEffect(heavyRain),                             // Not in the game yet
-    [DESCRIPTION_HARSH_SUNLIGHT] = terrainEffect(harshSunlight),
-    [DESCRIPTION_RAIN] = terrainEffect(rain),
-    [DESCRIPTION_SANDSTORM] = terrainEffect(sandstorm),
-    [DESCRIPTION_HAIL] = terrainEffect(hail),
-    [DESCRIPTION_MAGIC_ROOM] = terrainEffect(magicRoom),
-    [DESCRIPTION_TRICK_ROOM] = terrainEffect(trickRoom),
-    [DESCRIPTION_WONDER_ROOM] = terrainEffect(wonderRoom),
-    [DESCRIPTION_MUDSPORT] = terrainEffect(mudsport),
-    [DESCRIPTION_WATERSPORT] = terrainEffect(watersport),
-    [DESCRIPTION_GRAVITY] = terrainEffect(gravity),
-    [DESCRIPTION_GRASSY_TERRAIN] = terrainEffect(grassyTerrain),
-    [DESCRIPTION_MISTY_TERRAIN] = terrainEffect(mistyTerrain),
-    [DESCRIPTION_ELECTRIC_TERRAIN] = terrainEffect(electricTerrain),
-    [DESCRIPTION_PSYCHIC_TERRAIN] = terrainEffect(psychicTerrain),
-    [DESCRIPTION_FAIRY_LOCK] = terrainEffect(fairyLock),
-    [DESCRIPTION_CRITICAL_HIT_BOOST] = terrainEffect(criticalHitBoost),
-    [DESCRIPTION_CONFUSION] = terrainEffect(confusion),
-    [DESCRIPTION_INFATUATION] = terrainEffect(infatuation),
-    [DESCRIPTION_NIGHTMARE] = terrainEffect(nightmare),
-    [DESCRIPTION_DROWSY] = terrainEffect(drowsy),
-    [DESCRIPTION_ENCORE] = terrainEffect(encore),
-    [DESCRIPTION_NO_ABILITY] = terrainEffect(noAbility),
-    [DESCRIPTION_TORMENT] = terrainEffect(torment),
-    [DESCRIPTION_TAILWIND] = terrainEffect(tailwind),
-    [DESCRIPTION_LUCKY_CHANT] = terrainEffect(luckyChant),
-    [DESCRIPTION_GRUDGE] = terrainEffect(grudge),
-    [DESCRIPTION_HEAL_BLOCK] = terrainEffect(healBlock),
-    [DESCRIPTION_IDENTIFIED] = terrainEffect(identified),
-    [DESCRIPTION_MOVE_DISABLED] = terrainEffect(moveDisabled),
-    [DESCRIPTION_CANT_ESCAPE] = terrainEffect(cantEscape),
-    [DESCRIPTION_LOCK_ON] = terrainEffect(lockOn),
-    [DESCRIPTION_EMBARGO] = terrainEffect(embargo),
-    [DESCRIPTION_CHARGE] = terrainEffect(charge),
-    [DESCRIPTION_MIST] = terrainEffect(mist),
-    [DESCRIPTION_SAFEGUARD] = terrainEffect(safeguard),
-    [DESCRIPTION_STEALTH_ROCK] = terrainEffect(stealthRock),
-    [DESCRIPTION_STOCKPILE] = terrainEffect(stockpile),
-    [DESCRIPTION_TAUNT] = terrainEffect(taunt),
-    [DESCRIPTION_TELEKINESIS] = terrainEffect(telekinesis),
-    [DESCRIPTION_MAGNET_RISE] = terrainEffect(magnetRise),
-    [DESCRIPTION_TOXIC_SPIKES] = terrainEffect(toxicSpikes),
-    [DESCRIPTION_WISH] = terrainEffect(wish),
-    [DESCRIPTION_STICKY_WEB] = terrainEffect(stickyWeb),
-    [DESCRIPTION_INGRAIN] = terrainEffect(ingrain),
-    [DESCRIPTION_CURSE] = terrainEffect(curse),
-    [DESCRIPTION_TRICK_OR_TREAT] = terrainEffect(trickOrTreat),  // Not used yet
-    [DESCRIPTION_LIGHTSCREEN] = terrainEffect(lightscreen),
-    [DESCRIPTION_REFLECT] = terrainEffect(reflect),
-    [DESCRIPTION_IMPRISON] = terrainEffect(imprison),
-    [DESCRIPTION_COUNTING_DOWN] = terrainEffect(countingDown),
-    [DESCRIPTION_SPIKES] = terrainEffect(spikes),
-    [DESCRIPTION_DESTINY_BOND] = terrainEffect(destinyBond),
-    [DESCRIPTION_FORESTS_CURSE] = terrainEffect(forestsCurse),    // Not used yet
-    [DESCRIPTION_LEECHSEED] = terrainEffect(leechseed),
-    // [DESCRIPTION_LOCK_ON] = terrainEffect(lockOn),
-    [DESCRIPTION_BOUND] = terrainEffect(bound),
-    [DESCRIPTION_BIDE] = terrainEffect(bide),
-    [DESCRIPTION_OUTRAGE] = terrainEffect(outrage),
-    [DESCRIPTION_RAMPAGING] = terrainEffect(rampaging),
-    [DESCRIPTION_PETAL_DANCE] = terrainEffect(petalDance),
-    [DESCRIPTION_BADLY_POISONED] = terrainEffect(badlyPoisoned),
-    [DESCRIPTION_FUTUREATTACK] = terrainEffect(futureattack),
-    [DESCRIPTION_UPROAR] = terrainEffect(uproar),
-    [DESCRIPTION_AQUA_RING] = terrainEffect(aquaRing),
-    [DESCRIPTION_AUTOTOMIZE] = terrainEffect(autotomize),
-    [DESCRIPTION_SMACK_DOWN] = terrainEffect(smackDown),
-    [DESCRIPTION_RAINBOW] = terrainEffect(rainbow),                          // Not used yet
-    [DESCRIPTION_SWAMP] = terrainEffect(swamp),                              // Not used yet
-    [DESCRIPTION_SEAOF_FIRE] = terrainEffect(seaofFire),                     // Not used yet
-    [DESCRIPTION_STRONG_WINDS] = terrainEffect(strongWinds),                 // Not used yet
-    [DESCRIPTION_THROAT_CHOP] = terrainEffect(throatChop),
-    [DESCRIPTION_AURORA_VEIL] = terrainEffect(auroraVeil),
-    [DESCRIPTION_LASER_FOCUS] = terrainEffect(laserFocus),
-    [DESCRIPTION_TAR_SHOT] = terrainEffect(tarShot),                         // Not used yet?
-    [DESCRIPTION_OCTOLOCK] = terrainEffect(octolock),                        // Not used yet?
-    [DESCRIPTION_G_MAX_WILDFIRE] = terrainEffect(gMaxWildfire),              // Not used yet
-    [DESCRIPTION_G_MAX_VOLCALITH] = terrainEffect(gMaxVolcalith),            // Not used yet
-    [DESCRIPTION_G_MAX_STEELSURGE] = terrainEffect(gMaxSteelsurge),          // Not used yet
-    [DESCRIPTION_G_MAX_VINE_LASH] = terrainEffect(gMaxVineLash),             // Not used yet
-    [DESCRIPTION_G_MAX_CANNONADE] = terrainEffect(gMaxCannonade),            // Not used yet
+    [TERRAIN_EFFECT_EXTREMELY_HARSH_SUNLIGHT] = terrainEffect(extremelyHarshSunlight),  // Not in the game yet
+    [TERRAIN_EFFECT_HEAVY_RAIN] = terrainEffect(heavyRain),                             // Not in the game yet
+    [TERRAIN_EFFECT_HARSH_SUNLIGHT] = terrainEffect(harshSunlight),
+    [TERRAIN_EFFECT_RAIN] = terrainEffect(rain),
+    [TERRAIN_EFFECT_SANDSTORM] = terrainEffect(sandstorm),
+    [TERRAIN_EFFECT_HAIL] = terrainEffect(hail),
+    [TERRAIN_EFFECT_MAGIC_ROOM] = terrainEffect(magicRoom),
+    [TERRAIN_EFFECT_TRICK_ROOM] = terrainEffect(trickRoom),
+    [TERRAIN_EFFECT_WONDER_ROOM] = terrainEffect(wonderRoom),
+    [TERRAIN_EFFECT_MUDSPORT] = terrainEffect(mudsport),
+    [TERRAIN_EFFECT_WATERSPORT] = terrainEffect(watersport),
+    [TERRAIN_EFFECT_GRAVITY] = terrainEffect(gravity),
+    [TERRAIN_EFFECT_GRASSY_TERRAIN] = terrainEffect(grassyTerrain),
+    [TERRAIN_EFFECT_MISTY_TERRAIN] = terrainEffect(mistyTerrain),
+    [TERRAIN_EFFECT_ELECTRIC_TERRAIN] = terrainEffect(electricTerrain),
+    [TERRAIN_EFFECT_PSYCHIC_TERRAIN] = terrainEffect(psychicTerrain),
+    [TERRAIN_EFFECT_FAIRY_LOCK] = terrainEffect(fairyLock),
+    [TERRAIN_EFFECT_CRITICAL_HIT_BOOST] = terrainEffect(criticalHitBoost),
+    [TERRAIN_EFFECT_CONFUSION] = terrainEffect(confusion),
+    [TERRAIN_EFFECT_INFATUATION] = terrainEffect(infatuation),
+    [TERRAIN_EFFECT_NIGHTMARE] = terrainEffect(nightmare),
+    [TERRAIN_EFFECT_DROWSY] = terrainEffect(drowsy),
+    [TERRAIN_EFFECT_ENCORE] = terrainEffect(encore),
+    [TERRAIN_EFFECT_NO_ABILITY] = terrainEffect(noAbility),
+    [TERRAIN_EFFECT_TORMENT] = terrainEffect(torment),
+    [TERRAIN_EFFECT_TAILWIND] = terrainEffect(tailwind),
+    [TERRAIN_EFFECT_LUCKY_CHANT] = terrainEffect(luckyChant),
+    [TERRAIN_EFFECT_GRUDGE] = terrainEffect(grudge),
+    [TERRAIN_EFFECT_HEAL_BLOCK] = terrainEffect(healBlock),
+    [TERRAIN_EFFECT_IDENTIFIED] = terrainEffect(identified),
+    [TERRAIN_EFFECT_MOVE_DISABLED] = terrainEffect(moveDisabled),
+    [TERRAIN_EFFECT_CANT_ESCAPE] = terrainEffect(cantEscape),
+    [TERRAIN_EFFECT_LOCK_ON] = terrainEffect(lockOn),
+    [TERRAIN_EFFECT_EMBARGO] = terrainEffect(embargo),
+    [TERRAIN_EFFECT_CHARGE] = terrainEffect(charge),
+    [TERRAIN_EFFECT_MIST] = terrainEffect(mist),
+    [TERRAIN_EFFECT_SAFEGUARD] = terrainEffect(safeguard),
+    [TERRAIN_EFFECT_STEALTH_ROCK] = terrainEffect(stealthRock),
+    [TERRAIN_EFFECT_STOCKPILE] = terrainEffect(stockpile),
+    [TERRAIN_EFFECT_TAUNT] = terrainEffect(taunt),
+    [TERRAIN_EFFECT_TELEKINESIS] = terrainEffect(telekinesis),
+    [TERRAIN_EFFECT_MAGNET_RISE] = terrainEffect(magnetRise),
+    [TERRAIN_EFFECT_TOXIC_SPIKES] = terrainEffect(toxicSpikes),
+    [TERRAIN_EFFECT_WISH] = terrainEffect(wish),
+    [TERRAIN_EFFECT_STICKY_WEB] = terrainEffect(stickyWeb),
+    [TERRAIN_EFFECT_INGRAIN] = terrainEffect(ingrain),
+    [TERRAIN_EFFECT_CURSE] = terrainEffect(curse),
+    [TERRAIN_EFFECT_TRICK_OR_TREAT] = terrainEffect(trickOrTreat),              // Not used yet
+    [TERRAIN_EFFECT_LIGHTSCREEN] = terrainEffect(lightscreen),
+    [TERRAIN_EFFECT_REFLECT] = terrainEffect(reflect),
+    [TERRAIN_EFFECT_IMPRISON] = terrainEffect(imprison),
+    [TERRAIN_EFFECT_COUNTING_DOWN] = terrainEffect(countingDown),
+    [TERRAIN_EFFECT_SPIKES] = terrainEffect(spikes),
+    [TERRAIN_EFFECT_DESTINY_BOND] = terrainEffect(destinyBond),
+    [TERRAIN_EFFECT_FORESTS_CURSE] = terrainEffect(forestsCurse),               // Not used yet
+    [TERRAIN_EFFECT_LEECHSEED] = terrainEffect(leechseed),
+    [TERRAIN_EFFECT_LOCKED_ON] = terrainEffect(lockedOn),
+    [TERRAIN_EFFECT_BOUND] = terrainEffect(bound),
+    [TERRAIN_EFFECT_BIDE] = terrainEffect(bide),
+    [TERRAIN_EFFECT_OUTRAGE] = terrainEffect(outrage),
+    [TERRAIN_EFFECT_RAMPAGING] = terrainEffect(rampaging),
+    [TERRAIN_EFFECT_PETAL_DANCE] = terrainEffect(petalDance),
+    [TERRAIN_EFFECT_BADLY_POISONED] = terrainEffect(badlyPoisoned),
+    [TERRAIN_EFFECT_FUTUREATTACK] = terrainEffect(futureattack),
+    [TERRAIN_EFFECT_UPROAR] = terrainEffect(uproar),
+    [TERRAIN_EFFECT_AQUA_RING] = terrainEffect(aquaRing),
+    [TERRAIN_EFFECT_AUTOTOMIZE] = terrainEffect(autotomize),
+    [TERRAIN_EFFECT_SMACK_DOWN] = terrainEffect(smackDown),
+    [TERRAIN_EFFECT_RAINBOW] = terrainEffect(rainbow),                          // Not used yet
+    [TERRAIN_EFFECT_SWAMP] = terrainEffect(swamp),                              // Not used yet
+    [TERRAIN_EFFECT_SEAOF_FIRE] = terrainEffect(seaofFire),                     // Not used yet
+    [TERRAIN_EFFECT_STRONG_WINDS] = terrainEffect(strongWinds),                 // Not used yet
+    [TERRAIN_EFFECT_THROAT_CHOP] = terrainEffect(throatChop),
+    [TERRAIN_EFFECT_AURORA_VEIL] = terrainEffect(auroraVeil),
+    [TERRAIN_EFFECT_LASER_FOCUS] = terrainEffect(laserFocus),
+    [TERRAIN_EFFECT_TAR_SHOT] = terrainEffect(tarShot),                         // Not used yet?
+    [TERRAIN_EFFECT_OCTOLOCK] = terrainEffect(octolock),                        // Not used yet?
+    [TERRAIN_EFFECT_G_MAX_WILDFIRE] = terrainEffect(gMaxWildfire),              // Not used yet
+    [TERRAIN_EFFECT_G_MAX_VOLCALITH] = terrainEffect(gMaxVolcalith),            // Not used yet
+    [TERRAIN_EFFECT_G_MAX_STEELSURGE] = terrainEffect(gMaxSteelsurge),          // Not used yet
+    [TERRAIN_EFFECT_G_MAX_VINE_LASH] = terrainEffect(gMaxVineLash),             // Not used yet
+    [TERRAIN_EFFECT_G_MAX_CANNONADE] = terrainEffect(gMaxCannonade),            // Not used yet
 };
+
+struct terrain_effect GetTerrainEffect(u8 terrainId)
+{
+    return sTerrainEffects[terrainId];
+}
+
+
+
+#define howManyTerrainEffects 4
+#define setTerrainEffect(__WHICH_EFFECT__) \
+    curTerrainEffects[curIndex] = __WHICH_EFFECT__; \
+    logUnsigned(curIndex);\
+    logUnsigned(curTerrainEffects[curIndex]);\
+    if(++curIndex == howManyTerrainEffects) \
+        return; \
+
+#define handleFieldStatus(__WHICH__) \
+if (gFieldStatuses & STATUS_FIELD_ ## __WHICH__) \
+{ \
+    setTerrainEffect(TERRAIN_EFFECT_ ## __WHICH__); \
+} \
+
+#define handleMonStatus1(__WHICH__, __STATUS__) \
+if (gBattleMons[monIndex].status1 & STATUS1_ ## __STATUS__) \
+{ \
+    setTerrainEffect(TERRAIN_EFFECT_ ## __WHICH__); \
+} \
+
+#define handleMonStatus2(__WHICH__, __STATUS__) \
+if (gBattleMons[monIndex].status2 & STATUS2_ ## __STATUS__) \
+{ \
+    setTerrainEffect(TERRAIN_EFFECT_ ## __WHICH__); \
+} \
+
+#define handleMonStatus3(__WHICH__, __STATUS__) \
+if (gStatuses3[monIndex] & STATUS3_ ## __STATUS__) \
+{ \
+    setTerrainEffect(TERRAIN_EFFECT_ ## __WHICH__); \
+} \
+
+#define handleDisableStruct(__WHICH__, __STRUCT_ATTR__) \
+if (gDisableStructs[monIndex] ## __STRUCT_ATTR__ != 0) \
+{ \
+    setTerrainEffect(TERRAIN_EFFECT_ ## __WHICH__); \
+} \
+
+#define handleSideStatus(__WHICH__) \
+if (sideStatus & SIDE_STATUS_ ## __WHICH__) \
+{ \
+    setTerrainEffect(TERRAIN_EFFECT_ ## __WHICH__); \
+} \
+
+
+void GetTerrainEffectDescriptions(u8 monIndex, u8*curTerrainEffects)
+{
+    logDebug("GetTerrainEffectDescriptions");
+    u8 curIndex = 0;
+    u8 i;
+    u32 sideStatus = gSideStatuses[GET_BATTLER_SIDE(monIndex)];
+
+    // Null out the existing array
+    for (i = 0; i < howManyTerrainEffects; i++)
+    {
+        curTerrainEffects[i] = TERRAIN_EFFECT_NULL;
+    }
+
+    // First, check the weather states
+    if (gBattleWeather & WEATHER_ANY)
+    {
+        if (gBattleWeather & WEATHER_SUN_ANY)
+        {
+            curTerrainEffects[curIndex] = TERRAIN_EFFECT_HARSH_SUNLIGHT;
+        }
+        else if (gBattleWeather & WEATHER_RAIN_ANY)
+        {
+            curTerrainEffects[curIndex] = TERRAIN_EFFECT_RAIN;
+        }
+        else if (gBattleWeather & WEATHER_SANDSTORM_ANY)
+        {
+            curTerrainEffects[curIndex] = TERRAIN_EFFECT_SANDSTORM;
+        }
+        else if (gBattleWeather & WEATHER_HAIL_ANY)
+        {
+            curTerrainEffects[curIndex] = TERRAIN_EFFECT_HAIL;
+        }
+        ++curIndex;
+    }
+    // Next, check if there's any flags set in gFieldStatuses
+    if (gFieldStatuses)
+    {
+        if (gFieldStatuses & STATUS_TERRAIN_ANY)
+        {
+            if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN)
+            {
+                curTerrainEffects[curIndex] = TERRAIN_EFFECT_GRASSY_TERRAIN;
+            }
+            else if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN)
+            {
+                curTerrainEffects[curIndex] = TERRAIN_EFFECT_ELECTRIC_TERRAIN;
+            }
+            else if (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
+            {
+                curTerrainEffects[curIndex] = TERRAIN_EFFECT_MISTY_TERRAIN;
+            }
+            else if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN)
+            {
+                curTerrainEffects[curIndex] = TERRAIN_EFFECT_PSYCHIC_TERRAIN;
+            }
+            ++curIndex;
+        }
+        handleFieldStatus(MAGIC_ROOM);
+        handleFieldStatus(TRICK_ROOM);
+        handleFieldStatus(WONDER_ROOM);
+        handleFieldStatus(MUDSPORT);
+        handleFieldStatus(WATERSPORT);
+        handleFieldStatus(GRAVITY);
+        handleFieldStatus(FAIRY_LOCK);
+    }
+
+    handleMonStatus1(BADLY_POISONED, TOXIC_POISON);
+
+    if (gBattleMons[monIndex].status2)
+    {
+        // For whatever reason, there's a different description for each type of rampage. So we need to check for the locked move
+        if (gBattleMons[gEffectBattler].status2 & STATUS2_MULTIPLETURNS && gBattleMons[gEffectBattler].status2 & STATUS2_LOCK_CONFUSE)
+        {
+            switch (gLockedMoves[gEffectBattler])
+            {
+            case MOVE_OUTRAGE:
+                curTerrainEffects[curIndex] = TERRAIN_EFFECT_OUTRAGE;
+                break;
+            case MOVE_THRASH:
+                curTerrainEffects[curIndex] = TERRAIN_EFFECT_RAMPAGING;
+                break;
+            case MOVE_PETAL_DANCE:
+                curTerrainEffects[curIndex] = TERRAIN_EFFECT_PETAL_DANCE;
+                break;
+            }
+            if (++curIndex == howManyTerrainEffects)
+                return;
+        }
+        handleMonStatus2(CRITICAL_HIT_BOOST, FOCUS_ENERGY);
+        handleMonStatus2(IDENTIFIED, FORESIGHT);
+        handleMonStatus2(CANT_ESCAPE, ESCAPE_PREVENTION);
+        handleMonStatus2(CONFUSION, CONFUSION);
+        handleMonStatus2(INFATUATION, INFATUATION);
+        handleMonStatus2(NIGHTMARE, NIGHTMARE);
+        handleMonStatus2(TORMENT, TORMENT);
+        handleMonStatus2(CURSE, CURSED);
+        handleMonStatus2(DESTINY_BOND, DESTINY_BOND);
+        handleMonStatus2(BOUND, WRAPPED);
+        handleMonStatus2(BIDE, BIDE);
+        handleMonStatus2(UPROAR, UPROAR);
+    }
+
+    if (gStatuses3[monIndex])
+    {
+        handleMonStatus3(DROWSY, YAWN);
+        handleMonStatus3(NO_ABILITY, GASTRO_ACID);
+        handleMonStatus3(LOCKED_ON, ALWAYS_HITS);
+        handleMonStatus3(CHARGE, CHARGED_UP);
+        handleMonStatus3(INGRAIN, ROOTED);
+        handleMonStatus3(GRUDGE, GRUDGE);
+        handleMonStatus3(HEAL_BLOCK, HEAL_BLOCK);
+        handleMonStatus3(EMBARGO, EMBARGO);
+        handleMonStatus3(TELEKINESIS, TELEKINESIS);
+        handleMonStatus3(MAGNET_RISE, MAGNET_RISE);
+        handleMonStatus3(IMPRISON, IMPRISONED_OTHERS);
+        handleMonStatus3(LEECHSEED, LEECHSEED);
+        handleMonStatus3(AQUA_RING, AQUA_RING);
+        handleMonStatus3(SMACK_DOWN, SMACKED_DOWN);
+        handleMonStatus3(LASER_FOCUS, LASER_FOCUS);
+    }
+
+    if (sideStatus)
+    {
+        handleSideStatus(TAILWIND);
+        handleSideStatus(LUCKY_CHANT);
+        handleSideStatus(SAFEGUARD);
+        handleSideStatus(STEALTH_ROCK);
+        handleSideStatus(TOXIC_SPIKES);
+        handleSideStatus(STICKY_WEB);
+        handleSideStatus(LIGHTSCREEN);
+        handleSideStatus(REFLECT);
+        handleSideStatus(SPIKES);
+        handleSideStatus(FUTUREATTACK);
+        handleSideStatus(AURORA_VEIL);
+    }
+
+    if (gSideTimers[sideStatus].mistTimer)
+    {
+        setTerrainEffect(TERRAIN_EFFECT_MIST);
+    }
+
+    if (gDisableStructs[monIndex].encoredMove != 0)
+    {
+        setTerrainEffect(TERRAIN_EFFECT_ENCORE);
+    }
+    if (gDisableStructs[monIndex].disabledMove != 0)
+    {
+        setTerrainEffect(TERRAIN_EFFECT_MOVE_DISABLED);
+    }
+    if (gDisableStructs[monIndex].stockpileCounter != 0)
+    {
+        setTerrainEffect(TERRAIN_EFFECT_STOCKPILE);
+    }
+    if (gDisableStructs[monIndex].tauntTimer != 0)
+    {
+        setTerrainEffect(TERRAIN_EFFECT_TAUNT);
+    }
+    if (gDisableStructs[monIndex].perishSongTimer != 0)
+    {
+        setTerrainEffect(TERRAIN_EFFECT_COUNTING_DOWN);
+    }
+    if (gDisableStructs[monIndex].autotomizeCount != 0)
+    {
+        setTerrainEffect(TERRAIN_EFFECT_AUTOTOMIZE);
+    }
+    if (gDisableStructs[monIndex].throatChopTimer != 0)
+    {
+        setTerrainEffect(TERRAIN_EFFECT_THROAT_CHOP);
+    }
+
+    if (gWishFutureKnock.wishCounter[gBattlerAttacker] != 0)
+    {
+        setTerrainEffect(TERRAIN_EFFECT_WISH);
+    }
+
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        if (i != monIndex && gStatuses3[i] & STATUS3_ALWAYS_HITS && gDisableStructs[i].battlerWithSureHit == monIndex)
+        {
+            setTerrainEffect(TERRAIN_EFFECT_LOCK_ON);
+            break;
+        }
+    }
+}
+#undef setTerrainEffect
+#undef setTerrainEffect
+#undef handleFieldStatus
+#undef handleMonStatus1
+#undef handleMonStatus2
+#undef handleMonStatus3
+#undef handleDisableStruct
+#undef handleSideStatus
+#undef handleSideTimers
+
+
 #undef terrainEffect
-#endif  // TERRAIN_EFFECTS_H
