@@ -44,7 +44,7 @@ void LoadPartyMenuAilmentGfx(void);
 void LoadBattleInfoPokeballGfx(void);
 void AnimateBattleInfoSlot(u8 animNum, struct BattleInfoBox* battleInfoBox);
 void PartyPaletteBufferCopy(u8 offset);
-bool8 AllocMonWindowBgGfx(u8 state);
+bool8 AllocMonWindowBgGfx(u8 state, u16 size);
 void FreeMonWindowData(void);
 
 

@@ -73,7 +73,7 @@
 #define NICKNAME_POS_Y  1
 #define GENDER_POS_X   64
 #define GENDER_POS_Y   10
-#define LEVEL_POS_X    35
+#define LEVEL_POS_X    32
 #define LEVEL_POS_Y    10
 
 static const struct SpritePalette sSpritePalette_HeldItem =
@@ -100,12 +100,11 @@ static void DisplayBattlePokemonLevel(struct BattleInfoBox* battleInfoBox);
 static void SpriteCB_BouncePartyMonIcon(struct Sprite* sprite);
 static void SpriteCB_UpdatePartyMonIcon(struct Sprite* sprite);
 static void AnimateSelectedPartyIcon(u8 spriteId, u8 animNum);
-static void BlitBitmapToMonWindow(struct BattleInfoBox* battleInfoBox, const u8* b, u8 c, u8 w, u8 h);
 static void BlitMainMonWindow(struct BattleInfoBox* battleInfoBox);
 static void BlitEmptyMonWindow(struct BattleInfoBox* battleInfoBox);
 static u8* GetBgTile(u16 tileId);
 
-bool8 AllocMonWindowBgGfx(u8 state)
+bool8 AllocMonWindowBgGfx(u8 state, u16 size)
 {
     u8 battler;
     u32 sizeout;
@@ -118,8 +117,12 @@ bool8 AllocMonWindowBgGfx(u8 state)
         LoadBgTiles(2, sMonWindowBgGfxTilemap, sizeout, 0);
         break;
     case 1:
-        LoadCompressedPalette(gPartyMenuBg_Pal, 0, 0x160);
-        CpuCopy16(&gPlttBufferUnfaded, GetPalBuffer(), 0x160);
+        // LoadCompressedPalette(gPartyMenuBg_Pal, 0, 0x160);
+        // CpuCopy16(&gPlttBufferUnfaded, GetPalBuffer(), 0x160);
+        // LoadCompressedPalette(gPartyMenuBg_Pal, 0, 0x90);
+        // CpuCopy16(&gPlttBufferUnfaded, GetPalBuffer(), 0x90);
+        LoadCompressedPalette(gPartyMenuBg_Pal, 0, size);
+        CpuCopy16(&gPlttBufferUnfaded, GetPalBuffer(), size);
         break;
     }
 }
@@ -342,7 +345,7 @@ void RenderMonWindow(struct BattleInfoBox* battleInfoBox, bool8 isSelected)
     BlitMainMonWindow(battleInfoBox);
     DisplayBattlePokemonNickname(battleInfoBox, 0);
     DisplayBattlePokemonGenderNidoranCheck(battleInfoBox, 0);
-    if (battleInfoBox->battleMon->status1 || CheckPartyPokerus(battleInfoBox->mon, 0))
+    if (!(battleInfoBox->battleMon->status1 || CheckPartyPokerus(battleInfoBox->mon, 0)))
         DisplayBattlePokemonLevel(battleInfoBox);
     AnimateBattleInfoSlot(isSelected, battleInfoBox);
 
@@ -488,62 +491,14 @@ void AnimateBattleInfoSlot(u8 animNum, struct BattleInfoBox* battleInfoBox)
     }
 }
 
-// what the hell is 'c'?
-static void BlitBitmapToMonWindow(struct BattleInfoBox* battleInfoBox, const u8* b, u8 c, u8 w, u8 h)
-{
-    u8* pixels = AllocZeroed(h * w * 32);
-    u8 i, j;
-
-    if (pixels != NULL)
-    {
-        // TOP ROW
-        // Top left
-        CpuCopy16(GetBgTile(b[0]), &pixels[0], 32);
-        // Top middle
-        for (j = 1; j < w - 1; j++)
-            CpuCopy16(GetBgTile(b[1]), &pixels[j * 32], 32);
-        // Top right
-        CpuCopy16(GetBgTile(b[2]), &pixels[(w - 1) * 32], 32);
-
-        // MIDDLE ROWS
-        for (i = 1; i < h - 1; i++)
-        {
-            // Middle left
-            CpuCopy16(GetBgTile(b[3]), &pixels[w * i * 32], 32);
-            // Middle middle
-            for (j = 1; j < w - 1; j++)
-                CpuCopy16(GetBgTile(b[4]), &pixels[(w * i + j) * 32], 32);
-            // Middle right
-            CpuCopy16(GetBgTile(b[5]), &pixels[(w * i + w - 1) * 32], 32);
-        }
-
-        // BOTTOM ROW
-        // Top left
-        CpuCopy16(GetBgTile(b[6]), &pixels[((h - 1) * w) * 32], 32);
-        // Top middle
-        for (j = 1; j < w - 1; j++)
-            CpuCopy16(GetBgTile(b[7]), &pixels[((h - 1) * w + j) * 32], 32);
-        // Top right
-        CpuCopy16(GetBgTile(b[8]), &pixels[(h * w - 1) * 32], 32);
-
-        BlitBitmapToWindow(battleInfoBox->windowId, pixels, 0, 0, w * 8, h * 8);
-        Free(pixels);
-    }
-}
-
 static void BlitMainMonWindow(struct BattleInfoBox* battleInfoBox)
 {
-    BlitBitmapToMonWindow(battleInfoBox, sMainSlotTileNums, 10, battleInfoBox->windowWidth, battleInfoBox->windowHeight);
+    BlitBitmapToMonWindow(sMonWindowBgGfxTilemap, battleInfoBox->windowId, sMainSlotTileNums, 10, battleInfoBox->windowWidth, battleInfoBox->windowHeight);
 }
 
 static void BlitEmptyMonWindow(struct BattleInfoBox* battleInfoBox)
 {
-    BlitBitmapToMonWindow(battleInfoBox, sEmptySlotTileNums, 10, battleInfoBox->windowWidth, battleInfoBox->windowHeight);
-}
-
-static u8* GetBgTile(u16 tileId)
-{
-    return &sMonWindowBgGfxTilemap[tileId << 5];
+    BlitBitmapToMonWindow(sMonWindowBgGfxTilemap, battleInfoBox->windowId, sEmptySlotTileNums, 10, battleInfoBox->windowWidth, battleInfoBox->windowHeight);
 }
 
 
