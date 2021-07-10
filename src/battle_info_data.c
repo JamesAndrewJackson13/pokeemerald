@@ -69,7 +69,6 @@
 
 // data used for the description window
 #define DESCRIPTION_WINDOW_ID (7)
-#define DESCRIPTION_WINDOW_TEXT_FONT_ID (7)
 #define DESCRIPTION_WINDOW_TEXT_POS_X (7)
 #define DESCRIPTION_WINDOW_TEXT_POS_Y (5)
 #define DESCRIPTION_WINDOW_WIDTH (90 - DESCRIPTION_WINDOW_TEXT_POS_X)
@@ -115,6 +114,7 @@ static void RenderWindow_ButtonInfo(void);
 static void RenderWindow_StatNumbers(void);
 static void DrawStatStageIcons(void);
 static void RenderWindow_PutAndCopy(void);
+static void SetupTerrainEffects(void);
 static void RenderWindow_DoTerrainInfoTiles(void);
 static void PlayMonCry(void);
 static void BattleInfoData_SetupSprites(void);
@@ -133,11 +133,12 @@ static EWRAM_DATA struct BattleInfoDataGUI_Struct
     u8 graphicsLoadState;
     u8 windowsBackgroundLoadState;
     u8 cursorIndex;
+    u8 cursorViewStart;
     u8 curMon;
-    u8 terrainEffects[4];
+    u8 terrainEffects[NUM_TERRAIN_EFFECTS];
     u8 pokemonTypeSpriteIds[2];
     u8 showDescriptionAnimationTask;
-    u8 numberOfTerrainTiles;
+    u8 terrainTilesCount;
     bool8 showDescription;
 }  *sBattleInfoDataGUI = NULL;
 
@@ -217,7 +218,6 @@ static void CB2_BattleInfoData_RunSetup(void)
 
 static bool8 BattleInfoData_SetupGfx(void)
 {
-    logDebug("BattleInfoData_SetupGfx: %u", gMain.state);
 
     switch (gMain.state)
     {
@@ -290,29 +290,37 @@ static bool8 BattleInfoData_SetupGfx(void)
         RenderWindow_StatNumbers();
         break;
     case 16:
-        RenderWindow_DoTerrainInfoTiles();
-        RenderWindow_TerrainDescription();
+        GetActiveTerrainEffects(sBattleInfoDataGUI->curMon, sBattleInfoDataGUI->terrainEffects);
         break;
     case 17:
-        RenderWindow_PutAndCopy();
+        SetupTerrainEffects();
         break;
     case 18:
-        DrawStatStageIcons();
+        RenderWindow_DoTerrainInfoTiles();
         break;
     case 19:
-        BattleInfoData_SetupSprites();
+        RenderWindow_TerrainDescription();
         break;
     case 20:
-        CreateTask(Task_BattleInfoData_WaitFadeIn, 0);
+        RenderWindow_PutAndCopy();
         break;
     case 21:
-        BlendPalettes(PALETTES_ALL, 16, RGB_BLACK);
+        DrawStatStageIcons();
         break;
     case 22:
+        BattleInfoData_SetupSprites();
+        break;
+    case 23:
+        CreateTask(Task_BattleInfoData_WaitFadeIn, 0);
+        break;
+    case 24:
+        BlendPalettes(PALETTES_ALL, 16, RGB_BLACK);
+        break;
+    case 25:
         BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
         gPaletteFade.bufferTransferDisabled = FALSE;
         break;
-    case 23:
+    case 26:
         PlayMonCry();
         SetVBlankCallback(VBlankCB_BattleInfoData);
         SetMainCallback2(CB2_BattleInfoDataRun);
@@ -330,7 +338,6 @@ static void Task_BattleInfoData_WaitFadeIn(u8 taskId)
 
 static bool8 AllocBattleInfoBgGfx(void)
 {
-    logDebug("AllocBattleInfoBgGfx<Data>");
     u8 battler;
     u32 sizeout;
     switch (sBattleInfoDataGUI->windowsBackgroundLoadState)
@@ -377,7 +384,6 @@ static const u8 sMoveTypeToOamPaletteNum[NUMBER_OF_MON_TYPES] =
 
 static bool8 BattleInfoData_InitBGs(void)
 {
-    logDebug("BattleInfoData_InitBGs");
     u8 i;
     ResetVramOamAndBgCntRegs();
     ResetAllBgsCoordinates();
@@ -385,7 +391,6 @@ static bool8 BattleInfoData_InitBGs(void)
     sBg1TilemapBuffer = Alloc(0x800);
     if (sBg1TilemapBuffer == NULL)
     {
-        logDebug("    FALSE");
         return FALSE;
     }
     memset(sBg1TilemapBuffer, 0, 0x800);
@@ -415,7 +420,6 @@ static bool8 BattleInfoData_InitBGs(void)
         FillWindowPixelBuffer(i, PIXEL_FILL(0));
     }
 
-    logDebug("    TRUE");
     return TRUE;
 }
 
@@ -455,7 +459,6 @@ static void BattleInfoData_SetupSprites(void)
 
 static void BattleInfoData_OpenInit(u8 monIndex, MainCallback callback)
 {
-    logDebug("BattleInfoData_OpenInit");
     // Get all vars set up and ready to go, then set the callback to the main loop
     if ((sBattleInfoDataGUI = AllocZeroed(sizeof(struct BattleInfoDataGUI_Struct))) == NULL)
     {
@@ -478,8 +481,6 @@ static void BattleInfoData_OpenInit(u8 monIndex, MainCallback callback)
 static bool8 LoadBattleInfoData_Graphics(void)
 {
     u32 sizeout;
-    logDebug("LoadBattleInfoData_Graphics");
-    logDebug("    sBattleInfoDataGUI->graphicsLoadState: %u", sBattleInfoDataGUI->graphicsLoadState);
     switch (sBattleInfoDataGUI->graphicsLoadState)
     {
     case 0:
@@ -510,10 +511,8 @@ static bool8 LoadBattleInfoData_Graphics(void)
         break;
     default:
         sBattleInfoDataGUI->graphicsLoadState = 0;
-        logDebug("    TRUE");
         return TRUE;
     }
-    logDebug("    FALSE");
     return FALSE;
 }
 
@@ -521,20 +520,27 @@ static bool8 LoadBattleInfoData_Graphics(void)
 static void UpdateTerrainPaletteHighlight(void)
 {
     u8 i;
-    u16 toSet;
+    u16 bodyColor, borderColor;
     for (i = 0; i < 4; i++)
     {
-        toSet = sBattleInfoDataGUI->cursorIndex == i ? BODY_HIGHLIGHT_COLOR : BODY_NORMAL_COLOR;
-        FillPalette(toSet, 0x6C + 0x10 * i, 2);
-        toSet = sBattleInfoDataGUI->cursorIndex == i ? BORDER_HIGHLIGHT_COLOR : BORDER_NORMAL_COLOR;
-        FillPalette(toSet, 0x6D + 0x10 * i, 2);
+        if (sBattleInfoDataGUI->cursorIndex == sBattleInfoDataGUI->cursorViewStart + i)
+        {
+            bodyColor = BODY_HIGHLIGHT_COLOR;
+            borderColor = BORDER_HIGHLIGHT_COLOR;
+        }
+        else
+        {
+            bodyColor = BODY_NORMAL_COLOR;
+            borderColor = BORDER_NORMAL_COLOR;
+        }
+        FillPalette(bodyColor, 0x6C + 0x10 * i, 2);
+        FillPalette(borderColor, 0x6D + 0x10 * i, 2);
     }
 }
 
 
 static void InitBattleMonDataWindows(void)
 {
-    logDebug("InitBattleMonDataWindows");
     u8 i;
 
     InitWindows(sBattleInfoDataWindows);
@@ -583,7 +589,6 @@ static void InitBattleInfoBox(void)
 #define getN(num) (num < 100 ? (num < 10 ? 1 : 2) : 3)
 static void RenderWindow_LevelAndHP(void)
 {
-    logDebug("RenderWindow_LevelAndHP");
     ConvertIntToDecimalStringN(gStringVar1, sBattleInfoBox->battleMon->hp, STR_CONV_MODE_RIGHT_ALIGN, getN(sBattleInfoBox->battleMon->hp));
     ConvertIntToDecimalStringN(gStringVar2, sBattleInfoBox->battleMon->maxHP, STR_CONV_MODE_RIGHT_ALIGN, getN(sBattleInfoBox->battleMon->maxHP));
     ConvertIntToDecimalStringN(gStringVar3, sBattleInfoBox->battleMon->level, STR_CONV_MODE_RIGHT_ALIGN, 3);
@@ -594,7 +599,6 @@ static void RenderWindow_LevelAndHP(void)
 
 static void RenderWindow_ButtonInfo(void)
 {
-    logDebug("RenderWindow_ButtonInfo");
     AddTextPrinterParameterized4(8, 0, 0, 0, -1, -1, GetFontColor(BATTLE_MON_TEXT_COLOR_HEADER), 0, sButtonInfo);
 }
 
@@ -610,12 +614,9 @@ static const u8 sStatDrawOrder[] = {
 
 static void RenderWindow_StatNumbers(void)
 {
-    logDebug("RenderWindow_StatNumbers");
     u8* txtPtr = StringCopy(gStringVar4, sBlank);
     for (u8 i = 0; i < NUM_STATS_TO_DRAW; i++)
     {
-        logInt(sBattleInfoBox->battleMon->statStages[sStatDrawOrder[i]]);
-        logUnsigned(sBattleInfoBox->battleMon->statStages[sStatDrawOrder[i]]);
         if (sBattleInfoBox->battleMon->statStages[sStatDrawOrder[i]] >= 6)
         {
             *txtPtr = CHAR_PLUS;
@@ -651,7 +652,6 @@ static const u16 sStatStageTileStarts[] = {
 
 static void DrawStatStageIcons(void)
 {
-    logDebug("DrawStatStageIcons");
     u8* tilemap = sBg1TilemapBuffer;
     u8* cursor;
     u8 i, j, tile, numToDraw;
@@ -670,7 +670,6 @@ static void DrawStatStageIcons(void)
         }
         for (j = 0; j < numToDraw; j++)
         {
-            logUnsigned(*cursor);
             *cursor = tile;
             cursor++;
             cursor++;
@@ -688,19 +687,17 @@ static void RenderWindow_PutAndCopy(void)
     }
 }
 
-static void RenderWindow_DoTerrainInfoTiles(void)
+static void SetupTerrainEffects(void)
 {
-    logDebug("RenderWindow_DoTerrainInfoTiles");
-    u8 windowId, i = 0;
-    GetTerrainEffectDescriptions(sBattleInfoDataGUI->curMon, sBattleInfoDataGUI->terrainEffects);
-    while (i < 4 && sBattleInfoDataGUI->terrainEffects[i] < NUM_TERRAIN_EFFECT_DESCRIPTIONS)
+    u8 i = 0;
+    struct terrain_effect terrainEffect;
+
+    while (i < NUM_TERRAIN_EFFECTS && sBattleInfoDataGUI->terrainEffects[i] < NUM_TERRAIN_EFFECT_DESCRIPTIONS)
     {
-        windowId = i + 3;
-        BlitBitmapToMonWindow(sBattleInfoDataTileGfx, windowId, sTerrainEffectFilledTileNums, 10, STAGE_STATE_WINDOW_WIDTH, STAGE_STATE_WINDOW_HEIGHT);
-        AddTextPrinterParameterized3(windowId, TERRAIN_TILE_TEXT_FONT_ID, TERRAIN_TILE_TEXT_POS_X, TERRAIN_TILE_TEXT_POS_Y, GetFontColor(BATTLE_MON_TEXT_COLOR_TERRAIN), 0, GetTerrainEffect(sBattleInfoDataGUI->terrainEffects[i]).title);
-        ++i;
+        i++;
     }
-    sBattleInfoDataGUI->numberOfTerrainTiles = i;
+    sBattleInfoDataGUI->terrainTilesCount = i;
+    sBattleInfoDataGUI->cursorViewStart = 0;
     if (sBattleInfoDataGUI->terrainEffects[0] != 255)
     {
         sBattleInfoDataGUI->cursorIndex = 0;
@@ -708,10 +705,48 @@ static void RenderWindow_DoTerrainInfoTiles(void)
     }
 }
 
+static void RenderWindow_DoTerrainInfoTiles(void)
+{
+    u8 windowId, i = 0;
+    while (i < 4 && sBattleInfoDataGUI->terrainEffects[i + sBattleInfoDataGUI->cursorViewStart] < NUM_TERRAIN_EFFECT_DESCRIPTIONS)
+    {
+        windowId = i + 3;
+        BlitBitmapToMonWindow(sBattleInfoDataTileGfx, windowId, sTerrainEffectFilledTileNums, 10, STAGE_STATE_WINDOW_WIDTH, STAGE_STATE_WINDOW_HEIGHT);
+        AddTextPrinterParameterized3(windowId, TERRAIN_TILE_TEXT_FONT_ID, TERRAIN_TILE_TEXT_POS_X, TERRAIN_TILE_TEXT_POS_Y, GetFontColor(BATTLE_MON_TEXT_COLOR_TERRAIN), 0, GetTerrainEffect(sBattleInfoDataGUI->terrainEffects[i + sBattleInfoDataGUI->cursorViewStart]).title);
+        ++i;
+    }
+}
+
 static void RenderWindow_TerrainDescription(void)
 {
-    logDebug("RenderWindow_TerrainDescription");
-    logBool(sBattleInfoDataGUI->showDescription);
+    const u8* description;
+    u8 fontSize;
+    u8 tmpTextBuffer[100];
+    if (sBattleInfoDataGUI->cursorIndex == 255)
+    {
+        description = sBlank;
+        fontSize = 0;
+    }
+    else
+    {
+        struct terrain_effect terrainEffect = GetTerrainEffect(sBattleInfoDataGUI->terrainEffects[sBattleInfoDataGUI->cursorIndex]);
+        fontSize = terrainEffect.fontSize;
+        switch (sBattleInfoDataGUI->terrainEffects[sBattleInfoDataGUI->cursorIndex])
+        {
+        case TERRAIN_EFFECT_ENCORE:
+            StringCopy(gStringVar1, gMoveNames[gDisableStructs[sBattleInfoDataGUI->curMon].encoredMove]);
+            StringExpandPlaceholders(tmpTextBuffer, terrainEffect.description);
+            description = SplitTextOnWordsWithNewLines(fontSize, tmpTextBuffer, -1, DESCRIPTION_WINDOW_WIDTH);
+            break;
+        case TERRAIN_EFFECT_MOVE_DISABLED:
+            StringCopy(gStringVar1, gMoveNames[gDisableStructs[sBattleInfoDataGUI->curMon].disabledMove]);
+            StringExpandPlaceholders(tmpTextBuffer, terrainEffect.description);
+            description = SplitTextOnWordsWithNewLines(fontSize, tmpTextBuffer, -1, DESCRIPTION_WINDOW_WIDTH);
+            break;
+        default:
+            description = terrainEffect.description;
+        }
+    }
     BlitBitmapToMonWindow(
         sBattleInfoDataTileGfx,
         DESCRIPTION_WINDOW_ID,
@@ -722,21 +757,14 @@ static void RenderWindow_TerrainDescription(void)
     );
     AddTextPrinterParameterized4(
         DESCRIPTION_WINDOW_ID,
-        DESCRIPTION_WINDOW_TEXT_FONT_ID,
+        fontSize,
         DESCRIPTION_WINDOW_TEXT_POS_X,
         DESCRIPTION_WINDOW_TEXT_POS_Y,
         -1,
         -1,
         GetFontColor(BATTLE_MON_TEXT_COLOR_TERRAIN),
         0,
-        sBattleInfoDataGUI->cursorIndex == 255
-            ? sBlank
-            : SplitTextOnWordsWithNewLines(
-                DESCRIPTION_WINDOW_TEXT_FONT_ID,
-                GetTerrainEffect(sBattleInfoDataGUI->terrainEffects[sBattleInfoDataGUI->cursorIndex]).description,
-                -1,
-                DESCRIPTION_WINDOW_WIDTH
-            )
+        description
     );
 }
 
@@ -745,7 +773,6 @@ static void RenderWindow_TerrainDescription(void)
 #define animation sDescriptionSlideAnimation[sBattleInfoDataGUI->showDescription]
 static void Task_DescriptionWindowAnimation(u8 taskId)
 {
-    logDebug("Task_ShowDescriptionAnimation");
     if (gTasks[taskId].frame == DESCRIPTION_WINDOW_ANIMATION_LENGNTH)
     {
         DestroyTask(taskId);
@@ -759,9 +786,9 @@ static void Task_DescriptionWindowAnimation(u8 taskId)
 }
 
 #define toggleDescriptionMode() \
-if (sBattleInfoDataGUI->showDescriptionAnimationTask == 0xFF && sBattleInfoDataGUI->numberOfTerrainTiles > 0) \
+if (sBattleInfoDataGUI->showDescriptionAnimationTask == 0xFF && sBattleInfoDataGUI->terrainTilesCount > 0) \
 { \
-    PlaySE(SE_SELECT); \
+    PlaySE(SE_FU_ZAKU); \
     sBattleInfoDataGUI->showDescription = !sBattleInfoDataGUI->showDescription; \
     sBattleInfoDataGUI->showDescriptionAnimationTask = CreateTask(Task_DescriptionWindowAnimation, 0); \
     gTasks[sBattleInfoDataGUI->showDescriptionAnimationTask].frame = 0; \
@@ -787,14 +814,53 @@ static void Task_BattleInfoData_Main(u8 taskId)
             BattleInfoData_FadeAndExit();
         }
     }
-    else if (JOY_REPEAT(DPAD_ANY))
+    else if (sBattleInfoDataGUI->terrainTilesCount > 1 && JOY_REPEAT(DPAD_ANY))
     {
-        PlaySE(SE_SELECT);
+        PlaySE(SE_DEX_SCROLL);
         if (JOY_REPEAT(DPAD_DOWN) || JOY_REPEAT(DPAD_RIGHT))
-            cursorMoveBy = 1;
+        {
+            // Move down the list
+            if (sBattleInfoDataGUI->cursorIndex == sBattleInfoDataGUI->terrainTilesCount - 1)
+            {
+                // Case: When scrolling back to the top
+                sBattleInfoDataGUI->cursorIndex = 0;
+                sBattleInfoDataGUI->cursorViewStart = 0;
+            }
+            else
+            {
+                // Case: When moving down normally
+                sBattleInfoDataGUI->cursorIndex += 1;
+                if (sBattleInfoDataGUI->cursorViewStart + 2 < sBattleInfoDataGUI->cursorIndex && sBattleInfoDataGUI->cursorViewStart != sBattleInfoDataGUI->terrainTilesCount - 4)
+                {
+                    // Case: There's still more items bellow the current view
+                    sBattleInfoDataGUI->cursorViewStart += 1;
+                }
+            }
+        }
         else
-            cursorMoveBy = sBattleInfoDataGUI->numberOfTerrainTiles - 1;
-        sBattleInfoDataGUI->cursorIndex = (sBattleInfoDataGUI->cursorIndex + cursorMoveBy) % sBattleInfoDataGUI->numberOfTerrainTiles;
+        {
+            // Move up the list
+            if (sBattleInfoDataGUI->cursorIndex == 0)
+            {
+                // Case: When scrolling back to the bottom
+                sBattleInfoDataGUI->cursorIndex = sBattleInfoDataGUI->terrainTilesCount - 1;
+                if (sBattleInfoDataGUI->terrainTilesCount > 4)
+                    sBattleInfoDataGUI->cursorViewStart = sBattleInfoDataGUI->terrainTilesCount - 4;
+                else
+                    sBattleInfoDataGUI->cursorViewStart = 0;
+            }
+            else
+            {
+                // Case: When moving up normally
+                sBattleInfoDataGUI->cursorIndex -= 1;
+                if (sBattleInfoDataGUI->cursorViewStart == sBattleInfoDataGUI->cursorIndex && sBattleInfoDataGUI->cursorViewStart != 0)
+                {
+                    // Case: There's still more items above the current view
+                    sBattleInfoDataGUI->cursorViewStart -= 1;
+                }
+            }
+        }
+        RenderWindow_DoTerrainInfoTiles();
         RenderWindow_TerrainDescription();
         UpdateTerrainPaletteHighlight();
     }
@@ -805,7 +871,6 @@ static void Task_BattleInfoData_Main(u8 taskId)
 
 static void CB2_ReturnToBattleInfo(void)
 {
-    logDebug("CB2_ReturnToBattleInfo");
     u8 taskId = CreateTask(Task_OpenBattleInfo, 0);
     gTasks[taskId].battleInfoMonIndex = gBattlerInMenuId;
     SetVBlankCallback(VBlankCB_BattleInfoData);
@@ -814,7 +879,6 @@ static void CB2_ReturnToBattleInfo(void)
 
 static void HandleOpenAction(u8 taskId, MainCallback callback)
 {
-    logDebug("HandleOpenAction<Data>");
     if (!gPaletteFade.active)
     {
         CleanupOverworldWindowsAndTilemaps();
@@ -825,13 +889,11 @@ static void HandleOpenAction(u8 taskId, MainCallback callback)
 
 void Task_OpenBattleInfoDataDebug(u8 taskId)
 {
-    logDebug("Task_OpenBattleInfoDebug");
     HandleOpenAction(taskId, CB2_ReturnToFieldWithOpenMenu);
 }
 
 void Task_OpenBattleInfoData(u8 taskId)
 {
-    logDebug("Task_OpenBattleInfo");
     HandleOpenAction(taskId, CB2_ReturnToBattleInfo);
 }
 
@@ -873,7 +935,6 @@ static void BattleInfoData_FadeAndExit(void)
 #undef TERRAIN_TILE_TEXT_POS_X
 #undef TERRAIN_TILE_TEXT_POS_Y
 #undef DESCRIPTION_WINDOW_ID
-#undef DESCRIPTION_WINDOW_TEXT_FONT_ID
 #undef DESCRIPTION_WINDOW_TEXT_POS_X
 #undef DESCRIPTION_WINDOW_TEXT_POS_Y
 #undef DESCRIPTION_WINDOW_WIDTH
