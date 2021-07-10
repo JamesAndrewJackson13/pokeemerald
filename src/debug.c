@@ -2543,7 +2543,6 @@ static void DebugAction_Other_ForceRoamerEncounter(u8 taskId)
 
 static void DebugAction_Other_ShowBattleInfo(u8 taskId)
 {
-    logDebug("DebugAction_Other_ShowBattleInfo");
     Debug_DestroyMenu(taskId);
     PlayRainStoppingSoundEffect();
     CleanupOverworldWindowsAndTilemaps();
