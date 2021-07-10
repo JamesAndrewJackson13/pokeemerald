@@ -86,7 +86,9 @@ u8* SplitTextOnWordsWithNewLines(u8 fontId, const u8* baseStr, s16 letterSpacing
                             wordStart = wordSourceQueue[queueIndex++];
                             break;
                         default:
-                            *strCursor++ = *wordStart++;
+                            *strCursor = *wordStart;
+                            strCursor++;
+                            wordStart++;
                         }
                     }
 
@@ -117,8 +119,13 @@ u8* SplitTextOnWordsWithNewLines(u8 fontId, const u8* baseStr, s16 letterSpacing
                         case(EOS):
                             wordStart = wordSourceQueue[queueIndex++];
                             break;
+                        case(CHAR_SPACE):
+                            wordStart++;
+                            break;
                         default:
-                            *strCursor++ = *wordStart++;
+                            *strCursor = *wordStart;
+                            strCursor++;
+                            wordStart++;
                         }
                     }
                     if (wordWidth + glyphWidth > width)
@@ -140,6 +147,7 @@ u8* SplitTextOnWordsWithNewLines(u8 fontId, const u8* baseStr, s16 letterSpacing
                     lineWidth = 0;
                 }
                 str++; // This gets us past the whitespace
+                wordStart++;
                 wordWidth = 0;
                 queueEnd = 0;
                 break;
@@ -322,7 +330,6 @@ u8* SplitTextOnWordsWithNewLines(u8 fontId, const u8* baseStr, s16 letterSpacing
         }
     }
     *strCursor++ = EOS;
-    logU8String(gStringVar4);
     return gStringVar4;
 }
 
