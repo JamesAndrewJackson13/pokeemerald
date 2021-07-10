@@ -215,8 +215,6 @@ static void VBlankCB_BattleInfoSelect(void)
  */
 static bool8 BattleInfoSelect_SetupGfx(void)
 {
-    logDebug("BattleInfoSelect_SetupGfx: %u", gMain.state);
-
     switch (gMain.state)
     {
     case 0:
@@ -430,7 +428,6 @@ static void InitBattleInfoBoxes()
 
 static void InitBattleMonWindows(void)
 {
-    logDebug("InitBattleMonWindows");
     u8 i;
     bool8 isDouble = IsDoubleBattle();
 
@@ -475,7 +472,6 @@ static void BattleInfoSelect_FadeAndExit(void)
 
 static void BattleInfoSelect_OpenInit(u8 cursorMonStart, MainCallback callback)
 {
-    logDebug("BattleInfoSelect_OpenInit");
     // Get all vars set up and ready to go, then set the callback to the main loop
     if ((sBattleInfoSelectionGUI = AllocZeroed(sizeof(struct BattleInfoSelectionGUI_Struct))) == NULL)
     {
@@ -545,7 +541,6 @@ static bool8 CreateBattleMonSpritesLoop(void)
 // Start Menu Function
 void HandleOpenAction(u8 taskId, MainCallback callback)
 {
-    logDebug("HandleOpenAction<Selection>");
     u8 passedMonIndex;
     if (!gPaletteFade.active)
     {
@@ -565,13 +560,11 @@ void HandleOpenAction(u8 taskId, MainCallback callback)
 
 void Task_OpenBattleInfoDebug(u8 taskId)
 {
-    logDebug("Task_OpenBattleInfoDebug");
     HandleOpenAction(taskId, CB2_ReturnToFieldWithOpenMenu);
 }
 
 void Task_OpenBattleInfo(u8 taskId)
 {
-    logDebug("Task_OpenBattleInfo");
     HandleOpenAction(taskId, CB2_SetUpReshowBattleScreenAfterMenu);
 }
 
@@ -586,14 +579,12 @@ void CB2_OpenBattleInfo(void)
 
 static bool8 BattleInfoSelect_InitBGs(void)
 {
-    logDebug("BattleInfoSelect_InitBGs");
     ResetVramOamAndBgCntRegs();
     ResetAllBgsCoordinates();
 
     sBg1TilemapBuffer = Alloc(0x800);
     if (sBg1TilemapBuffer == NULL)
     {
-        logDebug("    FALSE");
         return FALSE;
     }
     memset(sBg1TilemapBuffer, 0, 0x800);
@@ -605,14 +596,11 @@ static bool8 BattleInfoSelect_InitBGs(void)
     SetGpuReg(REG_OFFSET_BLDCNT, 0);
     ShowBg(0);
     ShowBg(1);
-    logDebug("    TRUE");
     return TRUE;
 }
 
 static bool8 LoadBattleInfoSelect_Graphics(void)
 {
-    logDebug("LoadBattleInfoSelect_Graphics");
-    logDebug("    sBattleInfoSelectionGUI->graphicsLoadState: %u", sBattleInfoSelectionGUI->graphicsLoadState);
     switch (sBattleInfoSelectionGUI->graphicsLoadState)
     {
     case 0:
@@ -633,10 +621,8 @@ static bool8 LoadBattleInfoSelect_Graphics(void)
         break;
     default:
         sBattleInfoSelectionGUI->graphicsLoadState = 0;
-        logDebug("    TRUE");
         return TRUE;
     }
-    logDebug("    FALSE");
     return FALSE;
 }
 
@@ -644,8 +630,6 @@ static bool8 AllocBattleInfoBgGfx(void)
 {
     u8 battler;
     u32 sizeout;
-    logInfo("AllocBattleInfoBgGfx");
-    logInfo("    sBattleInfoSelectionGUI->windowsBackgroundLoadState: %u", sBattleInfoSelectionGUI->windowsBackgroundLoadState);
     switch (sBattleInfoSelectionGUI->windowsBackgroundLoadState)
     {
         case 0:

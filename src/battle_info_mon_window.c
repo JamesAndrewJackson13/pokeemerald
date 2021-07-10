@@ -108,8 +108,6 @@ bool8 AllocMonWindowBgGfx(u8 state, u16 size)
 {
     u8 battler;
     u32 sizeout;
-    logInfo("AllocMonWindowBgGfx");
-    logUnsigned(state);
     switch (state)
     {
     case 0:
@@ -155,27 +153,18 @@ void LoadPartyMenuAilmentGfx(void)
 
 static void CreateBattleMonIconSpriteParameterized(u16 species, u32 pid, struct BattleInfoBox* battleInfoBox, u8 priority)
 {
-    logDebug("CreateBattleMonIconSpriteParameterized");
-    logDebug("    species: %u", species);
-    logDebug("    pid: %u", pid);
-    logDebug("    priority: %u", priority);
-    logDebug("    (x<%u>, y<%u>)", battleInfoBox->spriteCoords[0], battleInfoBox->spriteCoords[1]);
     battleInfoBox->monSpriteId = CreateMonIcon(species, SpriteCB_MonIcon, battleInfoBox->spriteCoords[0], battleInfoBox->spriteCoords[1], 4, pid);
     gSprites[battleInfoBox->monSpriteId].oam.priority = priority;
 }
 
 static void ShowOrHideHeldItemSprite(u16 item, struct BattleInfoBox* battleInfoBox)
 {
-    logDebug("    ShowOrHideHeldItemSprite");
-    logDebug("        item: %u", item);
     if (item == ITEM_NONE)
     {
-        logDebug("        item == ITEM_NONE");
         gSprites[battleInfoBox->itemSpriteId].invisible = TRUE;
     }
     else
     {
-        logDebug("        item == ITEM_%s", ItemIsMail(item) ? "MAIL" : "OTHER");
         if (ItemIsMail(item))
             StartSpriteAnim(&gSprites[battleInfoBox->itemSpriteId], 1);
         else
@@ -186,10 +175,6 @@ static void ShowOrHideHeldItemSprite(u16 item, struct BattleInfoBox* battleInfoB
 
 static void CreateBattleMonHeldItemSpriteParameterized(u16 species, u16 item, struct BattleInfoBox* battleInfoBox)
 {
-    logDebug("CreateBattleMonHeldItemSpriteParameterized");
-    logDebug("    species: %u", species);
-    logDebug("    item: %u", item);
-    logDebug("    (x<%u>, y<%u>)", battleInfoBox->spriteCoords[2], battleInfoBox->spriteCoords[3]);
     battleInfoBox->itemSpriteId = CreateSprite(&sSpriteTemplate_HeldItem, battleInfoBox->spriteCoords[2], battleInfoBox->spriteCoords[3], 0);
     gSprites[battleInfoBox->itemSpriteId].oam.priority = 0;
     ShowOrHideHeldItemSprite(item, battleInfoBox);
@@ -197,9 +182,6 @@ static void CreateBattleMonHeldItemSpriteParameterized(u16 species, u16 item, st
 
 static void CreateBattleMonPokeballSpriteParameterized(u16 species, struct BattleInfoBox* battleInfoBox)
 {
-    logDebug("CreateBattleMonPokeballSpriteParameterized");
-    logDebug("    species: %u", species);
-    logDebug("    (x<%u>, y<%u>)", battleInfoBox->spriteCoords[6], battleInfoBox->spriteCoords[7]);
     battleInfoBox->pokeballSpriteId = CreateSprite(&sSpriteTemplate_MenuPokeball, battleInfoBox->spriteCoords[6], battleInfoBox->spriteCoords[7], 8);
     gSprites[battleInfoBox->pokeballSpriteId].oam.priority = 0;
 }
@@ -233,12 +215,10 @@ static void CreateBattleMonStatusSpriteParameterized(u8 status, struct BattleInf
 
 void CreateBattleMonSprites(struct BattleInfoBox* battleInfoBox)
 {
-    logDebug("CreateBattleMonSprites");
 
     struct Pokemon curPokemon = *battleInfoBox->mon;
     struct BattlePokemon curBattlePokemon = *battleInfoBox->battleMon;
     u8 status;
-    logUnsigned(GetMonData(curPokemon, MON_DATA_STATUS, NULL));
 
     if (curBattlePokemon.species != SPECIES_NONE)
     {
@@ -262,7 +242,6 @@ void PartyPaletteBufferCopy(u8 offset)
 
 static void LoadPartyBoxPalette(u8 windowId, u8 palFlags)
 {
-    logDebug("LoadPartyBoxPalette");
     u8 palNum = GetWindowAttribute(windowId, WINDOW_PALETTE_NUM) * 16;
 
     if (isPaletteFlagSet(PARTY_PAL_NO_MON))
@@ -340,7 +319,6 @@ static void LoadPartyBoxPalette(u8 windowId, u8 palFlags)
 
 void RenderMonWindow(struct BattleInfoBox* battleInfoBox, bool8 isSelected)
 {
-    logDebug("RenderMonWindow");
     LoadPartyBoxPalette(battleInfoBox->windowId, isSelected ? PARTY_PAL_SELECTED : PARTY_PAL_UNUSED);
     BlitMainMonWindow(battleInfoBox);
     DisplayBattlePokemonNickname(battleInfoBox, 0);
@@ -410,14 +388,9 @@ static void DisplayBattlePokemonNickname(struct BattleInfoBox* battleInfoBox, u8
 
 static void DisplayBattlePokemonLevel(struct BattleInfoBox* battleInfoBox)
 {
-    logDebug("DisplayBattlePokemonLevel");
-    logUnsigned(LEVEL_POS_X);
-    logUnsigned(LEVEL_POS_Y);
-    logUnsigned(battleInfoBox->windowId);
     ConvertIntToDecimalStringN(gStringVar2, battleInfoBox->mon->level, STR_CONV_MODE_LEFT_ALIGN, 3);
     StringCopy(gStringVar1, gText_LevelSymbol);
     StringAppend(gStringVar1, gStringVar2);
-    // logU8String(gStringVar1);
     DisplayBattlePokemonBarDetail(battleInfoBox->windowId, gStringVar1, 0, LEVEL_POS_X, LEVEL_POS_Y);
 }
 
@@ -466,20 +439,9 @@ static void AnimateSelectedPartyIcon(u8 spriteId, u8 animNum)
 
 void AnimateBattleInfoSlot(u8 animNum, struct BattleInfoBox* battleInfoBox)
 {
-    logDebug("AnimateBattleInfoSlot");
-
     u8 palFlags = 0;
-
-
-    logUnsigned(animNum);
-    logUnsigned(GetMonData(battleInfoBox->mon, MON_DATA_SPECIES));
-    logBool(GetMonData(battleInfoBox->mon, MON_DATA_SPECIES) != SPECIES_NONE);
-
     if (GetMonData(battleInfoBox->mon, MON_DATA_SPECIES) != SPECIES_NONE)
     {
-        logUnsigned(battleInfoBox->windowId);
-        logUnsigned(battleInfoBox->monSpriteId);
-        logUnsigned(battleInfoBox->pokeballSpriteId);
         if (animNum == 1)
             palFlags |= PARTY_PAL_SELECTED;
         if (GetMonData(battleInfoBox->mon, MON_DATA_HP) == 0)

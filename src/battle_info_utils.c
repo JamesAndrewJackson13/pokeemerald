@@ -105,7 +105,6 @@ const u16* GetPalBuffer(void)
 // what the hell is 'c'?
 void BlitBitmapToMonWindow(u8* bgGfxTilemap, u8 windowId, const u8* b, u8 c, u8 w, u8 h)
 {
-    logDebug("BlitBitmapToMonWindow");
     u8* pixels = AllocZeroed(h * w * 32);
     u8 i, j;
 
