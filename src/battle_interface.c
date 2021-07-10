@@ -3384,22 +3384,6 @@ void BattleInfoIconEndTurn(void)
     gSprites[gBattleStruct->battleInfoIconSpriteId].invisible = TRUE;
 }
 
-// static void Task_DEBUG_MoveBattleInfoIcon(u8 taskId)
-// {
-//     if(JOY_REPEAT(DPAD_RIGHT))
-//         gSprites[gBattleStruct->battleInfoIconSpriteId].pos1.x++;
-//     else if(JOY_REPEAT(DPAD_LEFT))
-//         gSprites[gBattleStruct->battleInfoIconSpriteId].pos1.x--;
-//     else if(JOY_REPEAT(DPAD_DOWN))
-//         gSprites[gBattleStruct->battleInfoIconSpriteId].pos1.y++;
-//     else if(JOY_REPEAT(DPAD_UP))
-//         gSprites[gBattleStruct->battleInfoIconSpriteId].pos1.y--;
-//     else if(JOY_REPEAT(L_BUTTON))
-//     {
-//         logDebug("(x<%u>, y<%u>)", gSprites[gBattleStruct->battleInfoIconSpriteId].pos1.x + 16, gSprites[gBattleStruct->battleInfoIconSpriteId].pos1.y + 8);
-//     }
-// }
-
 static void CreateBattleInfoIcon(void)
 {
     u8 x, y;
