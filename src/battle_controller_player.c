@@ -3405,8 +3405,6 @@ static void PlayerHandleBattleDebug(void)
 
 static void PlayerHandleShowBattleInfo(void)
 {
-    logDebug("PlayerHandleShowBattleInfo");
-    logDebug("    palette fade: %s", BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK) ? "TRUE" : "FALSE");
     FreeAllWindowBuffers();
     DestroyBattleInfoIcon();
     SetMainCallback2(CB2_OpenBattleInfo);
