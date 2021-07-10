@@ -1109,7 +1109,6 @@ static bool8 ToggleAutoRun(void)
     // Toggle autoRun and draw toast
     gSaveBlock2Ptr->autoRun = !gSaveBlock2Ptr->autoRun;
     DrawAutoRunBox(gSaveBlock2Ptr->autoRun);
-    // logInfo("ToggleAutoRun FINISHED");
     return FALSE;
 }
 
