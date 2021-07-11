@@ -50,6 +50,17 @@ FEATURE LIST
 ## Decapitalization
 * Tweaks the game text to REMOVE all the CAPITAL WORDS so the text isn't so ANNOYING to read.
 
+## In-Battle Move Descriptions
+* On click of a button, show a screen in battle with info about the selected move
+* Also shows accuracy, base power, and type of attack
+* Done by me
+
+## Battle Data Screen
+* Clicking 'L' during a battle will open a screen that lets you get extra details
+* Shows effects on the mon, and offers descriptions
+* Also shows the Mon's stat stages
+* Inspired by Sword and Shield
+* Coded by me, art by Kyrio
 
 # CORE GAME
 ## Cleaned Up the Save Ram
