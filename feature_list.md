@@ -115,6 +115,11 @@ FEATURE LIST
 * When you want the player to appear again, you must use the applymovement command that includes a set_visible movement command.
 * https://github.com/pret/pokeemerald/wiki/Spawn-Invisible-Player
 
+## Fix issue with Wild Mon RNG
+* In cases where the 11 / 12 mon slots are used, their RNG will be improperly calculated
+* Also exists with the Super Rod
+* Fix noted by Syreldar (https://www.pokecommunity.com/showthread.php?p=10376011#post10376011)
+
 
 
 # BASE GAME
