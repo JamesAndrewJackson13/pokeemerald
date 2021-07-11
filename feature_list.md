@@ -134,6 +134,10 @@ FEATURE LIST
 
 
 # BASE GAME
+## Nickname Rival
+* Allows you to nickname the rival
+* Once more, name them rude things and giggle whenever you must challenge them!!
+
 ## Alt Default Options (FEATURE_ALTDEFAULTOPTIONS)
 * Changes default settings
   * optionsTextSpeed = ~~OPTIONS_TEXT_SPEED_MID~~=>**OPTIONS_TEXT_SPEED_FAST**
