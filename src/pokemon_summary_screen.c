@@ -4404,7 +4404,7 @@ static void SetMoveTypeIcons(void)
         if (summary->moves[i] != MOVE_NONE)
         {
             if (summary->moves[i] == MOVE_HIDDEN_POWER)
-                type = getHiddenPowerType(mon) & 0x3F;
+                type = GetHiddenPowerType(mon) & 0x3F;
             else
                 type = gBattleMoves[summary->moves[i]].type;
             SetTypeSpritePosAndPal(gBattleMoves[summary->moves[i]].type, 85, 32 + (i * 16), i + SPRITE_ARR_ID_TYPE);
@@ -4457,7 +4457,7 @@ static void SetNewMoveTypeIcon(void)
         if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
         {
             if (sMonSummaryScreen->newMove == MOVE_HIDDEN_POWER)
-                type = getHiddenPowerType(mon) & 0x3F;
+                type = GetHiddenPowerType(mon) & 0x3F;
             else
                 type = gBattleMoves[sMonSummaryScreen->newMove].type;
             SetTypeSpritePosAndPal(type, 85, 96, SPRITE_ARR_ID_TYPE + 4);

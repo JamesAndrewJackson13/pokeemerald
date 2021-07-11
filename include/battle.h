@@ -5,6 +5,7 @@
 #include "constants/battle.h"
 #include "battle_main.h"
 #include "battle_message.h"
+#include "battle_anim.h"
 #include "battle_util.h"
 #include "battle_script_commands.h"
 #include "battle_ai_switch_items.h"
@@ -37,6 +38,7 @@
 #define B_ACTION_CANCEL_PARTNER         12 // when choosing an action
 #define B_ACTION_NOTHING_FAINTED        13 // when choosing an action
 #define B_ACTION_DEBUG                  20
+#define B_ACTION_SHOW_BATTLE_INFO       21
 #define B_ACTION_NONE                   0xFF
 
 #define MAX_TRAINER_ITEMS 4
@@ -556,6 +558,7 @@ struct BattleStruct
     u16 moveEffect2; // For Knock Off
     u16 changedSpecies[PARTY_SIZE]; // For Zygarde or future forms when multiple mons can change into the same pokemon.
     u8 quickClawBattlerId;
+    u8 battleInfoIconSpriteId;
 };
 
 #define GET_MOVE_TYPE(move, typeArg)                        \

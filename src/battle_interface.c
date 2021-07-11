@@ -28,6 +28,12 @@
 #include "data.h"
 #include "pokemon_summary_screen.h"
 
+// Macros
+#define BATTLE_INFO_ICON_TOP_POS_X 228
+#define BATTLE_INFO_ICON_TOP_POS_Y  13
+#define BATTLE_INFO_ICON_BOTTOM_POS_X 233
+#define BATTLE_INFO_ICON_BOTTOM_POS_Y 120
+
 enum
 {   // Corresponds to gHealthboxElementsGfxTable (and the tables after it) in graphics.c
     // These are indexes into the tables, which are filled with 8x8 square pixel data.
@@ -185,7 +191,10 @@ static void SpriteCB_StatusSummaryBallsOnBattleStart(struct Sprite *sprite);
 static void SpriteCB_StatusSummaryBallsOnSwitchout(struct Sprite *sprite);
 
 static void SpriteCb_MegaTrigger(struct Sprite *sprite);
-static void SpriteCb_MegaIndicator(struct Sprite *sprite);
+static void SpriteCb_MegaIndicator(struct Sprite* sprite);
+
+static void SpriteCb_BattleInfoIcon(struct Sprite* sprite);
+
 
 static u8 GetStatusIconForBattlerId(u8 statusElementId, u8 battlerId);
 static s32 CalcNewBarValue(s32 maxValue, s32 currValue, s32 receivedValue, s32 *arg3, u8 arg4, u16 arg5);
@@ -195,6 +204,8 @@ static u8 CalcBarFilledPixels(s32 maxValue, s32 oldValue, s32 receivedValue, s32
 
 static void SpriteCb_AbilityPopUp(struct Sprite *sprite);
 static void Task_FreeAbilityPopUpGfx(u8 taskId);
+
+static void CreateBattleInfoIcon(void);
 
 // const rom data
 static const struct OamData sUnknown_0832C138 =
@@ -1694,6 +1705,11 @@ static void SpriteCb_MegaIndicator(struct Sprite *sprite)
 
 }
 
+static void SpriteCb_BattleInfoIcon(struct Sprite* sprite)
+{
+
+}
+
 #undef tBattler
 #undef tHide
 
@@ -2865,7 +2881,6 @@ static void SafariTextIntoHealthboxObject(void *dest, u8 *windowTileData, u32 wi
     CpuCopy32(windowTileData + 256, dest + 256, windowWidth * TILE_SIZE_4BPP);
 }
 
-#define ABILITY_POP_UP_TAG 0xD720
 
 // for sprite
 #define tOriginalX      data[0]
@@ -3314,4 +3329,92 @@ static void Task_FreeAbilityPopUpGfx(u8 taskId)
         FreeSpritePaletteByTag(ABILITY_POP_UP_TAG);
         DestroyTask(taskId);
     }
+}
+
+const u16 sBattleInfoIcon_Pal[] = INCBIN_U16("graphics/battle_info/battle_info_icon.gbapal");
+const u8 sBattleInfoIcon_Gfx[] = INCBIN_U8("graphics/battle_info/battle_info_icon.4bpp");
+
+static const struct SpriteSheet sSpriteSheet_BattleInfoIcon =
+{
+    sBattleInfoIcon_Gfx, sizeof(sBattleInfoIcon_Gfx), TAG_BATTLE_INFO_ICON_TAG
+};
+static const struct SpritePalette sSpritePalette_BattleInfoIcon =
+{
+    sBattleInfoIcon_Pal, TAG_BATTLE_INFO_ICON_TAG
+};
+
+static const struct OamData sOamData_BattleInfoIcon =
+{
+    .y = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .mosaic = 0,
+    .bpp = ST_OAM_4BPP,
+    .shape = ST_OAM_H_RECTANGLE,
+    .x = 0,
+    .matrixNum = 0,
+    .size = SPRITE_SIZE(32x16),
+    .tileNum = 0,
+    .priority = 0,
+    .paletteNum = 0,
+    .affineParam = 0,
+};
+
+static const struct SpriteTemplate sSpriteTemplate_BattleInfoIcon =
+{
+    .tileTag = TAG_BATTLE_INFO_ICON_TAG,
+    .paletteTag = TAG_BATTLE_INFO_ICON_TAG,
+    .oam = &sOamData_BattleInfoIcon,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCallbackDummy,
+};
+void BattleInfoIconStartTurn(void)
+{
+    if (gBattleStruct->battleInfoIconSpriteId == 0xFF)
+    {
+        CreateBattleInfoIcon();
+    }
+    gSprites[gBattleStruct->battleInfoIconSpriteId].invisible = FALSE;
+}
+
+void BattleInfoIconEndTurn(void)
+{
+    gSprites[gBattleStruct->battleInfoIconSpriteId].invisible = TRUE;
+}
+
+static void CreateBattleInfoIcon(void)
+{
+    u8 x, y;
+    if (GetSpriteTileStartByTag(TAG_BATTLE_INFO_ICON_TAG) == 0xFFFF)
+    {
+        LoadSpritePalette(&sSpritePalette_BattleInfoIcon);
+        LoadSpriteSheet(&sSpriteSheet_BattleInfoIcon);
+    }
+    switch (gSaveBlock2Ptr->optionsBattleInfo)
+    {
+        case 0:
+            x = BATTLE_INFO_ICON_TOP_POS_X;
+            y = BATTLE_INFO_ICON_TOP_POS_Y;
+            break;
+        case 1:
+            x = BATTLE_INFO_ICON_BOTTOM_POS_X;
+            y = BATTLE_INFO_ICON_BOTTOM_POS_Y;
+            break;
+        default:
+            x = 250;
+            y = 180;
+    }
+    gBattleStruct->battleInfoIconSpriteId = CreateSprite(&sSpriteTemplate_BattleInfoIcon, x, y, 0);
+    // CreateTask(Task_DEBUG_MoveBattleInfoIcon, 0);
+}
+
+void DestroyBattleInfoIcon(void)
+{
+    if (gBattleStruct->battleInfoIconSpriteId != 0xFF)
+        DestroySprite(&gSprites[gBattleStruct->battleInfoIconSpriteId]);
+    FreeSpriteTilesByTag(TAG_BATTLE_INFO_ICON_TAG);
+    FreeSpritePaletteByTag(TAG_BATTLE_INFO_ICON_TAG);
+    gBattleStruct->battleInfoIconSpriteId = 0xFF;
 }

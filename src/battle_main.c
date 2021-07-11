@@ -510,6 +510,7 @@ void CB2_InitBattle(void)
     AllocateBattleSpritesData();
     AllocateMonSpritesGfx();
     RecordedBattle_ClearFrontierPassFlag();
+    gBattleStruct->battleInfoIconSpriteId = 0xFF;
 
     if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
     {
@@ -1797,6 +1798,7 @@ static void FreeRestoreBattleData(void)
     FreeMonSpritesGfx();
     FreeBattleSpritesData();
     FreeBattleResources();
+    DestroyBattleInfoIcon();
 }
 
 void CB2_QuitRecordedBattle(void)
@@ -2148,6 +2150,7 @@ void CB2_InitEndLinkBattle(void)
         FreeBattleResources();
         FreeBattleSpritesData();
         FreeMonSpritesGfx();
+        DestroyBattleInfoIcon();
     }
     else
     {
@@ -2268,6 +2271,7 @@ static void EndLinkBattleInSteps(void)
                     FreeBattleResources();
                     FreeBattleSpritesData();
                     FreeMonSpritesGfx();
+                    DestroyBattleInfoIcon();
                 }
                 else if (gReceivedRemoteLinkPlayers == 0)
                 {
@@ -2285,6 +2289,7 @@ static void EndLinkBattleInSteps(void)
                 FreeBattleResources();
                 FreeBattleSpritesData();
                 FreeMonSpritesGfx();
+                DestroyBattleInfoIcon();
             }
         }
         break;
@@ -2333,6 +2338,7 @@ static void EndLinkBattleInSteps(void)
             FreeBattleResources();
             FreeBattleSpritesData();
             FreeMonSpritesGfx();
+            DestroyBattleInfoIcon();
         }
         break;
     }
@@ -2520,6 +2526,7 @@ static void sub_803939C(void)
                 FreeBattleResources();
                 FreeBattleSpritesData();
                 FreeMonSpritesGfx();
+                DestroyBattleInfoIcon();
             }
         }
         break;
@@ -3622,6 +3629,8 @@ static void TryDoEventsBeforeFirstTurn(void)
     *(&gBattleStruct->field_91) = gAbsentBattlerFlags;
     BattlePutTextOnWindow(gText_EmptyString3, 0);
     gBattleMainFunc = HandleTurnActionSelectionState;
+    if (gSaveBlock2Ptr->optionsBattleInfo < 2)
+        BattleInfoIconStartTurn();
     ResetSentPokesToOpponentValue();
 
     for (i = 0; i < BATTLE_COMMUNICATION_ENTRIES_COUNT; i++)
@@ -3730,6 +3739,8 @@ void BattleTurnPassed(void)
     BattlePutTextOnWindow(gText_EmptyString3, 0);
     gBattleMainFunc = HandleTurnActionSelectionState;
     gRandomTurnNumber = Random();
+    if (gSaveBlock2Ptr->optionsBattleInfo < 2)
+        BattleInfoIconStartTurn();
 
     if (gBattleTypeFlags & BATTLE_TYPE_PALACE)
         BattleScriptExecute(BattleScript_PalacePrintFlavorText);
@@ -4032,6 +4043,10 @@ static void HandleTurnActionSelectionState(void)
                     BtlController_EmitDebugMenu(0);
                     MarkBattlerForControllerExec(gActiveBattler);
                     break;
+                case B_ACTION_SHOW_BATTLE_INFO:
+                    BtlController_EmitShowBattleInfo(0);
+                    MarkBattlerForControllerExec(gActiveBattler);
+                    break;
                 }
 
                 if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_TRAINER_HILL) && gBattleResources->bufferB[gActiveBattler][1] == B_ACTION_RUN)
@@ -4173,6 +4188,9 @@ static void HandleTurnActionSelectionState(void)
                 case B_ACTION_DEBUG:
                     gBattleCommunication[gActiveBattler] = STATE_BEFORE_ACTION_CHOSEN;
                     break;
+                case B_ACTION_SHOW_BATTLE_INFO:
+                    gBattleCommunication[gActiveBattler] = STATE_BEFORE_ACTION_CHOSEN;
+                    break;
                 }
             }
             break;
@@ -4256,6 +4274,8 @@ static void HandleTurnActionSelectionState(void)
     // Check if everyone chose actions.
     if (gBattleCommunication[ACTIONS_CONFIRMED_COUNT] == gBattlersCount)
     {
+        if (gSaveBlock2Ptr->optionsBattleInfo < 2)
+            BattleInfoIconEndTurn();
         sub_818603C(1);
         gBattleMainFunc = SetActionsAndBattlersTurnOrder;
 
@@ -4970,6 +4990,7 @@ static void FreeResetData_ReturnToOvOrDoEvolutions(void)
         FreeMonSpritesGfx();
         FreeBattleResources();
         FreeBattleSpritesData();
+        DestroyBattleInfoIcon();
     }
 }
 

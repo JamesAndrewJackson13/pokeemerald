@@ -314,10 +314,14 @@ extern const u8 gText_ButtonTypeNormal[];
 extern const u8 gText_ButtonTypeLR[];
 extern const u8 gText_ButtonTypeLEqualsA[];
 extern const u8 gText_Instant[];
+extern const u8 gText_BattleInfoTop[];
+extern const u8 gText_BattleInfoBottom[];
+extern const u8 gText_BattleInfoOff[];
 extern const u8 gText_Light[];
 extern const u8 gText_Dark[];
 extern const u8 sText_HpBar[];
 extern const u8 sText_ExpBar[];
+extern const u8 sText_BattleInfo[];
 extern const u8 sText_UnitSystem[];
 #ifdef FEATURE_CHANGEDEXLOOK
 extern const u8 gText_DexType[];
@@ -3319,6 +3323,9 @@ extern const u8 gText_Summary2[];
 extern const u8 gText_PkmnForSwap[];
 extern const u8 gText_SamePkmnInPartyAlready[];
 extern const u8 gText_Cancel3[];
+
+// Battle Info
+extern const u8 gText_BattleInfoHeader[];
 
 #ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
 // Rotom change form

@@ -174,6 +174,7 @@ enum
     CONTROLLER_RESETACTIONMOVESELECTION,
     CONTROLLER_ENDLINKBATTLE,
     CONTROLLER_DEBUGMENU,
+    CONTROLLER_SHOWBATTLEINFO,
     /*new controllers should go here*/
     CONTROLLER_TERMINATOR_NOP,
     CONTROLLER_CMDS_COUNT
@@ -246,6 +247,7 @@ void BtlController_EmitLinkStandbyMsg(u8 bufferId, u8 arg1, bool32 record);
 void BtlController_EmitResetActionMoveSelection(u8 bufferId, u8 caseId);
 void BtlController_EmitEndLinkBattle(u8 bufferId, u8 battleOutcome);
 void BtlController_EmitDebugMenu(u8 bufferId);
+void BtlController_EmitShowBattleInfo(u8 bufferId);
 
 // player controller
 void SetControllerToPlayer(void);

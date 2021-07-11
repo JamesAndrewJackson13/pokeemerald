@@ -1530,14 +1530,18 @@ const u8 gText_UnitSystemMetric[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Metric")
 const u8 gText_UnitSystemImperial[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Imperial"); //tx_optionsPlus
 const u8 gText_SoundMono[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Mono");
 const u8 gText_SoundStereo[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Stereo");
-const u8 gText_FrameType[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Type");
+const u8 gText_FrameType[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Type ");
 const u8 gText_FrameTypeNumber[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}");
 const u8 gText_ButtonTypeNormal[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Normal");
 const u8 gText_ButtonTypeLR[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}LR");
 const u8 gText_ButtonTypeLEqualsA[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}L=A");
 const u8 gText_Instant[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Instant");
+const u8 gText_BattleInfoTop[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Top");
+const u8 gText_BattleInfoBottom[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Bottom");
+const u8 gText_BattleInfoOff[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Off");
 const u8 sText_HpBar[] = _("HP Bar");
 const u8 sText_ExpBar[] = _("EXP Bar");
+const u8 sText_BattleInfo[] = _("Battle-Info Icon");
 const u8 sText_UnitSystem[] = _("Unit System");
 #ifdef FEATURE_TOGGLEPOKEMONBATTLEANIMATIONS
 const u8 gText_PokeAnimation[] = _("Battle Intros");
@@ -2149,6 +2153,9 @@ const u8 gText_BikeModeForcedMach[] = _("Bike forced to Mach Mode");
 // Quest toast notifications
 const u8 gText_QuestUnlocked[] = _("Quest Unlocked!\n{SIZE 0}{STR_VAR_1}");
 const u8 gText_QuestComplete[] = _("Quest Complete!\n{SIZE 0}{STR_VAR_1}");
+
+// Battle Info
+const u8 gText_BattleInfoHeader[] = _("Battlefield Info");
 
 #ifdef FEATURE_CHECKFORPOKEMONSPECIESSCRIPT
 // Rotom form options

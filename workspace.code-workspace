@@ -22,7 +22,15 @@
 			"array": "c",
 			"vector": "c",
 			"xstring": "c",
-			"memory": "c"
+			"memory": "c",
+			"cstdint": "c",
+			"deque": "c",
+			"initializer_list": "c",
+			"list": "c",
+			"queue": "c",
+			"stack": "c",
+			"type_traits": "c",
+			"valarray": "c"
 		},
 		"C_Cpp.formatting": "vcFormat",
 		"C_Cpp.vcFormat.newLine.beforeOpenBrace.type": "newLine",

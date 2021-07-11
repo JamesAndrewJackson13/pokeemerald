@@ -33,6 +33,7 @@ enum
     MENUITEM_BUTTONMODE,
     MENUITEM_HP_BAR,
     MENUITEM_EXP_BAR,
+    MENUITEM_BATTLE_INFO,
     MENUITEM_UNIT_SYSTEM,
     MENUITEM_FRAMETYPE,
 #ifdef FEATURE_CHANGEDEXLOOK
@@ -70,6 +71,7 @@ static void TextSpeed_DrawChoices(int selection, u16 y, u8 textSpeed);
 static void BattleScene_DrawChoices(int selection, u16 y, u8 textSpeed);
 static void BattleStyle_DrawChoices(int selection, u16 y, u8 textSpeed);
 static void HpBar_DrawChoices(int selection, u16 y, u8 textSpeed);
+static void BattleInfo_DrawChoices(int selection, u16 y, u8 textSpeed);
 static void UnitSystem_DrawChoices(int selection, u16 y, u8 textSpeed);
 static void DexMode_DrawChoices(int selection, u16 y, u8 textSpeed);
 static void PokeAnimation_DrawChoices(int selection, u16 y, u8 textSpeed);
@@ -104,6 +106,7 @@ struct
     [MENUITEM_FRAMETYPE] = {FrameType_DrawChoices, FrameType_ProcessInput},
     [MENUITEM_HP_BAR] = {HpBar_DrawChoices, ElevenOptions_ProcessInput},
     [MENUITEM_EXP_BAR] = {HpBar_DrawChoices, ElevenOptions_ProcessInput},
+    [MENUITEM_BATTLE_INFO] = {BattleInfo_DrawChoices, ThreeOptions_ProcessInput},
     [MENUITEM_UNIT_SYSTEM] = {UnitSystem_DrawChoices, TwoOptions_ProcessInput},
 #ifdef FEATURE_CHANGEDEXLOOK
     [MENUITEM_DEXTYPE] = {DexMode_DrawChoices, TwoOptions_ProcessInput},
@@ -125,6 +128,7 @@ static const u16 sNumberOfChoices[MENUITEM_COUNT] =
     [MENUITEM_FRAMETYPE] = 20,
     [MENUITEM_HP_BAR] = 11,
     [MENUITEM_EXP_BAR] = 11,
+    [MENUITEM_BATTLE_INFO] = 3,
     [MENUITEM_UNIT_SYSTEM] = 2,
 #ifdef FEATURE_CHANGEDEXLOOK
     [MENUITEM_DEXTYPE] = 2,
@@ -146,6 +150,7 @@ static const bool8 sShowSelectionArrows[MENUITEM_COUNT] =
     [MENUITEM_FRAMETYPE] = TRUE,
     [MENUITEM_HP_BAR] = TRUE,
     [MENUITEM_EXP_BAR] = TRUE,
+    [MENUITEM_BATTLE_INFO] = TRUE,
     [MENUITEM_UNIT_SYSTEM] = TRUE,
 #ifdef FEATURE_CHANGEDEXLOOK
     [MENUITEM_DEXTYPE] = TRUE,
@@ -163,6 +168,7 @@ static const bool8 sShowSelectionArrows[MENUITEM_COUNT] =
 //     [MENUITEM_FRAMETYPE] = TRUE,
 //     [MENUITEM_HP_BAR] = TRUE,
 //     [MENUITEM_EXP_BAR] = TRUE,
+//     [MENUITEM_BATTLE_INFO] = TRUE,
 //     [MENUITEM_UNIT_SYSTEM] = FALSE,
 //     [MENUITEM_DEXTYPE] = FALSE,
 //     [MENUITEM_CANCEL] = FALSE,
@@ -190,6 +196,7 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_FRAMETYPE]   = gText_Frame,
     [MENUITEM_HP_BAR]      = sText_HpBar,
     [MENUITEM_EXP_BAR]     = sText_ExpBar,
+    [MENUITEM_BATTLE_INFO] = sText_BattleInfo,
     [MENUITEM_UNIT_SYSTEM] = sText_UnitSystem,
 #ifdef FEATURE_CHANGEDEXLOOK
     [MENUITEM_DEXTYPE]     = gText_DexType,
@@ -394,6 +401,7 @@ void CB2_InitOptionMenu(void)
         sOptions->sel[MENUITEM_FRAMETYPE]   = gSaveBlock2Ptr->optionsWindowFrameType;
         sOptions->sel[MENUITEM_HP_BAR]      = gSaveBlock2Ptr->optionsHpBarSpeed;
         sOptions->sel[MENUITEM_EXP_BAR]     = gSaveBlock2Ptr->optionsExpBarSpeed;
+        sOptions->sel[MENUITEM_BATTLE_INFO] = gSaveBlock2Ptr->optionsBattleInfo;
         sOptions->sel[MENUITEM_UNIT_SYSTEM] = gSaveBlock2Ptr->optionsUnitSystem;
 #ifdef FEATURE_CHANGEDEXLOOK
         sOptions->sel[MENUITEM_DEXTYPE] = gSaveBlock2Ptr->optionsDexMode;
@@ -569,6 +577,7 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2Ptr->optionsWindowFrameType = sOptions->sel[MENUITEM_FRAMETYPE];
     gSaveBlock2Ptr->optionsHpBarSpeed =      sOptions->sel[MENUITEM_HP_BAR];
     gSaveBlock2Ptr->optionsExpBarSpeed =     sOptions->sel[MENUITEM_EXP_BAR];
+    gSaveBlock2Ptr->optionsBattleInfo =      sOptions->sel[MENUITEM_BATTLE_INFO];
     gSaveBlock2Ptr->optionsUnitSystem =      sOptions->sel[MENUITEM_UNIT_SYSTEM];
 #ifdef FEATURE_CHANGEDEXLOOK
     gSaveBlock2Ptr->optionsDexMode =         sOptions->sel[MENUITEM_DEXTYPE];
@@ -749,6 +758,17 @@ static void doTwoChoices(const u8* text1, const u8* text2, int selection, u16 y,
     DrawOptionMenuChoice(text2, GetStringRightAlignXOffset(1, text2, 198), y, styles[1], textSpeed);
 }
 
+static void doThreeChoices(const u8* text1, const u8* text2, const u8* text3, int selection, u16 y, u8 textSpeed)
+{
+    u8 styles[3] = { 0 };
+    int xMid = GetMiddleX(text1, text2, text3);
+
+    styles[selection] = 1;
+    DrawOptionMenuChoice(text1, 104, y, styles[0], textSpeed);
+    DrawOptionMenuChoice(text2, xMid, y, styles[1], textSpeed);
+    DrawOptionMenuChoice(text3, GetStringRightAlignXOffset(1, text3, 198), y, styles[2], textSpeed);
+}
+
 static void BattleScene_DrawChoices(int selection, u16 y, u8 textSpeed)
 {
     doTwoChoices(gText_BattleSceneOn, gText_BattleSceneOff, selection, y, textSpeed);
@@ -810,13 +830,7 @@ static void TextSpeed_DrawChoices(int selection, u16 y, u8 textSpeed)
 
 static void Sound_DrawChoices(int selection, u16 y, u8 textSpeed)
 {
-    u8 styles[3] = {0, 0, 0};
-    int xMid = GetMiddleX(gText_SoundMono, gText_SoundStereo, gText_BattleSceneOff);
-
-    styles[selection] = 1;
-    DrawOptionMenuChoice(gText_SoundMono, 104, y, styles[0], textSpeed);
-    DrawOptionMenuChoice(gText_SoundStereo, xMid, y, styles[1], textSpeed);
-    DrawOptionMenuChoice(gText_BattleSceneOff, GetStringRightAlignXOffset(1, gText_BattleSceneOff, 198), y, styles[2], textSpeed);
+    doThreeChoices(gText_SoundMono, gText_SoundStereo, gText_BattleSceneOff, selection, y, textSpeed);
 }
 
 static void FrameType_DrawChoices(int selection, u16 y, u8 textSpeed)
@@ -852,13 +866,7 @@ static void FrameType_DrawChoices(int selection, u16 y, u8 textSpeed)
 
 static void ButtonMode_DrawChoices(int selection, u16 y, u8 textSpeed)
 {
-    u8 styles[3] = {0};
-    int xMid = GetMiddleX(gText_ButtonTypeNormal, gText_ButtonTypeLR, gText_ButtonTypeLEqualsA);
-
-    styles[selection] = 1;
-    DrawOptionMenuChoice(gText_ButtonTypeNormal, 104, y, styles[0], textSpeed);
-    DrawOptionMenuChoice(gText_ButtonTypeLR, xMid, y, styles[1], textSpeed);
-    DrawOptionMenuChoice(gText_ButtonTypeLEqualsA, GetStringRightAlignXOffset(1, gText_ButtonTypeLEqualsA, 198), y, styles[2], textSpeed);
+    doThreeChoices(gText_ButtonTypeNormal, gText_ButtonTypeLR, gText_ButtonTypeLEqualsA, selection, y, textSpeed);
 }
 
 static void DrawTextOption(void)
@@ -877,6 +885,11 @@ static void DrawOptionMenuTexts(void)
         AddTextPrinterParameterized(WIN_OPTIONS, 1, sOptionMenuItemsNames[i], 8, (i * Y_DIFF) + 1, 0, NULL);
 
     CopyWindowToVram(WIN_OPTIONS, 3);
+}
+
+static void BattleInfo_DrawChoices(int selection, u16 y, u8 textSpeed)
+{
+    doThreeChoices(gText_BattleInfoTop, gText_BattleInfoBottom, gText_BattleInfoOff, selection, y, textSpeed);
 }
 
 #define TILE_TOP_CORNER_L 0x1A2
