@@ -86,6 +86,12 @@
 #define BASE_STATS_UP_ARROW    (0x34)
 #define EXTRA_STATS_UP_ARROW   (0x5C)
 
+// Scroll arrow
+#define SCROLL_ARROW_X      (100)
+#define SCROLL_ARROW_TOP     (40)
+#define SCROLL_ARROW_BOTTOM (145)
+#define SCROLL_ARROW_TAG    (110)
+
 
 // Graphics Consts
 static const u32 sBattleInfoData_Tiles[] = INCBIN_U32("graphics/battle_info/battle_info_data_tiles.4bpp.lz");
@@ -120,6 +126,8 @@ static void PlayMonCry(void);
 static void BattleInfoData_SetupSprites(void);
 static void RenderWindow_TerrainDescription(void);
 static void Task_DescriptionWindowAnimation(u8 taskId);
+static void BattleInfoData_PlaceTopMenuScrollIndicatorArrows(void);
+static void BattleInfoData_RemoveScrollIndicatorArrowPair(void);
 
 
 // EWRAM Data
@@ -130,14 +138,16 @@ static EWRAM_DATA struct BattleInfoBox* sBattleInfoBox = NULL;
 static EWRAM_DATA struct BattleInfoDataGUI_Struct
 {
     MainCallback savedCallback;
+    u16 scrollIndicatorArrowPairId;
     u8 graphicsLoadState;
     u8 windowsBackgroundLoadState;
-    u8 cursorIndex;
+    u16 cursorIndex;
     u8 cursorViewStart;
     u8 curMon;
     u8 terrainEffects[NUM_TERRAIN_EFFECTS];
     u8 pokemonTypeSpriteIds[2];
-    u8 showDescriptionAnimationTask;
+    u8 showDescriptionAnimationTaskId;
+    u8 scrollUpdateTaskId;
     u8 terrainTilesCount;
     bool8 showDescription;
 }  *sBattleInfoDataGUI = NULL;
@@ -302,25 +312,29 @@ static bool8 BattleInfoData_SetupGfx(void)
         RenderWindow_TerrainDescription();
         break;
     case 20:
-        RenderWindow_PutAndCopy();
+        if (sBattleInfoDataGUI->terrainTilesCount > 4)
+            BattleInfoData_PlaceTopMenuScrollIndicatorArrows();
         break;
     case 21:
-        DrawStatStageIcons();
+        RenderWindow_PutAndCopy();
         break;
     case 22:
-        BattleInfoData_SetupSprites();
+        DrawStatStageIcons();
         break;
     case 23:
-        CreateTask(Task_BattleInfoData_WaitFadeIn, 0);
+        BattleInfoData_SetupSprites();
         break;
     case 24:
-        BlendPalettes(PALETTES_ALL, 16, RGB_BLACK);
+        CreateTask(Task_BattleInfoData_WaitFadeIn, 0);
         break;
     case 25:
+        BlendPalettes(PALETTES_ALL, 16, RGB_BLACK);
+        break;
+    case 26:
         BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
         gPaletteFade.bufferTransferDisabled = FALSE;
         break;
-    case 26:
+    case 27:
         PlayMonCry();
         SetVBlankCallback(VBlankCB_BattleInfoData);
         SetMainCallback2(CB2_BattleInfoDataRun);
@@ -328,6 +342,28 @@ static bool8 BattleInfoData_SetupGfx(void)
     }
     ++gMain.state;
     return FALSE;
+}
+
+static void BattleInfoData_PlaceTopMenuScrollIndicatorArrows(void)
+{
+    sBattleInfoDataGUI->scrollIndicatorArrowPairId = AddScrollIndicatorArrowPairParameterized(
+        SCROLL_ARROW_UP,
+        SCROLL_ARROW_X,
+        SCROLL_ARROW_TOP,
+        SCROLL_ARROW_BOTTOM,
+        sBattleInfoDataGUI->terrainTilesCount - 1,
+        SCROLL_ARROW_TAG,
+        SCROLL_ARROW_TAG,
+        &sBattleInfoDataGUI->cursorIndex);
+}
+
+static void BattleInfoData_RemoveScrollIndicatorArrowPair(void)
+{
+    if (sBattleInfoDataGUI->scrollIndicatorArrowPairId != 0xFF)
+    {
+        RemoveScrollIndicatorArrowPair(sBattleInfoDataGUI->scrollIndicatorArrowPairId);
+        sBattleInfoDataGUI->scrollIndicatorArrowPairId = 0xFF;
+    }
 }
 
 static void Task_BattleInfoData_WaitFadeIn(u8 taskId)
@@ -474,7 +510,8 @@ static void BattleInfoData_OpenInit(u8 monIndex, MainCallback callback)
     sBattleInfoDataGUI->cursorIndex = 255;
     sBattleInfoDataGUI->curMon = monIndex;
     sBattleInfoDataGUI->showDescription = FALSE;
-    sBattleInfoDataGUI->showDescriptionAnimationTask = 0xFF;
+    sBattleInfoDataGUI->showDescriptionAnimationTaskId = 0xFF;
+    sBattleInfoDataGUI->scrollUpdateTaskId = 0xFF;
     SetMainCallback2(CB2_BattleInfoData_RunSetup);
 }
 
@@ -768,6 +805,27 @@ static void RenderWindow_TerrainDescription(void)
     );
 }
 
+
+#define state data[1]
+static void Task_OnScrollUpdate(u8 taskId)
+{
+    switch (gTasks[taskId].state)
+    {
+        case 0:
+            UpdateTerrainPaletteHighlight();
+            break;
+        case 1:
+            RenderWindow_TerrainDescription();
+            break;
+        case 2:
+            RenderWindow_DoTerrainInfoTiles();
+            sBattleInfoDataGUI->scrollUpdateTaskId = 0xFF;
+            DestroyTask(taskId);
+            break;
+    }
+    gTasks[taskId].state++;
+}
+
 // To make the code a little more readable
 #define frame data[1]
 #define animation sDescriptionSlideAnimation[sBattleInfoDataGUI->showDescription]
@@ -776,7 +834,7 @@ static void Task_DescriptionWindowAnimation(u8 taskId)
     if (gTasks[taskId].frame == DESCRIPTION_WINDOW_ANIMATION_LENGNTH)
     {
         DestroyTask(taskId);
-        sBattleInfoDataGUI->showDescriptionAnimationTask = 0xFF;
+        sBattleInfoDataGUI->showDescriptionAnimationTaskId = 0xFF;
     }
     else
     {
@@ -786,12 +844,12 @@ static void Task_DescriptionWindowAnimation(u8 taskId)
 }
 
 #define toggleDescriptionMode() \
-if (sBattleInfoDataGUI->showDescriptionAnimationTask == 0xFF && sBattleInfoDataGUI->terrainTilesCount > 0) \
+if (sBattleInfoDataGUI->showDescriptionAnimationTaskId == 0xFF && sBattleInfoDataGUI->terrainTilesCount > 0) \
 { \
     PlaySE(SE_FU_ZAKU); \
     sBattleInfoDataGUI->showDescription = !sBattleInfoDataGUI->showDescription; \
-    sBattleInfoDataGUI->showDescriptionAnimationTask = CreateTask(Task_DescriptionWindowAnimation, 0); \
-    gTasks[sBattleInfoDataGUI->showDescriptionAnimationTask].frame = 0; \
+    sBattleInfoDataGUI->showDescriptionAnimationTaskId = CreateTask(Task_DescriptionWindowAnimation, 0); \
+    gTasks[sBattleInfoDataGUI->showDescriptionAnimationTaskId].frame = 0; \
 } \
 
 static void Task_BattleInfoData_Main(u8 taskId)
@@ -814,7 +872,7 @@ static void Task_BattleInfoData_Main(u8 taskId)
             BattleInfoData_FadeAndExit();
         }
     }
-    else if (sBattleInfoDataGUI->terrainTilesCount > 1 && JOY_REPEAT(DPAD_ANY))
+    else if (sBattleInfoDataGUI->terrainTilesCount > 1 && JOY_REPEAT(DPAD_ANY) && sBattleInfoDataGUI->scrollUpdateTaskId == 0xFF)
     {
         PlaySE(SE_DEX_SCROLL);
         if (JOY_REPEAT(DPAD_DOWN) || JOY_REPEAT(DPAD_RIGHT))
@@ -860,14 +918,14 @@ static void Task_BattleInfoData_Main(u8 taskId)
                 }
             }
         }
-        RenderWindow_DoTerrainInfoTiles();
-        RenderWindow_TerrainDescription();
-        UpdateTerrainPaletteHighlight();
+        sBattleInfoDataGUI->scrollUpdateTaskId = CreateTask(Task_OnScrollUpdate, 0);
+        gTasks[sBattleInfoDataGUI->scrollUpdateTaskId].state = 0;
     }
 }
 #undef toggleDescriptionMode
 #undef frame
 #undef animation
+#undef state
 
 static void CB2_ReturnToBattleInfo(void)
 {
@@ -913,6 +971,7 @@ static void BattleInfoData_FadeAndExit(void)
 {
     // We need to store this somewhere since we're freeing memory. So, why not here?
     gBattlerInMenuId = sBattleInfoDataGUI->curMon;
+    BattleInfoData_RemoveScrollIndicatorArrowPair();
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
     CreateTask(Task_BattleInfoData_FadeAndExit, 0);
     SetVBlankCallback(VBlankCB_BattleInfoData);
@@ -945,3 +1004,7 @@ static void BattleInfoData_FadeAndExit(void)
 #undef NUM_STATS_TO_DRAW
 #undef BASE_STATS_UP_ARROW
 #undef EXTRA_STATS_UP_ARROW
+#undef SCROLL_ARROW_X
+#undef SCROLL_ARROW_TOP
+#undef SCROLL_ARROW_BOTTOM
+#undef SCROLL_ARROW_TAG
