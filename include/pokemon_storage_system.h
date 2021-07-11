@@ -76,5 +76,6 @@ u8 CountPartyNonEggMons(void);
 #ifdef FEATURE_PORTABLEPC
 void EnterPokeStorage(u8 boxOption);
 #endif
+void CB2_ReturnToPokeStorage(void);
 
 #endif // GUARD_POKEMON_STORAGE_SYSTEM_H

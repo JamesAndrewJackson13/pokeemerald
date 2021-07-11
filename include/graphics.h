@@ -9535,5 +9535,16 @@ extern const u32 gItemIconPalette_MysteriousCable[];
 extern const u32 gItemIcon_HeavyDutyBoots[];
 extern const u32 gItemIconPalette_HeavyDutyBoots[];
 #endif
+// fr_tm_case_port
+extern const u32 gTMCase_bg[];
+extern const u32 gTMCase_Tilemap[];
+// extern const u32 gUnknown_8E84B70[];
+extern const u32 gTMCase_BagColor_Male[];
+extern const u32 gTMCase_BagColor_Female[];
+extern const u32 gTMCase_TMSpriteGfx[];
+// extern const u32 gUnknown_8E84F20[];
+// extern const u32 gUnknown_8E85068[];
+extern const u8 gTMCase_HMIconGFX[];
+extern const u16 gTMCaseMainWindowPalette[];
 
 #endif //GUARD_GRAPHICS_H

@@ -157,3 +157,4 @@
 
 gSoundInfo:
     .space 0xFB0
+	.include "src/tm_case.o"

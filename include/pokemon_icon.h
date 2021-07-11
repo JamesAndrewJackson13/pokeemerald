@@ -3,6 +3,7 @@
 
 extern const u8 gMonIconPaletteIndices[];
 extern const u8 gMonIconPaletteIndicesFemale[];
+extern const struct SpritePalette gMonIconPaletteTable[6];
 
 const u8 *GetMonIconTiles(u16 species, u32 personality);
 void sub_80D304C(u16 offset);

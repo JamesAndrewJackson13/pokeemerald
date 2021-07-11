@@ -28,6 +28,7 @@ void ItemUseOutOfBattle_BlackWhiteFlute(u8);
 void ItemUseOutOfBattle_EvolutionStone(u8);
 void ItemUseOutOfBattle_Berry(u8);
 void ItemUseOutOfBattle_EnigmaBerry(u8);
+void ItemUseOutOfBattle_TmCase(u8);
 void ItemUseOutOfBattle_CannotUse(u8);
 #ifdef FEATURE_MODERNEXPSHARE
 void ItemUseOutOfBattle_ExpShare(u8);

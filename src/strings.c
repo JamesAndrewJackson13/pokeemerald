@@ -2190,3 +2190,11 @@ const u8 gText_MenuPC[] = _("PC");
 #ifdef FEATURE_NICKNAMEPOKEMONINMENU
 const u8 gText_Nickname[] = _("Nickname");
 #endif
+
+// fr_tm_case_port
+const u8 gText_TMCase[] = _("TM CASE");
+const u8 gText_Close[] = _("CLOSE");
+const u8 gText_TMCaseWillBePutAway[] = _("The TM CASE will be\nput away.");
+const u8 gText_FontSize0[] = _("{SIZE 0}");
+const u8 gText_FontSize2[] = _("{SIZE 2}");
+const u8 gText_TMCase_Blue[] = _("{COLOR_HIGHLIGHT_SHADOW BLUE TRANSPARENT LIGHT_BLUE}{STR_VAR_2}");

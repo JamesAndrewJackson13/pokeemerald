@@ -338,6 +338,7 @@ SECTIONS {
         src/mugshot.o(.text);
         src/surfable_pokemon.o(.text);
         src/battle_info.o(.text);
+        src/tm_case.o(.text);
     } =0
 
     script_data :
@@ -706,6 +707,7 @@ SECTIONS {
         src/mugshot.o(.rodata);
         src/surfable_pokemon.o(.rodata);
         src/battle_info.o(.rodata);
+        src/tm_case.o(.rodata);
     } =0
 
     song_data :
